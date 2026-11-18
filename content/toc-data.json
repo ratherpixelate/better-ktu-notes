@@ -1,0 +1,315 @@
+{
+  "coa-m1": [
+    {
+      "id": "t-orgarch",
+      "title": "Organization vs architecture",
+      "group": "Structure"
+    },
+    {
+      "id": "t-units",
+      "title": "Functional units",
+      "group": "Structure"
+    },
+    {
+      "id": "t-ops",
+      "title": "Basic operational concepts",
+      "group": "Structure"
+    },
+    {
+      "id": "t-interrupt",
+      "title": "Interrupts",
+      "group": "Structure"
+    },
+    {
+      "id": "t-bus",
+      "title": "Bus structures",
+      "group": "Structure"
+    },
+    {
+      "id": "t-software",
+      "title": "System software",
+      "group": "Structure"
+    },
+    {
+      "id": "t-memory",
+      "title": "Memory locations &amp; addresses",
+      "group": "Data"
+    },
+    {
+      "id": "t-signed",
+      "title": "Signed numbers",
+      "group": "Data"
+    },
+    {
+      "id": "t-float",
+      "title": "IEEE 754 floating point",
+      "group": "Data"
+    },
+    {
+      "id": "t-formats",
+      "title": "Instruction types &amp; formats",
+      "group": "Instructions"
+    },
+    {
+      "id": "t-seq",
+      "title": "Sequencing &amp; branching",
+      "group": "Instructions"
+    },
+    {
+      "id": "t-shifts",
+      "title": "Shifts",
+      "group": "Instructions"
+    },
+    {
+      "id": "t-modes",
+      "title": "Addressing modes",
+      "group": "Instructions"
+    },
+    {
+      "id": "t-isa",
+      "title": "ISA principles",
+      "group": "ISA &amp; RISC"
+    },
+    {
+      "id": "t-encoding",
+      "title": "Instruction encoding",
+      "group": "ISA &amp; RISC"
+    },
+    {
+      "id": "t-risc",
+      "title": "RISC architecture",
+      "group": "ISA &amp; RISC"
+    },
+    {
+      "id": "t-riscvscisc",
+      "title": "RISC vs CISC",
+      "group": "ISA &amp; RISC"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    }
+  ],
+  "coa-m2": [
+    {
+      "id": "t-single",
+      "title": "Single-cycle processor",
+      "group": "Processors"
+    },
+    {
+      "id": "t-multi",
+      "title": "Multi-cycle processor",
+      "group": "Processors"
+    },
+    {
+      "id": "t-intro",
+      "title": "Introduction to pipelining",
+      "group": "Pipelining basics"
+    },
+    {
+      "id": "t-stages",
+      "title": "Five-stage RISC pipeline",
+      "group": "Pipelining basics"
+    },
+    {
+      "id": "t-perf",
+      "title": "Pipeline performance",
+      "group": "Pipelining basics"
+    },
+    {
+      "id": "t-struct",
+      "title": "Structural hazards",
+      "group": "Hazards"
+    },
+    {
+      "id": "t-data",
+      "title": "Data hazards",
+      "group": "Hazards"
+    },
+    {
+      "id": "t-control",
+      "title": "Control hazards",
+      "group": "Hazards"
+    },
+    {
+      "id": "t-impl",
+      "title": "Pipelining implementation",
+      "group": "Implementation"
+    },
+    {
+      "id": "t-multicycle",
+      "title": "Multicycle operations",
+      "group": "Implementation"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
+  ],
+  "ds-m1": [
+    {
+      "id": "t-basics",
+      "title": "Data and data structures",
+      "group": "Foundations"
+    },
+    {
+      "id": "t-classes",
+      "title": "Classification",
+      "group": "Foundations"
+    },
+    {
+      "id": "t-space",
+      "title": "Space complexity",
+      "group": "Analysis"
+    },
+    {
+      "id": "t-time",
+      "title": "Time complexity",
+      "group": "Analysis"
+    },
+    {
+      "id": "t-asym",
+      "title": "Asymptotic notations",
+      "group": "Analysis"
+    },
+    {
+      "id": "t-arrays",
+      "title": "Arrays and addresses",
+      "group": "Arrays"
+    },
+    {
+      "id": "t-sparse",
+      "title": "Sparse matrix",
+      "group": "Arrays"
+    },
+    {
+      "id": "t-poly",
+      "title": "Polynomial addition",
+      "group": "Arrays"
+    },
+    {
+      "id": "t-stack",
+      "title": "Stack",
+      "group": "Stack and queues"
+    },
+    {
+      "id": "t-queue",
+      "title": "Queue",
+      "group": "Stack and queues"
+    },
+    {
+      "id": "t-cqueue",
+      "title": "Circular queue",
+      "group": "Stack and queues"
+    },
+    {
+      "id": "t-deque",
+      "title": "Deque, priority queue",
+      "group": "Stack and queues"
+    },
+    {
+      "id": "t-postfix",
+      "title": "Infix to postfix",
+      "group": "Stack and queues"
+    },
+    {
+      "id": "t-eval",
+      "title": "Postfix evaluation",
+      "group": "Stack and queues"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
+  ],
+  "dbms-m1": [
+    {
+      "id": "t-intro",
+      "title": "Databases and DBMS",
+      "group": "Introduction"
+    },
+    {
+      "id": "t-approach",
+      "title": "Database approach",
+      "group": "Introduction"
+    },
+    {
+      "id": "t-users",
+      "title": "Database users",
+      "group": "Introduction"
+    },
+    {
+      "id": "t-models",
+      "title": "Models, schemas, architecture",
+      "group": "Introduction"
+    },
+    {
+      "id": "t-lang",
+      "title": "Languages and system structure",
+      "group": "Introduction"
+    },
+    {
+      "id": "t-process",
+      "title": "Design process",
+      "group": "Conceptual design (ERD)"
+    },
+    {
+      "id": "t-er",
+      "title": "Entities and attributes",
+      "group": "Conceptual design (ERD)"
+    },
+    {
+      "id": "t-relship",
+      "title": "Relationships and constraints",
+      "group": "Conceptual design (ERD)"
+    },
+    {
+      "id": "t-example",
+      "title": "Building an ERD",
+      "group": "Conceptual design (ERD)"
+    },
+    {
+      "id": "t-relmodel",
+      "title": "Relational model",
+      "group": "Logical design"
+    },
+    {
+      "id": "t-mapping",
+      "title": "ER to relational mapping",
+      "group": "Logical design"
+    },
+    {
+      "id": "t-ddl",
+      "title": "Creating tables in SQL",
+      "group": "Database creation"
+    },
+    {
+      "id": "t-fk",
+      "title": "Foreign keys and violations",
+      "group": "Database creation"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
+  ]
+}

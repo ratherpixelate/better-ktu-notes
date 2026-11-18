@@ -1,9 +1,9 @@
-const SEARCH_INDEX = [
+[
   {
     "id": "t-orgarch",
     "title": "Organization vs architecture",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-orgarch",
+    "url": "/notes/coa-module-1/#t-orgarch",
     "chips": [
       "Differentiate",
       "Define"
@@ -14,7 +14,7 @@ const SEARCH_INDEX = [
     "id": "t-units",
     "title": "Functional units of a computer",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-units",
+    "url": "/notes/coa-module-1/#t-units",
     "chips": [
       "Draw",
       "Define"
@@ -25,7 +25,7 @@ const SEARCH_INDEX = [
     "id": "t-ops",
     "title": "Basic operational concepts",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-ops",
+    "url": "/notes/coa-module-1/#t-ops",
     "chips": [
       "Explain steps",
       "Draw",
@@ -37,7 +37,7 @@ const SEARCH_INDEX = [
     "id": "t-interrupt",
     "title": "Interrupts",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-interrupt",
+    "url": "/notes/coa-module-1/#t-interrupt",
     "chips": [
       "Define",
       "List classes"
@@ -48,7 +48,7 @@ const SEARCH_INDEX = [
     "id": "t-bus",
     "title": "Bus structures",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-bus",
+    "url": "/notes/coa-module-1/#t-bus",
     "chips": [
       "Draw",
       "Differentiate",
@@ -60,7 +60,7 @@ const SEARCH_INDEX = [
     "id": "t-software",
     "title": "System software",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-software",
+    "url": "/notes/coa-module-1/#t-software",
     "chips": [
       "Short note"
     ],
@@ -70,7 +70,7 @@ const SEARCH_INDEX = [
     "id": "t-memory",
     "title": "Memory locations and addresses",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-memory",
+    "url": "/notes/coa-module-1/#t-memory",
     "chips": [
       "Numerical",
       "Define",
@@ -82,7 +82,7 @@ const SEARCH_INDEX = [
     "id": "t-signed",
     "title": "Signed integer representations",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-signed",
+    "url": "/notes/coa-module-1/#t-signed",
     "chips": [
       "Numerical",
       "Compare",
@@ -94,18 +94,18 @@ const SEARCH_INDEX = [
     "id": "t-float",
     "title": "IEEE 754 floating point",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-float",
+    "url": "/notes/coa-module-1/#t-float",
     "chips": [
       "Added",
       "Numerical"
     ],
-    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (\u22121)^s 2^(E bias) stored true"
+    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (−1)^s 2^(E bias) stored true"
   },
   {
     "id": "t-formats",
     "title": "Instruction types and formats",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-formats",
+    "url": "/notes/coa-module-1/#t-formats",
     "chips": [
       "Numerical",
       "Write programs",
@@ -117,7 +117,7 @@ const SEARCH_INDEX = [
     "id": "t-seq",
     "title": "Instruction sequencing and branching",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-seq",
+    "url": "/notes/coa-module-1/#t-seq",
     "chips": [
       "Explain",
       "Write programs"
@@ -128,7 +128,7 @@ const SEARCH_INDEX = [
     "id": "t-shifts",
     "title": "Logical and arithmetic shifts",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-shifts",
+    "url": "/notes/coa-module-1/#t-shifts",
     "chips": [
       "Numerical",
       "Differentiate",
@@ -140,7 +140,7 @@ const SEARCH_INDEX = [
     "id": "t-modes",
     "title": "Addressing modes",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-modes",
+    "url": "/notes/coa-module-1/#t-modes",
     "chips": [
       "Numerical",
       "Define",
@@ -152,7 +152,7 @@ const SEARCH_INDEX = [
     "id": "t-isa",
     "title": "Instruction set architecture principles",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-isa",
+    "url": "/notes/coa-module-1/#t-isa",
     "chips": [
       "Define",
       "Classify",
@@ -164,7 +164,7 @@ const SEARCH_INDEX = [
     "id": "t-encoding",
     "title": "Encoding of instructions",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-encoding",
+    "url": "/notes/coa-module-1/#t-encoding",
     "chips": [
       "Numerical",
       "Draw",
@@ -176,7 +176,7 @@ const SEARCH_INDEX = [
     "id": "t-risc",
     "title": "RISC architecture",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-risc",
+    "url": "/notes/coa-module-1/#t-risc",
     "chips": [
       "Explain",
       "Short note",
@@ -188,7 +188,7 @@ const SEARCH_INDEX = [
     "id": "t-riscvscisc",
     "title": "RISC vs CISC",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-riscvscisc",
+    "url": "/notes/coa-module-1/#t-riscvscisc",
     "chips": [
       "Differentiate",
       "Table answer"
@@ -199,18 +199,18 @@ const SEARCH_INDEX = [
     "id": "t-sheet",
     "title": "One-page cheat sheet",
     "badge": "COA M1",
-    "url": "COA Module 1 Notes.html#t-sheet",
+    "url": "/notes/coa-module-1/#t-sheet",
     "chips": [
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: \u22121), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
+    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: −1), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
   },
   {
     "id": "t-single",
     "title": "Single-cycle processor",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-single",
+    "url": "/notes/coa-module-2/#t-single",
     "chips": [
       "Added",
       "Define",
@@ -222,7 +222,7 @@ const SEARCH_INDEX = [
     "id": "t-multi",
     "title": "Multi-cycle processor",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-multi",
+    "url": "/notes/coa-module-2/#t-multi",
     "chips": [
       "Added",
       "Differentiate",
@@ -235,7 +235,7 @@ const SEARCH_INDEX = [
     "id": "t-intro",
     "title": "Introduction to pipelining",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-intro",
+    "url": "/notes/coa-module-2/#t-intro",
     "chips": [
       "Define",
       "Short note",
@@ -247,7 +247,7 @@ const SEARCH_INDEX = [
     "id": "t-stages",
     "title": "The five-stage RISC pipeline",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-stages",
+    "url": "/notes/coa-module-2/#t-stages",
     "chips": [
       "Draw",
       "Explain steps",
@@ -259,7 +259,7 @@ const SEARCH_INDEX = [
     "id": "t-perf",
     "title": "Pipeline performance",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-perf",
+    "url": "/notes/coa-module-2/#t-perf",
     "chips": [
       "Added",
       "Numerical",
@@ -271,7 +271,7 @@ const SEARCH_INDEX = [
     "id": "t-struct",
     "title": "Pipeline hazards and structural hazards",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-struct",
+    "url": "/notes/coa-module-2/#t-struct",
     "chips": [
       "Define",
       "3 marks"
@@ -282,7 +282,7 @@ const SEARCH_INDEX = [
     "id": "t-data",
     "title": "Data hazards",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-data",
+    "url": "/notes/coa-module-2/#t-data",
     "chips": [
       "Numerical",
       "Define",
@@ -294,7 +294,7 @@ const SEARCH_INDEX = [
     "id": "t-control",
     "title": "Control hazards",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-control",
+    "url": "/notes/coa-module-2/#t-control",
     "chips": [
       "Numerical",
       "Explain",
@@ -307,7 +307,7 @@ const SEARCH_INDEX = [
     "id": "t-impl",
     "title": "Pipelining implementation",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-impl",
+    "url": "/notes/coa-module-2/#t-impl",
     "chips": [
       "Added",
       "Explain",
@@ -319,7 +319,7 @@ const SEARCH_INDEX = [
     "id": "t-multicycle",
     "title": "RISC-V integer pipeline with multicycle operations",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-multicycle",
+    "url": "/notes/coa-module-2/#t-multicycle",
     "chips": [
       "Added",
       "Define",
@@ -332,7 +332,7 @@ const SEARCH_INDEX = [
     "id": "t-sheet",
     "title": "One-page cheat sheet",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-sheet",
+    "url": "/notes/coa-module-2/#t-sheet",
     "chips": [
       "Added",
       "Revise the night before"
@@ -343,7 +343,7 @@ const SEARCH_INDEX = [
     "id": "t-qa",
     "title": "Likely questions with answer outlines",
     "badge": "COA M2",
-    "url": "COA Module 2 Notes.html#t-qa",
+    "url": "/notes/coa-module-2/#t-qa",
     "chips": [
       "Added",
       "Covers every syllabus line"
@@ -354,7 +354,7 @@ const SEARCH_INDEX = [
     "id": "t-basics",
     "title": "Data, information and data structures",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-basics",
+    "url": "/notes/ds-module-1/#t-basics",
     "chips": [
       "Define",
       "Short note"
@@ -365,7 +365,7 @@ const SEARCH_INDEX = [
     "id": "t-classes",
     "title": "Classification of data structures",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-classes",
+    "url": "/notes/ds-module-1/#t-classes",
     "chips": [
       "Differentiate",
       "Define",
@@ -377,7 +377,7 @@ const SEARCH_INDEX = [
     "id": "t-space",
     "title": "Algorithm analysis: space complexity",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-space",
+    "url": "/notes/ds-module-1/#t-space",
     "chips": [
       "Define",
       "Numerical",
@@ -390,7 +390,7 @@ const SEARCH_INDEX = [
     "id": "t-time",
     "title": "Time complexity and growth functions",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-time",
+    "url": "/notes/ds-module-1/#t-time",
     "chips": [
       "Draw graph",
       "Table",
@@ -403,7 +403,7 @@ const SEARCH_INDEX = [
     "id": "t-asym",
     "title": "Asymptotic notations: best, worst, average case",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-asym",
+    "url": "/notes/ds-module-1/#t-asym",
     "chips": [
       "Define",
       "Numerical",
@@ -416,7 +416,7 @@ const SEARCH_INDEX = [
     "id": "t-arrays",
     "title": "Arrays and address calculation",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-arrays",
+    "url": "/notes/ds-module-1/#t-arrays",
     "chips": [
       "Numerical",
       "Define",
@@ -428,7 +428,7 @@ const SEARCH_INDEX = [
     "id": "t-sparse",
     "title": "Sparse matrix",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-sparse",
+    "url": "/notes/ds-module-1/#t-sparse",
     "chips": [
       "Define",
       "Numerical",
@@ -440,7 +440,7 @@ const SEARCH_INDEX = [
     "id": "t-poly",
     "title": "Polynomial representation and addition",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-poly",
+    "url": "/notes/ds-module-1/#t-poly",
     "chips": [
       "Algorithm",
       "Numerical",
@@ -452,7 +452,7 @@ const SEARCH_INDEX = [
     "id": "t-stack",
     "title": "Stack using an array",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-stack",
+    "url": "/notes/ds-module-1/#t-stack",
     "chips": [
       "Algorithm",
       "Define",
@@ -465,7 +465,7 @@ const SEARCH_INDEX = [
     "id": "t-queue",
     "title": "Queue using an array",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-queue",
+    "url": "/notes/ds-module-1/#t-queue",
     "chips": [
       "Algorithm",
       "Define",
@@ -477,7 +477,7 @@ const SEARCH_INDEX = [
     "id": "t-cqueue",
     "title": "Circular queue",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-cqueue",
+    "url": "/notes/ds-module-1/#t-cqueue",
     "chips": [
       "Algorithm",
       "Differentiate",
@@ -489,7 +489,7 @@ const SEARCH_INDEX = [
     "id": "t-deque",
     "title": "Other queues: deque and priority queue",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-deque",
+    "url": "/notes/ds-module-1/#t-deque",
     "chips": [
       "Define",
       "Concept only",
@@ -501,7 +501,7 @@ const SEARCH_INDEX = [
     "id": "t-postfix",
     "title": "Infix to postfix conversion using a stack",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-postfix",
+    "url": "/notes/ds-module-1/#t-postfix",
     "chips": [
       "Numerical",
       "Algorithm",
@@ -514,7 +514,7 @@ const SEARCH_INDEX = [
     "id": "t-eval",
     "title": "Postfix evaluation using a stack",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-eval",
+    "url": "/notes/ds-module-1/#t-eval",
     "chips": [
       "Numerical",
       "Algorithm",
@@ -526,18 +526,18 @@ const SEARCH_INDEX = [
     "id": "t-sheet",
     "title": "One-page cheat sheet",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-sheet",
+    "url": "/notes/ds-module-1/#t-sheet",
     "chips": [
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c\u00b7g, worst case, upper bound best case, lower bound c\u2081\u00b7g c\u2082\u00b7g, average case, tight"
+    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c·g, worst case, upper bound best case, lower bound c₁·g c₂·g, average case, tight"
   },
   {
     "id": "t-qa",
     "title": "Likely questions with answer outlines",
     "badge": "DS M1",
-    "url": "DS Module 1 Notes.html#t-qa",
+    "url": "/notes/ds-module-1/#t-qa",
     "chips": [
       "Added",
       "Covers every syllabus line"
@@ -548,7 +548,7 @@ const SEARCH_INDEX = [
     "id": "t-intro",
     "title": "Databases and DBMS",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-intro",
+    "url": "/notes/dbms-module-1/#t-intro",
     "chips": [
       "Define",
       "Added"
@@ -559,7 +559,7 @@ const SEARCH_INDEX = [
     "id": "t-approach",
     "title": "Database approach: characteristics and advantages",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-approach",
+    "url": "/notes/dbms-module-1/#t-approach",
     "chips": [
       "List",
       "Explain"
@@ -570,7 +570,7 @@ const SEARCH_INDEX = [
     "id": "t-users",
     "title": "Database users",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-users",
+    "url": "/notes/dbms-module-1/#t-users",
     "chips": [
       "List",
       "Differentiate"
@@ -581,7 +581,7 @@ const SEARCH_INDEX = [
     "id": "t-models",
     "title": "Data models, schemas and the three-schema architecture",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-models",
+    "url": "/notes/dbms-module-1/#t-models",
     "chips": [
       "Define",
       "Draw",
@@ -593,7 +593,7 @@ const SEARCH_INDEX = [
     "id": "t-lang",
     "title": "DBMS languages, interfaces and system structure",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-lang",
+    "url": "/notes/dbms-module-1/#t-lang",
     "chips": [
       "Differentiate",
       "Draw"
@@ -604,7 +604,7 @@ const SEARCH_INDEX = [
     "id": "t-process",
     "title": "Database design process",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-process",
+    "url": "/notes/dbms-module-1/#t-process",
     "chips": [
       "List",
       "Draw"
@@ -615,7 +615,7 @@ const SEARCH_INDEX = [
     "id": "t-er",
     "title": "ER model: entities, attributes and keys",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-er",
+    "url": "/notes/dbms-module-1/#t-er",
     "chips": [
       "Define",
       "Draw"
@@ -626,7 +626,7 @@ const SEARCH_INDEX = [
     "id": "t-relship",
     "title": "Relationships, constraints and weak entities",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-relship",
+    "url": "/notes/dbms-module-1/#t-relship",
     "chips": [
       "Define",
       "Draw",
@@ -638,7 +638,7 @@ const SEARCH_INDEX = [
     "id": "t-example",
     "title": "Building an ERD from requirements",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-example",
+    "url": "/notes/dbms-module-1/#t-example",
     "chips": [
       "Added",
       "Draw",
@@ -650,7 +650,7 @@ const SEARCH_INDEX = [
     "id": "t-relmodel",
     "title": "Relational model and its constraints",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-relmodel",
+    "url": "/notes/dbms-module-1/#t-relmodel",
     "chips": [
       "Define",
       "Differentiate",
@@ -662,7 +662,7 @@ const SEARCH_INDEX = [
     "id": "t-mapping",
     "title": "ER to relational mapping",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-mapping",
+    "url": "/notes/dbms-module-1/#t-mapping",
     "chips": [
       "Algorithm",
       "Design",
@@ -674,7 +674,7 @@ const SEARCH_INDEX = [
     "id": "t-ddl",
     "title": "Creating the database: tables in SQL",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-ddl",
+    "url": "/notes/dbms-module-1/#t-ddl",
     "chips": [
       "Added",
       "Write SQL"
@@ -685,7 +685,7 @@ const SEARCH_INDEX = [
     "id": "t-fk",
     "title": "Tables, relationships and foreign keys in action",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-fk",
+    "url": "/notes/dbms-module-1/#t-fk",
     "chips": [
       "Added",
       "Write SQL",
@@ -697,7 +697,7 @@ const SEARCH_INDEX = [
     "id": "t-sheet",
     "title": "One-page cheat sheet",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-sheet",
+    "url": "/notes/dbms-module-1/#t-sheet",
     "chips": [],
     "keywords": "One-page cheat sheet revised DBMS basics Define, construct, manipulate, share Self-describing catalog (meta-data) Program-data independence, views, abstraction Concurrency control and recovery Don't use for simple, real-time, single-user cases Users On the scene: DBA, designer, end users End users: casual, naive, sophisticated, stand-alone Behind the scene:"
   },
@@ -705,11 +705,11 @@ const SEARCH_INDEX = [
     "id": "t-qa",
     "title": "Likely questions with answer outlines",
     "badge": "DBMS M1",
-    "url": "DBMS Module 1 Notes.html#t-qa",
+    "url": "/notes/dbms-module-1/#t-qa",
     "chips": [
       "Added",
       "Covers every syllabus line"
     ],
     "keywords": "Likely questions with answer outlines revised Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours. Explain the characteristics of the database approach and its advantages over file"
   }
-];
+]
