@@ -52,7 +52,8 @@
   const MODULES = [
     { key: 'coa-m1-revised', total: 18, id: 'prog-coa-m1', fillId: 'fill-coa-m1' },
     { key: 'coa-m2-revised', total: 12, id: 'prog-coa-m2', fillId: 'fill-coa-m2' },
-    { key: 'ds-m1-revised', total: 16, id: 'prog-ds-m1', fillId: 'fill-ds-m1' }
+    { key: 'ds-m1-revised', total: 16, id: 'prog-ds-m1', fillId: 'fill-ds-m1' },
+    { key: 'dbms-m1-revised', total: 15, id: 'prog-dbms-m1', fillId: 'fill-dbms-m1' }
   ];
 
   function getModuleCompleted(key) {

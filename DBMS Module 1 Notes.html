@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FA">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0E14">
+  <meta name="color-scheme" content="light dark">
+  <title>DBMS Module 1: Database Design &amp; Creation · BetterKTUNotes</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/search-data.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="site-nav">
+    <div class="nav-container">
+      <a href="index.html" class="brand-wrap" aria-label="BetterKTUNotes Home">
+        <div class="brand-logo" aria-hidden="true">B</div>
+        <div class="brand-text">
+          <span class="brand-title">BetterKTUNotes</span>
+          <span class="brand-subtitle">KTU · 2024 Scheme</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-back-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          <span>All Subjects</span>
+        </a>
+        <button class="search-trigger" onclick="openSearch()" aria-label="Search notes (Ctrl+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <span>Search...</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+        <button class="btn-icon" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <span id="theme-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+<nav class="toc" aria-label="Module sections">
+  <p class="brand">PBITT304 · Module 1</p>
+  <ul id="toclist">
+    <li class="grp">Introduction</li>
+    <li><a href="#t-intro">Databases and DBMS</a></li>
+    <li><a href="#t-approach">Database approach</a></li>
+    <li><a href="#t-users">Database users</a></li>
+    <li><a href="#t-models">Models, schemas, architecture</a></li>
+    <li><a href="#t-lang">Languages and system structure</a></li>
+    <li class="grp">Conceptual design (ERD)</li>
+    <li><a href="#t-process">Design process</a></li>
+    <li><a href="#t-er">Entities and attributes</a></li>
+    <li><a href="#t-relship">Relationships and constraints</a></li>
+    <li><a href="#t-example">Building an ERD</a></li>
+    <li class="grp">Logical design</li>
+    <li><a href="#t-relmodel">Relational model</a></li>
+    <li><a href="#t-mapping">ER to relational mapping</a></li>
+    <li class="grp">Database creation</li>
+    <li><a href="#t-ddl">Creating tables in SQL</a></li>
+    <li><a href="#t-fk">Foreign keys and violations</a></li>
+    <li class="grp">Revise</li>
+    <li><a href="#t-sheet">One-page cheat sheet</a></li>
+    <li><a href="#t-qa">Likely questions</a></li>
+  </ul>
+  <p class="progress" id="progress" aria-live="polite"></p>
+</nav>
+
+<main class="notes-main">
+<header class="top">
+  <p class="eyebrow">PBITT304 · Database Management Systems</p>
+  <h1>Module 1: Database design and creation</h1>
+  <p class="lede">Rebuilt from your Elmasri and Navathe slides (chapters 1, 2, 3, 5 and 7) with the filler cut. The slides cover the theory well but not the syllabus lines on a database project, so I added how to scope a project, how to build an ERD from requirements, and how to create the tables in SQL. I ran the SQL examples in SQLite.</p>
+  <div class="legend">
+    <div><span class="chip add">Added</span><span>Not in your class notes. Written from the syllabus and standard references, so check it against your textbook.</span></div>
+    <div><span class="chip fix">Check</span><span>Your slides have an error, an OCR slip or a gap. Read these first.</span></div>
+    <div><span class="chip">Draw</span><span>Question types to expect: draw, define, differentiate, design, write SQL.</span></div>
+  </div>
+</header>
+
+<!-- ============ INTRO ============ -->
+<section class="topic" id="t-intro">
+  <div class="head"><h2>Databases and DBMS</h2><label class="rev" for="r-intro"><input class="rev" type="checkbox" id="r-intro" data-sec="t-intro">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip add">Added</span></div>
+  <div class="note def"><p><span class="lbl">Database</span>A collection of <strong>related data</strong>. <strong>Data</strong> is known facts that can be recorded and have an implicit meaning. <strong>Information</strong> is data with explicit meaning, that is, processed data.</p></div>
+  <div class="note def"><p><span class="lbl">DBMS</span>Database management system: software that lets users <strong>create and maintain</strong> a computerised database. The <strong>database system</strong> is the DBMS software together with the data itself (and sometimes the applications).</p></div>
+
+  <h3>What a DBMS does</h3>
+  <ul class="t">
+    <li><strong>Define</strong> the database: data types, structures and constraints.</li>
+    <li><strong>Construct</strong> it: load the initial data onto secondary storage.</li>
+    <li><strong>Manipulate</strong> it: retrieval (queries, reports) and modification (insert, delete, update), also through web applications.</li>
+    <li><strong>Process and share</strong> it among concurrent users while keeping the data valid and consistent.</li>
+    <li>Other features: security against unauthorised access, "active" processing (triggers), presentation of data, and maintenance of the database and programs over its lifetime.</li>
+  </ul>
+
+  <h3>Types of database applications</h3>
+  <p>Traditional: numeric and textual databases. More recent: multimedia, geographic information systems (GIS), data warehouses, real-time and active databases. This course focuses on the traditional kind.</p>
+
+  <h3>Scope and objectives of a database project</h3>
+  <div class="note add"><p><span class="lbl">Added</span>Your slides use the UNIVERSITY and COMPANY examples but never say how to scope a project. The syllabus asks for it, so here is the short version.</p></div>
+  <ul class="t">
+    <li><strong>Mini-world:</strong> the part of the real world the database models, for example one college's activity points.</li>
+    <li><strong>Objectives:</strong> the questions the database must answer and the transactions it must support (for example "list students below the required points").</li>
+    <li><strong>Scope:</strong> what is in (entities, users, reports) and what is deliberately left out. A small, well-defined scope is easier to design and test.</li>
+    <li><strong>Users:</strong> who inserts, who queries, who administers.</li>
+  </ul>
+
+  <h3>Importance of a DBMS in real-world applications</h3>
+  <ul class="t">
+    <li>Banking and reservations: hundreds of concurrent transactions per second (OLTP) with correct, current data.</li>
+    <li>Universities and hospitals: many departments share one consistent record of students or patients.</li>
+    <li>E-commerce and the web: pages generated from a database, with XML or PHP/JavaScript on top.</li>
+    <li>Data warehouses and data mining: large historical data analysed for decisions.</li>
+  </ul>
+  <p>Roughly in the order of history: hierarchical and network models (1960s to 70s), relational (Codd 1970, products from the early 80s), object-oriented (late 80s, little uptake), then object-relational and web/XML data.</p>
+</section>
+
+<section class="topic" id="t-approach">
+  <div class="head"><h2>Database approach: characteristics and advantages</h2><label class="rev" for="r-approach"><input class="rev" type="checkbox" id="r-approach" data-sec="t-approach">revised</label></div>
+  <div class="chips"><span class="chip">List</span><span class="chip">Explain</span></div>
+  <h3>Main characteristics (file system vs database)</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Characteristic</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Self-describing</strong></td><td>The <strong>catalog</strong> stores a description of the database (structures, types, constraints). This description is <strong>meta-data</strong>, and it lets the same DBMS software work with any database.</td></tr>
+      <tr><td><strong>Program-data independence</strong></td><td>Data structures and storage can change without changing the programs that access the data. In file processing the structure is inside the program.</td></tr>
+      <tr><td><strong>Data abstraction</strong></td><td>A data model hides storage details and shows a conceptual view. Programs use model constructs, not storage details.</td></tr>
+      <tr><td><strong>Multiple views</strong></td><td>Each user group sees only the data it needs.</td></tr>
+      <tr><td><strong>Sharing and multi-user transactions</strong></td><td><strong>Concurrency control</strong> makes each transaction execute correctly or abort. The <strong>recovery</strong> subsystem makes sure a completed transaction's effect is permanent.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Advantages of using a DBMS</h3>
+  <ul class="t">
+    <li>Controlling <strong>redundancy</strong> in storage and in development effort.</li>
+    <li><strong>Sharing</strong> of data among users, and multiple interfaces for different classes of users.</li>
+    <li>Restricting <strong>unauthorised access</strong>.</li>
+    <li>Persistent storage for program objects, and <strong>indexes</strong> for efficient query processing.</li>
+    <li><strong>Backup and recovery</strong> services.</li>
+    <li>Representing <strong>complex relationships</strong> among data and enforcing <strong>integrity constraints</strong>.</li>
+    <li>Inferences and actions from stored data using deductive and active rules.</li>
+    <li>Further implications: enforcing standards, shorter development time for each new application, flexibility to change structures, up-to-date information, economies of scale.</li>
+  </ul>
+
+  <h3>When not to use a DBMS</h3>
+  <ul class="t">
+    <li><strong>Costs:</strong> high initial investment (possibly extra hardware), and overhead for generality, security, concurrency control, recovery and integrity.</li>
+    <li><strong>Unnecessary when:</strong> the database and applications are simple, well defined and not expected to change; there are stringent real-time requirements the overhead would break; multiple users do not need access.</li>
+    <li><strong>Insufficient when:</strong> the data is too complex for the model, or users need special operations the DBMS does not support.</li>
+  </ul>
+</section>
+
+<section class="topic" id="t-users">
+  <div class="head"><h2>Database users</h2><label class="rev" for="r-users"><input class="rev" type="checkbox" id="r-users" data-sec="t-users">revised</label></div>
+  <div class="chips"><span class="chip">List</span><span class="chip">Differentiate</span></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Group</th><th>Who</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><strong>Actors on the scene</strong><br>(use or manage the database)</td><td>Database administrator (DBA)</td><td>Authorises access, coordinates and monitors use, acquires hardware and software, monitors efficiency.</td></tr>
+      <tr><td>Database designer</td><td>Defines content, structure, constraints, and functions or transactions. Talks to end users to understand their needs.</td></tr>
+      <tr><td>End users</td><td>Query, report and update. Categories below.</td></tr>
+      <tr><td><strong>Workers behind the scene</strong></td><td>DBMS designers and implementers, tool developers, operators and maintenance staff</td><td>Build and run the DBMS software and the system, but are not interested in the database content.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>End-user categories</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Category</th><th>Description and example</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Casual</strong></td><td>Access the database occasionally when needed.</td></tr>
+      <tr><td><strong>Naive (parametric)</strong></td><td>A large share of end users. Use well-defined "canned transactions" repeatedly. Example: bank tellers, reservation clerks.</td></tr>
+      <tr><td><strong>Sophisticated</strong></td><td>Business analysts, scientists, engineers who know the system capabilities and use tools or write their own queries.</td></tr>
+      <tr><td><strong>Stand-alone</strong></td><td>Keep personal databases with ready-made packages. Example: a tax program, an address book.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="topic" id="t-models">
+  <div class="head"><h2>Data models, schemas and the three-schema architecture</h2><label class="rev" for="r-models"><input class="rev" type="checkbox" id="r-models" data-sec="t-models">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Draw</span><span class="chip">Differentiate</span></div>
+  <div class="note def"><p><span class="lbl">Data model</span>A set of concepts to describe the <strong>structure</strong> of a database, the <strong>operations</strong> for manipulating it, and the <strong>constraints</strong> it must obey.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Category</th><th>Close to</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Conceptual</strong> (high-level, semantic)</td><td>How users see data. Also called entity-based or object-based.</td><td>ER model</td></tr>
+      <tr><td><strong>Implementation</strong> (representational)</td><td>Between the two. Used by commercial DBMSs.</td><td>Relational, network, hierarchical</td></tr>
+      <tr><td><strong>Physical</strong> (low-level, internal)</td><td>How data is stored: record formats, ordering, access paths.</td><td>File structures, indexes</td></tr>
+    </tbody>
+  </table></div>
+  <p>Operations are either basic (insert, delete, update) or user-defined (for example <code>compute_student_gpa</code>).</p>
+
+  <h3>Schema, state and instance</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Database schema</th><th>Database state</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Meaning</strong></td><td>The <strong>description</strong> of the database: structure, data types, constraints.</td><td>The <strong>actual data</strong> at a particular moment. Also called instance, occurrence or snapshot.</td></tr>
+      <tr><td><strong>Other name</strong></td><td>Intension</td><td>Extension</td></tr>
+      <tr><td><strong>Changes</strong></td><td>Very infrequently</td><td>Every update</td></tr>
+    </tbody>
+  </table></div>
+  <p>The <strong>initial state</strong> is the state when data is first loaded. A <strong>valid state</strong> satisfies the structure and all constraints. A <strong>schema diagram</strong> is a picture of the schema, and a <strong>schema construct</strong> is one component of it, such as STUDENT.</p>
+
+  <h3>Three-schema architecture</h3>
+  <p>Proposed to support program-data independence and multiple views. Commercial DBMSs do not follow it exactly, but it explains how a DBMS is organised.</p>
+  <figure class="fig">
+<svg viewBox="0 0 720 384" role="img" aria-labelledby="fig_threet fig_threed"><title id="fig_threet">Three-schema architecture</title><desc id="fig_threed">Three levels: external views for users, one conceptual schema for the whole database, and an internal schema for storage, linked by two mappings down to the stored database.</desc><defs><marker id="fig_threeah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs>
+<text class="s-s" x="360" y="18" text-anchor="middle" >End users and application programs</text>
+<rect class="s-box" x="70" y="30" width="190" height="34" rx="3"/>
+<rect class="s-box" x="265" y="30" width="190" height="34" rx="3"/>
+<rect class="s-box" x="460" y="30" width="190" height="34" rx="3"/>
+<text class="s-t" x="165" y="52" text-anchor="middle" >External view 1</text>
+<text class="s-t" x="360" y="52" text-anchor="middle" >External view 2</text>
+<text class="s-t" x="555" y="52" text-anchor="middle" >External view n</text>
+<rect class="s-dash" x="20" y="84" width="680" height="52" rx="3"/>
+<text class="s-m" x="32" y="100" text-anchor="start" >EXTERNAL LEVEL</text>
+<text class="s-s" x="360" y="125" text-anchor="middle" >what each user group sees (views)</text>
+<path class="s-line" d="M360 64 L360 84" marker-end="url(#fig_threeah)"/>
+<path class="s-line" d="M360 136 L360 166" marker-end="url(#fig_threeah)"/>
+<text class="s-s" x="372" y="155" text-anchor="start" >external/conceptual mapping</text>
+<rect class="s-dash" x="20" y="166" width="680" height="60" rx="3"/>
+<text class="s-m" x="32" y="182" text-anchor="start" >CONCEPTUAL LEVEL</text>
+<rect class="s-box2" x="250" y="190" width="220" height="30" rx="3"/>
+<text class="s-t" x="360" y="210" text-anchor="middle" >Conceptual schema</text>
+<path class="s-line" d="M360 226 L360 256" marker-end="url(#fig_threeah)"/>
+<text class="s-s" x="372" y="245" text-anchor="start" >conceptual/internal mapping</text>
+<rect class="s-dash" x="20" y="256" width="680" height="60" rx="3"/>
+<text class="s-m" x="32" y="272" text-anchor="start" >INTERNAL LEVEL</text>
+<rect class="s-box2" x="250" y="280" width="220" height="30" rx="3"/>
+<text class="s-t" x="360" y="300" text-anchor="middle" >Internal schema</text>
+<path class="s-line" d="M360 316 L360 340" marker-end="url(#fig_threeah)"/>
+<rect class="s-box" x="260" y="340" width="200" height="34" rx="3"/>
+<text class="s-t" x="360" y="362" text-anchor="middle" >Stored database</text>
+<text class="s-s" x="660" y="205" text-anchor="end" >whole database</text>
+<text class="s-s" x="660" y="295" text-anchor="end" >files, indexes</text>
+</svg>
+    <figcaption>Users and programs refer to an external schema. The DBMS maps requests down to the conceptual schema and then to the internal schema, and reformats results on the way back.</figcaption>
+  </figure>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Level</th><th>Describes</th><th>Uses</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Internal schema</strong></td><td>Physical storage structures and access paths such as indexes</td><td>A physical data model</td></tr>
+      <tr><td><strong>Conceptual schema</strong></td><td>Structure and constraints of the <strong>whole</strong> database for a community of users</td><td>A conceptual or implementation model</td></tr>
+      <tr><td><strong>External schemas</strong></td><td>The various user views</td><td>Usually the same model as the conceptual schema</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Data independence</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Type</th><th>Ability to change</th><th>Without changing</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Logical</strong></td><td>The conceptual schema</td><td>External schemas and application programs</td></tr>
+      <tr><td><strong>Physical</strong></td><td>The internal schema (new indexes, reorganised files)</td><td>The conceptual schema</td></tr>
+    </tbody>
+  </table></div>
+  <p>When a lower schema changes, only the <strong>mappings</strong> between levels change. The higher schemas stay the same, so application programs need no change. Logical independence is the harder one to achieve.</p>
+</section>
+
+<section class="topic" id="t-lang">
+  <div class="head"><h2>DBMS languages, interfaces and system structure</h2><label class="rev" for="r-lang"><input class="rev" type="checkbox" id="r-lang" data-sec="t-lang">revised</label></div>
+  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Draw</span></div>
+  <h3>Languages</h3>
+  <ul class="t">
+    <li><strong>DDL</strong> (data definition language): used by the DBA and designers to specify the conceptual schema. Some DBMSs also use it for internal and external schemas. Others have a separate <strong>SDL</strong> (storage definition) and <strong>VDL</strong> (view definition).</li>
+    <li><strong>DML</strong> (data manipulation language): retrievals and updates. It can be <strong>embedded</strong> in a host language (C, Java) or used stand-alone as a <strong>query language</strong>.</li>
+  </ul>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>High-level (non-procedural)</th><th>Low-level (procedural)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Example</strong></td><td>SQL</td><td>Navigational languages of the network and hierarchical models</td></tr>
+      <tr><td><strong>Style</strong></td><td>Set-oriented and declarative: says <em>what</em> to retrieve</td><td>One record at a time: says <em>how</em>, with loops and pointer positioning</td></tr>
+      <tr><td><strong>Use</strong></td><td>Stand-alone or embedded</td><td>Must be embedded in a programming language</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Interfaces</h3>
+  <ul class="t">
+    <li>Stand-alone query interface (for example SQL*Plus).</li>
+    <li>Programmer interfaces: <strong>embedded</strong> SQL (SQLJ), <strong>procedure-call</strong> (JDBC, ODBC), or a <strong>database programming language</strong> (PL/SQL).</li>
+    <li>User-friendly: menu-based, forms-based (naive users), graphical, natural language, speech, web browser, parametric (bank-teller function keys).</li>
+    <li>DBA interfaces: create accounts, grant authorisations, set system parameters, change schemas or access paths.</li>
+  </ul>
+
+  <h3>Utilities</h3>
+  <p>Loading data from files (with conversion), backup, file reorganisation, report generation, performance monitoring, and sorting, user monitoring and compression. CASE and application-development tools are separate.</p>
+
+  <h3>Architectures</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Architecture</th><th>Idea</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Centralised</strong></td><td>DBMS, hardware, applications and user-interface processing all on one system. Remote terminals only display, all processing is at the central site.</td></tr>
+      <tr><td><strong>Two-tier client-server</strong></td><td>Clients run the application and talk to a DBMS server (SQL, query or transaction server) through an API such as <strong>ODBC</strong> or <strong>JDBC</strong>. Other specialised servers: print, file, web, email.</td></tr>
+      <tr><td><strong>Three-tier</strong></td><td>Adds an <strong>application or web server</strong> in the middle that holds the business logic. The database server is reachable only through the middle tier, which improves security. Common for web applications.</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Classification of DBMSs:</strong> by data model (relational, network, hierarchical, object-oriented, object-relational), single-user or multi-user, centralised or distributed (homogeneous, heterogeneous, federated), and by cost (free ones such as MySQL and PostgreSQL up to very costly commercial ones).</p>
+</section>
+
+<!-- ============ DESIGN ============ -->
+<section class="topic" id="t-process">
+  <div class="head"><h2>Database design process</h2><label class="rev" for="r-process"><input class="rev" type="checkbox" id="r-process" data-sec="t-process">revised</label></div>
+  <div class="chips"><span class="chip">List</span><span class="chip">Draw</span></div>
+  <p>Two activities: <strong>database design</strong> (the conceptual schema, our focus) and <strong>application design</strong> (programs and interfaces, which is software engineering).</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Phase</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1. Requirements collection and analysis</strong></td><td>Data requirements and functional requirements for the mini-world</td></tr>
+      <tr><td><strong>2. Conceptual design</strong></td><td>Conceptual schema in a high-level model (the <strong>ER diagram</strong>). DBMS-independent.</td></tr>
+      <tr><td><strong>3. Logical design</strong> (data model mapping)</td><td>Relational schema. DBMS-specific model.</td></tr>
+      <tr><td><strong>4. Physical design</strong></td><td>Internal schema: file structures, indexes</td></tr>
+    </tbody>
+  </table></div>
+  <p>Functional requirements run in parallel: <em>functional analysis</em> gives high-level transaction specifications, which become application programs and their implementation.</p>
+</section>
+
+<section class="topic" id="t-er">
+  <div class="head"><h2>ER model: entities, attributes and keys</h2><label class="rev" for="r-er"><input class="rev" type="checkbox" id="r-er" data-sec="t-er">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Draw</span></div>
+  <div class="note def"><p><span class="lbl">Entity</span>A specific object or thing in the mini-world, for example the EMPLOYEE John Smith or the Research DEPARTMENT. An <strong>attribute</strong> is a property that describes it. A specific entity has a value for each attribute.</p></div>
+  <p>Each attribute has a <strong>value set</strong> (domain or data type): integer, string, enumerated and so on.</p>
+
+  <h3>Types of attributes</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Type</th><th>Meaning</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Simple</strong> (atomic)</td><td>One indivisible value</td><td>Age, Sex</td></tr>
+      <tr><td><strong>Composite</strong></td><td>Made of components, possibly in a hierarchy</td><td>Name(FirstName, MiddleName, LastName); Address(Street, City, State, Zip)</td></tr>
+      <tr><td><strong>Multivalued</strong></td><td>Several values for one entity. Written in braces.</td><td>{Color} of a CAR, {PreviousDegrees}</td></tr>
+      <tr><td><strong>Derived</strong></td><td>Computed from another attribute or from stored data</td><td>Age from Birth_date; Number_of_employees of a department</td></tr>
+    </tbody>
+  </table></div>
+  <p>Composite and multivalued can nest: <code>{PreviousDegrees(College, Year, Degree, Field)}</code> is a composite multivalued attribute with four components.</p>
+
+  <h3>Entity type, entity set and keys</h3>
+  <ul class="t">
+    <li><strong>Entity type:</strong> entities with the same basic attributes (the schema), such as EMPLOYEE. <strong>Entity set:</strong> the entities of that type currently in the database (the state). The same name often serves for both.</li>
+    <li><strong>Key attribute:</strong> every entity must have a unique value for it, for example SSN of EMPLOYEE. A key can be <strong>composite</strong>, and an entity type can have <strong>more than one key</strong>.</li>
+    <li>Example: CAR has two keys, Vehicle_id (VIN) and Registration, where Registration is composite (Number, State).</li>
+    <li>In the diagram a key is <u>underlined</u>.</li>
+  </ul>
+  <figure class="fig">
+<svg viewBox="0 0 720 316" role="img" aria-labelledby="fig_notationt fig_notationd"><title id="fig_notationt">ER diagram notation</title><desc id="fig_notationd">A reference sheet of the twelve ER symbols: entity, weak entity, relationship, identifying relationship, attribute, key, multivalued, derived and composite attributes, total participation, cardinality ratio and min-max.</desc><defs><marker id="fig_notationah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs>
+<rect class="s-box" x="14" y="20" width="84" height="34" rx="3"/>
+<text class="s-t" x="56" y="42" text-anchor="middle" >E</text>
+<text class="s-s" x="56" y="68" text-anchor="middle" >Entity type</text>
+<rect class="s-box" x="254" y="20" width="84" height="34" rx="3"/>
+<rect class="s-box" x="258" y="24" width="76" height="26" rx="3"/>
+<text class="s-t" x="296" y="42" text-anchor="middle" >W</text>
+<text class="s-s" x="296" y="68" text-anchor="middle" >Weak entity type</text>
+<path class="s-box" d="M492.0 38 L536 16.0 L580.0 38 L536 60.0z"/>
+<text class="s-t" x="536" y="42" text-anchor="middle" >R</text>
+<text class="s-s" x="536" y="68" text-anchor="middle" >Relationship type</text>
+<path class="s-box" d="M12.0 114 L56 92.0 L100.0 114 L56 136.0z"/>
+<path class="s-box" d="M20.0 114 L56 98.0 L92.0 114 L56 130.0z"/>
+<text class="s-t" x="56" y="118" text-anchor="middle" >R</text>
+<text class="s-s" x="56" y="144" text-anchor="middle" >Identifying</text>
+<text class="s-s" x="56" y="155" text-anchor="middle" >relationship</text>
+<ellipse class="s-box" cx="296" cy="114" rx="40" ry="18" />
+<text class="s-t" x="296" y="118" text-anchor="middle" >A</text>
+<text class="s-s" x="296" y="144" text-anchor="middle" >Attribute</text>
+<ellipse class="s-box" cx="536" cy="114" rx="40" ry="18" />
+<text class="s-t" x="536" y="118" text-anchor="middle" text-decoration="underline">K</text>
+<text class="s-s" x="536" y="144" text-anchor="middle" >Key attribute</text>
+<ellipse class="s-box" cx="56" cy="190" rx="40" ry="18" />
+<ellipse class="s-box" cx="56" cy="190" rx="35" ry="14" />
+<text class="s-t" x="56" y="194" text-anchor="middle" >A</text>
+<text class="s-s" x="56" y="220" text-anchor="middle" >Multivalued</text>
+<text class="s-s" x="56" y="231" text-anchor="middle" >attribute</text>
+<ellipse class="s-box" cx="296" cy="190" rx="40" ry="18" stroke-dasharray="4 3"/>
+<text class="s-t" x="296" y="194" text-anchor="middle" >A</text>
+<text class="s-s" x="296" y="220" text-anchor="middle" >Derived attribute</text>
+<path class="s-line" d="M536 181 L512 166"/>
+<path class="s-line" d="M536 181 L560 166"/>
+<ellipse class="s-box" cx="512" cy="164" rx="19" ry="8" />
+<ellipse class="s-box" cx="560" cy="164" rx="19" ry="8" />
+<ellipse class="s-box" cx="536" cy="196" rx="40" ry="15" />
+<text class="s-t" x="536" y="200" text-anchor="middle" >A</text>
+<text class="s-s" x="536" y="220" text-anchor="middle" >Composite attribute</text>
+<rect class="s-box" x="10" y="252" width="34" height="28" rx="3"/>
+<text class="s-s" x="27" y="271" text-anchor="middle" >E</text>
+<path class="s-line" d="M44 264 L68 264"/>
+<path class="s-line" d="M44 268 L68 268"/>
+<path class="s-box" d="M68.0 266 L86 253.0 L104.0 266 L86 279.0z"/>
+<text class="s-s" x="56" y="296" text-anchor="middle" >Total participation</text>
+<rect class="s-box" x="250" y="252" width="30" height="28" rx="3"/>
+<path class="s-line" d="M280 266 L300 266"/>
+<text class="s-s" x="290" y="262" text-anchor="middle" >1</text>
+<path class="s-box" d="M300.0 266 L314 253.0 L328.0 266 L314 279.0z"/>
+<path class="s-line" d="M328 266 L342 266"/>
+<rect class="s-box" x="342" y="252" width="24" height="28" rx="3"/>
+<text class="s-s" x="334" y="262" text-anchor="middle" >N</text>
+<text class="s-s" x="296" y="296" text-anchor="middle" >Cardinality ratio</text>
+<rect class="s-box" x="490" y="252" width="30" height="28" rx="3"/>
+<path class="s-line" d="M520 266 L550 266"/>
+<text class="s-s" x="535" y="280" text-anchor="middle" style="font-size:9.5px">(min,max)</text>
+<path class="s-box" d="M550.0 266 L566 253.0 L582.0 266 L566 279.0z"/>
+<text class="s-s" x="536" y="296" text-anchor="middle" >(min,max) constraint</text>
+</svg>
+    <figcaption>The twelve symbols to memorise. Entities are rectangles, attributes are ovals, relationships are diamonds, and the double versions mean weak, multivalued, identifying and total.</figcaption>
+  </figure>
+  <div class="note fix"><p><span class="lbl">Check</span>The slide text "min£max, min³0, max ³1" is OCR damage for <strong>min ≤ max, min ≥ 0, max ≥ 1</strong>. Min is not limited to 0 or 1: the COMPANY figure shows DEPARTMENT in WORKS_FOR as <strong>(4,N)</strong>, meaning every department has at least 4 employees.</p></div>
+</section>
+
+<section class="topic" id="t-relship">
+  <div class="head"><h2>Relationships, constraints and weak entities</h2><label class="rev" for="r-relship"><input class="rev" type="checkbox" id="r-relship" data-sec="t-relship">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Draw</span><span class="chip">Differentiate</span></div>
+  <div class="note def"><p><span class="lbl">Relationship</span>Relates two or more distinct entities with a specific meaning, for example EMPLOYEE Franklin Wong <em>manages</em> the Research DEPARTMENT. Relationships of the same kind form a <strong>relationship type</strong>. Its <strong>degree</strong> is the number of participating entity types (binary = 2, ternary = 3).</p></div>
+  <ul class="t">
+    <li><strong>Relationship type</strong> is the schema: name, participating entity types, constraints. The <strong>relationship set</strong> is the current set of relationship instances (the state).</li>
+    <li>More than one relationship type can exist between the same entity types. MANAGES and WORKS_FOR both join EMPLOYEE and DEPARTMENT, with different meanings.</li>
+    <li>A relationship type can have <strong>attributes</strong>, such as Hours on WORKS_ON. Hours depends on the (employee, project) pair. On a 1:N relationship such an attribute can move to the N-side entity.</li>
+  </ul>
+
+  <h3>Recursive relationship</h3>
+  <p>The same entity type takes part twice in <strong>distinct roles</strong>. SUPERVISION relates an EMPLOYEE in the <em>supervisor</em> role to another EMPLOYEE in the <em>supervisee</em> role. Role names must be shown in the diagram.</p>
+
+  <h3>Structural constraints</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Constraint</th><th>Specifies</th><th>Values</th><th>Notation</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Cardinality ratio</strong></td><td><strong>Maximum</strong> participation</td><td>1:1, 1:N (or N:1), M:N</td><td>Numbers on the edges</td></tr>
+      <tr><td><strong>Participation</strong> (existence dependency)</td><td><strong>Minimum</strong> participation</td><td>Total (mandatory, at least one) or partial (optional, zero allowed)</td><td>Double line for total, single line for partial</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note def"><p><span class="lbl">(min,max) notation</span>On each participation of entity type E in relationship R: every entity of E takes part in <strong>at least min and at most max</strong> relationship instances. Default is (0,n). Read the pair next to the entity type, looking <em>away</em> from it.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Rule in the mini-world</th><th>Participation</th><th>(min,max)</th></tr></thead>
+    <tbody>
+      <tr><td>A department has exactly one manager</td><td>DEPARTMENT in MANAGES</td><td class="m">(1,1)</td></tr>
+      <tr><td>An employee manages at most one department</td><td>EMPLOYEE in MANAGES</td><td class="m">(0,1)</td></tr>
+      <tr><td>An employee works for exactly one department</td><td>EMPLOYEE in WORKS_FOR</td><td class="m">(1,1)</td></tr>
+      <tr><td>A department can have any number of employees</td><td>DEPARTMENT in WORKS_FOR</td><td class="m">(0,N) in the slide text, but (4,N) in the figure</td></tr>
+    </tbody>
+  </table></div>
+  <p>Link between the two notations: ratio 1 on a side means max = 1, N means max = n. Total means min = 1, partial means min = 0.</p>
+
+  <h3>Weak entity type</h3>
+  <div class="note def"><p><span class="lbl">Weak entity</span>An entity type with <strong>no key attribute of its own</strong>. It must take part in an <strong>identifying relationship</strong> with an <strong>owner (identifying) entity type</strong>. Its entities are identified by the <strong>partial key</strong> together with the owner entity they are related to.</p></div>
+  <ul class="t">
+    <li>Example: DEPENDENT is weak. Dependent_name is the partial key, EMPLOYEE is the owner, and DEPENDENTS_OF is the identifying relationship.</li>
+    <li>A weak entity always has <strong>total participation</strong> in the identifying relationship, because it cannot exist without its owner.</li>
+    <li>Diagram: double rectangle, double diamond, partial key dotted-underlined.</li>
+  </ul>
+</section>
+
+<section class="topic" id="t-example">
+  <div class="head"><h2>Building an ERD from requirements</h2><label class="rev" for="r-example"><input class="rev" type="checkbox" id="r-example" data-sec="t-example">revised</label></div>
+  <div class="chips"><span class="chip add">Added</span><span class="chip">Draw</span><span class="chip">Design</span></div>
+  <div class="note add"><p><span class="lbl">Added</span>The method in steps 1 to 5 is the usual textbook approach and is not in your slides. The COMPANY diagram itself is from your slides.</p></div>
+  <ol class="t">
+    <li><strong>Entities:</strong> underline the nouns that have their own properties. Those are candidate entity types.</li>
+    <li><strong>Attributes:</strong> list each entity's properties. Mark the key, and mark composite, multivalued and derived ones.</li>
+    <li><strong>Refine:</strong> an attribute that refers to another entity (Manager of DEPARTMENT, Works_on of EMPLOYEE) becomes a relationship.</li>
+    <li><strong>Relationships:</strong> the verbs between entities. For each, decide the name, degree, cardinality ratio and participation.</li>
+    <li><strong>Weak entities and roles:</strong> look for entities with no key of their own, and for recursive relationships that need role names.</li>
+  </ol>
+
+  <h3>COMPANY database</h3>
+  <p>Requirements in short: departments have a name, number, a manager (with start date) and several locations. Departments control projects. Employees work for one department, work on several projects (hours per week recorded), have a direct supervisor and may have dependents.</p>
+  <figure class="fig">
+<svg viewBox="0 0 720 470" role="img" aria-labelledby="fig_ert fig_erd"><title id="fig_ert">COMPANY ER diagram</title><desc id="fig_erd">Entity boxes EMPLOYEE, DEPARTMENT, PROJECT and weak entity DEPENDENT with relationships WORKS_FOR N to 1, MANAGES 1 to 1, CONTROLS 1 to N, WORKS_ON M to N with Hours, SUPERVISION 1 to N recursive, and DEPENDENTS_OF 1 to N identifying.</desc><defs><marker id="fig_erah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs>
+<rect class="s-box2" x="185" y="170" width="240" height="80" rx="3"/>
+<text class="s-t" x="305.0" y="189" text-anchor="middle" >EMPLOYEE</text>
+<path class="s-line" d="M185 196 L425 196"/>
+<text class="s-s" x="195" y="210" text-anchor="start" text-decoration="underline">Ssn</text>
+<text class="s-s" x="195" y="226" text-anchor="start" >Name (Fname, Minit, Lname)</text>
+<text class="s-s" x="195" y="242" text-anchor="start" >Bdate, Sex, Address, Salary</text>
+<rect class="s-box2" x="185" y="10" width="240" height="80" rx="3"/>
+<text class="s-t" x="305.0" y="29" text-anchor="middle" >DEPARTMENT</text>
+<path class="s-line" d="M185 36 L425 36"/>
+<text class="s-s" x="195" y="50" text-anchor="start" text-decoration="underline">Dnumber, Dname</text>
+<text class="s-s" x="195" y="66" text-anchor="start" >{Locations}   multivalued</text>
+<text class="s-s" x="195" y="82" text-anchor="start" >Number_of_employees   derived</text>
+<rect class="s-box2" x="560" y="170" width="150" height="80" rx="3"/>
+<text class="s-t" x="635.0" y="189" text-anchor="middle" >PROJECT</text>
+<path class="s-line" d="M560 196 L710 196"/>
+<text class="s-s" x="570" y="210" text-anchor="start" text-decoration="underline">Pnumber</text>
+<text class="s-s" x="570" y="226" text-anchor="start" >Pname</text>
+<text class="s-s" x="570" y="242" text-anchor="start" >Plocation</text>
+<rect class="s-box2" x="185" y="360" width="240" height="64" rx="3"/>
+<rect class="s-box2" x="188" y="363" width="234" height="58" rx="3"/>
+<text class="s-t" x="305.0" y="379" text-anchor="middle" >DEPENDENT</text>
+<path class="s-line" d="M191 386 L419 386"/>
+<text class="s-s" x="195" y="400" text-anchor="start" text-decoration="underline dotted">Dependent_name   partial key</text>
+<text class="s-s" x="195" y="416" text-anchor="start" >Sex, Bdate, Relationship</text>
+<path class="s-box" d="M200.0 140 L250 121.0 L300.0 140 L250 159.0z"/>
+<text class="s-s" x="250" y="144" text-anchor="middle" style="font-size:10px;font-weight:600;fill:var(--fg)">WORKS_FOR</text>
+<path class="s-box" d="M310.0 140 L360 121.0 L410.0 140 L360 159.0z"/>
+<text class="s-s" x="360" y="144" text-anchor="middle" style="font-size:10px;font-weight:600;fill:var(--fg)">MANAGES</text>
+<path class="s-line" d="M248 90 L248 121"/>
+<path class="s-line" d="M252 90 L252 121"/>
+<path class="s-line" d="M248 159 L248 170"/>
+<path class="s-line" d="M252 159 L252 170"/>
+<path class="s-line" d="M358 90 L358 121"/>
+<path class="s-line" d="M362 90 L362 121"/>
+<path class="s-line" d="M360 159 L360 170"/>
+<text class="s-s" x="240" y="102" text-anchor="end" >1</text>
+<text class="s-s" x="240" y="167" text-anchor="end" >N</text>
+<text class="s-s" x="370" y="102" text-anchor="start" >1</text>
+<text class="s-s" x="370" y="167" text-anchor="start" >1</text>
+<text class="s-s" x="416" y="144" text-anchor="start" >Start_date</text>
+<path class="s-box" d="M585.0 60 L635 41.0 L685.0 60 L635 79.0z"/>
+<text class="s-s" x="635" y="64" text-anchor="middle" style="font-size:10px;font-weight:600;fill:var(--fg)">CONTROLS</text>
+<path class="s-line" d="M425 60 L585 60"/>
+<text class="s-s" x="440" y="54" text-anchor="start" >1</text>
+<path class="s-line" d="M633 79 L633 170"/>
+<path class="s-line" d="M637 79 L637 170"/>
+<text class="s-s" x="648" y="158" text-anchor="start" >N</text>
+<path class="s-box" d="M442.0 204 L492 185.0 L542.0 204 L492 223.0z"/>
+<text class="s-s" x="492" y="208" text-anchor="middle" style="font-size:10px;font-weight:600;fill:var(--fg)">WORKS_ON</text>
+<path class="s-line" d="M425 202 L442 202"/>
+<path class="s-line" d="M425 206 L442 206"/>
+<text class="s-s" x="432" y="196" text-anchor="middle" >M</text>
+<path class="s-line" d="M542 202 L560 202"/>
+<path class="s-line" d="M542 206 L560 206"/>
+<text class="s-s" x="551" y="196" text-anchor="middle" >N</text>
+<text class="s-s" x="492" y="238" text-anchor="middle" >Hours</text>
+<path class="s-box" d="M25.0 212 L80 193.0 L135.0 212 L80 231.0z"/>
+<text class="s-s" x="80" y="216" text-anchor="middle" style="font-size:10px;font-weight:600;fill:var(--fg)">SUPERVISION</text>
+<path class="s-line" d="M80 193 L80 184 L185 184"/>
+<text class="s-s" x="94" y="180" text-anchor="start" >1  supervisor</text>
+<path class="s-line" d="M80 231 L80 240 L185 240"/>
+<text class="s-s" x="94" y="236" text-anchor="start" >N  supervisee</text>
+<path class="s-box" d="M225.0 305.0 L305 286.0 L385.0 305.0 L305 324.0z"/>
+<path class="s-box" d="M233.0 305.0 L305 292.0 L377.0 305.0 L305 318.0z"/>
+<text class="s-s" x="305" y="309.0" text-anchor="middle" style="font-size:10px;font-weight:600;fill:var(--fg)">DEPENDENTS_OF</text>
+<path class="s-line" d="M305 250 L305 286.0"/>
+<text class="s-s" x="319" y="262" text-anchor="start" >1</text>
+<path class="s-line" d="M303 324.0 L303 360"/>
+<path class="s-line" d="M307 324.0 L307 360"/>
+<text class="s-s" x="319" y="358" text-anchor="start" >N</text>
+<text class="s-s" x="520" y="424" text-anchor="start" >double line = total participation</text>
+<path class="s-line" d="M480 420 L510 420"/>
+<path class="s-line" d="M480 424 L510 424"/>
+</svg>
+    <figcaption>COMPANY ER diagram, redrawn with attributes inside the boxes. Double lines are total participation. Compare with Figure 3.2 in your slides.</figcaption>
+  </figure>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Relationship</th><th>Between</th><th>Ratio</th><th>(min,max)</th></tr></thead>
+    <tbody>
+      <tr><td class="m">WORKS_FOR</td><td>EMPLOYEE, DEPARTMENT</td><td>N:1</td><td class="m">EMPLOYEE (1,1), DEPARTMENT (4,N)</td></tr>
+      <tr><td class="m">MANAGES</td><td>EMPLOYEE, DEPARTMENT</td><td>1:1</td><td class="m">EMPLOYEE (0,1), DEPARTMENT (1,1)</td></tr>
+      <tr><td class="m">CONTROLS</td><td>DEPARTMENT, PROJECT</td><td>1:N</td><td class="m">DEPARTMENT (0,N), PROJECT (1,1)</td></tr>
+      <tr><td class="m">WORKS_ON</td><td>EMPLOYEE, PROJECT</td><td>M:N</td><td class="m">EMPLOYEE (1,N), PROJECT (1,N)</td></tr>
+      <tr><td class="m">SUPERVISION</td><td>EMPLOYEE (supervisor), EMPLOYEE (supervisee)</td><td>1:N</td><td class="m">supervisor (0,N), supervisee (0,1)</td></tr>
+      <tr><td class="m">DEPENDENTS_OF</td><td>EMPLOYEE, DEPENDENT</td><td>1:N</td><td class="m">EMPLOYEE (0,N), DEPENDENT (1,1)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Your slide text says to specify <strong>(0,n)</strong> for DEPARTMENT in WORKS_FOR, but the diagram on the next slide shows <strong>(4,N)</strong>. Both are valid if the rule differs (any number, or at least 4 employees). Use whichever the question states. The OCR of this diagram is messy, so the other (min,max) pairs in the table are the standard textbook ones. Check them against your printed slide.</p></div>
+
+  <h3>Small project example: library</h3>
+  <div class="note add"><p><span class="lbl">Added</span><strong>Requirements:</strong> members borrow books. A book has an ISBN, title, and one or more authors. Each loan records the issue date and due date. A member has an id, a name and several phone numbers.</p>
+  <p><strong>Entities:</strong> BOOK (<u>Isbn</u>, Title, {Author}), MEMBER (<u>Member_id</u>, Name, {Phone}).</p>
+  <p><strong>Relationship:</strong> BORROWS between MEMBER and BOOK is <strong>M:N</strong> (a member borrows many books over time, a book is borrowed by many members), with attributes Issue_date and Due_date. Both participations are partial, so (0,N) on each side.</p>
+  <p>You map it to tables in the mapping section.</p></div>
+</section>
+
+<!-- ============ LOGICAL ============ -->
+<section class="topic" id="t-relmodel">
+  <div class="head"><h2>Relational model and its constraints</h2><label class="rev" for="r-relmodel"><input class="rev" type="checkbox" id="r-relmodel" data-sec="t-relmodel">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Differentiate</span><span class="chip">Numerical</span></div>
+  <p>Proposed by E. F. Codd (IBM) in 1970. A relation is a mathematical concept based on sets, and informally it looks like a <strong>table of values</strong>.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Informal</th><th>Formal</th></tr></thead>
+    <tbody>
+      <tr><td>Table</td><td>Relation</td></tr>
+      <tr><td>Column header</td><td>Attribute</td></tr>
+      <tr><td>All possible column values</td><td>Domain</td></tr>
+      <tr><td>Row</td><td>Tuple</td></tr>
+      <tr><td>Table definition</td><td>Schema of a relation</td></tr>
+      <tr><td>Populated table</td><td>State of the relation</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Formal definitions</h3>
+  <ul class="t">
+    <li><strong>Schema</strong> R(A<sub>1</sub>, …, A<sub>n</sub>): relation name plus attributes, for example CUSTOMER(Cust-id, Cust-name, Address, Phone#). Its <strong>degree</strong> is n.</li>
+    <li><strong>Domain:</strong> the set of valid values for an attribute, with a logical definition and a data type or format. The <strong>attribute name</strong> gives the role the domain plays: the domain Date can be used for both Invoice-date and Payment-date.</li>
+    <li><strong>Tuple:</strong> an ordered list of values, one from each attribute's domain (or null). A row of CUSTOMER is a 4-tuple.</li>
+    <li><strong>Relation state</strong> r(R) is a <strong>subset of the Cartesian product</strong> of the domains: r(R) ⊆ dom(A<sub>1</sub>) × … × dom(A<sub>n</sub>).</li>
+  </ul>
+  <div class="note add"><p><span class="lbl">Worked</span>Let dom(A<sub>1</sub>) = {0,1} and dom(A<sub>2</sub>) = {a,b,c}. The product has 2 × 3 = <strong>6</strong> tuples: &lt;0,a&gt;, &lt;0,b&gt;, &lt;0,c&gt;, &lt;1,a&gt;, &lt;1,b&gt;, &lt;1,c&gt;. One possible state is {&lt;0,a&gt;, &lt;0,b&gt;, &lt;1,c&gt;}, which has three 2-tuples.</p></div>
+
+  <h3>Characteristics of relations</h3>
+  <ul class="t">
+    <li><strong>Tuples are not ordered</strong>, because a relation is a set. Attribute order in the schema is taken as fixed.</li>
+    <li>Every value is <strong>atomic</strong> (indivisible) and from the attribute's domain.</li>
+    <li><strong>null</strong> stands for unknown or inapplicable.</li>
+    <li>Notation: t[A<sub>i</sub>] or t.A<sub>i</sub> is the value of attribute A<sub>i</sub> in tuple t.</li>
+  </ul>
+
+  <h3>Integrity constraints</h3>
+  <p>Constraints are conditions that must hold on <strong>every valid state</strong>.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Constraint</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Domain</strong></td><td>Every value must come from the domain of its attribute (or be null, if allowed).</td></tr>
+      <tr><td><strong>Key</strong></td><td>No two tuples have the same value for the key. See keys below.</td></tr>
+      <tr><td><strong>Entity integrity</strong></td><td>No primary-key attribute of any tuple may be null, because the primary key identifies the tuple. Other attributes may also be NOT NULL.</td></tr>
+      <tr><td><strong>Referential integrity</strong></td><td>Involves <strong>two relations</strong>. A foreign key value in the referencing relation must be either the value of an existing primary key in the referenced relation, or null. If it is null it must not be part of the FK relation's own primary key.</td></tr>
+      <tr><td><strong>Semantic</strong></td><td>Application rules the model cannot express by itself, such as "an employee works at most 56 hours a week". Use triggers or assertions.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Keys</h3>
+  <ul class="t">
+    <li><strong>Superkey:</strong> a set of attributes SK such that no two tuples in any valid state have the same SK value.</li>
+    <li><strong>Key:</strong> a <strong>minimal</strong> superkey. Removing any attribute stops it being a superkey. Every key is a superkey but not the other way round, and any attribute set that includes a key is a superkey.</li>
+    <li><strong>Candidate keys:</strong> all the keys of a relation. One is chosen as the <strong>primary key</strong>, underlined, and the others are unique (secondary) keys. Rule of thumb: pick the smallest.</li>
+    <li><strong>Foreign key:</strong> attributes FK in R1 that refer to the primary key PK of R2. A tuple t1 in R1 <em>references</em> t2 in R2 if t1[FK] = t2[PK]. Shown as an arrow from R1.FK to R2.</li>
+    <li>An artificial (surrogate) key, such as a sequence number, can be added when no natural key exists.</li>
+  </ul>
+  <div class="note add"><p><span class="lbl">Worked</span>CAR(State, Reg#, SerialNo, Make, Model, Year). Keys: {State, Reg#} and {SerialNo}. {SerialNo, Make} is a superkey but <strong>not</strong> a key, because Make can be removed.</p>
+  <p><strong>Counting superkeys.</strong> R(A, B, C) with A as the only key: a superkey is any subset that contains A, so 2<sup>2</sup> = <strong>4</strong> superkeys (A, AB, AC, ABC).</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Your slide on CAR says "we chose SerialNo as the primary key" but the next slide's table picks <strong>LicenseNumber</strong>. Both are candidate keys, so either is allowed. In an exam, state which one you choose and underline only that one.</p></div>
+
+  <h3>Update operations and constraint violations</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Operation</th><th>Can violate</th><th>Typical remedy</th></tr></thead>
+    <tbody>
+      <tr><td><strong>INSERT</strong></td><td>All four: domain, key (duplicate key), referential integrity (FK has no parent), entity integrity (null PK)</td><td>Reject the insert</td></tr>
+      <tr><td><strong>DELETE</strong></td><td><strong>Only</strong> referential integrity, if the deleted tuple is referenced</td><td><strong>RESTRICT</strong> (reject), <strong>CASCADE</strong> (delete the referencing tuples too), <strong>SET NULL</strong> (set their FK to null)</td></tr>
+      <tr><td><strong>UPDATE</strong></td><td>Domain and NOT NULL on the changed attribute. A changed <strong>PK</strong> acts like delete plus insert. A changed <strong>FK</strong> may break referential integrity. An ordinary attribute can only break its domain.</td><td>Same options as delete for the PK. Reject for the rest.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Your slide describes CASCADE for delete as "propagate the new primary key value into the foreign keys". That is the meaning for an <strong>update</strong> (<code>ON UPDATE CASCADE</code>). For a <strong>delete</strong>, CASCADE means the referencing tuples are <strong>deleted</strong> too. I used the second meaning here and in the SQL below.</p></div>
+</section>
+
+<section class="topic" id="t-mapping">
+  <div class="head"><h2>ER to relational mapping</h2><label class="rev" for="r-mapping"><input class="rev" type="checkbox" id="r-mapping" data-sec="t-mapping">revised</label></div>
+  <div class="chips"><span class="chip">Algorithm</span><span class="chip">Design</span><span class="chip">Draw</span></div>
+  <p>Seven steps for a plain ER schema. Steps 8 and 9 in your slides (specialisation, generalisation and union types) are EER topics and are not in this module's syllabus, so they are left out.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Step</th><th>ER construct</th><th>Rule</th><th>COMPANY result</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td>Regular (strong) entity</td><td>One relation with all <strong>simple</strong> attributes (a composite contributes its simple components). Pick a key as the primary key.</td><td>EMPLOYEE (Ssn), DEPARTMENT (Dnumber), PROJECT (Pnumber)</td></tr>
+      <tr><td><strong>2</strong></td><td>Weak entity</td><td>One relation with its simple attributes, plus the <strong>owner's PK as a foreign key</strong>. PK = owner's PK + partial key.</td><td>DEPENDENT (<u>Essn</u>, <u>Dependent_name</u>, …)</td></tr>
+      <tr><td><strong>3</strong></td><td>Binary <strong>1:1</strong></td><td>Three options. <strong>Foreign key</strong> in one side (prefer the side with total participation). <strong>Merge</strong> into one relation (when both sides are total). <strong>Cross-reference relation</strong> with both PKs.</td><td>MANAGES: put <code>Mgr_ssn</code> and <code>Mgr_start_date</code> in DEPARTMENT, because DEPARTMENT is total</td></tr>
+      <tr><td><strong>4</strong></td><td>Binary <strong>1:N</strong></td><td>Put the <strong>PK of the 1-side as an FK in the N-side</strong> relation. Move the relationship's simple attributes to the N-side too.</td><td>WORKS_FOR gives <code>Dno</code> in EMPLOYEE. CONTROLS gives <code>Dnum</code> in PROJECT. SUPERVISION gives <code>Super_ssn</code> in EMPLOYEE.</td></tr>
+      <tr><td><strong>5</strong></td><td>Binary <strong>M:N</strong></td><td>New relation. FKs are the PKs of both sides, and <strong>together they form the PK</strong>. Add the relationship's attributes.</td><td>WORKS_ON (<u>Essn</u>, <u>Pno</u>, Hours)</td></tr>
+      <tr><td><strong>6</strong></td><td>Multivalued attribute</td><td>New relation with the attribute plus the owner's PK as FK. PK is the pair.</td><td>DEPT_LOCATIONS (<u>Dnumber</u>, <u>Dlocation</u>)</td></tr>
+      <tr><td><strong>7</strong></td><td>N-ary (n &gt; 2)</td><td>New relation with the PKs of all n sides as FKs, plus the attributes. PK is usually the combination of the FKs.</td><td>SUPPLY (<u>Sname</u>, <u>Partno</u>, <u>Projname</u>, Quantity)</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="fig">
+<svg viewBox="0 0 720 362" role="img" aria-labelledby="fig_relt fig_reld"><title id="fig_relt">COMPANY relational schema with foreign keys</title><desc id="fig_reld">Six relation schemas EMPLOYEE, DEPARTMENT, DEPT_LOCATIONS, PROJECT, WORKS_ON and DEPENDENT. Arrows run from each foreign key to the primary key it references.</desc><defs><marker id="fig_relah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs>
+<text class="s-m" x="20" y="22" text-anchor="start" >EMPLOYEE</text>
+<rect class="s-box" x="20" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="53.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Fname</text>
+<rect class="s-box" x="86" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="119.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Minit</text>
+<rect class="s-box" x="152" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="185.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Lname</text>
+<rect class="s-box" x="218" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="251.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Ssn</text>
+<rect class="s-box" x="284" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="317.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Bdate</text>
+<rect class="s-box" x="350" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="383.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Address</text>
+<rect class="s-box" x="416" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="449.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Sex</text>
+<rect class="s-box" x="482" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="515.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Salary</text>
+<rect class="s-box2" x="548" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="581.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Super_ssn</text>
+<rect class="s-box2" x="614" y="28" width="66" height="26" rx="0"/>
+<text class="s-s" x="647.0" y="45" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Dno</text>
+<text class="s-m" x="20" y="106" text-anchor="start" >DEPARTMENT</text>
+<rect class="s-box" x="20" y="112" width="80" height="26" rx="0"/>
+<text class="s-s" x="60.0" y="129" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Dname</text>
+<rect class="s-box" x="100" y="112" width="80" height="26" rx="0"/>
+<text class="s-s" x="140.0" y="129" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Dnumber</text>
+<rect class="s-box2" x="180" y="112" width="80" height="26" rx="0"/>
+<text class="s-s" x="220.0" y="129" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Mgr_ssn</text>
+<rect class="s-box" x="260" y="112" width="110" height="26" rx="0"/>
+<text class="s-s" x="315.0" y="129" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Mgr_start_date</text>
+<text class="s-m" x="600" y="106" text-anchor="end" >DEPT_LOCATIONS</text>
+<rect class="s-box" x="440" y="112" width="80" height="26" rx="0"/>
+<text class="s-s" x="480.0" y="129" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Dnumber</text>
+<rect class="s-box" x="520" y="112" width="80" height="26" rx="0"/>
+<text class="s-s" x="560.0" y="129" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Dlocation</text>
+<text class="s-m" x="20" y="192" text-anchor="start" >PROJECT</text>
+<rect class="s-box" x="20" y="198" width="80" height="26" rx="0"/>
+<text class="s-s" x="60.0" y="215" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Pname</text>
+<rect class="s-box" x="100" y="198" width="80" height="26" rx="0"/>
+<text class="s-s" x="140.0" y="215" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Pnumber</text>
+<rect class="s-box" x="180" y="198" width="90" height="26" rx="0"/>
+<text class="s-s" x="225.0" y="215" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Plocation</text>
+<rect class="s-box2" x="270" y="198" width="60" height="26" rx="0"/>
+<text class="s-s" x="300.0" y="215" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Dnum</text>
+<text class="s-m" x="660" y="192" text-anchor="end" >WORKS_ON</text>
+<rect class="s-box" x="440" y="198" width="80" height="26" rx="0"/>
+<text class="s-s" x="480.0" y="215" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Essn</text>
+<rect class="s-box" x="520" y="198" width="80" height="26" rx="0"/>
+<text class="s-s" x="560.0" y="215" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Pno</text>
+<rect class="s-box" x="600" y="198" width="60" height="26" rx="0"/>
+<text class="s-s" x="630.0" y="215" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Hours</text>
+<text class="s-m" x="20" y="278" text-anchor="start" >DEPENDENT</text>
+<rect class="s-box" x="20" y="284" width="80" height="26" rx="0"/>
+<text class="s-s" x="60.0" y="301" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Essn</text>
+<rect class="s-box" x="100" y="284" width="110" height="26" rx="0"/>
+<text class="s-s" x="155.0" y="301" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" text-decoration="underline">Dependent_name</text>
+<rect class="s-box" x="210" y="284" width="50" height="26" rx="0"/>
+<text class="s-s" x="235.0" y="301" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Sex</text>
+<rect class="s-box" x="260" y="284" width="70" height="26" rx="0"/>
+<text class="s-s" x="295.0" y="301" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Bdate</text>
+<rect class="s-box" x="330" y="284" width="90" height="26" rx="0"/>
+<text class="s-s" x="375.0" y="301" text-anchor="middle" style="fill:var(--fg);font-size:10.5px" >Relationship</text>
+<path class="s-line" d="M581.0 28 L581.0 10 L251.0 10 L251.0 27" marker-end="url(#fig_relah)"/>
+<path class="s-line" d="M647.0 54 L647.0 82 L140.0 82 L140.0 111" marker-end="url(#fig_relah)"/>
+<path class="s-line" d="M220.0 112 L220.0 94 L257.0 94 L257.0 55" marker-end="url(#fig_relah)"/>
+<path class="s-line" d="M440 125 L371 125" marker-end="url(#fig_relah)"/>
+<path class="s-line" d="M300.0 198 L300.0 168 L140.0 168 L140.0 139" marker-end="url(#fig_relah)"/>
+<path class="s-line" d="M560.0 224 L560.0 250 L140.0 250 L140.0 225" marker-end="url(#fig_relah)"/>
+<path class="s-line" d="M480.0 198 L480.0 160 L704 160 L704 70 L245.0 70 L245.0 55" marker-end="url(#fig_relah)"/>
+<path class="s-line" d="M20 297 L8 297 L8 62 L237.0 62 L237.0 55" marker-end="url(#fig_relah)"/>
+<rect class="s-box2" x="20" y="336" width="16" height="12" rx="0"/>
+<text class="s-s" x="44" y="346" text-anchor="start" >foreign key</text>
+<text class="s-s" x="130" y="346" text-anchor="start" text-decoration="underline">underline = primary key</text>
+</svg>
+    <figcaption>The relational schema the seven steps produce for COMPANY. Shaded cells are foreign keys and underlined names are primary keys. Compare with Figure 7.2 in your slides.</figcaption>
+  </figure>
+  <p>Table 7.1 in short: entity type gives an entity relation; 1:1 or 1:N relationship gives a foreign key (or a relationship relation); M:N gives a relationship relation with two foreign keys; n-ary gives a relation with n foreign keys; composite attribute gives its simple components; multivalued attribute gives a relation and a foreign key; value set gives a domain; key attribute gives the primary (or secondary) key.</p>
+  <div class="note fix"><p><span class="lbl">Check</span>Slide 11 of chapter 7 has two slips: "SUPPY" should be SUPPLY, and "create a new relationship S" should read "create a new <strong>relation</strong> S". In the SUPPLY example the keys are SNAME, PARTNO and PROJNAME as in the slide's figure.</p></div>
+
+  <div class="note add"><p><span class="lbl">Worked</span><strong>Map the library ERD</strong> from the previous section.</p>
+  <p>Step 1: BOOK (<u>Isbn</u>, Title) and MEMBER (<u>Member_id</u>, Name).</p>
+  <p>Step 6: the multivalued {Author} and {Phone} each get a relation. BOOK_AUTHOR (<u>Isbn</u>, <u>Author</u>) and MEMBER_PHONE (<u>Member_id</u>, <u>Phone</u>), where Isbn and Member_id are foreign keys.</p>
+  <p>Step 5: BORROWS is M:N, so BORROWS (<u>Member_id</u>, <u>Isbn</u>, Issue_date, Due_date) with Member_id and Isbn as foreign keys.</p>
+  <p>If the same member can borrow the same book again later, the pair (Member_id, Isbn) would repeat, so add Issue_date to the primary key. That is a judgement beyond the textbook step. I ran these as CREATE TABLE statements and they work.</p></div>
+</section>
+
+<!-- ============ CREATION ============ -->
+<section class="topic" id="t-ddl">
+  <div class="head"><h2>Creating the database: tables in SQL</h2><label class="rev" for="r-ddl"><input class="rev" type="checkbox" id="r-ddl" data-sec="t-ddl">revised</label></div>
+  <div class="chips"><span class="chip add">Added</span><span class="chip">Write SQL</span></div>
+  <div class="note add"><p><span class="lbl">Added</span>Your slides stop at the relational schema. The syllabus asks you to implement a sample schema in a DBMS (MySQL, PostgreSQL or SQLite) and define tables with attributes and foreign keys, so this section is from standard SQL. I ran every statement below in SQLite. MySQL and PostgreSQL syntax is the same for these statements as far as I know, but I did not run them there.</p></div>
+
+  <h3>What goes in a CREATE TABLE</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Part</th><th>Implements</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>Column and data type</td><td>Attribute and domain</td><td class="m">Salary DECIMAL(10,2)</td></tr>
+      <tr><td><code>NOT NULL</code></td><td>Disallow null (entity integrity for the PK)</td><td class="m">Fname VARCHAR(15) NOT NULL</td></tr>
+      <tr><td><code>PRIMARY KEY</code></td><td>Primary key, single or composite</td><td class="m">PRIMARY KEY (Essn, Pno)</td></tr>
+      <tr><td><code>UNIQUE</code></td><td>Other candidate keys</td><td class="m">Dname VARCHAR(30) UNIQUE</td></tr>
+      <tr><td><code>CHECK</code></td><td>Domain constraint</td><td class="m">CHECK (Sex IN ('M','F'))</td></tr>
+      <tr><td><code>FOREIGN KEY … REFERENCES</code></td><td>Referential integrity</td><td class="m">FOREIGN KEY (Dno) REFERENCES DEPARTMENT(Dnumber)</td></tr>
+      <tr><td><code>ON DELETE / ON UPDATE</code></td><td>RESTRICT, CASCADE, SET NULL option</td><td class="m">ON DELETE CASCADE</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>COMPANY schema</h3>
+<pre><code>CREATE TABLE DEPARTMENT (
+  Dnumber        INT PRIMARY KEY,
+  Dname          VARCHAR(30) NOT NULL UNIQUE,
+  Mgr_ssn        CHAR(9),
+  Mgr_start_date DATE
+);
+
+CREATE TABLE EMPLOYEE (
+  Ssn       CHAR(9) PRIMARY KEY,
+  Fname     VARCHAR(15) NOT NULL,
+  Minit     CHAR(1),
+  Lname     VARCHAR(15) NOT NULL,
+  Bdate     DATE,
+  Address   VARCHAR(50),
+  Sex       CHAR(1) CHECK (Sex IN ('M','F')),
+  Salary    DECIMAL(10,2) CHECK (Salary &gt; 0),
+  Super_ssn CHAR(9),
+  Dno       INT NOT NULL,
+  FOREIGN KEY (Super_ssn) REFERENCES EMPLOYEE(Ssn)
+      ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (Dno) REFERENCES DEPARTMENT(Dnumber)
+);
+
+CREATE TABLE DEPT_LOCATIONS (
+  Dnumber   INT,
+  Dlocation VARCHAR(20),
+  PRIMARY KEY (Dnumber, Dlocation),
+  FOREIGN KEY (Dnumber) REFERENCES DEPARTMENT(Dnumber) ON DELETE CASCADE
+);
+
+CREATE TABLE PROJECT (
+  Pnumber   INT PRIMARY KEY,
+  Pname     VARCHAR(20) NOT NULL UNIQUE,
+  Plocation VARCHAR(20),
+  Dnum      INT NOT NULL,
+  FOREIGN KEY (Dnum) REFERENCES DEPARTMENT(Dnumber)
+);
+
+CREATE TABLE WORKS_ON (
+  Essn  CHAR(9),
+  Pno   INT,
+  Hours DECIMAL(4,1),
+  PRIMARY KEY (Essn, Pno),
+  FOREIGN KEY (Essn) REFERENCES EMPLOYEE(Ssn)   ON DELETE CASCADE,
+  FOREIGN KEY (Pno)  REFERENCES PROJECT(Pnumber) ON DELETE CASCADE
+);
+
+CREATE TABLE DEPENDENT (
+  Essn           CHAR(9),
+  Dependent_name VARCHAR(15),
+  Sex            CHAR(1),
+  Bdate          DATE,
+  Relationship   VARCHAR(8),
+  PRIMARY KEY (Essn, Dependent_name),
+  FOREIGN KEY (Essn) REFERENCES EMPLOYEE(Ssn) ON DELETE CASCADE
+);</code></pre>
+  <ul class="t">
+    <li>Each column in the mapping became a column here. The <strong>composite</strong> key of WORKS_ON and DEPENDENT is a table-level <code>PRIMARY KEY (a, b)</code>.</li>
+    <li><strong>ON DELETE CASCADE</strong> is used where the child cannot exist without its parent: locations, works-on rows and dependents. EMPLOYEE.Dno has no rule, so deleting a department that still has employees is rejected (RESTRICT is the default).</li>
+    <li>SUPERVISION uses <strong>SET NULL</strong>: if a supervisor is deleted, the subordinates stay with no supervisor.</li>
+  </ul>
+
+  <h3>The circular reference</h3>
+  <p>DEPARTMENT refers to EMPLOYEE (manager) and EMPLOYEE refers to DEPARTMENT (Dno). Neither table can be created first with both foreign keys. The usual fix: create DEPARTMENT without the manager foreign key, create EMPLOYEE, then add it:</p>
+<pre><code>ALTER TABLE DEPARTMENT
+  ADD CONSTRAINT fk_mgr FOREIGN KEY (Mgr_ssn) REFERENCES EMPLOYEE(Ssn);</code></pre>
+  <p>Rows have the same chicken-and-egg problem: insert the department with <code>Mgr_ssn = NULL</code>, insert the employee, then update the department's manager. This is why Mgr_ssn must be allowed to be null.</p>
+  <div class="note add"><p><span class="lbl">Run result</span>In my test I left the manager foreign key out (SQLite cannot add one with ALTER). The result shows why it matters: a department row with <code>Mgr_ssn = '333445555'</code> was <strong>accepted though no such employee existed</strong>, and deleting an employee who was a manager was also accepted, leaving a dangling reference. With the ALTER above, both are rejected.</p></div>
+
+  <h3>Differences between the three DBMSs</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>MySQL</th><th>PostgreSQL</th><th>SQLite</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Auto-number key</strong></td><td><code>AUTO_INCREMENT</code></td><td><code>SERIAL</code> or <code>GENERATED … AS IDENTITY</code></td><td><code>INTEGER PRIMARY KEY</code></td></tr>
+      <tr><td><strong>Foreign keys enforced</strong></td><td>Yes with InnoDB (the default engine)</td><td>Yes</td><td><strong>Off by default.</strong> Run <code>PRAGMA foreign_keys = ON;</code> on every connection.</td></tr>
+      <tr><td><strong>Add FK later</strong></td><td><code>ALTER TABLE … ADD FOREIGN KEY</code></td><td>Same</td><td>Not supported. Declare it in CREATE TABLE.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note fix"><p><span class="lbl">Check</span>In SQLite, a <code>PRIMARY KEY</code> column that is not an integer <strong>still accepts NULL</strong> (I tested this: inserting a null Ssn succeeded). MySQL and PostgreSQL reject it. Write <code>NOT NULL</code> on every primary key column so the schema behaves the same everywhere and entity integrity holds.</p></div>
+</section>
+
+<section class="topic" id="t-fk">
+  <div class="head"><h2>Tables, relationships and foreign keys in action</h2><label class="rev" for="r-fk"><input class="rev" type="checkbox" id="r-fk" data-sec="t-fk">revised</label></div>
+  <div class="chips"><span class="chip add">Added</span><span class="chip">Write SQL</span><span class="chip">Trace</span></div>
+  <p>Relationships between tables exist only through matching key values, so you use them in queries with a <strong>join</strong>:</p>
+<pre><code>SELECT E.Fname, P.Pname, W.Hours
+FROM EMPLOYEE E
+  JOIN WORKS_ON W ON E.Ssn = W.Essn
+  JOIN PROJECT  P ON W.Pno = P.Pnumber;</code></pre>
+  <p>With two sample employees on ProductX this returns (Franklin, ProductX, 10) and (John, ProductX, 32.5). Each <code>ON</code> clause is one foreign key matched to the primary key it references.</p>
+
+  <h3>What the DBMS rejects (test run with foreign keys on)</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Statement</th><th>Constraint tested</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Insert an employee with Dno = 1 before department 1 exists</td><td>Referential</td><td>Rejected (FOREIGN KEY constraint failed)</td></tr>
+      <tr><td>Insert an employee whose Ssn already exists</td><td>Key</td><td>Rejected (UNIQUE constraint failed)</td></tr>
+      <tr><td>Insert an employee with Dno = 9 (no such department)</td><td>Referential</td><td>Rejected</td></tr>
+      <tr><td>Insert Sex = 'Q'</td><td>Domain (CHECK)</td><td>Rejected</td></tr>
+      <tr><td>Insert Salary = −5</td><td>Domain (CHECK)</td><td>Rejected</td></tr>
+      <tr><td>Insert the same (Essn, Pno) into WORKS_ON twice</td><td>Key (composite)</td><td>Rejected</td></tr>
+      <tr><td>Insert WORKS_ON for an employee that does not exist</td><td>Referential</td><td>Rejected</td></tr>
+      <tr><td>Delete a department that still has employees</td><td>Referential (RESTRICT)</td><td>Rejected</td></tr>
+      <tr><td>Update an employee's Ssn while WORKS_ON rows reference it</td><td>Referential (no ON UPDATE rule)</td><td>Rejected</td></tr>
+      <tr><td>Delete a supervisor</td><td>SET NULL</td><td>Accepted. Subordinates' Super_ssn became NULL.</td></tr>
+      <tr><td>Delete an employee with WORKS_ON and DEPENDENT rows</td><td>CASCADE</td><td>Accepted. Both child tables lost the rows (counts went to 0).</td></tr>
+    </tbody>
+  </table></div>
+  <p>Insert order matters: parents before children (DEPARTMENT, then EMPLOYEE, then PROJECT, then WORKS_ON and DEPENDENT). Delete order is the reverse, unless a CASCADE rule does it for you.</p>
+</section>
+
+<!-- ============ REVISE ============ -->
+<section class="topic" id="t-sheet">
+  <div class="head"><h2>One-page cheat sheet</h2><label class="rev" for="r-sheet"><input class="rev" type="checkbox" id="r-sheet" data-sec="t-sheet">revised</label></div>
+  <div class="cards">
+    <div class="rc"><h4>DBMS basics</h4><ul>
+      <li>Define, construct, manipulate, share</li>
+      <li>Self-describing catalog (meta-data)</li>
+      <li>Program-data independence, views, abstraction</li>
+      <li>Concurrency control and recovery</li>
+      <li>Don't use for simple, real-time, single-user cases</li></ul></div>
+    <div class="rc"><h4>Users</h4><ul>
+      <li>On the scene: DBA, designer, end users</li>
+      <li>End users: casual, naive, sophisticated, stand-alone</li>
+      <li>Behind the scene: DBMS designers, tool developers, operators</li></ul></div>
+    <div class="rc"><h4>Three schemas</h4><ul>
+      <li>External = views</li>
+      <li>Conceptual = whole database</li>
+      <li>Internal = storage</li>
+      <li>Logical independence: change conceptual, keep external</li>
+      <li>Physical independence: change internal, keep conceptual</li></ul></div>
+    <div class="rc"><h4>Design phases</h4><ul>
+      <li>Requirements → conceptual (ER) → logical (relational) → physical</li></ul></div>
+    <div class="rc"><h4>ER symbols</h4><ul>
+      <li>Rectangle entity, double = weak</li>
+      <li>Diamond relationship, double = identifying</li>
+      <li>Oval attribute: underline key, double multivalued, dashed derived</li>
+      <li>Double line total participation</li></ul></div>
+    <div class="rc"><h4>Constraints</h4><ul>
+      <li>Ratio = max: 1:1, 1:N, M:N</li>
+      <li>Participation = min: total or partial</li>
+      <li>(min,max) on each side, read away from the entity</li></ul></div>
+    <div class="rc"><h4>Relational constraints</h4><ul>
+      <li>Domain, key, entity, referential, semantic</li>
+      <li>Insert: any can break</li>
+      <li>Delete: only referential. RESTRICT, CASCADE, SET NULL</li>
+      <li>Update PK = delete + insert</li></ul></div>
+    <div class="rc"><h4>Keys</h4><ul>
+      <li>Superkey: unique</li>
+      <li>Key: minimal superkey</li>
+      <li>Candidate → primary</li>
+      <li>FK refers to a PK, or is null</li></ul></div>
+    <div class="rc"><h4>Mapping steps</h4><ul>
+      <li>1 strong entity → relation</li>
+      <li>2 weak entity → owner PK + partial key</li>
+      <li>3 1:1 → FK (total side), merge or cross-reference</li>
+      <li>4 1:N → FK on N-side</li>
+      <li>5 M:N → new relation, PK = both FKs</li>
+      <li>6 multivalued → new relation</li>
+      <li>7 n-ary → new relation with n FKs</li></ul></div>
+  </div>
+</section>
+
+<section class="topic" id="t-qa">
+  <div class="head"><h2>Likely questions with answer outlines</h2><label class="rev" for="r-qa"><input class="rev" type="checkbox" id="r-qa" data-sec="t-qa">revised</label></div>
+  <div class="chips"><span class="chip add">Added</span><span class="chip">Covers every syllabus line</span></div>
+  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours.</p></div>
+
+  <details class="q"><summary>Explain the characteristics of the database approach and its advantages over file processing. (7)</summary><div class="ans">
+    <p>Self-describing catalog, program-data independence, abstraction, multiple views, sharing with transaction support. Then advantages: less redundancy, access control, backup and recovery, integrity constraints. Add when not to use one. See <a href="#t-approach">Database approach</a>.</p></div></details>
+
+  <details class="q"><summary>Describe the three-schema architecture. How does it give data independence? (7)</summary><div class="ans">
+    <p>Draw the three levels and two mappings. Define logical and physical independence. State that only the mappings change when a lower schema changes. See <a href="#t-models">Models, schemas, architecture</a>.</p></div></details>
+
+  <details class="q"><summary>Differentiate database schema and database state. (3)</summary><div class="ans">
+    <p>Schema is the description (intension), changes rarely. State is the actual data at a moment (extension, instance, snapshot), changes with every update. A valid state satisfies the schema and constraints.</p></div></details>
+
+  <details class="q"><summary>Who are the database users? Explain the end-user categories. (5)</summary><div class="ans">
+    <p>Actors on the scene versus workers behind the scene, then casual, naive, sophisticated, stand-alone with an example each. See <a href="#t-users">Database users</a>.</p></div></details>
+
+  <details class="q"><summary>Explain the phases of database design. (3 or 5)</summary><div class="ans">
+    <p>Requirements analysis, conceptual design (ER), logical design (mapping), physical design, with the output of each. Mention the parallel functional analysis for application design. See <a href="#t-process">Design process</a>.</p></div></details>
+
+  <details class="q"><summary>Define entity, attribute and relationship. Explain the types of attributes with examples. (7)</summary><div class="ans">
+    <p>Simple, composite, multivalued, derived. Include the nested example <code>{PreviousDegrees(College, Year, Degree, Field)}</code>. Add key attributes and the symbols. See <a href="#t-er">Entities and attributes</a>.</p></div></details>
+
+  <details class="q"><summary>Explain cardinality ratio and participation constraints, including the (min,max) notation. (7)</summary><div class="ans">
+    <p>Ratio gives the maximum, participation the minimum. Give the MANAGES and WORKS_FOR (min,max) pairs. See <a href="#t-relship">Relationships and constraints</a>.</p></div></details>
+
+  <details class="q"><summary>What is a weak entity type? Give an example. (3)</summary><div class="ans">
+    <p>No key of its own, identified through an owner entity and a partial key, with an identifying relationship and total participation. DEPENDENT of EMPLOYEE.</p></div></details>
+
+  <details class="q"><summary>Draw the ER diagram for a given scenario (library, hospital, college) and state the constraints. (10)</summary><div class="ans">
+    <p>Use the five-step method: entities, attributes with keys, relationships, ratios and participation, weak entities. Label every relationship with its ratio. See <a href="#t-example">Building an ERD</a>.</p></div></details>
+
+  <details class="q"><summary>Explain the relational constraints. How are they violated by insert, delete and update? (7)</summary><div class="ans">
+    <p>Domain, key, entity integrity, referential integrity. Then the table of violations and the three delete remedies. See <a href="#t-relmodel">Relational model</a>.</p></div></details>
+
+  <details class="q"><summary>Differentiate superkey, candidate key, primary key and foreign key. (5)</summary><div class="ans">
+    <p>Superkey is unique, key is minimal, candidate keys are all keys, primary key is the chosen one, foreign key refers to another relation's PK. Use the CAR example.</p></div></details>
+
+  <details class="q"><summary>Explain the ER-to-relational mapping algorithm and map a given ER diagram to a relational schema. (10)</summary><div class="ans">
+    <p>Go through steps 1 to 7 in order and apply each to the diagram. Mark PKs and FKs. See <a href="#t-mapping">ER to relational mapping</a>.</p></div></details>
+
+  <details class="q"><summary>Write the SQL to create the tables for a sample schema with primary keys, foreign keys and constraints. (7)</summary><div class="ans">
+    <p>One CREATE TABLE per relation in parent-to-child order, with NOT NULL, PRIMARY KEY, FOREIGN KEY … REFERENCES and ON DELETE rules. Handle any circular reference with ALTER TABLE. See <a href="#t-ddl">Creating tables in SQL</a>.</p></div></details>
+</section>
+
+<footer class="notes-footer">
+  Built from your Elmasri and Navathe slides (chapters 1, 2, 3, 5 and 7) and your syllabus. The project scope, ERD method, library example and SQL are my additions, so check them against your textbook and your own mini-project. SQL was run in SQLite only. I haven't seen your PYQs.
+</footer>
+</main>
+</div>
+
+  <!-- Global Search Modal (Ctrl+K) -->
+  <div class="search-modal-backdrop" id="search-modal-backdrop" role="dialog" aria-modal="true" aria-label="Global Topic Search">
+    <div class="search-modal">
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="search" class="search-input" id="search-input" placeholder="Search any topic, formula, or PYQ... (e.g. 'Booth', 'IEEE', 'Hazard')" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="search" enterkeyhint="search">
+      </div>
+      <div class="search-results" id="search-results"></div>
+      <div class="search-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+        <span><kbd>Enter</kbd> to open</span>
+        <span><kbd>Esc</kbd> to close</span>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  var KEY = 'dbms-m1-revised';
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { done = {}; }
+  var boxes = [].slice.call(document.querySelectorAll('input.rev'));
+  var links = [].slice.call(document.querySelectorAll('.toc a'));
+  var prog = document.getElementById('progress');
+
+  function link(id) { return document.querySelector('.toc a[href="#' + id + '"]'); }
+  function paint() {
+    var n = 0;
+    boxes.forEach(function (b) {
+      var id = b.getAttribute('data-sec');
+      b.checked = !!done[id];
+      if (done[id]) n++;
+      var a = link(id);
+      if (a) a.classList.toggle('done', !!done[id]);
+    });
+    if (prog) prog.textContent = n + ' of ' + boxes.length + ' sections revised';
+  }
+  boxes.forEach(function (b) {
+    b.addEventListener('change', function () {
+      done[b.getAttribute('data-sec')] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {}
+      paint();
+    });
+  });
+  paint();
+
+  var secs = [].slice.call(document.querySelectorAll('section.topic'));
+  function onScroll() {
+    var cur = secs[0], y = 120;
+    secs.forEach(function (s) { if (s.getBoundingClientRect().top - y <= 0) cur = s; });
+    links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + cur.id); });
+    var active = document.querySelector('.toc a.on');
+    if (active && window.matchMedia('(max-width: 899px)').matches) {
+      var ul = document.getElementById('toclist');
+      var target = active.offsetLeft - 16;
+      if (Math.abs(ul.scrollLeft - target) > 80) ul.scrollLeft = target;
+    }
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () { ticking = false; onScroll(); });
+  }, { passive: true });
+  onScroll();
+})();
+</script>
+
+</body></html>

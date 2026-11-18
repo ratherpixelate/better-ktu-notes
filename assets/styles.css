@@ -1996,6 +1996,44 @@ footer.notes-footer {
   color: var(--bg);
 }
 
+/* Question Accordions (Likely Questions) */
+details.q {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  margin: 10px 0;
+  transition: background-color 150ms var(--ease-smooth), border-color 150ms var(--ease-smooth);
+}
+details.q summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--fg);
+  user-select: none;
+}
+details.q summary:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+details.q[open] summary {
+  border-bottom: 1px solid var(--border);
+}
+details.q .ans {
+  padding: 12px 16px 14px;
+  font-size: 14.5px;
+  color: var(--fg-secondary);
+  line-height: 1.6;
+}
+details.q .ans p {
+  margin: 6px 0;
+}
+
+.note .lbl + strong {
+  margin-left: 2px;
+}
+
 /* --------------------------------------------------------------------------
    ACCESSIBILITY: PREFERS REDUCED MOTION
    Respect user accessibility preference by disabling transform scaling
