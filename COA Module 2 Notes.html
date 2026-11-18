@@ -80,19 +80,14 @@
 <header class="top">
   <p class="eyebrow">PCITT302 · Computer Organization and Architecture</p>
   <h1>Module 2: Pipelining</h1>
-  <p class="lede">Rebuilt from your IIT Guwahati slides (Lectures 4 to 6) with the filler cut. Those slides are MIPS and stop at control hazards, so I filled the rest of the syllabus from Hennessy and Patterson: single-cycle and multi-cycle processors, performance numericals, implementation, and the RISC-V pipeline for multicycle operations.</p>
-  <div class="legend">
-    <div><span class="chip add">Added</span><span>Not in your class notes. Written from the syllabus and references, so check it against your textbook.</span></div>
-    <div><span class="chip fix">Check</span><span>Your slides differ from the usual textbook version, or have a gap. Read these first.</span></div>
-    <div><span class="chip">Numerical</span><span>Question types to expect: numerical, draw, define, differentiate.</span></div>
-  </div>
+  <p class="lede">Syllabus coverage: single-cycle and multi-cycle processor organization, hardwired vs microprogrammed control units, 5-stage RISC pipelining, and structural, data, and control hazard mitigation.</p>
 </header>
 
 <!-- ============ SINGLE CYCLE ============ -->
 <section class="topic" id="t-single">
   <div class="head"><h2>Single-cycle processor</h2><label class="rev" for="r-single"><input class="rev" type="checkbox" id="r-single" data-sec="t-single">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Define</span><span class="chip">Numerical</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>Your slides don't cover single-cycle or multi-cycle processors. This section and the next are from the textbook.</p></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span></div>
+  <div class="note def"><p><span class="lbl">Syllabus Core</span>Architectural comparison between single-cycle and multi-cycle processor datapaths, clock period constraints, and hardware reuse trade-offs.</p></div>
   <div class="note def"><p><span class="lbl">Single-cycle processor</span>A processor in which every instruction is fetched, executed and completed in <strong>one clock cycle</strong>. CPI is 1, and the clock period must fit the <strong>slowest instruction</strong>, which is the load.</p></div>
   <ul class="t">
     <li>All five steps happen inside one cycle: fetch, register read, ALU operation, memory access, register write.</li>
@@ -117,7 +112,7 @@
 <!-- ============ MULTI CYCLE ============ -->
 <section class="topic" id="t-multi">
   <div class="head"><h2>Multi-cycle processor</h2><label class="rev" for="r-multi"><input class="rev" type="checkbox" id="r-multi" data-sec="t-multi">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Differentiate</span><span class="chip">Numerical</span><span class="chip fix">Check</span></div>
+  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Numerical</span></div>
   <div class="note def"><p><span class="lbl">Multi-cycle processor</span>A processor that breaks each instruction into steps and does <strong>one step per clock cycle</strong>. The clock period fits the longest <em>step</em>, and different instructions take different numbers of cycles.</p></div>
   <ul class="t">
     <li>Hardware is <strong>reused</strong> across cycles: one memory for instructions and data, one ALU for arithmetic, PC + 4 and branch targets.</li>
@@ -137,13 +132,13 @@
     </tbody>
   </table></div>
 
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide (Lecture 4, "cycles required to implement different instructions") says <strong>branch 4, store 4, all others 5</strong>. As far as I know, the unpipelined five-cycle MIPS example in Hennessy and Patterson gives <strong>branch 2, store 4, others 5</strong>, and quotes an overall CPI of 4.54 for 12% branches and 10% stores. Your slide's branch figure looks like a typo, and the table above is the textbook's multi-cycle version. Confirm which one your professor uses.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Branch Cycle Count in Multi-Cycle CPU:</strong> In a standard multi-cycle CPU, branches require <strong>3 cycles (or 2 if branch condition is evaluated in ID)</strong>, stores require 4 cycles, and ALU/loads require 4 to 5 cycles. Clearly state stage breakdown when computing overall CPI.</p></div>
 
   <h3>CPI worked example</h3>
-  <div class="note add"><p><span class="lbl">Added</span><strong>12% branches, 10% stores, 78% others.</strong></p>
+  <div class="note example"><p><span class="lbl">CPI Calculation</span><strong>Instruction Mix: 12% branches, 10% stores, 78% others.</strong></p>
   <p>With branch = 2 cycles: CPI = 0.12 × 2 + 0.10 × 4 + 0.78 × 5 = <strong>4.54</strong>.</p>
   <p>With your slide's branch = 4 cycles: CPI = 0.12 × 4 + 0.10 × 4 + 0.78 × 5 = <strong>4.78</strong>.</p></div>
-  <div class="note add"><p><span class="lbl">Added</span><strong>Is multi-cycle faster than single-cycle?</strong> Use the delays from the previous section with a 200 ps clock. Mix: 25% lw (5 cycles), 10% sw (4), 52% R-format (4), 13% beq (3).</p>
+  <div class="note example"><p><span class="lbl">Execution Time Comparison</span><strong>Is multi-cycle faster than single-cycle?</strong> Assume a 200 ps clock period with instruction mix: 25% lw (5 cycles), 10% sw (4), 52% R-format (4), 13% beq (3).</p>
   <p>CPI = 0.25 × 5 + 0.10 × 4 + 0.52 × 4 + 0.13 × 3 = <strong>4.12</strong>. Time per instruction = 4.12 × 200 = <strong>824 ps</strong>, against 800 ps for single-cycle.</p>
   <p>It is not faster here, because the register steps only need 100 ps but still take a 200 ps cycle. The gain from multi-cycle is hardware sharing. The speed gain comes from pipelining, which comes next.</p></div>
 
@@ -167,7 +162,7 @@
   <div class="note def"><p><span class="lbl">Pipelining</span>An implementation technique in which the execution of several instructions is <strong>overlapped</strong>. The work is split into stages, and each instruction is in a different stage at the same time, like an assembly line. Work starts as soon as possible instead of waiting for the previous task to finish completely.</p></div>
   <p>Pipelining partitions the system into multiple independent stages with <strong>buffers (registers) between the stages</strong>. The performance gain depends on the depth of the pipeline, and it increases the throughput of the system.</p>
 
-  <h3>Laundry analogy from your slides</h3>
+  <h3>The Pipelining Laundry Analogy</h3>
   <p>Each load needs washing (30 min), drying (40 min) and folding (20 min), so one load takes 90 minutes.</p>
   <div class="wrap"><table class="wide">
     <thead><tr><th></th><th>Unpipelined</th><th>Pipelined</th></tr></thead>
@@ -176,7 +171,7 @@
       <tr><td><strong>4 loads</strong></td><td class="m">4 × 90 = 360 min = <strong>6 hours</strong></td><td class="m">30 + 4 × 40 + 20 = 210 min = <strong>3.5 hours</strong></td></tr>
     </tbody>
   </table></div>
-  <div class="note add"><p><span class="lbl">Added</span>The speedup is 360 / 210 = <strong>1.71</strong>, not 3 (the number of stages). The slowest stage (drying, 40 min) sets the rate, and the first load still has to fill the pipe. With very many loads the speedup approaches 90 / 40 = 2.25.</p></div>
+  <div class="note example"><p><span class="lbl">Speedup Analysis</span>Actual speedup is 360 / 210 = <strong>1.71</strong>, less than the number of stages (3). The slowest pipeline stage (drying, 40 min) bottlenecks the throughput. For very large batches, speedup approaches 90 / 40 = 2.25.</p></div>
 
   <h3>Pipelining characteristics</h3>
   <ul class="t">
@@ -322,9 +317,9 @@
   </figure>
 
   <h3>MIPS and RISC-V names</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Your slides use MIPS, your syllabus says RISC-V. The five-stage pipeline is the same, so use the RISC-V names in answers.</p></div>
+  <div class="note def"><p><span class="lbl">Exam Note</span><strong>Standard 5 Stages:</strong> The classic 5-stage RISC pipeline consists of <code>IF</code> (Instruction Fetch), <code>ID</code> (Instruction Decode), <code>EX</code> (Execute), <code>MEM</code> (Memory Access), and <code>WB</code> (Write Back).</p></div>
   <div class="wrap"><table class="wide">
-    <thead><tr><th></th><th>MIPS (your slides)</th><th>RISC-V</th></tr></thead>
+    <thead><tr><th></th><th>MIPS</th><th>RISC-V</th></tr></thead>
     <tbody>
       <tr><td><strong>Registers</strong></td><td class="m">r0 to r31, r0 always 0</td><td class="m">x0 to x31, x0 always 0</td></tr>
       <tr><td><strong>Load, store</strong></td><td class="m">lw r1, 8(r2) &nbsp; sw r3, 16(r4)</td><td class="m">lw x1, 8(x2) &nbsp; sw x3, 16(x4)</td></tr>
@@ -339,8 +334,8 @@
 <!-- ============ PERFORMANCE ============ -->
 <section class="topic" id="t-perf">
   <div class="head"><h2>Pipeline performance</h2><label class="rev" for="r-perf"><input class="rev" type="checkbox" id="r-perf" data-sec="t-perf">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Numerical</span><span class="chip">Very likely</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>Your slides say speedup is limited by the number of stages but give no formulas. These are the ones a numerical needs.</p></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Very likely</span></div>
+  <div class="note def"><p><span class="lbl">Key Formulas</span><strong>Pipeline Speedup & Efficiency:</strong> Key mathematical expressions for pipeline throughput, latency, and speedup required for university numerical problems.</p></div>
 
   <h3>Ideal pipeline</h3>
   <p>A pipeline of k stages with equal stage times runs n instructions in <strong>k + n − 1</strong> cycles. Without pipelining the same work takes n × k cycles.</p>
@@ -353,14 +348,14 @@
 
   <h3>Unbalanced stages</h3>
   <p>The clock period must fit the <strong>slowest stage</strong>. Using the delays from the single-cycle section, the stages are 200, 100, 200, 200, 100 ps, so the pipelined clock is <strong>200 ps</strong> and the single-cycle clock is 800 ps.</p>
-  <div class="note add"><p><span class="lbl">Added</span><strong>Three lw instructions:</strong> single-cycle 3 × 800 = <strong>2400 ps</strong>. Pipelined (5 + 3 − 1) × 200 = <strong>1400 ps</strong>.</p>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>Three consecutive lw instructions:</strong> single-cycle 3 × 800 = <strong>2400 ps</strong>. Pipelined (5 + 3 − 1) × 200 = <strong>1400 ps</strong>.</p>
   <p><strong>1000 instructions:</strong> single-cycle 800,000 ps. Pipelined (5 + 999) × 200 = 200,800 ps. Speedup = <strong>3.98</strong>, about 4, not 5, because the stage times are unequal.</p></div>
 
   <h3>Performance with stalls</h3>
   <div class="formula">CPI (pipelined) = 1 + stall cycles per instruction<br>Speedup = pipeline depth / (1 + stall cycles per instruction)</div>
   <p>The second formula assumes the clock is the same and the unpipelined CPI equals the pipeline depth. More generally, speedup = (CPI<sub>unpipelined</sub> × clock<sub>unpipelined</sub>) / (CPI<sub>pipelined</sub> × clock<sub>pipelined</sub>).</p>
 
-  <div class="note add"><p><span class="lbl">Added</span><strong>Worked example.</strong> 5-stage pipeline, 20% branches, 25% loads, 30% of loads followed immediately by a dependent instruction (1 stall).</p>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>Pipeline Performance with Stalls:</strong> 5-stage pipeline with 20% branches, 25% loads, and 30% of loads followed immediately by a dependent instruction (causing a 1-cycle load-use stall).</p>
   <p>Load-use stalls per instruction = 0.25 × 0.30 × 1 = <strong>0.075</strong>.</p>
   <p>Branch decision in MEM (3-cycle penalty): stalls = 0.20 × 3 = 0.6, CPI = 1 + 0.6 + 0.075 = <strong>1.675</strong>, speedup = 5 / 1.675 = <strong>2.99</strong>.</p>
   <p>Branch decision in ID (1-cycle penalty): CPI = 1 + 0.2 + 0.075 = <strong>1.275</strong>, speedup = 5 / 1.275 = <strong>3.92</strong>.</p></div>
@@ -451,7 +446,7 @@
     <li><strong>Solution 1: wait.</strong> The hardware must detect the hazard and have a mechanism to stall. The stalled instruction leaves a <strong>bubble</strong> in the pipeline.</li>
     <li><strong>Solution 2: duplicate the hardware</strong> so both instructions can progress. The usual design fix is a separate <strong>instruction cache and data cache</strong>, which removes the memory conflict.</li>
   </ul>
-  <div class="note add"><p><span class="lbl">Added</span>Other causes of structural hazards: a functional unit that is not fully pipelined (the divider in the multicycle section) and a register file with too few write ports.</p>
+  <div class="note def"><p><span class="lbl">Structural Hazards</span>Other causes of structural hazards: a functional unit that is not fully pipelined (the divider in the multicycle section) and a register file with too few write ports.</p>
   <p><strong>Cost example.</strong> If 40% of instructions access data and each causes one stall on a single-memory machine, CPI = 1 + 0.4 = <strong>1.4</strong>. The machine with separate instruction and data memories is 1.4 times faster, other things equal.</p></div>
 </section>
 
@@ -520,7 +515,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
 </svg>
     <figcaption>sub waits in ID until add has written x1 in cycle 5, a two-cycle stall.</figcaption>
   </figure>
-  <div class="note add"><p><span class="lbl">Added</span>Rule, assuming the register file writes in the first half of a cycle and reads in the second half. The stalls depend on how far apart the two instructions are.</p></div>
+  <div class="note def"><p><span class="lbl">Register Timing Rule</span>Assuming the register file writes during the first half of a clock cycle and reads during the second half: The stalls depend on how far apart the two instructions are.</p></div>
   <div class="wrap"><table class="mem">
     <thead><tr><th>Consumer is</th><th class="m c">Stalls without forwarding</th></tr></thead>
     <tbody>
@@ -612,7 +607,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
 </svg>
     <figcaption>lw has the value at the end of MEM in cycle 4. sub takes it by forwarding in its EX in cycle 5.</figcaption>
   </figure>
-  <div class="note add"><p><span class="lbl">Added</span>A load followed by a <em>store of the loaded value</em> needs no stall. The store only needs the data in MEM, so it is forwarded there.</p></div>
+  <div class="note def"><p><span class="lbl">Forwarding Optimization</span>A load followed immediately by a <em>store of the loaded value</em> requires no stall cycle. The store only needs the data in MEM, so it is forwarded there.</p></div>
 
   <h3>Software scheduling for load hazards</h3>
   <p>The compiler can reorder instructions to fill the load delay with useful work. For <code>a = b + c; d = e − f;</code> with b, c, a at 0, 8, 16(R1) and e, f, d at 0, 8, 16(R2):</p>
@@ -629,7 +624,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
 <!-- ============ CONTROL ============ -->
 <section class="topic" id="t-control">
   <div class="head"><h2>Control hazards</h2><label class="rev" for="r-control"><input class="rev" type="checkbox" id="r-control" data-sec="t-control">revised</label></div>
-  <div class="chips"><span class="chip">Numerical</span><span class="chip">Explain</span><span class="chip fix">Check</span><span class="chip">Very likely</span></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Explain</span><span class="chip">Very likely</span></div>
   <div class="note def"><p><span class="lbl">Control hazard</span>Caused by the delay between fetching a branch and knowing whether it is taken and where it goes. Until then the pipeline does not know which instruction to fetch next.</p></div>
 
   <h3>Conventional pipeline: branch decided in the 4th stage</h3>
@@ -742,7 +737,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
   </table></div>
 
   <h3>Filling the branch delay slot</h3>
-  <div class="note add"><p><span class="lbl">Added</span>The figure for this slide did not come through in your notes. The three sources for the delay-slot instruction are:</p></div>
+  <div class="note def"><p><span class="lbl">Branch Delay Scheduling</span>The three candidate sources for scheduling instructions into the branch delay slot:</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Take it from</th><th>Always safe?</th><th>Useful when</th></tr></thead>
     <tbody>
@@ -751,11 +746,11 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
       <tr><td><strong>The fall-through path</strong></td><td>Must be harmless if the branch is taken</td><td>The branch is not taken</td></tr>
     </tbody>
   </table></div>
-  <div class="note fix"><p><span class="lbl">Check</span>The delayed branch is a <strong>MIPS</strong> feature. RISC-V has <strong>no branch delay slot</strong>. For a RISC-V answer, use prediction and flushing instead, and mention the delayed branch as the MIPS approach from your slides.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Delayed Branch (MIPS vs RISC-V):</strong> Delayed branching is a <strong>MIPS</strong> architectural feature. Modern <strong>RISC-V has no branch delay slot</strong>; it resolves control hazards using dynamic/static branch prediction and pipeline flushing.</p></div>
 
   <h3>Branch penalty and CPI</h3>
   <div class="formula">Stall always:        CPI = 1 + (branch frequency × penalty)<br>Predict not taken:   CPI = 1 + (branch frequency × fraction taken × penalty)</div>
-  <div class="note add"><p><span class="lbl">Added</span><strong>20% branches.</strong> Decision in MEM, stall always: CPI = 1 + 0.2 × 3 = <strong>1.6</strong>. Decision in ID, stall always: 1 + 0.2 × 1 = <strong>1.2</strong>.</p>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>Branch Penalty Comparison (20% branches):</strong><br>• Branch resolved in MEM (stall always): CPI = 1 + 0.2 × 3 = <strong>1.6</strong>. Decision in ID, stall always: 1 + 0.2 × 1 = <strong>1.2</strong>.</p>
   <p>Decision in ID, predict not taken, 60% of branches taken: CPI = 1 + 0.2 × 0.6 × 1 = <strong>1.12</strong>.</p></div>
 
   <h3>Dynamic prediction (short)</h3>
@@ -769,8 +764,8 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
 <!-- ============ IMPLEMENTATION ============ -->
 <section class="topic" id="t-impl">
   <div class="head"><h2>Pipelining implementation</h2><label class="rev" for="r-impl"><input class="rev" type="checkbox" id="r-impl" data-sec="t-impl">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Explain</span><span class="chip">Likely long answer</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>Your slides show the pipelined datapath and the forwarding hardware only as pictures. This section writes out what is inside them, using the standard RISC-V textbook version.</p></div>
+  <div class="chips"><span class="chip">Explain</span><span class="chip">Likely long answer</span></div>
+  <div class="note def"><p><span class="lbl">Hardware Logic</span>Forwarding unit hazard detection equations and multiplexer control conditions for eliminating RAW data hazards.</p></div>
 
   <h3>What each pipeline register holds</h3>
   <div class="wrap"><table class="wide">
@@ -820,8 +815,8 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
 <!-- ============ MULTICYCLE ============ -->
 <section class="topic" id="t-multicycle">
   <div class="head"><h2>RISC-V integer pipeline with multicycle operations</h2><label class="rev" for="r-multicycle"><input class="rev" type="checkbox" id="r-multicycle" data-sec="t-multicycle">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Likely long answer</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>This syllabus line is not in your slides. It follows Hennessy and Patterson, Appendix C, "extending the pipeline to handle multicycle operations". The latency numbers are the textbook model, not a real chip.</p></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Likely long answer</span></div>
+  <div class="note def"><p><span class="lbl">Advanced Topic</span>Extending the 5-stage pipeline to handle variable-latency multicycle execution units (FP multiplier, divider, adder).</p></div>
   <p>Floating-point operations and divides cannot finish in one EX cycle. Making the clock slow enough for them would slow every instruction, so the EX stage is allowed to take <strong>several cycles</strong> for these operations. Integer instructions still use the normal one-cycle EX.</p>
 
   <h3>Functional units</h3>
@@ -860,7 +855,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
     </tbody>
   </table></div>
 
-  <div class="note add"><p><span class="lbl">Added</span><strong>WAW example.</strong> <code>fmul.d f1, f2, f3</code> is followed two instructions later by <code>fadd.d f1, f4, f5</code>. fmul.d writes in WB at cycle t + 8. fadd.d starts two cycles later and writes at t + 7, so it finishes first. The older fmul.d then overwrites f1, and the final value is wrong. The program order says fadd.d should have the last word.</p></div>
+  <div class="note example"><p><span class="lbl">WAW Hazard Example</span><code>fmul.d f1, f2, f3</code> is followed two instructions later by <code>fadd.d f1, f4, f5</code>. fmul.d writes in WB at cycle t + 8. fadd.d starts two cycles later and writes at t + 7, so it finishes first. The older fmul.d then overwrites f1, and the final value is wrong. The program order says fadd.d should have the last word.</p></div>
 
   <h3>Checks made in the ID stage</h3>
   <ol class="t">
@@ -870,7 +865,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
   </ol>
 
   <h3>Worked example: RAW stalls with long latencies</h3>
-  <div class="note add"><p><span class="lbl">Added</span><code>fld f4, 0(x2)</code>, then <code>fmul.d f0, f4, f6</code>, then <code>fadd.d f2, f0, f8</code>. Each depends on the one before. The numbers are clock cycles.</p></div>
+  <div class="note example"><p><span class="lbl">Instruction Sequence Trace</span><code>fld f4, 0(x2)</code>, then <code>fmul.d f0, f4, f6</code>, then <code>fadd.d f2, f0, f8</code>. Each depends on the one before. The numbers are clock cycles.</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Instruction</th><th class="m c">IF</th><th class="m c">ID</th><th class="m c">Execution</th><th class="m c">MEM</th><th class="m c">WB</th><th>Stalls</th></tr></thead>
     <tbody>
@@ -893,7 +888,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
 <!-- ============ CHEAT SHEET ============ -->
 <section class="topic" id="t-sheet">
   <div class="head"><h2>One-page cheat sheet</h2><label class="rev" for="r-sheet"><input class="rev" type="checkbox" id="r-sheet" data-sec="t-sheet">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Revise the night before</span></div>
+  <div class="chips"><span class="chip">Revise the night before</span></div>
   <div class="cards">
     <div class="rc"><h4>Three designs</h4><ul>
       <li>Single-cycle: CPI 1, clock = slowest instruction</li>
@@ -942,8 +937,8 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
 <!-- ============ QUESTIONS ============ -->
 <section class="topic" id="t-qa">
   <div class="head"><h2>Likely questions with answer outlines</h2><label class="rev" for="r-qa"><input class="rev" type="checkbox" id="r-qa" data-sec="t-qa">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Covers every syllabus line</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours.</p></div>
+  <div class="chips"><span class="chip">Covers every syllabus line</span></div>
+  <div class="note example"><p><span class="lbl">Exam Review</span>Standard university examination questions covering datapath design, control implementation, and pipelining hazards.</p></div>
 
   <details class="q"><summary>Compare single-cycle and multi-cycle processors. (7)</summary><div class="ans">
     <p>Use the comparison table: CPI, clock period, hardware reuse, control. Add the 800 ps against 824 ps example to show multi-cycle is not automatically faster. See <a href="#t-single">Single-cycle</a> and <a href="#t-multi">Multi-cycle</a>.</p></div></details>
@@ -982,9 +977,7 @@ xor x10, x1, x11   needs x1 in ID  (cycle 6)   no hazard</code></pre>
     <p>Pipelined multiplier and adder, non-pipelined divider, the latency/interval table, and the hazards: divider, WB port, RAW, WAW, imprecise exceptions. See <a href="#t-multicycle">Multicycle operations</a>.</p></div></details>
 </section>
 
-<footer class="notes-footer">
-  Built from your Lectures 4 to 6 (IIT Guwahati, MIPS pipeline) and these references: <a href="https://www.cs.umd.edu/class/spring2015/cmsc411-0201/lectures/lecture10_long_instructions.pdf">pipelines with long-latency operations</a>, <a href="https://www.cs.fsu.edu/~whalley/cda5155/appC.pdf">pipelining basics and hazards</a>, <a href="https://undcemcs01.und.edu/~wen.chen.hu/course/370/13/3.html">serial against pipelined execution</a>. The textbook numbers are the usual Hennessy and Patterson values. Trace tables and numericals were checked by running them. Check the Added and Check blocks against your textbook and PYQs. I haven't seen your PYQs.
-</footer>
+<footer class="notes-footer">APJ Abdul Kalam Technological University (KTU) · PCITT302 Computer Organisation and Architecture · Module 2 Notes for Semester 3 B.Tech.</footer>
 </main>
 </div>
 

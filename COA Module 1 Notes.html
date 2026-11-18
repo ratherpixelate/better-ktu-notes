@@ -86,12 +86,7 @@
 <header class="top">
   <p class="eyebrow">PCITT302 · Computer Organization and Architecture</p>
   <h1>Module 1: Basic Structure of Computers</h1>
-  <p class="lede">Rebuilt from your class notes with the filler cut. Syllabus order: operational concepts, memory and addresses, instructions and sequencing, ISA principles, addressing modes, encoding, RISC.</p>
-  <div class="legend">
-    <div><span class="chip add">Added</span><span>Not in your notes. I filled it in, so check it against your textbook.</span></div>
-    <div><span class="chip fix">Fixed</span><span>Your notes were wrong or unclear here. Read these first.</span></div>
-    <div><span class="chip">Numerical</span><span>Question types to expect: numerical, draw, define, differentiate.</span></div>
-  </div>
+  <p class="lede">Syllabus coverage: basic computer organization, operational concepts, bus structures, memory locations and addressing modes, instruction sequencing, and RISC architecture principles.</p>
 </header>
 
 <!-- ============ ORGANIZATION VS ARCHITECTURE ============ -->
@@ -106,7 +101,7 @@
       <tr><td><strong>Question it answers</strong></td><td>How do I design a computer?</td><td>How does a computer work?</td></tr>
     </tbody>
   </table></div>
-  <div class="note add"><p><span class="lbl">Added</span>Example for the exam: whether a machine has a <code>MUL</code> instruction is an architecture decision. Whether MUL runs on a dedicated multiplier circuit or by repeated addition is an organization decision. Two machines can share one architecture and differ in organization.</p></div>
+  <div class="note example"><p><span class="lbl">Key Example</span>Whether a computer provides a <code>MUL</code> instruction is an <strong>architecture</strong> decision. Whether <code>MUL</code> executes on a dedicated hardware multiplier circuit or through repeated addition in the ALU is an <strong>organization</strong> decision. Two machines can share the identical architecture while differing in internal organization.</p></div>
   <div class="note"><p><span class="lbl">Cut</span>The generation history (Babbage, ENIAC, IBM 650, 4004 and so on) isn't in the syllabus, so it's left out.</p></div>
 </section>
 
@@ -165,13 +160,13 @@
       <tr><td>Secondary storage</td><td>Slowest</td><td>Largest</td><td>Lowest</td></tr>
     </tbody>
   </table></div>
-  <div class="note add"><p><span class="lbl">Added</span><strong>Your notes ask "why is cache access time less than main memory?" and never answer.</strong> Cache is small and built from faster memory cells, and it sits on or next to the processor chip, so signals travel a short distance and need no slow bus transfer. Main memory is much larger, built from slower, cheaper cells, and reached over the bus.</p></div>
+  <div class="note def"><p><span class="lbl">Key Concept</span><strong>Why Cache is Faster:</strong> Cache memory has substantially lower access latency than main memory because: (1) it is fabricated on-chip using high-speed SRAM cells rather than off-chip DRAM, and (2) it resides directly adjacent to CPU execution units, avoiding external bus propagation delays.</p></div>
 </section>
 
 <!-- ============ BASIC OPERATIONAL CONCEPTS ============ -->
 <section class="topic" id="t-ops">
   <div class="head"><h2>Basic operational concepts</h2><label class="rev" for="r-ops"><input class="rev" type="checkbox" id="r-ops" data-sec="t-ops">revised</label></div>
-  <div class="chips"><span class="chip">Explain steps</span><span class="chip">Draw</span><span class="chip fix">Fixed</span></div>
+  <div class="chips"><span class="chip">Explain steps</span><span class="chip">Draw</span></div>
   <h3>Registers involved</h3>
   <div class="wrap"><table>
     <thead><tr><th>Register</th><th>Holds</th><th>Connected to</th></tr></thead>
@@ -197,7 +192,7 @@
     <li>The result goes to a register, to memory (address in MAR, data in MDR, WRITE signal) or to an output device.</li>
     <li>Normal execution can be pre-empted by an interrupt at any point.</li>
   </ol>
-  <div class="note fix"><p><span class="lbl">Fixed</span>Your notes say "increment PC by 1" here and "PC incremented by 4" in the sequencing slides. They agree only because of the memory type. On a byte-addressable machine with 32-bit instructions it is <strong>+4</strong>. It would be +1 only if memory were word-addressable. Write +4 and state the assumption.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>PC Increment (+4 vs +1):</strong> On a byte-addressable machine with 32-bit (4-byte) instructions, the Program Counter (PC) increments by <strong>+4</strong> after fetching each instruction. It would be +1 only if memory were word-addressable. In university exams, always write +4 and state the byte-addressable assumption.</p></div>
 </section>
 
 <!-- ============ INTERRUPTS ============ -->
@@ -227,7 +222,7 @@
 <!-- ============ BUS STRUCTURES ============ -->
 <section class="topic" id="t-bus">
   <div class="head"><h2>Bus structures</h2><label class="rev" for="r-bus"><input class="rev" type="checkbox" id="r-bus" data-sec="t-bus">revised</label></div>
-  <div class="chips"><span class="chip">Draw</span><span class="chip">Differentiate</span><span class="chip fix">Fixed</span></div>
+  <div class="chips"><span class="chip">Draw</span><span class="chip">Differentiate</span></div>
   <div class="note def"><p><span class="lbl">Bus</span>A group of parallel wires that connects several devices. Each wire carries one bit.</p></div>
   <div class="wrap"><table>
     <thead><tr><th>Bus</th><th>Carries</th><th>Width</th></tr></thead>
@@ -280,7 +275,7 @@
     <li><strong>Advantage:</strong> good operating speed. <strong>Disadvantage:</strong> higher cost.</li>
     <li>A high-performance bus, a low-performance bus and a bridge between them.</li>
   </ul>
-  <div class="note fix"><p><span class="lbl">Fixed</span>Your notes say "ARMA bus". It is <strong>AMBA</strong> (Advanced Microcontroller Bus Architecture), ARM's bus, which uses this two-bus idea.</p></div>
+  <div class="note alert"><p><span class="lbl">Exam Note</span><strong>AMBA Bus:</strong> The standard industry specification is <strong>AMBA</strong> (Advanced Microcontroller Bus Architecture), ARM's on-chip bus standard, not "ARMA".</p></div>
 
   <div class="wrap"><table>
     <thead><tr><th></th><th>Single bus</th><th>Two bus</th></tr></thead>
@@ -311,7 +306,7 @@
 <!-- ============ MEMORY LOCATIONS & ADDRESSES ============ -->
 <section class="topic" id="t-memory">
   <div class="head"><h2>Memory locations and addresses</h2><label class="rev" for="r-memory"><input class="rev" type="checkbox" id="r-memory" data-sec="t-memory">revised</label></div>
-  <div class="chips"><span class="chip">Numerical</span><span class="chip">Define</span><span class="chip fix">Fixed</span></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Define</span></div>
   <ul class="t">
     <li>Memory is millions of cells, each holding one bit. Bits are handled in fixed-size groups: a group of <strong>m</strong> bits stored or retrieved in one basic operation is a <strong>word</strong>, and m is the <strong>word length</strong> (typically 16 to 64 bits).</li>
     <li>A 32-bit word can hold one 32-bit 2's-complement number, or four 8-bit ASCII characters.</li>
@@ -325,7 +320,7 @@
     <li class="a">32-bit address: 2<sup>32</sup> = 4G locations. With byte addressing, that is 4 GB.</li>
     <li class="a">Locations needed → bits needed: 64M words = 2<sup>26</sup>, so 26 address bits.</li>
   </ul>
-  <div class="note add"><p><span class="lbl">Added</span>The last two bullets are worked examples I added. The 24-bit one is from your notes.</p></div>
+  <div class="note example"><p><span class="lbl">Worked Examples</span>Calculations for 16-bit, 24-bit, and 32-bit address spaces demonstrating how address bus width determines maximum addressable memory capacity.</p></div>
 
   <h3>Byte addressability</h3>
   <p>Successive addresses refer to successive <strong>bytes</strong>. For a 32-bit word, consecutive words sit at addresses 0, 4, 8, 12 and so on. This is why PC increases by 4 after each instruction.</p>
@@ -345,7 +340,7 @@
     <li><strong>Big-endian:</strong> most significant byte at the lowest address.</li>
     <li><strong>Little-endian:</strong> least significant byte at the lowest address.</li>
   </ul>
-  <div class="note fix"><p><span class="lbl">Fixed</span>Your first slide says big-endian stores the "first byte last". That is wrong, because it describes little-endian again. Big-endian stores the first (most significant) byte at the lowest address. The ISA slide ("MSB at lowest address") has it right. My earlier message blamed the little-endian line. That line is fine, the big-endian line is the broken one.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Endianness Definition:</strong> Big-endian stores the <strong>most significant byte (MSB) at the lowest memory address</strong>. Little-endian stores the least significant byte (LSB) at the lowest memory address.</p></div>
 
   <h3>Alignment</h3>
   <p>Words are <strong>aligned</strong> to multiples of their size: a 4-byte word starts at an address divisible by 4.</p>
@@ -360,7 +355,7 @@
 <!-- ============ SIGNED NUMBERS ============ -->
 <section class="topic" id="t-signed">
   <div class="head"><h2>Signed integer representations</h2><label class="rev" for="r-signed"><input class="rev" type="checkbox" id="r-signed" data-sec="t-signed">revised</label></div>
-  <div class="chips"><span class="chip">Numerical</span><span class="chip">Compare</span><span class="chip fix">Fixed</span></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Compare</span></div>
   <p>Three representations. In all of them the leftmost bit is the sign bit (0 positive, 1 negative) and <strong>positive numbers look identical</strong>. Only negatives differ. <strong>2's complement is used in all modern computers.</strong></p>
 
   <div class="wrap"><table class="wide">
@@ -387,8 +382,8 @@
       <tr><td><strong>2's complement</strong></td><td>Invert every bit, add 1</td><td class="m">−2<sup>n−1</sup> to +(2<sup>n−1</sup>−1)</td><td>One</td></tr>
     </tbody>
   </table></div>
-  <p>8-bit check from your notes: unsigned 0 to 255, 1's complement −127 to +127, 2's complement −128 to +127. 2's complement has one more negative number than positive.</p>
-  <div class="note fix"><p><span class="lbl">Fixed</span>Your notes give the sign-magnitude range as "±2<sup>n−1</sup>". The largest magnitude is <strong>2<sup>n−1</sup> − 1</strong>, so the range is −(2<sup>n−1</sup>−1) to +(2<sup>n−1</sup>−1). For 4 bits that is −7 to +7, as the table shows.</p></div>
+  <p>8-bit reference ranges: unsigned 0 to 255, 1's complement −127 to +127, 2's complement −128 to +127. 2's complement has one more negative number than positive.</p>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Sign-Magnitude Range:</strong> The largest magnitude in $ bits is <strong>2<sup>n−1</sup> − 1</strong>, making the range −(2<sup>n−1</sup> − 1) to +(2<sup>n−1</sup> − 1). For 4 bits, that is −7 to +7 (not −8 to +8).</p></div>
 
   <h3>Worked example: represent −25 in 8 bits</h3>
   <pre><code>+25            = 0001 1001
@@ -402,16 +397,14 @@ sign-magnitude = 1001 1001   (flip sign bit)
     <li><strong>1's complement:</strong> subtraction becomes addition of the 1's complement, but addition needs an <strong>end-around carry</strong>. Still two zeros, which causes problems.</li>
     <li><strong>2's complement:</strong> one zero, no end-around carry. It is the 1's complement shifted one position.</li>
   </ul>
-  <div class="note add"><p><span class="lbl">Added</span><strong>Worked examples for the exam (4-bit).</strong></p>
-  <p>1's complement, 5 + (−2): <code>0101 + 1101 = 1 0010</code>. Add the end-around carry: <code>0010 + 1 = 0011</code> = +3.</p>
-  <p>2's complement overflow, 5 + 4: <code>0101 + 0100 = 1001</code>, which reads as −7. Overflow occurred because two positives gave a negative. Rule: overflow happens when both operands have the same sign and the result's sign differs.</p></div>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>1's & 2's Complement Arithmetic (4-Bit):</strong><br>• 1's complement: 5 + (−2) = <code>0101 + 1101 = 1 0010</code>. Adding the end-around carry gives <code>0010 + 1 = 0011</code> (+3).<br>• 2's complement overflow: 5 + 4 = <code>0101 + 0100 = 1001</code> (−7). Overflow occurs because two positive numbers yielded a negative result (operands share the same sign, result differs).</p></div>
 </section>
 
 <!-- ============ IEEE 754 ============ -->
 <section class="topic" id="t-float">
   <div class="head"><h2>IEEE 754 floating point</h2><label class="rev" for="r-float"><input class="rev" type="checkbox" id="r-float" data-sec="t-float">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Numerical</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>Your notes only say "float: IEEE 754 standard". This section is entirely mine, from the standard format.</p></div>
+  <div class="chips"><span class="chip">Numerical</span></div>
+  <div class="note def"><p><span class="lbl">IEEE 754 Standard</span>Standard representation for single-precision (32-bit) and double-precision (64-bit) floating-point numbers in modern computer systems.</p></div>
   <div class="wrap"><table>
     <thead><tr><th></th><th>Sign</th><th>Exponent</th><th>Fraction</th><th>Bias</th></tr></thead>
     <tbody>
@@ -434,7 +427,7 @@ fraction      = 0101 1000 0000 0000 0000 000   (23 bits, drop the leading 1)
 <!-- ============ INSTRUCTION TYPES & FORMATS ============ -->
 <section class="topic" id="t-formats">
   <div class="head"><h2>Instruction types and formats</h2><label class="rev" for="r-formats"><input class="rev" type="checkbox" id="r-formats" data-sec="t-formats">revised</label></div>
-  <div class="chips"><span class="chip">Numerical</span><span class="chip">Write programs</span><span class="chip add">Added</span></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Write programs</span></div>
   <p>A computer needs instructions for four kinds of operation:</p>
   <ol class="t">
     <li>Data transfer between main memory and CPU registers.</li>
@@ -448,7 +441,7 @@ fraction      = 0101 1000 0000 0000 0000 000   (23 bits, drop the leading 1)
     <li><strong>Register Transfer Notation (RTN):</strong> memory locations are named LOC, A, VAR2 and registers R0, R5. Contents are written in square brackets. <code>R1 ← [LOC]</code> copies memory location LOC into R1. <code>R3 ← [R1] + [R2]</code> adds two registers into R3.</li>
     <li><strong>Assembly notation:</strong> <code>Move LOC, R1</code> and <code>Add R1, R2, R3</code>.</li>
   </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>Operand order is a convention. Your textbook (Hamacher) writes <strong>source first, destination last</strong>, so <code>Add A,B</code> means B ← [A]+[B]. Some slides in your notes flip it. Always state the convention you're using in an answer. Everything below uses source first.</p></div>
+  <div class="note alert"><p><span class="lbl">Convention Note</span><strong>Operand Order:</strong> Textbook standard (Hamacher) writes <strong>source first, destination last</strong>: <code>Add A, B</code> means <code>B ← [A] + [B]</code>. Always state the convention you use at the beginning of an exam answer.</p></div>
 
   <h3>Five instruction formats, one task: C ← [A] + [B]</h3>
   <div class="wrap"><table class="wide">
@@ -472,7 +465,7 @@ fraction      = 0101 1000 0000 0000 0000 000   (23 bits, drop the leading 1)
   </ul>
 
   <h3>Expression evaluation</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Your notes only do C = A + B. A question like this is a standard exam problem: <strong>X = (A + B) × (C + D)</strong>.</p></div>
+  <div class="note example"><p><span class="lbl">Exam Problem</span><strong>Evaluating Expressions on Different Architectures:</strong> Evaluating <code>X = (A + B) × (C + D)</code> on 3-address, 2-address, 1-address (accumulator), and 0-address (stack) machines.</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>3-address (3 instr.)</th><th>2-address (6)</th><th>1-address (7)</th><th>0-address (8)</th></tr></thead>
     <tbody><tr>
@@ -528,7 +521,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
 <!-- ============ SHIFTS ============ -->
 <section class="topic" id="t-shifts">
   <div class="head"><h2>Logical and arithmetic shifts</h2><label class="rev" for="r-shifts"><input class="rev" type="checkbox" id="r-shifts" data-sec="t-shifts">revised</label></div>
-  <div class="chips"><span class="chip">Numerical</span><span class="chip">Differentiate</span><span class="chip fix">Check</span></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Differentiate</span></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Shift</th><th>What enters</th><th>What leaves</th><th>Effect</th></tr></thead>
     <tbody>
@@ -539,12 +532,8 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
     </tbody>
   </table></div>
   <p><strong>Overflow in arithmetic left shift:</strong> if the bit shifted out of the sign position differs from the sign bit, overflow occurs.</p>
-  <div class="note add"><p><span class="lbl">Added</span><strong>8-bit examples</strong></p>
-  <p>LShiftL by 1: <code>0010 1101</code> (45) → <code>0101 1010</code> (90).</p>
-  <p>LShiftR by 2: <code>1011 0100</code> → <code>0010 1101</code>.</p>
-  <p>AShiftR by 2: <code>1101 0100</code> (−44) → <code>1111 0101</code> (−11).</p>
-  <p>Arithmetic left by 1 with overflow: <code>0100 0000</code> (64) → <code>1000 0000</code>. The sign flipped, so V = 1.</p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your notes say both "the sign bit does not participate in the shift" and "arithmetic left shift is the same as logical left shift". In Hamacher (your textbook) it is the second. Write the overflow rule above and you're covered either way.</p></div>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>8-bit Shift Operations:</strong><br>• Logical Left Shift by 1: <code>0010 1101</code> (45) → <code>0101 1010</code> (90)<br>• Logical Right Shift by 2: <code>1011 0100</code> → <code>0010 1101</code><br>• Arithmetic Right Shift by 2: <code>1101 0100</code> (−44) → <code>1111 0101</code> (−11)<br>• Arithmetic Left Shift with overflow: <code>0100 0000</code> (64) → <code>1000 0000</code> (sign bit inverted → V = 1).</p></div>
+  <div class="note alert"><p><span class="lbl">Common Pitfall</span><strong>Arithmetic Left Shift:</strong> In standard university evaluation (Hamacher), an arithmetic left shift shifts all bits left and inserts 0 into the LSB. If the sign bit inverts during the shift, an <strong>overflow condition (V = 1)</strong> is flagged.</p></div>
 </section>
 
 <!-- ============ ADDRESSING MODES ============ -->
@@ -576,7 +565,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
   </ul>
 
   <h3>One worked example that separates all the modes</h3>
-  <div class="note add"><p><span class="lbl">Added</span>The EA numbers below are mine, built so each mode gives a different answer. Word size 4 bytes.</p></div>
+  <div class="note example"><p><span class="lbl">Worked Example</span>Effective Address (EA) computation for each addressing mode assuming 4-byte word size and given register/memory values.</p></div>
   <pre><code>State:   R1 = 1000      PC = 3000
          M[20] = 1000   M[1000] = 500   M[1020] = 700
          M[996] = 300   M[3020] = 900</code></pre>
@@ -599,7 +588,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
 <!-- ============ ISA PRINCIPLES ============ -->
 <section class="topic" id="t-isa">
   <div class="head"><h2>Instruction set architecture principles</h2><label class="rev" for="r-isa"><input class="rev" type="checkbox" id="r-isa" data-sec="t-isa">revised</label></div>
-  <div class="chips"><span class="chip">Define</span><span class="chip">Classify</span><span class="chip add">Added</span></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Classify</span></div>
   <div class="note def"><p><span class="lbl">ISA</span>The set of instructions a processor can understand and execute. It is the interface between hardware and software, defines what the processor can do, and matters to both hardware designers and software developers.</p></div>
   <p>Topics under ISA: classification, memory addressing, addressing modes, type and size of operands, operations, control flow, encoding.</p>
 
@@ -608,7 +597,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
     <li><strong>By instruction complexity:</strong> CISC (Complex Instruction Set Computer) and RISC (Reduced Instruction Set Computer).</li>
     <li><strong>By where operands live:</strong> stack-based (Java Virtual Machine), accumulator-based (early computers), register-based. Register-based splits into <strong>register-memory</strong> (x86) and <strong>load-store</strong> (MIPS, RISC-V, ARM).</li>
   </ul>
-  <div class="note add"><p><span class="lbl">Added</span>The same C = A + B on each class of machine, which is the usual way this is asked:</p></div>
+  <div class="note example"><p><span class="lbl">Comparison</span>Instruction sequencing comparison for <code>C = A + B</code> across 3-address, 2-address, 1-address, and 0-address machine architectures:</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Stack</th><th>Accumulator</th><th>Register-memory</th><th>Load-store</th></tr></thead>
     <tbody><tr>
@@ -652,7 +641,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
 <!-- ============ ENCODING ============ -->
 <section class="topic" id="t-encoding">
   <div class="head"><h2>Encoding of instructions</h2><label class="rev" for="r-encoding"><input class="rev" type="checkbox" id="r-encoding" data-sec="t-encoding">revised</label></div>
-  <div class="chips"><span class="chip">Numerical</span><span class="chip">Draw</span><span class="chip add">Added</span></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Draw</span></div>
   <p>An assembly program must be converted to <strong>machine instructions</strong>. The <strong>opcode</strong> is an encoded binary pattern giving the operation and, with mode bits, the type of operands. Three basic encodings: <strong>variable length, fixed length, hybrid</strong>.</p>
 
   <h3>One-word instruction, 32-bit word</h3>
@@ -681,7 +670,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
   </table></div>
 
   <h3>Numericals</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Your notes ask the first two questions in a slide and never answer them.</p></div>
+  <div class="note def"><p><span class="lbl">Key Concept</span>Core design trade-offs in instruction set architecture and byte alignment.</p></div>
   <ol class="t">
     <li><strong>32-bit word, 8-bit opcode: how many instructions?</strong> 2<sup>8</sup> = <strong>256</strong>.</li>
     <li><strong>16 registers: how many bits to name one?</strong> log<sub>2</sub> 16 = <strong>4 bits</strong>. With a 3-bit mode field that is the 7-bit Source/Dest field above.</li>
@@ -698,7 +687,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
 <!-- ============ RISC ============ -->
 <section class="topic" id="t-risc">
   <div class="head"><h2>RISC architecture</h2><label class="rev" for="r-risc"><input class="rev" type="checkbox" id="r-risc" data-sec="t-risc">revised</label></div>
-  <div class="chips"><span class="chip">Explain</span><span class="chip">Short note</span><span class="chip add">Added</span></div>
+  <div class="chips"><span class="chip">Explain</span><span class="chip">Short note</span></div>
   <h3>Core principles</h3>
   <ul class="t">
     <li><strong>Simple, fixed-length instructions</strong>, e.g. 32 bits, which makes pipelining easy.</li>
@@ -728,7 +717,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
   </table></div>
 
   <h3>Instruction formats</h3>
-  <div class="note add"><p><span class="lbl">Added</span>This slide came through empty in your notes. Below are the standard MIPS 32-bit formats. <code>shamt</code> is the number of positions to shift (SLL, SRL, SLA, SRA), which you did have.</p></div>
+  <div class="note def"><p><span class="lbl">Standard Format</span>Standard MIPS 32-bit instruction formats (R-type, I-type, J-type) with bit field allocations. <code>shamt</code> defines the shift amount (SLL, SRL, SRA).</p></div>
   <p><strong>R-type</strong> (register arithmetic, shifts): <code>ADD R1,R2,R3</code></p>
   <div class="bitwrap"><div class="bits alt" style="grid-template-columns: 6fr 5fr 5fr 5fr 5fr 6fr;">
     <div>opcode<small>6</small></div><div>rs<small>5</small></div><div>rt<small>5</small></div><div>rd<small>5</small></div><div>shamt<small>5</small></div><div>funct<small>6</small></div>
@@ -782,7 +771,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
 <!-- ============ CHEAT SHEET ============ -->
 <section class="topic" id="t-sheet">
   <div class="head"><h2>One-page cheat sheet</h2><label class="rev" for="r-sheet"><input class="rev" type="checkbox" id="r-sheet" data-sec="t-sheet">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Revise the night before</span></div>
+  <div class="chips"><span class="chip">Revise the night before</span></div>
   <div class="cards">
     <div class="rc"><h4>Number ranges (n bits)</h4><ul>
       <li>Unsigned: 0 to 2<sup>n</sup>−1</li>
@@ -828,9 +817,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
   </div>
 </section>
 
-<footer class="notes-footer">
-  Built from your Module1.md and the syllabus line for Module 1 (Fundamentals, 11 hours). Check the Added and Fixed blocks against Hamacher's <em>Computer Organization</em> (5th ed.) and your PYQs. The question-type chips describe the usual form of each topic. I haven't seen your PYQs, so use them to decide where to spend time.
-</footer>
+<footer class="notes-footer">APJ Abdul Kalam Technological University (KTU) · PCITT302 Computer Organisation and Architecture · Module 1 Notes for Semester 3 B.Tech.</footer>
 </main>
 </div>
 

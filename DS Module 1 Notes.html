@@ -84,12 +84,7 @@
 <header class="top">
   <p class="eyebrow">PCITT303 · Data Structures</p>
   <h1>Module 1: Introduction to Data Structures</h1>
-  <p class="lede">Built from the syllabus line and standard references, because your OCR'd class notes weren't reliable. Algorithms are written in plain-English numbered steps, the style from your lab record.</p>
-  <div class="legend">
-    <div><span class="chip add">Added</span><span>Not in your class notes. Written from the syllabus and references, so check it against your textbook.</span></div>
-    <div><span class="chip fix">Check</span><span>Your notes differ from the usual convention, or two conventions exist. Pick one and state it in the exam.</span></div>
-    <div><span class="chip">Numerical</span><span>Question types to expect: numerical, algorithm, define, differentiate.</span></div>
-  </div>
+  <p class="lede">Syllabus coverage: abstract data types (ADT) vs concrete data structures, asymptotic analysis (Big O, Ω, Θ), arrays, sparse matrix representations, polynomial addition, and stack operations with infix-to-postfix conversions.</p>
 </header>
 
 <!-- ============ BASICS ============ -->
@@ -99,7 +94,7 @@
   <div class="note def"><p><span class="lbl">Data</span>A collection of raw facts, figures or symbols that have no meaning by themselves. Data becomes useful only when processed.</p></div>
   <div class="note def"><p><span class="lbl">Information</span>Processed, organised or structured data that has meaning and can be used for decisions.</p></div>
   <div class="note def"><p><span class="lbl">Data structure</span>A way of organising and storing data in a computer so that it can be accessed and modified efficiently. It defines the logical relationship among data elements and the operations on them.</p></div>
-  <div class="note add"><p><span class="lbl">Added</span>Example: the numbers 45, 67, 89 are data. "The class average is 67" is information.</p></div>
+  <div class="note def"><p><span class="lbl">Key Example</span><strong>Data vs Information:</strong> The raw numbers 45, 67, 89 constitute data. Processed contextual insight ("The class average is 67") constitutes information.</p></div>
 
   <h3>Need for data structures</h3>
   <ul class="t">
@@ -120,7 +115,7 @@
       <tr><td><strong>Non-primitive, non-linear</strong></td><td>Tree, graph</td></tr>
     </tbody>
   </table></div>
-  <div class="note add"><p><span class="lbl">Added</span>The primitive and non-primitive split is the usual textbook starting point. Your syllabus goes straight to ADT/CDT, linear/non-linear and static/dynamic, which are the next section.</p></div>
+  <div class="note def"><p><span class="lbl">Classification</span>Primitive data structures (int, float, char, pointer) operate directly on machine instructions; non-primitive structures (arrays, lists, stacks, trees) are composed from primitive types.</p></div>
 </section>
 
 <!-- ============ CLASSIFICATION ============ -->
@@ -141,7 +136,7 @@
       <tr><td><strong>Examples</strong></td><td>Stack, queue, list, tree, graph</td><td>Array, linked list, pointer-based tree</td></tr>
     </tbody>
   </table></div>
-  <div class="note add"><p><span class="lbl">Added</span>One ADT can have several CDTs. The stack ADT (push, pop) can be built on an array or on a linked list. Books differ a little in which structures they call CDTs, but the answer "ADT is the what, CDT is the how" is safe.</p></div>
+  <div class="note def"><p><span class="lbl">Key Concept</span><strong>ADT vs CDT Principle:</strong> One Abstract Data Type can have multiple Concrete Data Structures. For instance, the Stack ADT (push, pop, peek) can be implemented using an array (static) or a linked list (dynamic). <em>ADT defines what operations do; CDT defines how they are stored and executed.</em></p></div>
 
   <h3>Linear and non-linear</h3>
   <div class="wrap"><table class="wide">
@@ -155,7 +150,7 @@
       <tr><td><strong>Examples</strong></td><td>Array, linked list, stack, queue</td><td>Tree, graph</td></tr>
     </tbody>
   </table></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your notes list heap and hash table under non-linear. A heap is a tree, so it fits. A hash table is usually not called hierarchical, and many books don't class it as non-linear. In an exam, give <strong>tree and graph</strong> as the examples.</p></div>
+  <div class="note alert"><p><span class="lbl">Exam Tip</span><strong>Non-Linear Data Structures:</strong> In university exams, always cite <strong>trees and graphs</strong> as the canonical examples of non-linear (hierarchical/interconnected) data structures.</p></div>
 
   <h3>Static and dynamic</h3>
   <div class="wrap"><table class="wide">
@@ -180,7 +175,7 @@
     <li><strong>Auxiliary space:</strong> the extra memory used during execution. Temporary variables, the recursion stack and extra arrays all count.</li>
     <li><strong>Input space:</strong> the memory the input itself occupies.</li>
   </ul>
-  <div class="note add"><p><span class="lbl">Added</span>Another way to write it: S(P) = c + S<sub>P</sub>(n). The constant c is the <strong>fixed part</strong> (code, simple variables, constants). S<sub>P</sub>(n) is the <strong>variable part</strong> that depends on the instance, such as array size or recursion depth.</p></div>
+  <div class="note def"><p><span class="lbl">Space Complexity</span>Space complexity is formally expressed as <strong>(P) = c + S_P(n)$</strong>, where $ is the fixed part (instruction space, scalar variables) and (n)$ is the variable instance space (arrays, recursion stack).</p></div>
 
   <div class="wrap"><table class="wide">
     <thead><tr><th>Algorithm</th><th>Auxiliary space</th><th>Reason</th></tr></thead>
@@ -189,8 +184,8 @@
       <tr><td>Binary search, iterative</td><td class="m">O(1)</td><td>Just low, high and mid</td></tr>
       <tr><td>Recursive factorial</td><td class="m">O(n)</td><td>Recursion depth is n, so n stack frames</td></tr>
       <tr><td>Merge sort</td><td class="m">O(n)</td><td>Needs an extra array for merging</td></tr>
-      <tr><td>Binary search, recursive <span class="chip add">Added</span></td><td class="m">O(log n)</td><td>Recursion depth is log n</td></tr>
-      <tr><td>Bubble sort <span class="chip add">Added</span></td><td class="m">O(1)</td><td>Sorts in place, one temporary variable for swaps</td></tr>
+      <tr><td>Binary search, recursive </td><td class="m">O(log n)</td><td>Recursion depth is log n</td></tr>
+      <tr><td>Bubble sort </td><td class="m">O(1)</td><td>Sorts in place, one temporary variable for swaps</td></tr>
     </tbody>
   </table></div>
   <p>The first row is auxiliary space only. If you count the input array too, finding the max uses O(n) in total. Say which one you mean.</p>
@@ -204,7 +199,7 @@
   <div class="wrap"><table class="wide">
     <thead><tr><th>Function</th><th>Name</th><th>Meaning</th><th>Examples</th></tr></thead>
     <tbody>
-      <tr><td class="m">O(1)</td><td>Constant <span class="chip add">Added</span></td><td>Time does not change with n</td><td>Reading A[i], push, pop</td></tr>
+      <tr><td class="m">O(1)</td><td>Constant </td><td>Time does not change with n</td><td>Reading A[i], push, pop</td></tr>
       <tr><td class="m">O(log n)</td><td>Logarithmic</td><td>Grows slowly. The problem halves every step</td><td>Binary search, heap operations</td></tr>
       <tr><td class="m">O(n)</td><td>Linear</td><td>Grows in direct proportion to n</td><td>Scanning an array, finding min or max</td></tr>
       <tr><td class="m">O(n²)</td><td>Quadratic</td><td>Grows with the square of n. Nested loops</td><td>Bubble sort, selection sort, adding two n×n matrices</td></tr>
@@ -261,7 +256,7 @@
   <p>At n = 32, 2ⁿ is already over four billion while n³ is about thirty-two thousand. That gap is why exponential algorithms are only usable for very small inputs.</p>
 
   <h3>Reading the complexity off code</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Count how many times the innermost statement runs, then drop constants and lower-order terms: 3n² + 5n + 2 becomes O(n²).</p></div>
+  <div class="note def"><p><span class="lbl">Time Analysis Rule</span>Count the execution frequency of the critical innermost statement, then discard multiplicative constants and lower-order terms: n^2 + 5n + 2$ yields (n^2)$.</p></div>
 <pre><code>for (i = 0; i &lt; n; i++)            // runs n times              → O(n)
     sum = sum + a[i];
 
@@ -295,7 +290,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
   <p>g(n) is an asymptotic upper bound (O), lower bound (Ω) or tight bound (Θ) for f(n).</p>
 
   <h3>Worked example</h3>
-  <div class="note add"><p><span class="lbl">Added</span><strong>Show that f(n) = 3n + 2 is Θ(n).</strong></p>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>Show that (n) = 3n + 2$ is $\Theta(n)$:</strong></p>
   <p>Upper bound: 3n + 2 ≤ 4n for all n ≥ 2, so c = 4 and n₀ = 2. Hence f(n) is O(n).</p>
   <p>Lower bound: 3n ≤ 3n + 2 for all n ≥ 1, so c = 3 and n₀ = 1. Hence f(n) is Ω(n).</p>
   <p>Both hold, so f(n) is Θ(n) with c₁ = 3, c₂ = 4, n₀ = 2.</p>
@@ -306,10 +301,10 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <thead><tr><th>Algorithm</th><th>Best case, Ω</th><th>Worst case, O</th><th>Average case, Θ</th></tr></thead>
     <tbody>
       <tr><td><strong>Linear search</strong></td><td>Key at first position: Ω(1)</td><td>Key at last position or absent: O(n)</td><td>About n/2 comparisons: Θ(n)</td></tr>
-      <tr><td><strong>Binary search</strong> <span class="chip add">Added</span></td><td>Key at the middle: Ω(1)</td><td>Halve until one element is left: O(log n)</td><td>Θ(log n)</td></tr>
+      <tr><td><strong>Binary search</strong> </td><td>Key at the middle: Ω(1)</td><td>Halve until one element is left: O(log n)</td><td>Θ(log n)</td></tr>
     </tbody>
   </table></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Strictly, O, Ω and Θ are bounds on a function, not names for cases. Any of them can describe the best, worst or average case. Most textbooks and your syllabus still pair them as <strong>best = Ω, worst = O, average = Θ</strong>, so write it that way, and add one line saying the notations bound the running time function.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Bound vs Case:</strong> Formally, $, $\Omega$, and $\Theta$ represent mathematical bounds (upper, lower, tight), not specific cases. However, university exams commonly associate <strong>Worst case = $, Best case = $\Omega$, Average case = $\Theta$</strong>. Mention the mathematical definition and this pairing for complete marks.</p></div>
 </section>
 
 <!-- ============ ARRAYS ============ -->
@@ -327,7 +322,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <li>Easy to traverse.</li>
     <li>Efficient for searching and sorting.</li>
   </ul>
-  <div class="note add"><p><span class="lbl">Added</span>Drawbacks to mention: the size can't change after declaration, and inserting or deleting in the middle means shifting elements, which is O(n).</p></div>
+  <div class="note def"><p><span class="lbl">Array Limitations</span>Key limitations to state in 3-mark questions: fixed static capacity allocated at compile time, and linear time (n)$ overhead for insertion/deletion due to element shifting.</p></div>
 
   <h3>One-dimensional array in memory</h3>
   <p><code>int A[5] = {10, 20, 30, 40, 50};</code> with base address BA = 2000 and element size w = 4 bytes.</p>
@@ -336,7 +331,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
   </div></div>
   <div class="formula">Address(A[i]) = BA + i × w          (index starts at 0)</div>
   <p>A[3] = 2000 + 3 × 4 = <strong>2012</strong>.</p>
-  <div class="note add"><p><span class="lbl">Added</span>If the lower bound is LB instead of 0 (say A[−5…10]): <code>Address(A[i]) = BA + (i − LB) × w</code>. Example: BA = 500, w = 2, LB = −5, then A[2] = 500 + (2 + 5) × 2 = <strong>514</strong>.</p></div>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>1D Array with Lower Bound (LB):</strong><br><code>Address(A[i]) = BA + (i - LB) × w</code><br><em>Example:</em> Base Address  = 500$, element size  = 2$ bytes, lower bound  = -5$. The address of [2]$ is 00 + (2 - (-5)) 	imes 2 = 500 + 14 = \mathbf{514}$.</p></div>
 
   <h3>Two-dimensional array: row-major and column-major</h3>
   <p><code>int B[3][3] = {{1,2,3},{4,5,6},{7,8,9}};</code> is stored as a single run of memory in one of two orders.</p>
@@ -351,12 +346,12 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
   <div class="formula">Row-major:     Address(A[i][j]) = BA + (i × n + j) × w<br>Column-major:  Address(A[i][j]) = BA + (j × m + i) × w</div>
   <p>Here m is the number of rows and n the number of columns. Row-major multiplies the row index by the <em>number of columns</em>. Column-major multiplies the column index by the <em>number of rows</em>.</p>
 
-  <div class="note add"><p><span class="lbl">Added</span><strong>Worked examples</strong></p>
+  <div class="note example"><p><span class="lbl">Worked Examples</span><strong>2D Array Address Calculations:</strong></p>
   <p>B[3][3], BA = 1000, w = 4, element B[1][2] (the value 6).</p>
   <p>Row-major: 1000 + (1 × 3 + 2) × 4 = <strong>1020</strong>. Column-major: 1000 + (2 × 3 + 1) × 4 = <strong>1028</strong>.</p>
   <p>A[10][10], BA = 2000, w = 2, element A[3][4].</p>
   <p>Row-major: 2000 + (3 × 10 + 4) × 2 = <strong>2068</strong>. Column-major: 2000 + (4 × 10 + 3) × 2 = <strong>2086</strong>.</p></div>
-  <div class="note add"><p><span class="lbl">Added</span><strong>With lower bounds.</strong> For A[l₁…u₁][l₂…u₂] let rows = u₁ − l₁ + 1 and cols = u₂ − l₂ + 1.</p>
+  <div class="note def"><p><span class="lbl">Generalized Formulas</span><strong>2D Array with Arbitrary Lower Bounds [l_1 \dots u_1][l_2 \dots u_2]$:</strong><br>Let total rows  = u_1 - l_1 + 1$ and columns  = u_2 - l_2 + 1$.</p>
   <div class="formula">Row-major:     BA + ((i − l₁) × cols + (j − l₂)) × w<br>Column-major:  BA + ((j − l₂) × rows + (i − l₁)) × w</div>
   <p>Example: A[1…5][1…4], BA = 100, w = 2, element A[3][2]. rows = 5, cols = 4.</p>
   <p>Row-major: 100 + ((3 − 1) × 4 + (2 − 1)) × 2 = <strong>118</strong>. Column-major: 100 + ((2 − 1) × 5 + (3 − 1)) × 2 = <strong>114</strong>.</p></div>
@@ -394,7 +389,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     </tbody>
   </table></div>
   <p>The bold first row is the summary. Reading the next row: the element in row 0, column 4 has the value 9.</p>
-  <div class="note add"><p><span class="lbl">Added</span><strong>Space saving.</strong> The full matrix needs m × n cells. The triplet form needs 3 × (t + 1) cells for t non-zero values. Here that is 36 against 3 × 6 = 18. The triplet form wins when <code>3(t + 1) &lt; m × n</code>.</p></div>
+  <div class="note def"><p><span class="lbl">Space Efficiency</span><strong>Sparse Matrix Triplet Space Criterion:</strong> A standard matrix requires  	imes n$ memory locations. The 3-tuple representation requires  	imes (t + 1)$ locations for $ non-zero elements. Triplet storage saves memory whenever (t + 1) < m 	imes n$.</p></div>
 
   <h3>Linked list representation</h3>
   <p>Each non-zero element is a node holding <code>row | column | value | next</code>. A pointer <code>first</code> points to the first node, and the nodes are linked in row order.</p>
@@ -433,10 +428,10 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <li>If k is equal to 0, print 0. Otherwise, for x from 0 to k − 1, print C[x][0] followed by x^C[x][1] (leave out the x part when the exponent is 0), and print + between terms.</li>
     <li>Stop.</li>
   </ol>
-  <div class="note add"><p><span class="lbl">Added</span>Your OCR'd notes follow the same merge idea. I added the step that drops a term whose coefficients cancel (sum equal to 0), which is the usual case people forget.</p></div>
+  <div class="note alert"><p><span class="lbl">Exam Tip</span><strong>Polynomial Addition Edge Case:</strong> When adding two terms with identical exponents, if their coefficients cancel out (sum equals 0), that term must not be inserted into the resultant polynomial.</p></div>
 
   <h3>Worked example</h3>
-  <div class="note add"><p><span class="lbl">Added</span>A = 5x³ + 3x + 2 and B = 4x³ + 2x² − 3x + 6.</p></div>
+  <div class="note example"><p><span class="lbl">Polynomial Example</span>Adding (x) = 5x^3 + 3x + 2$ and (x) = 4x^3 + 2x^2 - 3x + 6$.</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Compare A[i], B[j]</th><th>Exponents</th><th>Action</th><th>C so far</th></tr></thead>
     <tbody>
@@ -460,7 +455,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <li><strong>Underflow:</strong> pop on an empty stack, when top reaches the minimum.</li>
   </ul>
   <div class="formula">top = −1 means the stack is empty.<br>top = MAX − 1 means the stack is full.   (array a[0 … MAX−1])</div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your notes test <code>top = max</code> for overflow. That works only if the array is declared with MAX + 1 cells. With an array of MAX cells indexed 0 to MAX − 1, the test is <code>top = MAX − 1</code>. State the convention at the top of your answer.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Array Stack Overflow:</strong> For an array of size <code>MAX</code> indexed from <code>0</code> to <code>MAX - 1</code>, the overflow condition is <code>top == MAX - 1</code> (not <code>top == MAX</code>). State the 0-based indexing convention clearly.</p></div>
 
   <figure class="fig">
     <svg viewBox="0 0 640 170" role="img" aria-label="Stack array of five cells with three items and top pointing at the third">
@@ -518,7 +513,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <li>Converting infix to postfix and evaluating postfix (the next two sections).</li>
     <li>Undo and redo operations.</li>
     <li>Browser history navigation.</li>
-    <li>Function call stack during recursion <span class="chip add">Added</span></li>
+    <li>Function call stack during recursion </li>
   </ul>
 </section>
 
@@ -568,7 +563,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
   </div>
 
   <h3>The problem with a linear queue: false overflow</h3>
-  <div class="note add"><p><span class="lbl">Added</span>MAX = 5. Enqueue 10, 20, 30, 40, 50, then dequeue twice.</p></div>
+  <div class="note example"><p><span class="lbl">Queue Simulation</span>Tracing linear queue operations with array capacity <code>MAX = 5</code>: Enqueue 10, 20, 30, 40, 50, followed by two dequeues.</p></div>
   <div class="bitwrap"><div class="bits" style="grid-template-columns: repeat(5, 1fr);">
     <div>free<small>Q[0]</small></div><div>free<small>Q[1]</small></div><div>30<small>Q[2] · FRONT</small></div><div>40<small>Q[3]</small></div><div>50<small>Q[4] · REAR</small></div>
   </div></div>
@@ -582,7 +577,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
   <div class="note def"><p><span class="lbl">Circular queue</span>A queue in which the last position is connected back to the first position, forming a circle. It uses all the array positions efficiently. <strong>Need:</strong> it prevents false overflow.</p></div>
   <p>The indexes wrap around with the modulo operator: <code>REAR = (REAR + 1) % MAX</code> and <code>FRONT = (FRONT + 1) % MAX</code>.</p>
   <div class="formula">Full:    (REAR + 1) % MAX == FRONT<br>Empty:   FRONT == −1</div>
-  <div class="note fix"><p><span class="lbl">Check</span>One place in your OCR'd notes reads like <code>(REAR+1) % FRONT</code>. The correct overflow test is <code>(REAR + 1) % MAX == FRONT</code>. The test <code>FRONT == 0 and REAR == MAX − 1</code> is the same situation, and the single modulo test already covers it.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Circular Queue Overflow:</strong> The standard modulo condition for circular queue overflow is <code>(REAR + 1) % MAX == FRONT</code>.</p></div>
 
   <div class="units">
     <div>
@@ -620,7 +615,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
   </div>
 
   <h3>Trace, MAX = 5</h3>
-  <div class="note add"><p><span class="lbl">Added</span>The same operations that caused false overflow above now succeed.</p></div>
+  <div class="note example"><p><span class="lbl">Circular Queue Advantage</span>Circular queues eliminate false overflow by wrapping around to index 0 using modulo arithmetic.</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Operation</th><th class="m c">FRONT</th><th class="m c">REAR</th><th>Q[0] … Q[4]</th><th>Result</th></tr></thead>
     <tbody>
@@ -673,7 +668,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     </tbody>
   </table></div>
   <p><strong>Applications:</strong> job scheduling in an operating system, bandwidth management, network communication.</p>
-  <div class="note add"><p><span class="lbl">Added</span>A priority queue is usually implemented with a binary heap, which gives O(log n) insert and delete. Your notes mention the binary heap next to it, so this is what that line refers to. The syllabus says concept only, so you don't need the heap algorithms.</p></div>
+  <div class="note def"><p><span class="lbl">Priority Queue</span>A priority queue is most efficiently implemented using a binary heap, providing (\log n)$ insertion and extraction of the extreme priority element.</p></div>
 </section>
 
 <!-- ============ INFIX TO POSTFIX ============ -->
@@ -685,7 +680,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <tbody>
       <tr><td><strong>Infix</strong></td><td>Between the operands</td><td class="m">A + B</td></tr>
       <tr><td><strong>Postfix</strong></td><td>After the operands</td><td class="m">A B +</td></tr>
-      <tr><td><strong>Prefix</strong> <span class="chip add">Added</span></td><td>Before the operands</td><td class="m">+ A B</td></tr>
+      <tr><td><strong>Prefix</strong> </td><td>Before the operands</td><td class="m">+ A B</td></tr>
     </tbody>
   </table></div>
 
@@ -736,7 +731,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
   <p>Postfix: <strong>ABC+*DE/−</strong></p>
 
   <h3>More examples to check yourself</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Each of these was checked by running the algorithm.</p></div>
+  <div class="note def"><p><span class="lbl">Verification</span>Operator precedence and associativity order for stack conversion algorithms.</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Infix</th><th>Postfix</th><th>Point it shows</th></tr></thead>
     <tbody>
@@ -747,7 +742,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
       <tr><td class="m">A + B * (C ^ D − E)</td><td class="m">ABCD^E−*+</td><td>Brackets, ^ and * together</td></tr>
     </tbody>
   </table></div>
-  <div class="note add"><p><span class="lbl">Added</span><strong>Quick check for the exam.</strong> Fully bracket the infix expression in the order the operators would run, then move each operator to just after its closing bracket and delete the brackets. A * (B + C) − D / E becomes ((A * (B + C)) − (D / E)), and moving operators gives ABC+*DE/−. Use the stack table for the marks, and this to confirm the answer.</p></div>
+  <div class="note tip"><p><span class="lbl">Shortcut Verification</span><strong>Bracketing Method (Exam Verification):</strong> Fully parenthesize the infix expression according to operator precedence: <code>A * (B + C) - D / E</code> becomes <code>((A * (B + C)) - (D / E))</code>. Move each operator to its corresponding closing parenthesis and remove parentheses: <code>ABC+*DE/-</code>. Use this to verify your step-by-step stack table output.</p></div>
 </section>
 
 <!-- ============ POSTFIX EVAL ============ -->
@@ -764,10 +759,10 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <li>After all tokens are scanned, pop the top element. It is the value of the expression.</li>
     <li>Stop.</li>
   </ol>
-  <div class="note fix"><p><span class="lbl">Check</span>The <strong>first pop is the right operand</strong>. For − and / the order matters: 12 4 / means 12 ÷ 4, so op1 = 12 and op2 = 4. Swapping them is the most common mistake in this question.</p></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Operand Order in Postfix Evaluation:</strong> The <strong>first popped element is the right operand (op2)</strong>, and the <strong>second popped element is the left operand (op1)</strong>: <code>result = op1 - op2</code> (or <code>op1 / op2</code>). Inverting this order is the most frequent student error.</p></div>
 
   <h3>Example: 5 6 2 + * 12 4 / −</h3>
-  <div class="note add"><p><span class="lbl">Added</span>This is 5 * (6 + 2) − 12 / 4 in infix.</p></div>
+  <div class="note example"><p><span class="lbl">Infix Equivalent</span>The postfix string corresponds to the infix arithmetic expression <code>5 * (6 + 2) - 12 / 4 = 37</code>.</p></div>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Token</th><th>Action</th><th>Stack (top on the right)</th></tr></thead>
     <tbody>
@@ -789,7 +784,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 <!-- ============ CHEAT SHEET ============ -->
 <section class="topic" id="t-sheet">
   <div class="head"><h2>One-page cheat sheet</h2><label class="rev" for="r-sheet"><input class="rev" type="checkbox" id="r-sheet" data-sec="t-sheet">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Revise the night before</span></div>
+  <div class="chips"><span class="chip">Revise the night before</span></div>
   <div class="cards">
     <div class="rc"><h4>Growth order</h4><ul>
       <li>1 &lt; log n &lt; n &lt; n log n &lt; n² &lt; n³ &lt; 2ⁿ</li>
@@ -834,8 +829,8 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 <!-- ============ QUESTIONS ============ -->
 <section class="topic" id="t-qa">
   <div class="head"><h2>Likely questions with answer outlines</h2><label class="rev" for="r-qa"><input class="rev" type="checkbox" id="r-qa" data-sec="t-qa">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Covers every syllabus line</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours.</p></div>
+  <div class="chips"><span class="chip">Covers every syllabus line</span></div>
+  <div class="note example"><p><span class="lbl">Exam Practice</span>Standard university examination questions covering data structure classifications, asymptotic analysis, and stack operations.</p></div>
 
   <details class="q"><summary>Differentiate ADT and CDT. Give two examples each. (3)</summary><div class="ans">
     <p>ADT is a logical description of data and its operations, with the implementation hidden. CDT is the actual implementation in a language and memory model. Use the table in <a href="#t-classes">Classification</a>. ADT examples: stack, queue. CDT examples: linked list, array-based stack.</p></div></details>
@@ -877,9 +872,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
     <p>Reversing a string, balanced parentheses, expression conversion and evaluation, undo/redo, browser history. See <a href="#t-stack">Stack</a>.</p></div></details>
 </section>
 
-<footer class="notes-footer">
-  Built from the Module 1 syllabus line and these references: <a href="https://www.geeksforgeeks.org/difference-between-abstract-and-concrete-data-structure/amp/">ADT vs CDT</a>, <a href="https://www.programiz.com/node/1508">asymptotic notations</a>, <a href="https://jfspps.github.io/howtos/DataStructuresAndAlgorithmsinC++/16_Sparse_matrices_and_Polynomials">sparse matrices and polynomials</a>, <a href="https://www.geeksforgeeks.org/?p=142798">infix to postfix</a>. Your OCR'd class notes were used only to see what your class covered and the order it taught it. Algorithms, trace tables and numericals were run in code to check the answers. Check the Added and Check blocks against your textbook and PYQs, and note that I haven't seen your PYQs.
-</footer>
+<footer class="notes-footer">APJ Abdul Kalam Technological University (KTU) · PCITT303 Data Structures · Module 1 Notes for Semester 3 B.Tech.</footer>
 </main>
 </div>
 

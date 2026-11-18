@@ -997,7 +997,7 @@ button {
 }
 
 .toc a.done::after {
-  content: "¹3";
+  content: " ¹3";
   color: var(--badge-success);
   font-weight: 700;
 }
@@ -1631,7 +1631,7 @@ footer.notes-footer {
     border-color: var(--accent);
   }
   .toc a.done::after {
-    content: " a0¹3";
+    content: " 3";
   }
   section.topic {
     scroll-margin-top: calc(var(--nav-height) + 60px);
@@ -1649,4 +1649,32 @@ footer.notes-footer {
   header.top {
     padding-top: 16px;
   }
+}
+
+/* Callout Variations: Alert (Watch Out) and Example */
+.note.alert {
+  border-left: 3px solid var(--badge-10m);
+  background: var(--badge-10m-bg);
+}
+.note.alert .lbl {
+  background: var(--badge-10m);
+  color: #FFFFFF;
+}
+
+.note.example {
+  border-left: 3px solid var(--accent);
+  background: var(--surface-subtle);
+}
+.note.example .lbl {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.note.tip {
+  border-left: 3px solid var(--badge-3m);
+  background: var(--badge-3m-bg);
+}
+.note.tip .lbl {
+  background: var(--badge-3m);
+  color: #FFFFFF;
 }
