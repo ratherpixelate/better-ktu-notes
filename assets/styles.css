@@ -2002,6 +2002,41 @@ td.c, th.c {
   letter-spacing: 0.05em;
 }
 
+.s-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.s-axis {
+  stroke: var(--fg-muted);
+  stroke-width: 1.5;
+}
+
+.s-tick {
+  fill: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.s-cell {
+  fill: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.s-lbl {
+  fill: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.s-c {
+  fill: var(--fg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11.5px;
+}
+
 /* Bitfield Diagrams */
 .bitwrap {
   overflow-x: auto;
@@ -2145,6 +2180,19 @@ td.c, th.c {
   --g-quad: #D4D4D8;
   --g-cub: #E4E4E7;
   --g-exp: #FAFAFA;
+}
+
+.gl {
+  fill: none !important;
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.gt {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
 }
 
 .g-log { stroke: var(--g-log); }
