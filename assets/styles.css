@@ -19,9 +19,12 @@
   --max-width: 1120px;
   --nav-height: 64px;
 
-  /* Transitions */
+  /* Transitions & Motion Curves */
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-pop: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --transition-fast: 0.15s var(--ease-smooth);
   --transition-normal: 0.25s var(--ease-spring);
 }
@@ -146,6 +149,7 @@ body {
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 200ms var(--ease-smooth), color 200ms var(--ease-smooth);
 }
 
 ::selection {
@@ -177,7 +181,7 @@ button {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth);
 }
 
 :root[data-theme="dark"] .site-nav {
@@ -256,13 +260,20 @@ button {
   border-radius: var(--radius-sm);
   font-size: 13.5px;
   font-weight: 500;
-  transition: all var(--transition-fast);
+  transition: transform 120ms var(--ease-spring),
+              background-color 150ms var(--ease-smooth),
+              border-color 150ms var(--ease-smooth),
+              color 150ms var(--ease-smooth);
 }
 
 .search-trigger:hover {
   background: var(--surface);
   border-color: var(--border-strong);
   color: var(--fg);
+}
+
+.search-trigger:active {
+  transform: scale(0.97);
 }
 
 .search-trigger kbd {
@@ -286,13 +297,20 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: transform 120ms var(--ease-spring),
+              background-color 150ms var(--ease-smooth),
+              border-color 150ms var(--ease-smooth),
+              color 150ms var(--ease-smooth);
 }
 
 .btn-icon:hover {
   color: var(--fg);
   background: var(--surface-subtle);
   border-color: var(--border-strong);
+}
+
+.btn-icon:active {
+  transform: scale(0.93);
 }
 
 /* --------------------------------------------------------------------------
@@ -359,6 +377,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth);
 }
 
 .progress-header {
@@ -525,7 +544,10 @@ button {
   flex-direction: column;
   justify-content: space-between;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-normal), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: transform 140ms var(--ease-spring),
+              background-color 200ms var(--ease-smooth),
+              border-color 150ms var(--ease-smooth),
+              box-shadow 150ms var(--ease-smooth);
   position: relative;
   overflow: hidden;
 }
@@ -534,6 +556,10 @@ button {
   transform: translateY(-2px);
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
+}
+
+.module-card:not(.locked):active {
+  transform: translateY(0) scale(0.985);
 }
 
 .module-card.active-module {
@@ -762,12 +788,16 @@ button {
   border-radius: var(--radius-sm);
   color: var(--fg);
   cursor: pointer;
-  transition: background var(--transition-fast);
+  transition: background-color 120ms var(--ease-smooth), transform 100ms var(--ease-spring);
 }
 
 .search-result-item:hover,
 .search-result-item.selected {
   background: var(--surface-subtle);
+}
+
+.search-result-item:active {
+  transform: scale(0.985);
 }
 
 .search-result-item.selected {
@@ -910,12 +940,19 @@ button {
   color: var(--fg-secondary);
   padding: 6px 12px;
   border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
+  transition: transform 120ms var(--ease-spring),
+              background-color 150ms var(--ease-smooth),
+              border-color 150ms var(--ease-smooth),
+              color 150ms var(--ease-smooth);
 }
 
 .nav-back-link:hover {
   background: var(--surface-subtle);
   color: var(--accent);
+}
+
+.nav-back-link:active {
+  transform: scale(0.96);
 }
 
 .shell {
@@ -982,12 +1019,18 @@ button {
   border-radius: var(--radius-xs);
   color: var(--fg-secondary);
   text-decoration: none;
-  transition: all var(--transition-fast);
+  transition: transform 120ms var(--ease-spring),
+              background-color 150ms var(--ease-smooth),
+              color 150ms var(--ease-smooth);
 }
 
 .toc a:hover {
   background: var(--surface-subtle);
   color: var(--fg);
+}
+
+.toc a:active {
+  transform: scale(0.98);
 }
 
 .toc a.on {
@@ -996,10 +1039,27 @@ button {
   font-weight: 600;
 }
 
+@keyframes checkPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  70% {
+    transform: scale(1.18);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .toc a.done::after {
-  content: " ¹3";
+  content: " ✓";
+  display: inline-block;
   color: var(--badge-success);
   font-weight: 700;
+  animation: checkPop 180ms var(--ease-pop) both;
+  transform-origin: center center;
 }
 
 .toc .progress {
@@ -1174,12 +1234,19 @@ section.topic + section.topic {
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
-  transition: all var(--transition-fast);
+  transition: transform 120ms var(--ease-spring),
+              border-color 150ms var(--ease-smooth),
+              background-color 150ms var(--ease-smooth),
+              color 150ms var(--ease-smooth);
 }
 
 .rev:hover {
   border-color: var(--border-strong);
   color: var(--fg);
+}
+
+.rev:active {
+  transform: scale(0.96);
 }
 
 .rev input {
@@ -1200,6 +1267,7 @@ section.topic + section.topic {
   font-size: 15px;
   line-height: 1.6;
   box-shadow: var(--shadow-sm);
+  transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth);
 }
 
 .note p {
@@ -1291,6 +1359,7 @@ pre code {
   overflow-x: auto;
   color: var(--fg);
   box-shadow: var(--shadow-sm);
+  transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth);
 }
 
 /* Tables */
@@ -1301,6 +1370,7 @@ pre code {
   border-radius: var(--radius-sm);
   background: var(--surface);
   box-shadow: var(--shadow-sm);
+  transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth);
 }
 
 table {
@@ -1351,6 +1421,7 @@ td.c, th.c {
   border-radius: var(--radius-md);
   background: var(--surface);
   box-shadow: var(--shadow-sm);
+  transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth);
 }
 
 .fig svg {
@@ -1624,6 +1695,13 @@ footer.notes-footer {
     border-radius: var(--radius-full);
     background: var(--surface);
     font-size: 13px;
+    transition: background-color 140ms var(--ease-smooth),
+                color 140ms var(--ease-smooth),
+                border-color 140ms var(--ease-smooth),
+                transform 120ms var(--ease-spring);
+  }
+  .toc a:active {
+    transform: scale(0.95);
   }
   .toc a.on {
     background: var(--accent);
@@ -1631,7 +1709,7 @@ footer.notes-footer {
     border-color: var(--accent);
   }
   .toc a.done::after {
-    content: " 3";
+    content: " ✓";
   }
   section.topic {
     scroll-margin-top: calc(var(--nav-height) + 60px);
@@ -1677,4 +1755,30 @@ footer.notes-footer {
 .note.tip .lbl {
   background: var(--badge-3m);
   color: #FFFFFF;
+}
+
+/* --------------------------------------------------------------------------
+   ACCESSIBILITY: PREFERS REDUCED MOTION
+   Respect user accessibility preference by disabling transform scaling
+   and instant-finishing animations, while preserving gentle color states.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .search-trigger:active,
+  .btn-icon:active,
+  .module-card:not(.locked):active,
+  .module-card:hover,
+  .module-card:hover .card-arrow,
+  .search-result-item:active,
+  .nav-back-link:active,
+  .toc a:active,
+  .rev:active {
+    transform: none !important;
+  }
 }
