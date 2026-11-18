@@ -34,6 +34,12 @@ test.describe('BetterKTUNotes E2E Suite', () => {
 
     const html = page.locator('html');
     const toggleBtn = page.locator('.btn-icon.theme-toggle');
+    const sunIcon = toggleBtn.locator('.theme-icon-sun');
+    const moonIcon = toggleBtn.locator('.theme-icon-moon');
+
+    // Both icons must exist in the DOM for smooth zero-hydration rotational cross-fade
+    await expect(sunIcon).toBeAttached();
+    await expect(moonIcon).toBeAttached();
 
     // Click toggle to switch theme
     const initialTheme = await html.getAttribute('data-theme') || 'light';
@@ -44,6 +50,15 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     // Verify localStorage persistence
     const storedTheme = await page.evaluate(() => localStorage.getItem('bkn-theme'));
     expect(storedTheme).toBe(newTheme);
+
+    // Verify icon opacity matching theme after transition settles
+    if (newTheme === 'dark') {
+      await expect(sunIcon).toHaveCSS('opacity', '1');
+      await expect(moonIcon).toHaveCSS('opacity', '0');
+    } else {
+      await expect(moonIcon).toHaveCSS('opacity', '1');
+      await expect(sunIcon).toHaveCSS('opacity', '0');
+    }
 
     // Capture screenshot in dark mode
     if (newTheme !== 'dark') {

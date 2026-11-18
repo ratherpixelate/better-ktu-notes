@@ -79,9 +79,10 @@ export function Navbar({ currentSubject, currentModule }: NavbarProps) {
               aria-label="Toggle visual theme (Light / Dark)"
               title="Toggle theme"
             >
-              {mounted && theme === 'dark' ? (
-                /* Sun icon for Dark mode */
+              <span className="theme-toggle-icon-wrap" aria-hidden="true">
+                {/* Sun icon (shown in Dark mode) */}
                 <svg
+                  className="theme-icon theme-icon-sun"
                   width="17"
                   height="17"
                   viewBox="0 0 24 24"
@@ -90,14 +91,13 @@ export function Navbar({ currentSubject, currentModule }: NavbarProps) {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  aria-hidden="true"
                 >
                   <circle cx="12" cy="12" r="5" />
                   <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
                 </svg>
-              ) : (
-                /* Moon icon for Light mode */
+                {/* Moon icon (shown in Light mode) */}
                 <svg
+                  className="theme-icon theme-icon-moon"
                   width="17"
                   height="17"
                   viewBox="0 0 24 24"
@@ -106,11 +106,10 @@ export function Navbar({ currentSubject, currentModule }: NavbarProps) {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  aria-hidden="true"
                 >
                   <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
                 </svg>
-              )}
+              </span>
             </button>
 
             <a

@@ -205,9 +205,8 @@ body {
 }
 
 /* Enable background and text color transitions only during user-initiated theme toggles */
-html.theme-transitioning body,
-html.theme-transitioning .site-nav {
-  transition: background-color 200ms var(--ease-smooth), color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth);
+html.theme-transitioning :is(body, .site-nav, .module-card, .search-trigger, .progress-card, .toc a, .note, .callout) {
+  transition: background-color 200ms var(--ease-smooth), color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth) !important;
 }
 
 ::selection {
@@ -406,6 +405,70 @@ input, textarea, select {
 
 .btn-icon:active {
   transform: scale(0.93);
+}
+
+/* Theme Toggle Icon Cross-Fade with Rotational Handoff */
+.theme-toggle-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  overflow: visible;
+}
+
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  transform-origin: center center;
+  transition: transform 200ms var(--ease-spring), opacity 150ms var(--ease-smooth);
+}
+
+/* Light mode default: Moon visible, Sun hidden & rotated */
+:root .theme-icon-moon,
+:root[data-theme="light"] .theme-icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+:root .theme-icon-sun,
+:root[data-theme="light"] .theme-icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+  pointer-events: none;
+}
+
+/* Dark mode: Sun visible, Moon hidden & rotated */
+:root[data-theme="dark"] .theme-icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+:root[data-theme="dark"] .theme-icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.6);
+  pointer-events: none;
+}
+
+/* System dark mode fallback before JS runs */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-icon-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  :root:not([data-theme="light"]) .theme-icon-moon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.6);
+    pointer-events: none;
+  }
+}
+
+/* Respect user's accessibility reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .theme-icon {
+    transition: opacity 150ms var(--ease-smooth) !important;
+    transform: none !important;
+  }
 }
 
 /* --------------------------------------------------------------------------
