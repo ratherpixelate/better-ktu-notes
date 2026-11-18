@@ -1,0 +1,4 @@
+# Local temporary/scratch directories
+.taste-skill/
+.DS_Store
+*.tmp

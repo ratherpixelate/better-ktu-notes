@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en" data-theme="style1" data-pattern="ruled" data-spacing="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Notebook Style Showcase · Exam Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Kalam:wght@400;700&family=Patrick+Hand&family=Shantell+Sans:ital,wght@0,300..700;1,300..700&display=swap">
+  
+  <style>
+    /* =========================================================
+       CSS VARIABLES & THEME TOKENS
+       ========================================================= */
+    :root {
+      --spacing: 32px;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-margin: 'Caveat', cursive;
+    }
+
+    /* Style 1: The Gel Pen Spiral Notebook (Recommended) */
+    html[data-theme="style1"] {
+      --paper-bg: #FDFBF7;
+      --paper-card: #F7F3E8;
+      --line-ruled: #E2EAF2;
+      --line-grid: #E8EEF5;
+      --line-margin: #F5A3A3;
+      --ink-primary: #1A3258;     /* Pilot G2 Royal Navy Blue */
+      --ink-secondary: #475E7E;
+      --ink-muted: #7B8EA6;
+      --ink-red: #C92A2A;         /* Red grading pen */
+      --ink-green: #15803D;       /* Green tutor pen */
+      --hl-yellow: #FEF08A;       /* Stabilo pastel yellow */
+      --hl-mint: #BBF7D0;         /* Stabilo pastel mint */
+      --hl-peach: #FED7AA;
+      --card-border: #E5DFC9;
+      --font-heading: 'Patrick Hand', cursive;
+      --font-body: 'Shantell Sans', cursive, sans-serif;
+      --spiral-metal: #CBD5E1;
+      --spiral-hole: #E2E8F0;
+      color-scheme: light;
+    }
+
+    /* Style 2: The Topper's Fountain Pen Ledger */
+    html[data-theme="style2"] {
+      --paper-bg: #FAF8F5;
+      --paper-card: #F2ECE1;
+      --line-ruled: #EBE4D8;
+      --line-grid: #EBE4D8;
+      --line-margin: #E06C6C;
+      --ink-primary: #142238;     /* Parker Quink Deep Blue-Black */
+      --ink-secondary: #48566A;
+      --ink-muted: #828F9F;
+      --ink-red: #B91C1C;
+      --ink-green: #047857;
+      --hl-yellow: #FDE047;
+      --hl-mint: #A7F3D0;
+      --hl-peach: #FDBA74;
+      --card-border: #DCD3C3;
+      --font-heading: 'Kalam', cursive;
+      --font-body: 'Comic Neue', cursive, sans-serif;
+      --spiral-metal: #94A3B8;
+      --spiral-hole: #CBD5E1;
+      color-scheme: light;
+    }
+
+    /* Style 3: The Midnight Study Session (Dark Mode) */
+    html[data-theme="style3"] {
+      --paper-bg: #111622;
+      --paper-card: #182030;
+      --line-ruled: #1D283E;
+      --line-grid: #1A2438;
+      --line-margin: #5C2B36;
+      --ink-primary: #E2E8F0;     /* White Sakura Gelly Roll */
+      --ink-secondary: #94A3B8;
+      --ink-muted: #64748B;
+      --ink-red: #F87171;         /* Neon coral marker */
+      --ink-green: #4ADE80;       /* Neon mint marker */
+      --hl-yellow: rgba(250, 204, 21, 0.22);
+      --hl-mint: rgba(74, 222, 128, 0.20);
+      --hl-peach: rgba(251, 146, 60, 0.22);
+      --card-border: #24324D;
+      --font-heading: 'Patrick Hand', cursive;
+      --font-body: 'Shantell Sans', cursive, sans-serif;
+      --spiral-metal: #334155;
+      --spiral-hole: #0B0F17;
+      color-scheme: dark;
+    }
+
+    /* Spacing densities */
+    html[data-spacing="compact"] { --spacing: 28px; }
+    html[data-spacing="comfortable"] { --spacing: 32px; }
+    html[data-spacing="relaxed"] { --spacing: 36px; }
+
+    /* =========================================================
+       PAGE BASE & PAPER RULING BACKGROUNDS
+       ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #E2E8F0;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: var(--spacing);
+      color: var(--ink-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html[data-theme="style3"] body {
+      background-color: #0B0E14;
+    }
+
+    /* Floating Interactive Controls Bar */
+    .controls-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #CBD5E1;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+    }
+
+    html[data-theme="style3"] .controls-bar {
+      background: rgba(17, 22, 34, 0.94);
+      border-bottom-color: #24324D;
+      color: #E2E8F0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-label {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: #64748B;
+      margin-right: 4px;
+    }
+
+    html[data-theme="style3"] .ctrl-label {
+      color: #94A3B8;
+    }
+
+    .btn-tab {
+      background: transparent;
+      border: 1px solid #CBD5E1;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    html[data-theme="style3"] .btn-tab {
+      border-color: #334155;
+    }
+
+    .btn-tab:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    html[data-theme="style3"] .btn-tab:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .btn-tab.active {
+      background: #1A3258;
+      color: #FFFFFF;
+      border-color: #1A3258;
+      font-weight: 600;
+    }
+
+    html[data-theme="style3"] .btn-tab.active {
+      background: #38BDF8;
+      color: #0F172A;
+      border-color: #38BDF8;
+    }
+
+    /* Outer Wrapper representing student desktop */
+    .desk {
+      max-width: 960px;
+      margin: 28px auto 60px;
+      padding: 0 16px;
+    }
+
+    /* The Ruled Notebook Sheet */
+    .notebook-page {
+      background-color: var(--paper-bg);
+      border-radius: 4px;
+      box-shadow: 
+        0 2px 4px rgba(0,0,0,0.04),
+        0 12px 32px rgba(0,0,0,0.08),
+        0 0 0 1px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+      padding: 44px 40px 60px 108px; /* Left indent accounts for red margin */
+    }
+
+    html[data-theme="style3"] .notebook-page {
+      box-shadow: 
+        0 2px 8px rgba(0,0,0,0.4),
+        0 16px 40px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    /* Spiral Binding simulation on the extreme left */
+    .spiral-spine {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 32px;
+      background: linear-gradient(90deg, rgba(0,0,0,0.04) 0%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 16px 0;
+      pointer-events: none;
+    }
+
+    .spiral-coil {
+      width: 22px;
+      height: 12px;
+      margin-left: 5px;
+      background: var(--spiral-hole);
+      border-radius: 6px;
+      border: 2px solid var(--spiral-metal);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    /* Notebook Ruling Styles */
+    /* 1. Ruled Horizontal Lines with Red Margin */
+    html[data-pattern="ruled"] .notebook-page {
+      background-image: 
+        /* Red/Coral Vertical Margin Line */
+        linear-gradient(90deg, transparent 86px, var(--line-margin) 86px, var(--line-margin) 88px, transparent 88px),
+        /* Horizontal Ruled Lines */
+        linear-gradient(var(--line-ruled) 1px, transparent 1px);
+      background-size: 100% 100%, 100% var(--spacing);
+      background-position: 0 0, 0 14px;
+    }
+
+    /* 2. Engineering 5mm Graph Grid */
+    html[data-pattern="grid"] .notebook-page {
+      background-image: 
+        linear-gradient(90deg, transparent 86px, var(--line-margin) 86px, var(--line-margin) 88px, transparent 88px),
+        linear-gradient(var(--line-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-grid) 1px, transparent 1px);
+      background-size: 100% 100%, 100% calc(var(--spacing) / 2), calc(var(--spacing) / 2) 100%;
+      background-position: 0 0, 0 14px, 0 0;
+    }
+
+    /* 3. Dotted Bullet Journal */
+    html[data-pattern="dots"] .notebook-page {
+      background-image: 
+        linear-gradient(90deg, transparent 86px, var(--line-margin) 86px, var(--line-margin) 88px, transparent 88px),
+        radial-gradient(var(--line-ruled) 1.5px, transparent 1.5px);
+      background-size: 100% 100%, calc(var(--spacing) / 2) calc(var(--spacing) / 2);
+      background-position: 0 0, 0 14px;
+    }
+
+    /* 4. Plain Paper */
+    html[data-pattern="plain"] .notebook-page {
+      background-image: 
+        linear-gradient(90deg, transparent 86px, var(--line-margin) 86px, var(--line-margin) 88px, transparent 88px);
+      background-size: 100% 100%;
+    }
+
+    /* =========================================================
+       MARGIN CALLOUTS & NOTES (In the Left Margin)
+       ========================================================= */
+    .margin-note-wrap {
+      position: relative;
+    }
+
+    .margin-note {
+      position: absolute;
+      left: -98px;
+      width: 82px;
+      font-family: var(--font-margin);
+      font-size: 15px;
+      line-height: 1.25;
+      color: var(--ink-red);
+      transform: rotate(-3deg);
+      text-align: right;
+      pointer-events: none;
+    }
+
+    .margin-note::after {
+      content: " ➔";
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* =========================================================
+       TYPOGRAPHY & CONTENT ELEMENTS
+       ========================================================= */
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      color: var(--ink-primary);
+      margin: 0;
+      font-weight: 700;
+      line-height: calc(var(--spacing) * 1.5);
+    }
+
+    h1 {
+      font-size: clamp(26px, 4.5vw, 38px);
+      line-height: calc(var(--spacing) * 2);
+      letter-spacing: -0.01em;
+      margin-bottom: calc(var(--spacing) * 0.5);
+    }
+
+    h2 {
+      font-size: clamp(22px, 3.5vw, 28px);
+      margin-top: calc(var(--spacing) * 1);
+      margin-bottom: calc(var(--spacing) * 0.5);
+      border-bottom: 2px dashed var(--line-ruled);
+      padding-bottom: 4px;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-top: calc(var(--spacing) * 0.8);
+      margin-bottom: calc(var(--spacing) * 0.3);
+      color: var(--ink-secondary);
+    }
+
+    p {
+      margin: 0 0 var(--spacing) 0;
+      /* Notice: margin bottom is exactly 1 line-height unit to maintain baseline grid alignment! */
+    }
+
+    /* Student Highlighter Effect */
+    mark.hl-yellow {
+      background-color: var(--hl-yellow);
+      color: inherit;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    mark.hl-mint {
+      background-color: var(--hl-mint);
+      color: inherit;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    /* Exam Question Chips */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: var(--spacing);
+    }
+
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 4px;
+      line-height: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      letter-spacing: 0.03em;
+      border: 1px dashed;
+    }
+
+    .chip.pyq-10m {
+      background: rgba(201, 42, 42, 0.08);
+      color: var(--ink-red);
+      border-color: var(--ink-red);
+    }
+
+    .chip.pyq-3m {
+      background: rgba(26, 50, 88, 0.08);
+      color: var(--ink-primary);
+      border-color: var(--ink-primary);
+    }
+
+    .chip.cut {
+      background: rgba(100, 116, 139, 0.12);
+      color: var(--ink-muted);
+      border-color: var(--ink-muted);
+      text-decoration: line-through;
+    }
+
+    /* Formula & Definition Card */
+    .notebook-card {
+      background: var(--paper-card);
+      border: 1px solid var(--card-border);
+      border-left: 4px solid var(--ink-primary);
+      border-radius: 4px;
+      padding: 16px 20px;
+      margin: var(--spacing) 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .notebook-card.exam-tip {
+      border-left-color: var(--ink-red);
+    }
+
+    .notebook-card h4 {
+      font-size: 17px;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .formula-mono {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      background: rgba(0,0,0,0.04);
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin: 8px 0;
+      overflow-x: auto;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    html[data-theme="style3"] .formula-mono {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    /* Comparison Table (Hand-Drawn Notebook Feel) */
+    .table-wrap {
+      overflow-x: auto;
+      margin: var(--spacing) 0;
+    }
+
+    table.notebook-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    table.notebook-table th, table.notebook-table td {
+      border: 1px solid var(--card-border);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    table.notebook-table th {
+      background: var(--paper-card);
+      font-family: var(--font-heading);
+      font-size: 17px;
+      color: var(--ink-primary);
+      font-weight: 700;
+    }
+
+    /* Hand-Drawn SVG Architecture Diagram */
+    .svg-diagram-card {
+      background: var(--paper-card);
+      border: 1px dashed var(--card-border);
+      border-radius: 6px;
+      padding: 20px;
+      margin: var(--spacing) 0;
+      text-align: center;
+    }
+
+    .svg-diagram-card svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 680px) {
+      .notebook-page {
+        padding: 32px 18px 48px 52px;
+      }
+      .spiral-spine {
+        width: 22px;
+      }
+      .spiral-coil {
+        width: 14px;
+        height: 10px;
+      }
+      /* Adjust red margin for small screens */
+      html[data-pattern="ruled"] .notebook-page,
+      html[data-pattern="grid"] .notebook-page,
+      html[data-pattern="dots"] .notebook-page,
+      html[data-pattern="plain"] .notebook-page {
+        background-image: 
+          linear-gradient(90deg, transparent 42px, var(--line-margin) 42px, var(--line-margin) 44px, transparent 44px),
+          linear-gradient(var(--line-ruled) 1px, transparent 1px);
+      }
+      .margin-note {
+        display: none; /* Hide margin scribbles on narrow phones to avoid clipping */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Style Switcher Toolbar -->
+  <header class="controls-bar" role="toolbar" aria-label="Style Switcher">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Style Preset:</span>
+      <button class="btn-tab active" onclick="setTheme('style1')">
+        <span>✒️</span> 1. Gel Pen Spiral (Patrick Hand + Shantell)
+      </button>
+      <button class="btn-tab" onclick="setTheme('style2')">
+        <span>🖋️</span> 2. Fountain Pen Ledger (Kalam + Comic Neue)
+      </button>
+      <button class="btn-tab" onclick="setTheme('style3')">
+        <span>🌙</span> 3. Midnight Study (Dark Slate)
+      </button>
+    </div>
+
+    <div class="ctrl-group">
+      <span class="ctrl-label">Page Pattern:</span>
+      <button class="btn-tab active" onclick="setPattern('ruled')">Ruled</button>
+      <button class="btn-tab" onclick="setPattern('grid')">5mm Grid</button>
+      <button class="btn-tab" onclick="setPattern('dots')">Dots</button>
+      <button class="btn-tab" onclick="setPattern('plain')">Plain</button>
+    </div>
+
+    <div class="ctrl-group">
+      <span class="ctrl-label">Line Spacing:</span>
+      <button class="btn-tab" onclick="setSpacing('compact')">Compact</button>
+      <button class="btn-tab active" onclick="setSpacing('comfortable')">Comfortable</button>
+      <button class="btn-tab" onclick="setSpacing('relaxed')">Relaxed</button>
+    </div>
+  </header>
+
+  <main class="desk">
+    <article class="notebook-page">
+      <!-- Spiral Wire Binding Rings -->
+      <div class="spiral-spine" aria-hidden="true">
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+        <div class="spiral-coil"></div>
+      </div>
+
+      <!-- Header & Subject Details -->
+      <div class="margin-note-wrap">
+        <div class="margin-note">Repeats 100%!</div>
+        <div class="chip-row">
+          <span class="chip pyq-10m">★ 10M Essay (Dec '23, Jan '22)</span>
+          <span class="chip pyq-3m">● 3M Short</span>
+          <span class="chip cut">Cut: Babbage & History</span>
+        </div>
+      </div>
+
+      <header>
+        <p style="font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; color: var(--ink-secondary); margin-bottom: 4px; letter-spacing: 0.08em;">
+          PCITT302 · Module 1: Fundamentals
+        </p>
+        <h1>Functional Units of a Computer & Basic Operational Concepts</h1>
+      </header>
+
+      <p>
+        A modern digital computer consists of five functionally independent main parts: 
+        <mark class="hl-yellow">Input, Memory, Arithmetic & Logic Unit (ALU), Output, and Control Unit</mark>. 
+        The ALU and Control Unit combined are collectively known as the <strong>Central Processing Unit (CPU)</strong>.
+      </p>
+
+      <div class="margin-note-wrap">
+        <div class="margin-note">Draw this!</div>
+        <h3>1. The 5 Functional Units (Architecture Diagram)</h3>
+      </div>
+
+      <p>
+        Examiners award 4 out of 10 marks just for drawing this clean interconnected block diagram with directional control/data buses:
+      </p>
+
+      <!-- Clean SVG Architecture Diagram -->
+      <div class="svg-diagram-card">
+        <svg viewBox="0 0 680 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-height: 220px;">
+          <!-- Memory Box -->
+          <rect x="250" y="15" width="180" height="50" rx="4" stroke="var(--ink-primary)" stroke-width="2" stroke-dasharray="3 3" fill="var(--paper-bg)" />
+          <text x="340" y="45" font-family="var(--font-heading)" font-size="19" font-weight="700" fill="var(--ink-primary)" text-anchor="middle">Primary Memory</text>
+
+          <!-- Input Unit -->
+          <rect x="20" y="125" width="140" height="55" rx="4" stroke="var(--ink-primary)" stroke-width="2" fill="var(--paper-bg)" />
+          <text x="90" y="158" font-family="var(--font-heading)" font-size="18" font-weight="700" fill="var(--ink-primary)" text-anchor="middle">Input Unit</text>
+
+          <!-- CPU Large Boundary -->
+          <rect x="210" y="105" width="260" height="115" rx="6" stroke="var(--ink-primary)" stroke-width="2" fill="var(--paper-card)" />
+          <text x="340" y="126" font-family="var(--font-mono)" font-size="12" font-weight="600" fill="var(--ink-secondary)" text-anchor="middle">CPU BOUNDARY</text>
+
+          <!-- Control Unit -->
+          <rect x="230" y="140" width="105" height="60" rx="4" stroke="var(--ink-primary)" stroke-width="1.8" fill="var(--paper-bg)" />
+          <text x="282" y="175" font-family="var(--font-heading)" font-size="16" font-weight="700" fill="var(--ink-primary)" text-anchor="middle">Control Unit</text>
+
+          <!-- ALU -->
+          <rect x="350" y="140" width="105" height="60" rx="4" stroke="var(--ink-primary)" stroke-width="1.8" fill="var(--paper-bg)" />
+          <text x="402" y="175" font-family="var(--font-heading)" font-size="16" font-weight="700" fill="var(--ink-primary)" text-anchor="middle">ALU</text>
+
+          <!-- Output Unit -->
+          <rect x="520" y="125" width="140" height="55" rx="4" stroke="var(--ink-primary)" stroke-width="2" fill="var(--paper-bg)" />
+          <text x="590" y="158" font-family="var(--font-heading)" font-size="18" font-weight="700" fill="var(--ink-primary)" text-anchor="middle">Output Unit</text>
+
+          <!-- Connection Arrows -->
+          <!-- Input to CPU -->
+          <path d="M160 152 H210" stroke="var(--ink-primary)" stroke-width="2" marker-end="url(#arrow)" />
+          <!-- CPU to Output -->
+          <path d="M470 152 H520" stroke="var(--ink-primary)" stroke-width="2" />
+          <!-- Memory Bidirectional -->
+          <path d="M310 65 V105" stroke="var(--ink-primary)" stroke-width="2" />
+          <path d="M370 65 V105" stroke="var(--ink-primary)" stroke-width="2" />
+        </svg>
+      </div>
+
+      <!-- Worked Formula Card -->
+      <div class="margin-note-wrap">
+        <div class="margin-note">Always 3M!</div>
+        <div class="notebook-card">
+          <h4>IEEE 754 Floating Point Formula (Single Precision 32-bit)</h4>
+          <p>Any normalized real binary number is stored across 3 fields (1 sign bit, 8 exponent bits, 23 mantissa bits):</p>
+          <div class="formula-mono">
+            Value = (-1)<sup>S</sup> × (1.M) × 2<sup>(E - 127)</sup>
+          </div>
+          <p style="margin: 0; font-size: 14.5px; color: var(--ink-secondary);">
+            Where <code>S = 0</code> for positive, <code>S = 1</code> for negative. Bias is fixed at <strong>127</strong> for single precision and <strong>1023</strong> for double precision.
+          </p>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <h3>2. Key Comparison: RISC vs. CISC Architecture</h3>
+      <p>
+        When answering a 7-mark or 10-mark comparison question, tabulate at least five structural contrasts:
+      </p>
+
+      <div class="table-wrap">
+        <table class="notebook-table">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Parameter</th>
+              <th style="width: 36%;">RISC (Reduced Instruction Set)</th>
+              <th style="width: 36%;">CISC (Complex Instruction Set)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Instruction Length</strong></td>
+              <td>Fixed length (typically 32-bit words).</td>
+              <td>Variable length (1 byte to 15 bytes).</td>
+            </tr>
+            <tr>
+              <td><strong>Execution Model</strong></td>
+              <td>Load-Store architecture (only Load/Store touch memory).</td>
+              <td>Memory-to-Memory or Register-to-Memory operations.</td>
+            </tr>
+            <tr>
+              <td><strong>Addressing Modes</strong></td>
+              <td>Few, simple modes (Register, Immediate, Indirect).</td>
+              <td>Many complex, multi-level addressing modes.</td>
+            </tr>
+            <tr>
+              <td><strong>Control Unit Type</strong></td>
+              <td>Hardwired control unit (faster, pipelined).</td>
+              <td>Microprogrammed control store (ROM based).</td>
+            </tr>
+            <tr>
+              <td><strong>Register Set</strong></td>
+              <td>Large register file (typically 32 or more general regs).</td>
+              <td>Small specialized register file (e.g. x86 EAX, EBX).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Examiner Tip Callout Box -->
+      <div class="notebook-card exam-tip">
+        <h4 style="color: var(--ink-red);">Exam Tip: How Examiners Score This Module</h4>
+        <p style="margin-bottom: 4px;">
+          1. <strong>Don't write essays</strong>: Break every answer into bullet points with underlined/bold keywords.<br>
+          2. <strong>Bus Architecture</strong>: Always mention <code>MAR</code> (Memory Address Register), <code>MDR</code> (Memory Data Register), <code>PC</code> (Program Counter), and <code>IR</code> (Instruction Register).<br>
+          3. <strong>Pipelining</strong>: Cite the 5 stages: <code>IF -> ID -> EX -> MEM -> WB</code>.
+        </p>
+      </div>
+
+    </article>
+  </main>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      updateActiveBtn('[onclick^="setTheme"]', theme);
+    }
+
+    function setPattern(pattern) {
+      document.documentElement.setAttribute('data-pattern', pattern);
+      updateActiveBtn('[onclick^="setPattern"]', pattern);
+    }
+
+    function setSpacing(spacing) {
+      document.documentElement.setAttribute('data-spacing', spacing);
+      updateActiveBtn('[onclick^="setSpacing"]', spacing);
+    }
+
+    function updateActiveBtn(selector, val) {
+      document.querySelectorAll(selector).forEach(btn => {
+        const matches = btn.getAttribute('onclick').includes(val);
+        btn.classList.toggle('active', matches);
+      });
+    }
+  </script>
+</body>
+</html>
