@@ -3,10 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="description" content="KTU DBMS Module 1 notes (PBITT304 / PCCST402). 3-schema architecture, ER diagrams, 7-step ER-to-relational mapping, and SQL DDL constraints with examples.">
+  <link rel="canonical" href="https://ratherpixelate.github.io/better-ktu-notes/DBMS%20Module%201%20Notes.html">
+
+  <!-- Open Graph & Social Sharing Metadata -->
+  <meta property="og:title" content="PBITT304 DBMS Module 1 Notes · Database Design &amp; Creation · BetterKTUNotes">
+  <meta property="og:description" content="Database approach vs file systems, 3-schema architecture, ER modeling, ER-to-relational mapping, and SQL DDL.">
+  <meta property="og:url" content="https://ratherpixelate.github.io/better-ktu-notes/DBMS%20Module%201%20Notes.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FA">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0E14">
   <meta name="color-scheme" content="light dark">
-  <title>DBMS Module 1: Database Design &amp; Creation · BetterKTUNotes</title>
+  <title>PBITT304 DBMS Module 1 Notes (2024 Scheme) · Database Design, ERD &amp; SQL DDL · BetterKTUNotes</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +25,47 @@
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/search-data.js" defer></script>
   <script src="assets/app.js" defer></script>
+
+  <!-- Structured Data (Schema.org JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "PBITT304 Database Management Systems - Module 1",
+    "courseCode": "PBITT304",
+    "description": "3-schema architecture, conceptual ER modeling, ER-to-relational mapping, and SQL DDL constraints for KTU 2024 Scheme.",
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "APJ Abdul Kalam Technological University (KTU)"
+    },
+    "educationalLevel": "B.Tech Semester 3",
+    "isAccessibleForFree": true
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Describe the three-schema architecture. How does it achieve data independence?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The three-schema architecture defines internal (physical storage), conceptual (logical community view), and external (individual user views) levels. Logical data independence allows conceptual schema changes without changing external views; physical data independence allows internal storage changes without modifying conceptual schemas."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a weak entity type? Give an example.",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A weak entity type is an entity that does not have key attributes of its own and must be identified through an identifying relationship with an owner entity and a partial key (discriminator). A classic example is DEPENDENT of an EMPLOYEE entity."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 

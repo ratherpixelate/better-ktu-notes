@@ -3,10 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="description" content="KTU S3 COA Module 2 notes on 5-stage RISC pipelining, processor datapaths, control units, and pipeline hazards (data, structural, branch) with solved examples.">
+  <link rel="canonical" href="https://ratherpixelate.github.io/better-ktu-notes/COA%20Module%202%20Notes.html">
+
+  <!-- Open Graph & Social Sharing Metadata -->
+  <meta property="og:title" content="PCITT302 COA Module 2 Notes · Pipelining &amp; Hazards · BetterKTUNotes">
+  <meta property="og:description" content="5-stage RISC pipelining, processor datapaths, control units, and pipeline hazards for KTU 2024 Scheme.">
+  <meta property="og:url" content="https://ratherpixelate.github.io/better-ktu-notes/COA%20Module%202%20Notes.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FA">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0E14">
   <meta name="color-scheme" content="light dark">
-  <title>COA Module 2: Processor Datapath & Pipelining · BetterKTUNotes</title>
+  <title>PCITT302 COA Module 2 Notes (2024 Scheme) · Processor Organization, Datapaths &amp; Pipelining · BetterKTUNotes</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +25,47 @@
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/search-data.js" defer></script>
   <script src="assets/app.js" defer></script>
+
+  <!-- Structured Data (Schema.org JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "PCITT302 Computer Organisation and Architecture - Module 2",
+    "courseCode": "PCITT302",
+    "description": "5-stage RISC pipelining, processor datapaths, control units, and pipeline hazards for KTU 2024 Scheme.",
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "APJ Abdul Kalam Technological University (KTU)"
+    },
+    "educationalLevel": "B.Tech Semester 3",
+    "isAccessibleForFree": true
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are pipeline hazards? Explain the types.",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pipeline hazards are situations that prevent the next instruction in the instruction stream from executing in its designated clock cycle. The three main types are: 1) Structural hazards (hardware resource conflicts), 2) Data hazards (instruction depends on result of a prior in-flight instruction), and 3) Control hazards (branch/jump decisions affecting instruction fetch)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Compare single-cycle and multi-cycle processors.",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A single-cycle processor executes each instruction in one long clock cycle sized by the slowest instruction (CPI = 1). A multi-cycle processor breaks execution into multiple shorter steps (CPI > 1) allowing functional units like the ALU and memory to be reused within an instruction."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 

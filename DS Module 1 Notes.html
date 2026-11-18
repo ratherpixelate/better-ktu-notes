@@ -3,10 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="description" content="KTU Data Structures Module 1 notes (PCITT303 / PCCST303). Asymptotic notation (Big O), sparse matrix operations, stack ADT, and infix-to-postfix conversion.">
+  <link rel="canonical" href="https://ratherpixelate.github.io/better-ktu-notes/DS%20Module%201%20Notes.html">
+
+  <!-- Open Graph & Social Sharing Metadata -->
+  <meta property="og:title" content="PCITT303 Data Structures Module 1 Notes · Stacks &amp; Arrays · BetterKTUNotes">
+  <meta property="og:description" content="ADT vs CDT, Big O asymptotic notations, sparse matrices, stack operations, and infix-to-postfix conversion.">
+  <meta property="og:url" content="https://ratherpixelate.github.io/better-ktu-notes/DS%20Module%201%20Notes.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FA">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0E14">
   <meta name="color-scheme" content="light dark">
-  <title>DS Module 1: Introduction, Arrays & Stacks · BetterKTUNotes</title>
+  <title>PCITT303 Data Structures Module 1 Notes (2024 Scheme) · Stacks, Arrays &amp; Asymptotics · BetterKTUNotes</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +25,47 @@
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/search-data.js" defer></script>
   <script src="assets/app.js" defer></script>
+
+  <!-- Structured Data (Schema.org JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "PCITT303 Data Structures - Module 1",
+    "courseCode": "PCITT303",
+    "description": "ADT vs CDT, Big O asymptotic notations, sparse matrix operations, polynomial addition, and stack operations for KTU 2024 Scheme.",
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "APJ Abdul Kalam Technological University (KTU)"
+    },
+    "educationalLevel": "B.Tech Semester 3",
+    "isAccessibleForFree": true
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Differentiate between ADT (Abstract Data Type) and CDT (Concrete Data Type).",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An ADT is a logical description of data and operations with implementation details hidden (e.g. Stack, Queue). A CDT is the actual concrete implementation in a specific language and memory model (e.g. Array, Linked List)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a sparse matrix? How is it represented?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A sparse matrix is a matrix in which the majority of elements are zero. It is efficiently represented in 3-tuple (triplet) form: row index, column index, and non-zero value, preceded by a header specifying total rows, columns, and non-zero entries."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
