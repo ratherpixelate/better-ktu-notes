@@ -14,6 +14,9 @@ dist/
 .DS_Store
 *.tmp
 *.log
+test-results/
+playwright-report/
+
 
 # Environment variables
 .env

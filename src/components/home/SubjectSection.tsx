@@ -10,13 +10,13 @@ interface SubjectSectionProps {
 
 export function SubjectSection({ code, name, modules }: SubjectSectionProps) {
   return (
-    <article className="subject-section" id={code.toLowerCase()}>
+    <article className="subject-block" id={code.toLowerCase()}>
       <div className="subject-header">
         <div className="subject-meta">
           <span className="subject-code">{code}</span>
           <h2 className="subject-name">{name}</h2>
         </div>
-        <span className="subject-tag">4 Modules</span>
+        <span className="subject-credit">4 Credits · KTU 2024 Scheme</span>
       </div>
 
       <div className="modules-grid">

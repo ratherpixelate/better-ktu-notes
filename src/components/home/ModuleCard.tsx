@@ -48,7 +48,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
   }
 
   return (
-    <Link href={module.href} className="module-card">
+    <Link href={module.href} className="module-card active-module">
       <div>
         <div className="card-top">
           <span className="module-pill">Module {module.num}</span>
@@ -69,7 +69,17 @@ export function ModuleCard({ module }: ModuleCardProps) {
         </div>
         <div className="card-arrow">
           <span>Open Notes</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>

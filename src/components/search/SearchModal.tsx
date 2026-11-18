@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import searchData from '@/../content/search-index.json';
-import Link from 'next/link';
 
 interface SearchItem {
   id: string;
@@ -87,21 +86,44 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="search-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-label="Search syllabus topics">
+    <div
+      className={`search-modal-backdrop ${isOpen ? 'open' : ''}`}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Global Topic Search"
+    >
       <div className="search-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="search-box">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        <div className="search-input-wrap">
+          <svg
+            className="search-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
           </svg>
           <input
             ref={inputRef}
             type="search"
+            className="search-input"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search all 33 topics, formulas, algorithms, or definitions..."
-            aria-label="Search notes"
+            placeholder="Search any topic, formula, or PYQ... (e.g. 'Booth', 'IEEE', 'Hazard')"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="none"
+            spellCheck="false"
+            inputMode="search"
+            enterKeyHint="search"
           />
-          <span className="search-esc" onClick={onClose}>esc</span>
         </div>
 
         <div className="search-results">
@@ -115,32 +137,31 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 key={`${item.badge}-${item.id}`}
                 href={item.url}
                 onClick={onClose}
-                className={`search-item ${idx === selectedIndex ? 'selected' : ''}`}
+                className={`search-result-item ${idx === selectedIndex ? 'selected' : ''}`}
                 onMouseEnter={() => setSelectedIndex(idx)}
               >
-                <div className="search-item-header">
-                  <span className="search-item-badge">{item.badge}</span>
-                  <span className="search-item-title">{item.title}</span>
+                <div className="result-main">
+                  <span className="result-title">{item.title}</span>
+                  {item.chips && item.chips.length > 0 && (
+                    <div className="result-chips">
+                      {item.chips.map((chip) => (
+                        <span key={chip} className="result-chip">
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {item.chips && item.chips.length > 0 && (
-                  <div className="search-item-chips">
-                    {item.chips.map((chip) => (
-                      <span key={chip} className="chip">{chip}</span>
-                    ))}
-                  </div>
-                )}
+                <span className="result-badge">{item.badge}</span>
               </a>
             ))
           )}
         </div>
 
         <div className="search-footer">
-          <div className="search-shortcuts">
-            <span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span>
-            <span><kbd>↵</kbd> select</span>
-            <span><kbd>esc</kbd> close</span>
-          </div>
-          <span className="search-count">{results.length} results</span>
+          <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+          <span><kbd>Enter</kbd> to open</span>
+          <span><kbd>Esc</kbd> to close</span>
         </div>
       </div>
     </div>
