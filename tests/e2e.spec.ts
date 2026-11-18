@@ -168,4 +168,45 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await toc.screenshot({ path: 'tests/screenshots/08-coa-toc-sidebar-dark.png' });
   });
 
+  test('7. Zero Flash Dark Mode Initialization (Stored & System Preferences)', async ({ browser }) => {
+    // Sub-test A: Stored 'dark' in localStorage loads directly into dark mode without light flash
+    const contextWithDarkStorage = await browser.newContext();
+    const pageA = await contextWithDarkStorage.newPage();
+
+    // Seed localStorage BEFORE page navigation
+    await pageA.addInitScript(() => {
+      localStorage.setItem('bkn-theme', 'dark');
+    });
+
+    await pageA.goto('/notes/coa-module-1/', { waitUntil: 'domcontentloaded' });
+
+    // Assert data-theme is 'dark' on frame 0
+    const htmlThemeA = await pageA.locator('html').getAttribute('data-theme');
+    expect(htmlThemeA).toBe('dark');
+
+    // Assert body background is pure dark (#0C0C0D = rgb(12, 12, 13)), NEVER white
+    const bgA = await pageA.evaluate(() => window.getComputedStyle(document.body).backgroundColor);
+    expect(bgA).toBe('rgb(12, 12, 13)');
+
+    await pageA.close();
+    await contextWithDarkStorage.close();
+
+    // Sub-test B: OS prefers-color-scheme: dark with empty localStorage loads directly into dark mode
+    const contextDarkOS = await browser.newContext({
+      colorScheme: 'dark',
+    });
+    const pageB = await contextDarkOS.newPage();
+
+    await pageB.goto('/', { waitUntil: 'domcontentloaded' });
+
+    const htmlThemeB = await pageB.locator('html').getAttribute('data-theme');
+    expect(htmlThemeB).toBe('dark');
+
+    const bgB = await pageB.evaluate(() => window.getComputedStyle(document.body).backgroundColor);
+    expect(bgB).toBe('rgb(12, 12, 13)');
+
+    await pageB.close();
+    await contextDarkOS.close();
+  });
+
 });
