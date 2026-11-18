@@ -1,0 +1,145 @@
+{
+  "subjects": [
+    {
+      "code": "PCITT302",
+      "slug": "coa",
+      "name": "Computer Organisation and Architecture",
+      "modules": [
+        {
+          "num": 1,
+          "slug": "module-1",
+          "title": "Basic Structure of Computers & Machine Instructions",
+          "desc": "Functional units, operational concepts, bus structures, memory locations, addressing modes, instruction sequencing, and RISC principles.",
+          "status": "active",
+          "storageKey": "coa-m1-revised",
+          "totalTopics": 6,
+          "href": "/notes/coa-module-1/"
+        },
+        {
+          "num": 2,
+          "slug": "module-2",
+          "title": "Processor Organization, Datapaths & Pipelining",
+          "desc": "Single-cycle vs multi-cycle processors, hardwired vs microprogrammed control, 5-stage RISC pipeline, and structural/data/control hazards.",
+          "status": "active",
+          "storageKey": "coa-m2-revised",
+          "totalTopics": 10,
+          "href": "/notes/coa-module-2/"
+        },
+        {
+          "num": 3,
+          "slug": "module-3",
+          "title": "Memory Hierarchy & Cache Architectures",
+          "desc": "SRAM, DRAM, cache mapping functions (direct, associative, set-associative), replacement policies, and virtual memory paging.",
+          "status": "drafting",
+          "storageKey": "coa-m3-revised",
+          "totalTopics": 6,
+          "href": null
+        },
+        {
+          "num": 4,
+          "slug": "module-4",
+          "title": "Parallel Processing & Multicore Architectures",
+          "desc": "Flynn's taxonomy (SISD, SIMD, MIMD), shared vs distributed memory multiprocessors, cache coherence, and hardware multithreading.",
+          "status": "drafting",
+          "storageKey": "coa-m4-revised",
+          "totalTopics": 5,
+          "href": null
+        }
+      ]
+    },
+    {
+      "code": "PCITT303",
+      "slug": "ds",
+      "name": "Data Structures",
+      "modules": [
+        {
+          "num": 1,
+          "slug": "module-1",
+          "title": "Introduction to Data Structures, Arrays & Stacks",
+          "desc": "ADT vs CDT, asymptotic notations (Big O, Ω, Θ), sparse matrices, polynomial addition, stack operations, and infix-to-postfix conversion.",
+          "status": "active",
+          "storageKey": "ds-m1-revised",
+          "totalTopics": 9,
+          "href": "/notes/ds-module-1/"
+        },
+        {
+          "num": 2,
+          "slug": "module-2",
+          "title": "Linked Lists, Queues & Double-Ended Queues",
+          "desc": "Singly, doubly and circular linked lists, polynomial addition using lists, linear and circular queue implementations, and deques.",
+          "status": "drafting",
+          "storageKey": "ds-m2-revised",
+          "totalTopics": 7,
+          "href": null
+        },
+        {
+          "num": 3,
+          "slug": "module-3",
+          "title": "Trees, Binary Search Trees & Traversals",
+          "desc": "Binary trees, array and linked representations, tree traversals (inorder, preorder, postorder), BST insertion/deletion, and AVL basics.",
+          "status": "drafting",
+          "storageKey": "ds-m3-revised",
+          "totalTopics": 8,
+          "href": null
+        },
+        {
+          "num": 4,
+          "slug": "module-4",
+          "title": "Sorting, Searching & Hashing",
+          "desc": "Selection, insertion, quick, merge, heap, and radix sort; linear and binary search; hash functions and collision resolution.",
+          "status": "drafting",
+          "storageKey": "ds-m4-revised",
+          "totalTopics": 6,
+          "href": null
+        }
+      ]
+    },
+    {
+      "code": "PBITT304",
+      "slug": "dbms",
+      "name": "Database Management Systems",
+      "modules": [
+        {
+          "num": 1,
+          "slug": "module-1",
+          "title": "Database Design and Creation",
+          "desc": "Database approach vs file systems, three-schema architecture, conceptual ER modeling, ER-to-relational mapping, and table creation with SQL DDL constraints.",
+          "status": "active",
+          "storageKey": "dbms-m1-revised",
+          "totalTopics": 8,
+          "href": "/notes/dbms-module-1/"
+        },
+        {
+          "num": 2,
+          "slug": "module-2",
+          "title": "Relational Algebra & SQL Query Processing",
+          "desc": "Relational algebra operations (select, project, join, aggregate), SQL queries, subqueries, nested queries, views, and integrity assertions.",
+          "status": "drafting",
+          "storageKey": "dbms-m2-revised",
+          "totalTopics": 7,
+          "href": null
+        },
+        {
+          "num": 3,
+          "slug": "module-3",
+          "title": "Database Normalization & Functional Dependencies",
+          "desc": "Functional dependencies, Armstrong's axioms, 1NF, 2NF, 3NF, Boyce-Codd Normal Form (BCNF), and lossless join decomposition.",
+          "status": "drafting",
+          "storageKey": "dbms-m3-revised",
+          "totalTopics": 6,
+          "href": null
+        },
+        {
+          "num": 4,
+          "slug": "module-4",
+          "title": "Introduction to NoSQL Concepts & Architecture",
+          "desc": "Need for NoSQL, CAP theorem, BASE properties, Key-Value stores, document stores, column-family stores, and graph databases.",
+          "status": "drafting",
+          "storageKey": "dbms-m4-revised",
+          "totalTopics": 5,
+          "href": null
+        }
+      ]
+    }
+  ]
+}

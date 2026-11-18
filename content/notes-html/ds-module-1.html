@@ -1,0 +1,801 @@
+<header class="top">
+  <p class="eyebrow">PCITT303 · Data Structures</p>
+  <h1>Module 1: Introduction to Data Structures</h1>
+  <p class="lede">Syllabus coverage: abstract data types (ADT) vs concrete data structures, asymptotic analysis (Big O, Ω, Θ), arrays, sparse matrix representations, polynomial addition, and stack operations with infix-to-postfix conversions.</p>
+</header>
+
+<!-- ============ BASICS ============ -->
+<section class="topic" id="t-basics">
+  <div class="head"><h2>Data, information and data structures</h2><label class="rev" for="r-basics"><input class="rev" type="checkbox" id="r-basics" data-sec="t-basics">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Short note</span></div>
+  <div class="note def"><p><span class="lbl">Data</span>A collection of raw facts, figures or symbols that have no meaning by themselves. Data becomes useful only when processed.</p></div>
+  <div class="note def"><p><span class="lbl">Information</span>Processed, organised or structured data that has meaning and can be used for decisions.</p></div>
+  <div class="note def"><p><span class="lbl">Data structure</span>A way of organising and storing data in a computer so that it can be accessed and modified efficiently. It defines the logical relationship among data elements and the operations on them.</p></div>
+  <div class="note def"><p><span class="lbl">Key Example</span><strong>Data vs Information:</strong> The raw numbers 45, 67, 89 constitute data. Processed contextual insight ("The class average is 67") constitutes information.</p></div>
+
+  <h3>Need for data structures</h3>
+  <ul class="t">
+    <li>Efficient data access.</li>
+    <li>Optimal use of memory.</li>
+    <li>Faster processing.</li>
+    <li>Handling large amounts of data.</li>
+    <li>Better performance of algorithms.</li>
+    <li>Required for complex tasks.</li>
+  </ul>
+
+  <h3>Overview of types</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Group</th><th>Members</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Primitive</strong></td><td>int, float, char, pointer (built into the language)</td></tr>
+      <tr><td><strong>Non-primitive, linear</strong></td><td>Array, linked list, stack, queue</td></tr>
+      <tr><td><strong>Non-primitive, non-linear</strong></td><td>Tree, graph</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note def"><p><span class="lbl">Classification</span>Primitive data structures (int, float, char, pointer) operate directly on machine instructions; non-primitive structures (arrays, lists, stacks, trees) are composed from primitive types.</p></div>
+</section>
+
+<!-- ============ CLASSIFICATION ============ -->
+<section class="topic" id="t-classes">
+  <div class="head"><h2>Classification of data structures</h2><label class="rev" for="r-classes"><input class="rev" type="checkbox" id="r-classes" data-sec="t-classes">revised</label></div>
+  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Define</span><span class="chip">3 marks</span></div>
+
+  <h3>ADT and CDT</h3>
+  <div class="note def"><p><span class="lbl">ADT</span>Abstract Data Type. A logical description of how data is viewed and the operations allowed on it, <strong>without</strong> saying how it is implemented. Users work through the interface. Examples: stack, queue, list, tree, graph.</p></div>
+  <div class="note def"><p><span class="lbl">CDT</span>Concrete Data Type. The actual implementation of an ADT using a specific programming language and memory model, such as arrays, linked lists or pointers. Examples: array-based stack, linked list, doubly linked list, binary tree using pointers, hash table using arrays and a hash function.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>ADT</th><th>CDT</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Describes</strong></td><td>What the data is and what operations exist</td><td>How the operations are implemented</td></tr>
+      <tr><td><strong>Level</strong></td><td>Logical, high level</td><td>Physical, implementation level</td></tr>
+      <tr><td><strong>Details</strong></td><td>Hides implementation details</td><td>Exposes the internal representation</td></tr>
+      <tr><td><strong>Change of implementation</strong></td><td>Programs using it keep working</td><td>Programs using it can break</td></tr>
+      <tr><td><strong>Examples</strong></td><td>Stack, queue, list, tree, graph</td><td>Array, linked list, pointer-based tree</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note def"><p><span class="lbl">Key Concept</span><strong>ADT vs CDT Principle:</strong> One Abstract Data Type can have multiple Concrete Data Structures. For instance, the Stack ADT (push, pop, peek) can be implemented using an array (static) or a linked list (dynamic). <em>ADT defines what operations do; CDT defines how they are stored and executed.</em></p></div>
+
+  <h3>Linear and non-linear</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Linear</th><th>Non-linear</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Arrangement</strong></td><td>Elements stored sequentially, each connected to the previous and next</td><td>Elements stored hierarchically or in an interconnected way. One element can connect to many others</td></tr>
+      <tr><td><strong>Levels</strong></td><td>Single level</td><td>Multiple levels or paths</td></tr>
+      <tr><td><strong>Traversal</strong></td><td>One run, one pass</td><td>Needs multiple passes or paths</td></tr>
+      <tr><td><strong>Memory</strong></td><td>Generally contiguous</td><td>Non-contiguous</td></tr>
+      <tr><td><strong>Used in</strong></td><td>Scheduling, buffer management, function call stack</td><td>File systems, searching, social networks</td></tr>
+      <tr><td><strong>Examples</strong></td><td>Array, linked list, stack, queue</td><td>Tree, graph</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note alert"><p><span class="lbl">Exam Tip</span><strong>Non-Linear Data Structures:</strong> In university exams, always cite <strong>trees and graphs</strong> as the canonical examples of non-linear (hierarchical/interconnected) data structures.</p></div>
+
+  <h3>Static and dynamic</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Static</th><th>Dynamic</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Memory</strong></td><td>Fixed size, allocated at compile time</td><td>Allocated and freed as needed at run time, using pointers and heap memory</td></tr>
+      <tr><td><strong>Access</strong></td><td>Faster</td><td>Slower (pointer following)</td></tr>
+      <tr><td><strong>Flexibility</strong></td><td>Less</td><td>More, and memory efficient</td></tr>
+      <tr><td><strong>Examples</strong></td><td>Array, static stack and queue</td><td>Linked list, tree, graph, dynamic stack and queue</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ SPACE ============ -->
+<section class="topic" id="t-space">
+  <div class="head"><h2>Algorithm analysis: space complexity</h2><label class="rev" for="r-space"><input class="rev" type="checkbox" id="r-space" data-sec="t-space">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span></div>
+  <div class="note def"><p><span class="lbl">Analysis of algorithms</span>The process of determining the time and space an algorithm needs, as a function of input size n.</p></div>
+  <div class="note def"><p><span class="lbl">Space complexity</span>The amount of memory an algorithm needs, as a function of input size.</p></div>
+  <div class="formula">Total space = input space + auxiliary space</div>
+  <ul class="t">
+    <li><strong>Auxiliary space:</strong> the extra memory used during execution. Temporary variables, the recursion stack and extra arrays all count.</li>
+    <li><strong>Input space:</strong> the memory the input itself occupies.</li>
+  </ul>
+  <div class="note def"><p><span class="lbl">Space Complexity</span>Space complexity is formally expressed as <strong>(P) = c + S_P(n)$</strong>, where $ is the fixed part (instruction space, scalar variables) and (n)$ is the variable instance space (arrays, recursion stack).</p></div>
+
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Algorithm</th><th>Auxiliary space</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>Finding max in an array</td><td class="m">O(1)</td><td>One variable for the max and one loop counter</td></tr>
+      <tr><td>Binary search, iterative</td><td class="m">O(1)</td><td>Just low, high and mid</td></tr>
+      <tr><td>Recursive factorial</td><td class="m">O(n)</td><td>Recursion depth is n, so n stack frames</td></tr>
+      <tr><td>Merge sort</td><td class="m">O(n)</td><td>Needs an extra array for merging</td></tr>
+      <tr><td>Binary search, recursive </td><td class="m">O(log n)</td><td>Recursion depth is log n</td></tr>
+      <tr><td>Bubble sort </td><td class="m">O(1)</td><td>Sorts in place, one temporary variable for swaps</td></tr>
+    </tbody>
+  </table></div>
+  <p>The first row is auxiliary space only. If you count the input array too, finding the max uses O(n) in total. Say which one you mean.</p>
+</section>
+
+<!-- ============ TIME ============ -->
+<section class="topic" id="t-time">
+  <div class="head"><h2>Time complexity and growth functions</h2><label class="rev" for="r-time"><input class="rev" type="checkbox" id="r-time" data-sec="t-time">revised</label></div>
+  <div class="chips"><span class="chip">Draw graph</span><span class="chip">Table</span><span class="chip">Define</span></div>
+  <div class="note def"><p><span class="lbl">Time complexity</span>How the running time of an algorithm grows with the input size. It counts basic steps, so it does not depend on the programming language or the machine.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Function</th><th>Name</th><th>Meaning</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td class="m">O(1)</td><td>Constant </td><td>Time does not change with n</td><td>Reading A[i], push, pop</td></tr>
+      <tr><td class="m">O(log n)</td><td>Logarithmic</td><td>Grows slowly. The problem halves every step</td><td>Binary search, heap operations</td></tr>
+      <tr><td class="m">O(n)</td><td>Linear</td><td>Grows in direct proportion to n</td><td>Scanning an array, finding min or max</td></tr>
+      <tr><td class="m">O(n²)</td><td>Quadratic</td><td>Grows with the square of n. Nested loops</td><td>Bubble sort, selection sort, adding two n×n matrices</td></tr>
+      <tr><td class="m">O(n³)</td><td>Cubic</td><td>Grows with the cube of n. Three nested loops</td><td>Multiplying two n×n matrices</td></tr>
+      <tr><td class="m">O(2ⁿ)</td><td>Exponential</td><td>Time doubles when n goes up by 1</td><td>Tower of Hanoi, recursive Fibonacci, brute force</td></tr>
+    </tbody>
+  </table></div>
+  <div class="formula">Order of growth, slowest to fastest:  1 &lt; log n &lt; n &lt; n log n &lt; n² &lt; n³ &lt; 2ⁿ</div>
+
+  <h3>Graphical representation</h3>
+  <figure class="fig">
+<svg viewBox="0 0 640 360" role="img" aria-labelledby="gct gcd"><title id="gct">Growth of common functions</title><desc id="gcd">Curves for log n, n, n squared, n cubed and 2 to the n for n from 0 to 10. 2 to the n and n cubed leave the chart first.</desc>
+<defs><clipPath id="plotclip"><rect x="56" y="36" width="534" height="280"/></clipPath></defs>
+<line class="s-grid" x1="56" y1="260.0" x2="590" y2="260.0"/><text class="s-tick" x="48" y="264.0" text-anchor="end">20</text>
+<line class="s-grid" x1="56" y1="204.0" x2="590" y2="204.0"/><text class="s-tick" x="48" y="208.0" text-anchor="end">40</text>
+<line class="s-grid" x1="56" y1="148.0" x2="590" y2="148.0"/><text class="s-tick" x="48" y="152.0" text-anchor="end">60</text>
+<line class="s-grid" x1="56" y1="92.0" x2="590" y2="92.0"/><text class="s-tick" x="48" y="96.0" text-anchor="end">80</text>
+<line class="s-grid" x1="56" y1="36.0" x2="590" y2="36.0"/><text class="s-tick" x="48" y="40.0" text-anchor="end">100</text>
+<line class="s-grid" x1="162.8" y1="36" x2="162.8" y2="316"/><text class="s-tick" x="162.8" y="332" text-anchor="middle">2</text>
+<line class="s-grid" x1="269.6" y1="36" x2="269.6" y2="316"/><text class="s-tick" x="269.6" y="332" text-anchor="middle">4</text>
+<line class="s-grid" x1="376.4" y1="36" x2="376.4" y2="316"/><text class="s-tick" x="376.4" y="332" text-anchor="middle">6</text>
+<line class="s-grid" x1="483.2" y1="36" x2="483.2" y2="316"/><text class="s-tick" x="483.2" y="332" text-anchor="middle">8</text>
+<line class="s-grid" x1="590.0" y1="36" x2="590.0" y2="316"/><text class="s-tick" x="590.0" y="332" text-anchor="middle">10</text>
+<text class="s-tick" x="48" y="320" text-anchor="end">0</text><text class="s-tick" x="56" y="332" text-anchor="middle">0</text>
+<line class="s-axis" x1="56" y1="36" x2="56" y2="316"/><line class="s-axis" x1="56" y1="316" x2="590" y2="316"/>
+<path class="gl g-exp" fill="none" clip-path="url(#plotclip)" d="M56.0 313.2 L61.3 313.0 L66.7 312.8 L72.0 312.6 L77.4 312.3 L82.7 312.0 L88.0 311.8 L93.4 311.5 L98.7 311.1 L104.1 310.8 L109.4 310.4 L114.7 310.0 L120.1 309.6 L125.4 309.1 L130.8 308.6 L136.1 308.1 L141.4 307.5 L146.8 306.9 L152.1 306.2 L157.5 305.6 L162.8 304.8 L168.1 304.0 L173.5 303.1 L178.8 302.2 L184.2 301.2 L189.5 300.2 L194.8 299.0 L200.2 297.8 L205.5 296.5 L210.9 295.1 L216.2 293.6 L221.5 292.0 L226.9 290.3 L232.2 288.4 L237.6 286.4 L242.9 284.3 L248.2 282.0 L253.6 279.6 L258.9 277.0 L264.3 274.2 L269.6 271.2 L274.9 268.0 L280.3 264.5 L285.6 260.8 L291.0 256.9 L296.3 252.6 L301.6 248.1 L307.0 243.2 L312.3 238.0 L317.7 232.4 L323.0 226.4 L328.3 220.0 L333.7 213.1 L339.0 205.7 L344.4 197.8 L349.7 189.3 L355.0 180.2 L360.4 170.4 L365.7 160.0 L371.1 148.8 L376.4 136.8 L381.7 123.9 L387.1 110.2 L392.4 95.4 L397.8 79.5 L403.1 62.6 L408.4 44.4 L413.8 24.9 L419.1 4.0"/>
+<path class="gl g-cub" fill="none" clip-path="url(#plotclip)" d="M56.0 316.0 L61.3 316.0 L66.7 316.0 L72.0 315.9 L77.4 315.8 L82.7 315.6 L88.0 315.4 L93.4 315.0 L98.7 314.6 L104.1 314.0 L109.4 313.2 L114.7 312.3 L120.1 311.2 L125.4 309.8 L130.8 308.3 L136.1 306.6 L141.4 304.5 L146.8 302.2 L152.1 299.7 L157.5 296.8 L162.8 293.6 L168.1 290.1 L173.5 286.2 L178.8 281.9 L184.2 277.3 L189.5 272.2 L194.8 266.8 L200.2 260.9 L205.5 254.5 L210.9 247.7 L216.2 240.4 L221.5 232.6 L226.9 224.2 L232.2 215.4 L237.6 205.9 L242.9 195.9 L248.2 185.4 L253.6 174.2 L258.9 162.4 L264.3 149.9 L269.6 136.8 L274.9 123.0 L280.3 108.6 L285.6 93.4 L291.0 77.5 L296.3 60.8 L301.6 43.5 L307.0 25.3 L312.3 6.3"/>
+<path class="gl g-quad" fill="none" clip-path="url(#plotclip)" d="M56.0 316.0 L61.3 316.0 L66.7 315.9 L72.0 315.7 L77.4 315.6 L82.7 315.3 L88.0 315.0 L93.4 314.6 L98.7 314.2 L104.1 313.7 L109.4 313.2 L114.7 312.6 L120.1 312.0 L125.4 311.3 L130.8 310.5 L136.1 309.7 L141.4 308.8 L146.8 307.9 L152.1 306.9 L157.5 305.9 L162.8 304.8 L168.1 303.7 L173.5 302.4 L178.8 301.2 L184.2 299.9 L189.5 298.5 L194.8 297.1 L200.2 295.6 L205.5 294.0 L210.9 292.5 L216.2 290.8 L221.5 289.1 L226.9 287.3 L232.2 285.5 L237.6 283.6 L242.9 281.7 L248.2 279.7 L253.6 277.7 L258.9 275.6 L264.3 273.4 L269.6 271.2 L274.9 268.9 L280.3 266.6 L285.6 264.2 L291.0 261.8 L296.3 259.3 L301.6 256.8 L307.0 254.1 L312.3 251.5 L317.7 248.8 L323.0 246.0 L328.3 243.2 L333.7 240.3 L339.0 237.3 L344.4 234.4 L349.7 231.3 L355.0 228.2 L360.4 225.0 L365.7 221.8 L371.1 218.5 L376.4 215.2 L381.7 211.8 L387.1 208.4 L392.4 204.9 L397.8 201.3 L403.1 197.7 L408.4 194.0 L413.8 190.3 L419.1 186.5 L424.5 182.7 L429.8 178.8 L435.1 174.9 L440.5 170.8 L445.8 166.8 L451.2 162.7 L456.5 158.5 L461.8 154.3 L467.2 150.0 L472.5 145.6 L477.9 141.3 L483.2 136.8 L488.5 132.3 L493.9 127.7 L499.2 123.1 L504.6 118.4 L509.9 113.7 L515.2 108.9 L520.6 104.1 L525.9 99.2 L531.3 94.2 L536.6 89.2 L541.9 84.1 L547.3 79.0 L552.6 73.8 L558.0 68.6 L563.3 63.3 L568.6 58.0 L574.0 52.5 L579.3 47.1 L584.7 41.6 L590.0 36.0"/>
+<path class="gl g-lin" fill="none" clip-path="url(#plotclip)" d="M56.0 316.0 L61.3 315.7 L66.7 315.4 L72.0 315.2 L77.4 314.9 L82.7 314.6 L88.0 314.3 L93.4 314.0 L98.7 313.8 L104.1 313.5 L109.4 313.2 L114.7 312.9 L120.1 312.6 L125.4 312.4 L130.8 312.1 L136.1 311.8 L141.4 311.5 L146.8 311.2 L152.1 311.0 L157.5 310.7 L162.8 310.4 L168.1 310.1 L173.5 309.8 L178.8 309.6 L184.2 309.3 L189.5 309.0 L194.8 308.7 L200.2 308.4 L205.5 308.2 L210.9 307.9 L216.2 307.6 L221.5 307.3 L226.9 307.0 L232.2 306.8 L237.6 306.5 L242.9 306.2 L248.2 305.9 L253.6 305.6 L258.9 305.4 L264.3 305.1 L269.6 304.8 L274.9 304.5 L280.3 304.2 L285.6 304.0 L291.0 303.7 L296.3 303.4 L301.6 303.1 L307.0 302.8 L312.3 302.6 L317.7 302.3 L323.0 302.0 L328.3 301.7 L333.7 301.4 L339.0 301.2 L344.4 300.9 L349.7 300.6 L355.0 300.3 L360.4 300.0 L365.7 299.8 L371.1 299.5 L376.4 299.2 L381.7 298.9 L387.1 298.6 L392.4 298.4 L397.8 298.1 L403.1 297.8 L408.4 297.5 L413.8 297.2 L419.1 297.0 L424.5 296.7 L429.8 296.4 L435.1 296.1 L440.5 295.8 L445.8 295.6 L451.2 295.3 L456.5 295.0 L461.8 294.7 L467.2 294.4 L472.5 294.2 L477.9 293.9 L483.2 293.6 L488.5 293.3 L493.9 293.0 L499.2 292.8 L504.6 292.5 L509.9 292.2 L515.2 291.9 L520.6 291.6 L525.9 291.4 L531.3 291.1 L536.6 290.8 L541.9 290.5 L547.3 290.2 L552.6 290.0 L558.0 289.7 L563.3 289.4 L568.6 289.1 L574.0 288.8 L579.3 288.6 L584.7 288.3 L590.0 288.0"/>
+<path class="gl g-log" fill="none" clip-path="url(#plotclip)" d="M109.4 316.0 L114.7 315.6 L120.1 315.3 L125.4 314.9 L130.8 314.6 L136.1 314.4 L141.4 314.1 L146.8 313.9 L152.1 313.6 L157.5 313.4 L162.8 313.2 L168.1 313.0 L173.5 312.8 L178.8 312.6 L184.2 312.5 L189.5 312.3 L194.8 312.1 L200.2 312.0 L205.5 311.8 L210.9 311.7 L216.2 311.6 L221.5 311.4 L226.9 311.3 L232.2 311.2 L237.6 311.1 L242.9 310.9 L248.2 310.8 L253.6 310.7 L258.9 310.6 L264.3 310.5 L269.6 310.4 L274.9 310.3 L280.3 310.2 L285.6 310.1 L291.0 310.0 L296.3 309.9 L301.6 309.8 L307.0 309.7 L312.3 309.7 L317.7 309.6 L323.0 309.5 L328.3 309.4 L333.7 309.3 L339.0 309.3 L344.4 309.2 L349.7 309.1 L355.0 309.0 L360.4 309.0 L365.7 308.9 L371.1 308.8 L376.4 308.8 L381.7 308.7 L387.1 308.6 L392.4 308.6 L397.8 308.5 L403.1 308.4 L408.4 308.4 L413.8 308.3 L419.1 308.3 L424.5 308.2 L429.8 308.1 L435.1 308.1 L440.5 308.0 L445.8 308.0 L451.2 307.9 L456.5 307.9 L461.8 307.8 L467.2 307.8 L472.5 307.7 L477.9 307.7 L483.2 307.6 L488.5 307.5 L493.9 307.5 L499.2 307.5 L504.6 307.4 L509.9 307.4 L515.2 307.3 L520.6 307.3 L525.9 307.2 L531.3 307.2 L536.6 307.1 L541.9 307.1 L547.3 307.0 L552.6 307.0 L558.0 306.9 L563.3 306.9 L568.6 306.9 L574.0 306.8 L579.3 306.8 L584.7 306.7 L590.0 306.7"/>
+<text class="gt gt-cub" x="303.9" y="28.0" text-anchor="middle">n³</text>
+<text class="gt gt-exp" x="410.8" y="28.0" text-anchor="middle">2ⁿ</text>
+<text class="gt gt-quad" x="590.0" y="28.0" text-anchor="middle">n²</text>
+<text class="gt gt-lin" x="596.0" y="292.0" text-anchor="start">n</text>
+<text class="gt gt-log" x="596.0" y="310.7" text-anchor="start">log n</text>
+<text class="s-s" x="323" y="354" text-anchor="middle">n (input size)</text>
+<text class="s-s" transform="translate(16 176) rotate(-90)" text-anchor="middle">steps f(n)</text>
+</svg>
+    <figcaption>log n and n stay near the bottom. n² reaches the top edge at n = 10. n³ leaves the chart at about n = 4.6 and 2ⁿ at about n = 6.6.</figcaption>
+  </figure>
+
+  <h3>Tabular representation</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th class="m">n</th><th class="m c">1</th><th class="m c">2</th><th class="m c">4</th><th class="m c">8</th><th class="m c">16</th><th class="m c">32</th></tr></thead>
+    <tbody>
+      <tr><td class="m">log₂ n</td><td class="m c">0</td><td class="m c">1</td><td class="m c">2</td><td class="m c">3</td><td class="m c">4</td><td class="m c">5</td></tr>
+      <tr><td class="m">n</td><td class="m c">1</td><td class="m c">2</td><td class="m c">4</td><td class="m c">8</td><td class="m c">16</td><td class="m c">32</td></tr>
+      <tr><td class="m">n log₂ n</td><td class="m c">0</td><td class="m c">2</td><td class="m c">8</td><td class="m c">24</td><td class="m c">64</td><td class="m c">160</td></tr>
+      <tr><td class="m">n²</td><td class="m c">1</td><td class="m c">4</td><td class="m c">16</td><td class="m c">64</td><td class="m c">256</td><td class="m c">1,024</td></tr>
+      <tr><td class="m">n³</td><td class="m c">1</td><td class="m c">8</td><td class="m c">64</td><td class="m c">512</td><td class="m c">4,096</td><td class="m c">32,768</td></tr>
+      <tr><td class="m">2ⁿ</td><td class="m c">2</td><td class="m c">4</td><td class="m c">16</td><td class="m c">256</td><td class="m c">65,536</td><td class="m c">4,294,967,296</td></tr>
+    </tbody>
+  </table></div>
+  <p>At n = 32, 2ⁿ is already over four billion while n³ is about thirty-two thousand. That gap is why exponential algorithms are only usable for very small inputs.</p>
+
+  <h3>Reading the complexity off code</h3>
+  <div class="note def"><p><span class="lbl">Time Analysis Rule</span>Count the execution frequency of the critical innermost statement, then discard multiplicative constants and lower-order terms: n^2 + 5n + 2$ yields (n^2)$.</p></div>
+<pre><code>for (i = 0; i &lt; n; i++)            // runs n times              → O(n)
+    sum = sum + a[i];
+
+for (i = 0; i &lt; n; i++)            // n × n times               → O(n²)
+    for (j = 0; j &lt; n; j++)
+        count++;
+
+for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log n)
+    count++;</code></pre>
+</section>
+
+<!-- ============ ASYMPTOTIC ============ -->
+<section class="topic" id="t-asym">
+  <div class="head"><h2>Asymptotic notations: best, worst, average case</h2><label class="rev" for="r-asym"><input class="rev" type="checkbox" id="r-asym" data-sec="t-asym">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Likely long answer</span></div>
+  <p>Asymptotic notation describes the efficiency of an algorithm when the input size becomes very large. It gives a mathematical expression for time complexity without getting into machine or language details.</p>
+
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Notation</th><th>Case</th><th>Gives</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td class="m"><strong>Ω (Omega)</strong></td><td>Best case</td><td>Lower bound</td><td>Minimum time taken for input size n. The algorithm will not run faster than this for any input</td></tr>
+      <tr><td class="m"><strong>O (Big O)</strong></td><td>Worst case</td><td>Upper bound</td><td>Maximum time taken for input size n. The algorithm will not run slower than this</td></tr>
+      <tr><td class="m"><strong>Θ (Theta)</strong></td><td>Average case</td><td>Tight bound</td><td>Bounded above and below. Describes the expected running time</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Formal definitions</h3>
+  <div class="formula">O(g(n)) = { f(n) : there exist positive constants c and n₀ such that 0 ≤ f(n) ≤ c·g(n) for all n ≥ n₀ }</div>
+  <div class="formula">Ω(g(n)) = { f(n) : there exist positive constants c and n₀ such that 0 ≤ c·g(n) ≤ f(n) for all n ≥ n₀ }</div>
+  <div class="formula">Θ(g(n)) = { f(n) : there exist positive constants c₁, c₂ and n₀ such that 0 ≤ c₁·g(n) ≤ f(n) ≤ c₂·g(n) for all n ≥ n₀ }</div>
+  <p>g(n) is an asymptotic upper bound (O), lower bound (Ω) or tight bound (Θ) for f(n).</p>
+
+  <h3>Worked example</h3>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>Show that (n) = 3n + 2$ is $\Theta(n)$:</strong></p>
+  <p>Upper bound: 3n + 2 ≤ 4n for all n ≥ 2, so c = 4 and n₀ = 2. Hence f(n) is O(n).</p>
+  <p>Lower bound: 3n ≤ 3n + 2 for all n ≥ 1, so c = 3 and n₀ = 1. Hence f(n) is Ω(n).</p>
+  <p>Both hold, so f(n) is Θ(n) with c₁ = 3, c₂ = 4, n₀ = 2.</p>
+  <p>Another: 2n² + 3n + 1 ≤ 6n² for n ≥ 1 (at n = 1 both sides are 6), so it is O(n²).</p></div>
+
+  <h3>Cases for linear search and binary search</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Algorithm</th><th>Best case, Ω</th><th>Worst case, O</th><th>Average case, Θ</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Linear search</strong></td><td>Key at first position: Ω(1)</td><td>Key at last position or absent: O(n)</td><td>About n/2 comparisons: Θ(n)</td></tr>
+      <tr><td><strong>Binary search</strong> </td><td>Key at the middle: Ω(1)</td><td>Halve until one element is left: O(log n)</td><td>Θ(log n)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Bound vs Case:</strong> Formally, $, $\Omega$, and $\Theta$ represent mathematical bounds (upper, lower, tight), not specific cases. However, university exams commonly associate <strong>Worst case = $, Best case = $\Omega$, Average case = $\Theta$</strong>. Mention the mathematical definition and this pairing for complete marks.</p></div>
+</section>
+
+<!-- ============ ARRAYS ============ -->
+<section class="topic" id="t-arrays">
+  <div class="head"><h2>Arrays and address calculation</h2><label class="rev" for="r-arrays"><input class="rev" type="checkbox" id="r-arrays" data-sec="t-arrays">revised</label></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Define</span><span class="chip">Likely long answer</span></div>
+  <div class="note def"><p><span class="lbl">Array</span>A collection of elements of the same type, stored in contiguous memory locations and accessed by an index.</p></div>
+  <h3>Properties</h3>
+  <ul class="t">
+    <li>Fixed size.</li>
+    <li>Homogeneous elements (all the same type).</li>
+    <li>Stored contiguously.</li>
+    <li>Direct access using the index.</li>
+    <li>Static memory allocation.</li>
+    <li>Easy to traverse.</li>
+    <li>Efficient for searching and sorting.</li>
+  </ul>
+  <div class="note def"><p><span class="lbl">Array Limitations</span>Key limitations to state in 3-mark questions: fixed static capacity allocated at compile time, and linear time (n)$ overhead for insertion/deletion due to element shifting.</p></div>
+
+  <h3>One-dimensional array in memory</h3>
+  <p><code>int A[5] = {10, 20, 30, 40, 50};</code> with base address BA = 2000 and element size w = 4 bytes.</p>
+  <div class="bitwrap"><div class="bits" style="grid-template-columns: repeat(5, 1fr);">
+    <div>10<small>A[0] · 2000</small></div><div>20<small>A[1] · 2004</small></div><div>30<small>A[2] · 2008</small></div><div>40<small>A[3] · 2012</small></div><div>50<small>A[4] · 2016</small></div>
+  </div></div>
+  <div class="formula">Address(A[i]) = BA + i × w          (index starts at 0)</div>
+  <p>A[3] = 2000 + 3 × 4 = <strong>2012</strong>.</p>
+  <div class="note example"><p><span class="lbl">Worked Example</span><strong>1D Array with Lower Bound (LB):</strong><br><code>Address(A[i]) = BA + (i - LB) × w</code><br><em>Example:</em> Base Address  = 500$, element size  = 2$ bytes, lower bound  = -5$. The address of [2]$ is 00 + (2 - (-5)) 	imes 2 = 500 + 14 = \mathbf{514}$.</p></div>
+
+  <h3>Two-dimensional array: row-major and column-major</h3>
+  <p><code>int B[3][3] = {{1,2,3},{4,5,6},{7,8,9}};</code> is stored as a single run of memory in one of two orders.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Order</th><th>Used by</th><th>How it is stored</th><th>Memory sequence for B</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Row-major</strong></td><td>C, C++, Java</td><td>Row by row</td><td class="m">1 2 3 4 5 6 7 8 9</td></tr>
+      <tr><td><strong>Column-major</strong></td><td>Fortran, MATLAB</td><td>Column by column</td><td class="m">1 4 7 2 5 8 3 6 9</td></tr>
+    </tbody>
+  </table></div>
+  <p>For an array A[m][n] with element size w and zero-based indices:</p>
+  <div class="formula">Row-major:     Address(A[i][j]) = BA + (i × n + j) × w<br>Column-major:  Address(A[i][j]) = BA + (j × m + i) × w</div>
+  <p>Here m is the number of rows and n the number of columns. Row-major multiplies the row index by the <em>number of columns</em>. Column-major multiplies the column index by the <em>number of rows</em>.</p>
+
+  <div class="note example"><p><span class="lbl">Worked Examples</span><strong>2D Array Address Calculations:</strong></p>
+  <p>B[3][3], BA = 1000, w = 4, element B[1][2] (the value 6).</p>
+  <p>Row-major: 1000 + (1 × 3 + 2) × 4 = <strong>1020</strong>. Column-major: 1000 + (2 × 3 + 1) × 4 = <strong>1028</strong>.</p>
+  <p>A[10][10], BA = 2000, w = 2, element A[3][4].</p>
+  <p>Row-major: 2000 + (3 × 10 + 4) × 2 = <strong>2068</strong>. Column-major: 2000 + (4 × 10 + 3) × 2 = <strong>2086</strong>.</p></div>
+  <div class="note def"><p><span class="lbl">Generalized Formulas</span><strong>2D Array with Arbitrary Lower Bounds [l_1 \dots u_1][l_2 \dots u_2]$:</strong><br>Let total rows  = u_1 - l_1 + 1$ and columns  = u_2 - l_2 + 1$.</p>
+  <div class="formula">Row-major:     BA + ((i − l₁) × cols + (j − l₂)) × w<br>Column-major:  BA + ((j − l₂) × rows + (i − l₁)) × w</div>
+  <p>Example: A[1…5][1…4], BA = 100, w = 2, element A[3][2]. rows = 5, cols = 4.</p>
+  <p>Row-major: 100 + ((3 − 1) × 4 + (2 − 1)) × 2 = <strong>118</strong>. Column-major: 100 + ((2 − 1) × 5 + (3 − 1)) × 2 = <strong>114</strong>.</p></div>
+</section>
+
+<!-- ============ SPARSE ============ -->
+<section class="topic" id="t-sparse">
+  <div class="head"><h2>Sparse matrix</h2><label class="rev" for="r-sparse"><input class="rev" type="checkbox" id="r-sparse" data-sec="t-sparse">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Likely long answer</span></div>
+  <div class="note def"><p><span class="lbl">Sparse matrix</span>A matrix in which most elements are zero, so the number of zero values is much greater than the number of non-zero values. Storing every zero wastes memory.</p></div>
+
+  <h3>Triplet representation</h3>
+  <p>Store only the non-zero elements. Each one is a row of three values: <strong>(row, column, value)</strong>. The first row of the table is a summary: number of rows, number of columns, number of non-zero values.</p>
+  <p>Example: a 6 × 6 matrix with 5 non-zero values.</p>
+  <div class="wrap"><table class="mem">
+    <thead><tr><th class="c"></th><th class="c m">c0</th><th class="c m">c1</th><th class="c m">c2</th><th class="c m">c3</th><th class="c m">c4</th><th class="c m">c5</th></tr></thead>
+    <tbody>
+      <tr><th class="m">r0</th><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m"><strong>9</strong></td><td class="c m">0</td></tr>
+      <tr><th class="m">r1</th><td class="c m">0</td><td class="c m"><strong>8</strong></td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td></tr>
+      <tr><th class="m">r2</th><td class="c m"><strong>4</strong></td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td></tr>
+      <tr><th class="m">r3</th><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m"><strong>2</strong></td><td class="c m">0</td><td class="c m">0</td></tr>
+      <tr><th class="m">r4</th><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td></tr>
+      <tr><th class="m">r5</th><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m"><strong>5</strong></td></tr>
+    </tbody>
+  </table></div>
+  <div class="wrap"><table class="mem">
+    <thead><tr><th class="c m">Row</th><th class="c m">Column</th><th class="c m">Value</th></tr></thead>
+    <tbody>
+      <tr><td class="c m"><strong>6</strong></td><td class="c m"><strong>6</strong></td><td class="c m"><strong>5</strong></td></tr>
+      <tr><td class="c m">0</td><td class="c m">4</td><td class="c m">9</td></tr>
+      <tr><td class="c m">1</td><td class="c m">1</td><td class="c m">8</td></tr>
+      <tr><td class="c m">2</td><td class="c m">0</td><td class="c m">4</td></tr>
+      <tr><td class="c m">3</td><td class="c m">3</td><td class="c m">2</td></tr>
+      <tr><td class="c m">5</td><td class="c m">5</td><td class="c m">5</td></tr>
+    </tbody>
+  </table></div>
+  <p>The bold first row is the summary. Reading the next row: the element in row 0, column 4 has the value 9.</p>
+  <div class="note def"><p><span class="lbl">Space Efficiency</span><strong>Sparse Matrix Triplet Space Criterion:</strong> A standard matrix requires  	imes n$ memory locations. The 3-tuple representation requires  	imes (t + 1)$ locations for $ non-zero elements. Triplet storage saves memory whenever (t + 1) < m 	imes n$.</p></div>
+
+  <h3>Linked list representation</h3>
+  <p>Each non-zero element is a node holding <code>row | column | value | next</code>. A pointer <code>first</code> points to the first node, and the nodes are linked in row order.</p>
+<pre><code>first → [0|4|9] → [1|1|8] → [2|0|4] → [3|3|2] → [5|5|5] → NULL</code></pre>
+  <p>Unlike the triplet array, nodes can be added or removed without shifting. The cost is an extra pointer per element.</p>
+</section>
+
+<!-- ============ POLYNOMIAL ============ -->
+<section class="topic" id="t-poly">
+  <div class="head"><h2>Polynomial representation and addition</h2><label class="rev" for="r-poly"><input class="rev" type="checkbox" id="r-poly" data-sec="t-poly">revised</label></div>
+  <div class="chips"><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Likely long answer</span></div>
+  <p>A polynomial is a sum of terms, each with a <strong>coefficient</strong> and an <strong>exponent</strong>. Store it in a two-column array: column 0 holds the coefficient, column 1 the exponent. Keep the terms in <strong>descending order of exponent</strong>.</p>
+  <p><code>A[i][0]</code> is the coefficient of term i. <code>A[i][1]</code> is its exponent.</p>
+  <div class="wrap"><table class="mem">
+    <thead><tr><th class="m">5x³ + 3x + 2</th><th class="c m">[i][0]<br>coefficient</th><th class="c m">[i][1]<br>exponent</th></tr></thead>
+    <tbody>
+      <tr><td class="m">term 0</td><td class="c m">5</td><td class="c m">3</td></tr>
+      <tr><td class="m">term 1</td><td class="c m">3</td><td class="c m">1</td></tr>
+      <tr><td class="m">term 2</td><td class="c m">2</td><td class="c m">0</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Algorithm for polynomial addition</h3>
+  <p>Add polynomial A (n1 terms) and polynomial B (n2 terms) into C. It works like merging two sorted lists.</p>
+  <ol class="t">
+    <li>Start.</li>
+    <li>Declare integer arrays A[n1][2], B[n2][2] and C[n1 + n2][2].</li>
+    <li>Read the terms of the first polynomial into A and the second into B, using for loops.</li>
+    <li>Set i to 0, j to 0 and k to 0.</li>
+    <li>Repeat steps 6 to 8 while i is less than n1 and j is less than n2.</li>
+    <li>If A[i][1] is greater than B[j][1], copy A[i][0] and A[i][1] into C[k][0] and C[k][1], then increase i and k by 1.</li>
+    <li>Else if A[i][1] is less than B[j][1], copy B[j][0] and B[j][1] into C[k][0] and C[k][1], then increase j and k by 1.</li>
+    <li>Otherwise the exponents are equal. Set sum to A[i][0] + B[j][0]. If sum is not equal to 0, set C[k][0] to sum and C[k][1] to A[i][1], and increase k by 1. Increase i and j by 1.</li>
+    <li>While i is less than n1, copy A[i] into C[k], then increase i and k by 1.</li>
+    <li>While j is less than n2, copy B[j] into C[k], then increase j and k by 1.</li>
+    <li>If k is equal to 0, print 0. Otherwise, for x from 0 to k − 1, print C[x][0] followed by x^C[x][1] (leave out the x part when the exponent is 0), and print + between terms.</li>
+    <li>Stop.</li>
+  </ol>
+  <div class="note alert"><p><span class="lbl">Exam Tip</span><strong>Polynomial Addition Edge Case:</strong> When adding two terms with identical exponents, if their coefficients cancel out (sum equals 0), that term must not be inserted into the resultant polynomial.</p></div>
+
+  <h3>Worked example</h3>
+  <div class="note example"><p><span class="lbl">Polynomial Example</span>Adding (x) = 5x^3 + 3x + 2$ and (x) = 4x^3 + 2x^2 - 3x + 6$.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Compare A[i], B[j]</th><th>Exponents</th><th>Action</th><th>C so far</th></tr></thead>
+    <tbody>
+      <tr><td class="m">5x³ , 4x³</td><td>3 = 3</td><td>Add: 5 + 4 = 9</td><td class="m">9x³</td></tr>
+      <tr><td class="m">3x , 2x²</td><td>1 &lt; 2</td><td>Copy the term from B</td><td class="m">9x³ + 2x²</td></tr>
+      <tr><td class="m">3x , −3x</td><td>1 = 1</td><td>Add: 3 − 3 = 0, so skip it</td><td class="m">9x³ + 2x²</td></tr>
+      <tr><td class="m">2 , 6</td><td>0 = 0</td><td>Add: 2 + 6 = 8</td><td class="m">9x³ + 2x² + 8</td></tr>
+    </tbody>
+  </table></div>
+  <p>Result: <strong>9x³ + 2x² + 8</strong>, with C = [(9,3), (2,2), (8,0)] and k = 3.</p>
+</section>
+
+<!-- ============ STACK ============ -->
+<section class="topic" id="t-stack">
+  <div class="head"><h2>Stack using an array</h2><label class="rev" for="r-stack"><input class="rev" type="checkbox" id="r-stack" data-sec="t-stack">revised</label></div>
+  <div class="chips"><span class="chip">Algorithm</span><span class="chip">Define</span><span class="chip">Likely long answer</span></div>
+  <div class="note def"><p><span class="lbl">Stack</span>A linear data structure stored in contiguous memory in which items are added and removed at <strong>one end only</strong>, called the top. It follows <strong>LIFO</strong> (last in, first out).</p></div>
+  <ul class="t">
+    <li><strong>Push:</strong> insertion. <strong>Pop:</strong> deletion.</li>
+    <li><strong>Overflow:</strong> push on a full stack, when top reaches the maximum.</li>
+    <li><strong>Underflow:</strong> pop on an empty stack, when top reaches the minimum.</li>
+  </ul>
+  <div class="formula">top = −1 means the stack is empty.<br>top = MAX − 1 means the stack is full.   (array a[0 … MAX−1])</div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Array Stack Overflow:</strong> For an array of size <code>MAX</code> indexed from <code>0</code> to <code>MAX - 1</code>, the overflow condition is <code>top == MAX - 1</code> (not <code>top == MAX</code>). State the 0-based indexing convention clearly.</p></div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 640 170" role="img" aria-label="Stack array of five cells with three items and top pointing at the third">
+      <rect class="s-box" x="120" y="40" width="80" height="52" rx="2"/><text class="s-t" x="160" y="72" text-anchor="middle">10</text><text class="s-s" x="160" y="112" text-anchor="middle">a[0]</text>
+      <rect class="s-box" x="200" y="40" width="80" height="52" rx="2"/><text class="s-t" x="240" y="72" text-anchor="middle">20</text><text class="s-s" x="240" y="112" text-anchor="middle">a[1]</text>
+      <rect class="s-box2" x="280" y="40" width="80" height="52" rx="2"/><text class="s-t" x="320" y="72" text-anchor="middle">30</text><text class="s-s" x="320" y="112" text-anchor="middle">a[2]</text>
+      <rect class="s-dash" x="360" y="40" width="80" height="52" rx="2"/><text class="s-s" x="400" y="72" text-anchor="middle">free</text><text class="s-s" x="400" y="112" text-anchor="middle">a[3]</text>
+      <rect class="s-dash" x="440" y="40" width="80" height="52" rx="2"/><text class="s-s" x="480" y="72" text-anchor="middle">free</text><text class="s-s" x="480" y="112" text-anchor="middle">a[4]</text>
+      <path class="s-line" d="M320 26V38" marker-end="url(#ah2)"/>
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs>
+      <text class="s-m" x="320" y="20" text-anchor="middle">TOP = 2</text>
+      <text class="s-s" x="20" y="72">MAX = 5</text>
+    </svg>
+    <figcaption>Three items pushed, so top is 2. Push goes to a[3], pop removes a[2].</figcaption>
+  </figure>
+
+  <div class="units">
+    <div>
+      <h4>Push (a, top, item, MAX)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If top is equal to MAX − 1, print "Stack Overflow" and stop.</li>
+        <li>Increase top by 1.</li>
+        <li>Assign item to a[top].</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Pop (a, top)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If top is equal to −1, print "Stack Underflow" and stop.</li>
+        <li>Assign a[top] to item.</li>
+        <li>Decrease top by 1.</li>
+        <li>Print item as the deleted element.</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Display (a, top)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If top is equal to −1, print "Stack is empty" and stop.</li>
+        <li>For i from top down to 0, print a[i].</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+  </div>
+  <p>Push and pop are <strong>O(1)</strong>. Display visits every element, so it is O(n).</p>
+
+  <h3>Applications</h3>
+  <ul class="t">
+    <li>Reversing a string.</li>
+    <li>Checking that nested parentheses in an expression are balanced.</li>
+    <li>Converting infix to postfix and evaluating postfix (the next two sections).</li>
+    <li>Undo and redo operations.</li>
+    <li>Browser history navigation.</li>
+    <li>Function call stack during recursion </li>
+  </ul>
+</section>
+
+<!-- ============ QUEUE ============ -->
+<section class="topic" id="t-queue">
+  <div class="head"><h2>Queue using an array</h2><label class="rev" for="r-queue"><input class="rev" type="checkbox" id="r-queue" data-sec="t-queue">revised</label></div>
+  <div class="chips"><span class="chip">Algorithm</span><span class="chip">Define</span><span class="chip">Differentiate</span></div>
+  <div class="note def"><p><span class="lbl">Queue</span>A linear data structure that allows insertion at one end (<strong>rear</strong>) and deletion at the other end (<strong>front</strong>). It follows <strong>FIFO</strong> (first in, first out).</p></div>
+  <ul class="t">
+    <li>A queue uses <strong>two</strong> pointers, FRONT and REAR. A stack uses only one, TOP.</li>
+    <li>Insertion is <strong>enqueue</strong>, deletion is <strong>dequeue</strong>.</li>
+    <li>Start with FRONT = −1 and REAR = −1 (empty queue).</li>
+  </ul>
+
+  <div class="units">
+    <div>
+      <h4>Enqueue (Q, MAX, num)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If REAR is equal to MAX − 1, print "Queue Overflow" and stop.</li>
+        <li>If FRONT is equal to −1, set FRONT to 0.</li>
+        <li>Increase REAR by 1.</li>
+        <li>Assign num to Q[REAR].</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Dequeue (Q)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If FRONT is equal to −1, print "Queue Underflow" and stop.</li>
+        <li>Assign Q[FRONT] to num and print it as the deleted item.</li>
+        <li>Increase FRONT by 1.</li>
+        <li>If FRONT is greater than REAR, set FRONT and REAR to −1.</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Display (Q)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If FRONT is equal to −1, print "Queue is empty" and stop.</li>
+        <li>For i from FRONT to REAR, print Q[i].</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>The problem with a linear queue: false overflow</h3>
+  <div class="note example"><p><span class="lbl">Queue Simulation</span>Tracing linear queue operations with array capacity <code>MAX = 5</code>: Enqueue 10, 20, 30, 40, 50, followed by two dequeues.</p></div>
+  <div class="bitwrap"><div class="bits" style="grid-template-columns: repeat(5, 1fr);">
+    <div>free<small>Q[0]</small></div><div>free<small>Q[1]</small></div><div>30<small>Q[2] · FRONT</small></div><div>40<small>Q[3]</small></div><div>50<small>Q[4] · REAR</small></div>
+  </div></div>
+  <p>REAR is MAX − 1, so enqueue prints overflow, yet two cells at the start are empty. The space freed by dequeues is never reused. A circular queue fixes this.</p>
+</section>
+
+<!-- ============ CIRCULAR QUEUE ============ -->
+<section class="topic" id="t-cqueue">
+  <div class="head"><h2>Circular queue</h2><label class="rev" for="r-cqueue"><input class="rev" type="checkbox" id="r-cqueue" data-sec="t-cqueue">revised</label></div>
+  <div class="chips"><span class="chip">Algorithm</span><span class="chip">Differentiate</span><span class="chip">Likely long answer</span></div>
+  <div class="note def"><p><span class="lbl">Circular queue</span>A queue in which the last position is connected back to the first position, forming a circle. It uses all the array positions efficiently. <strong>Need:</strong> it prevents false overflow.</p></div>
+  <p>The indexes wrap around with the modulo operator: <code>REAR = (REAR + 1) % MAX</code> and <code>FRONT = (FRONT + 1) % MAX</code>.</p>
+  <div class="formula">Full:    (REAR + 1) % MAX == FRONT<br>Empty:   FRONT == −1</div>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Circular Queue Overflow:</strong> The standard modulo condition for circular queue overflow is <code>(REAR + 1) % MAX == FRONT</code>.</p></div>
+
+  <div class="units">
+    <div>
+      <h4>Enqueue (Q, MAX, item)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If (REAR + 1) % MAX is equal to FRONT, print "Circular Queue Overflow" and stop.</li>
+        <li>If FRONT is equal to −1, set FRONT to 0.</li>
+        <li>Set REAR to (REAR + 1) % MAX.</li>
+        <li>Assign item to Q[REAR].</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Dequeue (Q, MAX)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If FRONT is equal to −1, print "Circular Queue Underflow" and stop.</li>
+        <li>Assign Q[FRONT] to item and print it as the deleted item.</li>
+        <li>If FRONT is equal to REAR, set FRONT and REAR to −1.</li>
+        <li>Else set FRONT to (FRONT + 1) % MAX.</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Display (Q, MAX)</h4>
+      <ol class="t">
+        <li>Start.</li>
+        <li>If FRONT is equal to −1, print "Queue is empty" and stop.</li>
+        <li>Set i to FRONT.</li>
+        <li>Repeat: print Q[i]. If i is equal to REAR, stop the loop. Otherwise set i to (i + 1) % MAX.</li>
+        <li>Stop.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Trace, MAX = 5</h3>
+  <div class="note example"><p><span class="lbl">Circular Queue Advantage</span>Circular queues eliminate false overflow by wrapping around to index 0 using modulo arithmetic.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Operation</th><th class="m c">FRONT</th><th class="m c">REAR</th><th>Q[0] … Q[4]</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td class="m">Enqueue 10, 20, 30, 40, 50</td><td class="m c">0</td><td class="m c">4</td><td class="m">10 20 30 40 50</td><td>Full: (4 + 1) % 5 = 0 = FRONT</td></tr>
+      <tr><td class="m">Dequeue</td><td class="m c">1</td><td class="m c">4</td><td class="m">_ 20 30 40 50</td><td>Removed 10</td></tr>
+      <tr><td class="m">Dequeue</td><td class="m c">2</td><td class="m c">4</td><td class="m">_ _ 30 40 50</td><td>Removed 20</td></tr>
+      <tr><td class="m">Enqueue 60</td><td class="m c">2</td><td class="m c">0</td><td class="m">60 _ 30 40 50</td><td>REAR wraps: (4 + 1) % 5 = 0</td></tr>
+      <tr><td class="m">Enqueue 70</td><td class="m c">2</td><td class="m c">1</td><td class="m">60 70 30 40 50</td><td>Queue is full again</td></tr>
+      <tr><td class="m">Enqueue 80</td><td class="m c">2</td><td class="m c">1</td><td class="m">60 70 30 40 50</td><td>Overflow: (1 + 1) % 5 = 2 = FRONT</td></tr>
+      <tr><td class="m">Dequeue</td><td class="m c">3</td><td class="m c">1</td><td class="m">60 70 _ 40 50</td><td>Removed 30</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Linear vs circular queue</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Linear queue</th><th>Circular queue</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Overflow</strong></td><td class="m">REAR == MAX − 1</td><td class="m">(REAR + 1) % MAX == FRONT</td></tr>
+      <tr><td><strong>Underflow</strong></td><td class="m">FRONT == −1</td><td class="m">FRONT == −1</td></tr>
+      <tr><td><strong>Increment REAR</strong></td><td class="m">REAR = REAR + 1</td><td class="m">REAR = (REAR + 1) % MAX</td></tr>
+      <tr><td><strong>Increment FRONT</strong></td><td class="m">FRONT = FRONT + 1</td><td class="m">FRONT = (FRONT + 1) % MAX</td></tr>
+      <tr><td><strong>Freed space</strong></td><td>Not reused, so false overflow</td><td>Reused, all positions usable</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ DEQUE / PRIORITY ============ -->
+<section class="topic" id="t-deque">
+  <div class="head"><h2>Other queues: deque and priority queue</h2><label class="rev" for="r-deque"><input class="rev" type="checkbox" id="r-deque" data-sec="t-deque">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Concept only</span><span class="chip">3 marks</span></div>
+
+  <h3>Deque (double-ended queue)</h3>
+  <div class="note def"><p><span class="lbl">Deque</span>A queue in which insertion and deletion can both be done at either end, front or rear. Four operations: insert at front, insert at rear, delete from front, delete from rear.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Type</th><th>Insertion</th><th>Deletion</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Input-restricted deque</strong></td><td>At <strong>one</strong> end only</td><td>At both ends</td></tr>
+      <tr><td><strong>Output-restricted deque</strong></td><td>At both ends</td><td>At <strong>one</strong> end only</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Application:</strong> palindrome checker. Insert the characters, then compare the front and rear characters, removing one from each end per step. If they always match, it is a palindrome.</p>
+
+  <h3>Priority queue (concept only)</h3>
+  <div class="note def"><p><span class="lbl">Priority queue</span>A queue in which each element has a priority. Insertion is done in order of arrival, and <strong>deletion is based on priority</strong>. If two elements have equal priority, they follow FIFO.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Type</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Ascending priority queue</strong></td><td>Elements can be inserted in any order, but only the <strong>smallest</strong> can be removed</td></tr>
+      <tr><td><strong>Descending priority queue</strong></td><td>Elements can be inserted in any order, but only the <strong>largest</strong> can be removed</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Applications:</strong> job scheduling in an operating system, bandwidth management, network communication.</p>
+  <div class="note def"><p><span class="lbl">Priority Queue</span>A priority queue is most efficiently implemented using a binary heap, providing (\log n)$ insertion and extraction of the extreme priority element.</p></div>
+</section>
+
+<!-- ============ INFIX TO POSTFIX ============ -->
+<section class="topic" id="t-postfix">
+  <div class="head"><h2>Infix to postfix conversion using a stack</h2><label class="rev" for="r-postfix"><input class="rev" type="checkbox" id="r-postfix" data-sec="t-postfix">revised</label></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Algorithm</span><span class="chip">Very likely</span></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Notation</th><th>Operator position</th><th>Example for A plus B</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Infix</strong></td><td>Between the operands</td><td class="m">A + B</td></tr>
+      <tr><td><strong>Postfix</strong></td><td>After the operands</td><td class="m">A B +</td></tr>
+      <tr><td><strong>Prefix</strong> </td><td>Before the operands</td><td class="m">+ A B</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Precedence and associativity</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Operator</th><th>Precedence</th><th>Associativity</th></tr></thead>
+    <tbody>
+      <tr><td class="m">^ (power)</td><td>Highest</td><td>Right to left</td></tr>
+      <tr><td class="m">*   /   %</td><td>Middle</td><td>Left to right</td></tr>
+      <tr><td class="m">+   −</td><td>Lowest</td><td>Left to right</td></tr>
+      <tr><td class="m">( on the stack</td><td>Lowest of all, so it never gets popped by an operator</td><td>none</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Algorithm</h3>
+  <ol class="t">
+    <li>Start.</li>
+    <li>Create an empty stack for operators and an empty output string.</li>
+    <li>Scan the infix expression from left to right, one token at a time. Repeat steps 4 to 8 for each token.</li>
+    <li>If the token is an operand, append it to the output.</li>
+    <li>If the token is an opening bracket, push it onto the stack.</li>
+    <li>If the token is a closing bracket, pop operators from the stack and append them to the output until an opening bracket is on top. Pop and discard the opening bracket.</li>
+    <li>If the token is an operator, then while the stack is not empty and the top is not an opening bracket and the top has higher precedence than the token (or equal precedence and the token is left-associative), pop the top and append it to the output.</li>
+    <li>After that loop, push the token onto the stack.</li>
+    <li>After all tokens are scanned, pop every remaining operator from the stack and append it to the output.</li>
+    <li>Print the output as the postfix expression.</li>
+    <li>Stop.</li>
+  </ol>
+
+  <h3>Example 1: A * (B + C) − D / E</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Token</th><th>Action</th><th>Stack (top on the right)</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td class="m">A</td><td>Operand, output</td><td class="m">&nbsp;</td><td class="m">A</td></tr>
+      <tr><td class="m">*</td><td>Push</td><td class="m">*</td><td class="m">A</td></tr>
+      <tr><td class="m">(</td><td>Push</td><td class="m">* (</td><td class="m">A</td></tr>
+      <tr><td class="m">B</td><td>Operand, output</td><td class="m">* (</td><td class="m">A B</td></tr>
+      <tr><td class="m">+</td><td>Top is (, so push</td><td class="m">* ( +</td><td class="m">A B</td></tr>
+      <tr><td class="m">C</td><td>Operand, output</td><td class="m">* ( +</td><td class="m">A B C</td></tr>
+      <tr><td class="m">)</td><td>Pop + to output, discard (</td><td class="m">*</td><td class="m">A B C +</td></tr>
+      <tr><td class="m">−</td><td>* has higher precedence, so pop it. Then push −</td><td class="m">−</td><td class="m">A B C + *</td></tr>
+      <tr><td class="m">D</td><td>Operand, output</td><td class="m">−</td><td class="m">A B C + * D</td></tr>
+      <tr><td class="m">/</td><td>/ is higher than −, so just push</td><td class="m">− /</td><td class="m">A B C + * D</td></tr>
+      <tr><td class="m">E</td><td>Operand, output</td><td class="m">− /</td><td class="m">A B C + * D E</td></tr>
+      <tr><td class="m">end</td><td>Pop all remaining</td><td class="m">&nbsp;</td><td class="m"><strong>A B C + * D E / −</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p>Postfix: <strong>ABC+*DE/−</strong></p>
+
+  <h3>More examples to check yourself</h3>
+  <div class="note def"><p><span class="lbl">Verification</span>Operator precedence and associativity order for stack conversion algorithms.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Infix</th><th>Postfix</th><th>Point it shows</th></tr></thead>
+    <tbody>
+      <tr><td class="m">A + B * C</td><td class="m">ABC*+</td><td>* binds tighter than +</td></tr>
+      <tr><td class="m">(A + B) * C</td><td class="m">AB+C*</td><td>Brackets override precedence</td></tr>
+      <tr><td class="m">A − B − C</td><td class="m">AB−C−</td><td>Left-associative: equal precedence on the stack is popped first</td></tr>
+      <tr><td class="m">A ^ B ^ C</td><td class="m">ABC^^</td><td>Right-associative: equal ^ on the stack is <strong>not</strong> popped</td></tr>
+      <tr><td class="m">A + B * (C ^ D − E)</td><td class="m">ABCD^E−*+</td><td>Brackets, ^ and * together</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note tip"><p><span class="lbl">Shortcut Verification</span><strong>Bracketing Method (Exam Verification):</strong> Fully parenthesize the infix expression according to operator precedence: <code>A * (B + C) - D / E</code> becomes <code>((A * (B + C)) - (D / E))</code>. Move each operator to its corresponding closing parenthesis and remove parentheses: <code>ABC+*DE/-</code>. Use this to verify your step-by-step stack table output.</p></div>
+</section>
+
+<!-- ============ POSTFIX EVAL ============ -->
+<section class="topic" id="t-eval">
+  <div class="head"><h2>Postfix evaluation using a stack</h2><label class="rev" for="r-eval"><input class="rev" type="checkbox" id="r-eval" data-sec="t-eval">revised</label></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Algorithm</span><span class="chip">Very likely</span></div>
+  <ol class="t">
+    <li>Start.</li>
+    <li>Create an empty stack for operands.</li>
+    <li>Scan the postfix expression from left to right, one token at a time. Repeat steps 4 to 6 for each token.</li>
+    <li>If the token is an operand, push it onto the stack.</li>
+    <li>If the token is an operator, pop the top element into op2, then pop the next element into op1.</li>
+    <li>Compute the result as op1 operator op2 and push the result onto the stack.</li>
+    <li>After all tokens are scanned, pop the top element. It is the value of the expression.</li>
+    <li>Stop.</li>
+  </ol>
+  <div class="note alert"><p><span class="lbl">Watch Out</span><strong>Operand Order in Postfix Evaluation:</strong> The <strong>first popped element is the right operand (op2)</strong>, and the <strong>second popped element is the left operand (op1)</strong>: <code>result = op1 - op2</code> (or <code>op1 / op2</code>). Inverting this order is the most frequent student error.</p></div>
+
+  <h3>Example: 5 6 2 + * 12 4 / −</h3>
+  <div class="note example"><p><span class="lbl">Infix Equivalent</span>The postfix string corresponds to the infix arithmetic expression <code>5 * (6 + 2) - 12 / 4 = 37</code>.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Token</th><th>Action</th><th>Stack (top on the right)</th></tr></thead>
+    <tbody>
+      <tr><td class="m">5</td><td>Push</td><td class="m">5</td></tr>
+      <tr><td class="m">6</td><td>Push</td><td class="m">5 6</td></tr>
+      <tr><td class="m">2</td><td>Push</td><td class="m">5 6 2</td></tr>
+      <tr><td class="m">+</td><td>op2 = 2, op1 = 6, 6 + 2 = 8</td><td class="m">5 8</td></tr>
+      <tr><td class="m">*</td><td>op2 = 8, op1 = 5, 5 * 8 = 40</td><td class="m">40</td></tr>
+      <tr><td class="m">12</td><td>Push</td><td class="m">40 12</td></tr>
+      <tr><td class="m">4</td><td>Push</td><td class="m">40 12 4</td></tr>
+      <tr><td class="m">/</td><td>op2 = 4, op1 = 12, 12 / 4 = 3</td><td class="m">40 3</td></tr>
+      <tr><td class="m">−</td><td>op2 = 3, op1 = 40, 40 − 3 = 37</td><td class="m"><strong>37</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p>Result: <strong>37</strong>.</p>
+  <p>With letters, ABC+*DE/− for A = 2, B = 3, C = 4, D = 8, E = 2 evaluates as 2 * (3 + 4) − 8 / 2 = 14 − 4 = <strong>10</strong>.</p>
+</section>
+
+<!-- ============ CHEAT SHEET ============ -->
+<section class="topic" id="t-sheet">
+  <div class="head"><h2>One-page cheat sheet</h2><label class="rev" for="r-sheet"><input class="rev" type="checkbox" id="r-sheet" data-sec="t-sheet">revised</label></div>
+  <div class="chips"><span class="chip">Revise the night before</span></div>
+  <div class="cards">
+    <div class="rc"><h4>Growth order</h4><ul>
+      <li>1 &lt; log n &lt; n &lt; n log n &lt; n² &lt; n³ &lt; 2ⁿ</li>
+      <li>Drop constants and lower-order terms</li></ul></div>
+    <div class="rc"><h4>Notations</h4><ul>
+      <li>O: f ≤ c·g, worst case, upper bound</li>
+      <li>Ω: c·g ≤ f, best case, lower bound</li>
+      <li>Θ: c₁·g ≤ f ≤ c₂·g, average case, tight bound</li></ul></div>
+    <div class="rc"><h4>Space</h4><ul>
+      <li>Total = input + auxiliary</li>
+      <li>Recursive factorial O(n), merge sort O(n)</li>
+      <li>Iterative binary search O(1)</li></ul></div>
+    <div class="rc"><h4>Array addresses</h4><ul>
+      <li>1D: BA + i·w</li>
+      <li>Row-major: BA + (i·n + j)·w</li>
+      <li>Column-major: BA + (j·m + i)·w</li>
+      <li>m rows, n columns, zero-based</li></ul></div>
+    <div class="rc"><h4>Sparse and polynomial</h4><ul>
+      <li>Triplet: (row, col, value), summary row first</li>
+      <li>Triplet wins when 3(t + 1) &lt; m·n</li>
+      <li>Polynomial: A[i][0] coefficient, A[i][1] exponent, descending</li></ul></div>
+    <div class="rc"><h4>Stack (LIFO)</h4><ul>
+      <li>Empty: top = −1. Full: top = MAX − 1</li>
+      <li>Push: top++, then a[top] = item</li>
+      <li>Pop: item = a[top], then top−−</li></ul></div>
+    <div class="rc"><h4>Queue (FIFO)</h4><ul>
+      <li>Linear full: REAR = MAX − 1</li>
+      <li>Circular full: (REAR + 1) % MAX = FRONT</li>
+      <li>Empty: FRONT = −1</li>
+      <li>Last dequeue: FRONT = REAR = −1</li></ul></div>
+    <div class="rc"><h4>Deque, priority queue</h4><ul>
+      <li>Input-restricted: insert at one end</li>
+      <li>Output-restricted: delete at one end</li>
+      <li>Priority queue: delete by priority, ties are FIFO</li></ul></div>
+    <div class="rc"><h4>Postfix rules</h4><ul>
+      <li>Precedence: ^ then * / % then + −</li>
+      <li>Pop while top ≥ token (left-assoc), top &gt; token for ^</li>
+      <li>Evaluate: first pop is op2, second is op1</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ QUESTIONS ============ -->
+<section class="topic" id="t-qa">
+  <div class="head"><h2>Likely questions with answer outlines</h2><label class="rev" for="r-qa"><input class="rev" type="checkbox" id="r-qa" data-sec="t-qa">revised</label></div>
+  <div class="chips"><span class="chip">Covers every syllabus line</span></div>
+  <div class="note example"><p><span class="lbl">Exam Practice</span>Standard university examination questions covering data structure classifications, asymptotic analysis, and stack operations.</p></div>
+
+  <details class="q"><summary>Differentiate ADT and CDT. Give two examples each. (3)</summary><div class="ans">
+    <p>ADT is a logical description of data and its operations, with the implementation hidden. CDT is the actual implementation in a language and memory model. Use the table in <a href="#t-classes">Classification</a>. ADT examples: stack, queue. CDT examples: linked list, array-based stack.</p></div></details>
+
+  <details class="q"><summary>Compare linear and non-linear data structures. (3)</summary><div class="ans">
+    <p>Sequential single-level and contiguous against hierarchical, multi-level and non-contiguous. Examples: array, linked list, stack, queue against tree, graph. See <a href="#t-classes">Classification</a>.</p></div></details>
+
+  <details class="q"><summary>Define space complexity and time complexity. Find the space complexity of recursive factorial. (3)</summary><div class="ans">
+    <p>Space: memory needed as a function of n, which is input plus auxiliary space. Time: how running time grows with n, independent of language and machine. Recursive factorial has depth n, so n stack frames, O(n) space. See <a href="#t-space">Space</a>.</p></div></details>
+
+  <details class="q"><summary>Explain Big O, Omega and Theta with definitions and an example. (7)</summary><div class="ans">
+    <p>Give the three formal definitions with c and n₀, the mapping worst/best/average, and the proof for 3n + 2. Finish with linear search: Ω(1), O(n), Θ(n). See <a href="#t-asym">Asymptotic notations</a>.</p></div></details>
+
+  <details class="q"><summary>Draw the growth of n, n², n³, log n and 2ⁿ and tabulate values. (3 or 7)</summary><div class="ans">
+    <p>Draw the five curves on one axes and give the table for n = 1, 2, 4, 8, 16. State the order 1 &lt; log n &lt; n &lt; n² &lt; n³ &lt; 2ⁿ. See <a href="#t-time">Time complexity</a>.</p></div></details>
+
+  <details class="q"><summary>Derive the address of A[i][j] in row-major and column-major order. Find the address of A[3][4] for A[10][10], BA = 2000, w = 2. (7)</summary><div class="ans">
+    <p>Row-major BA + (i·n + j)·w = 2068. Column-major BA + (j·m + i)·w = 2086. See <a href="#t-arrays">Arrays</a>.</p></div></details>
+
+  <details class="q"><summary>What is a sparse matrix? Represent a given matrix in triplet form. (3 or 7)</summary><div class="ans">
+    <p>Define it, write the summary row (rows, columns, non-zero count), then one row per non-zero value in row order. Mention the space saving condition. See <a href="#t-sparse">Sparse matrix</a>.</p></div></details>
+
+  <details class="q"><summary>Write an algorithm to add two polynomials using arrays. Add 5x³ + 3x + 2 and 4x³ + 2x² − 3x + 6. (7)</summary><div class="ans">
+    <p>Two-column array representation, then the merge algorithm. Answer: 9x³ + 2x² + 8. See <a href="#t-poly">Polynomial addition</a>.</p></div></details>
+
+  <details class="q"><summary>Write algorithms for push, pop and display on an array stack. State overflow and underflow. (7)</summary><div class="ans">
+    <p>Overflow: top = MAX − 1. Underflow: top = −1. See <a href="#t-stack">Stack</a>.</p></div></details>
+
+  <details class="q"><summary>Why is a circular queue needed? Write the enqueue and dequeue algorithms. (7)</summary><div class="ans">
+    <p>Linear queue gives false overflow because freed space at the front is never reused. Circular uses the modulo wrap. Full: (REAR + 1) % MAX = FRONT. See <a href="#t-cqueue">Circular queue</a>.</p></div></details>
+
+  <details class="q"><summary>Write a short note on deque and priority queue. (3)</summary><div class="ans">
+    <p>Deque: insertion and deletion at both ends, with input-restricted and output-restricted types. Priority queue: deletion by priority, ties by FIFO, ascending and descending types. See <a href="#t-deque">Other queues</a>.</p></div></details>
+
+  <details class="q"><summary>Convert A * (B + C) − D / E to postfix using a stack and evaluate it for A = 2, B = 3, C = 4, D = 8, E = 2. (7)</summary><div class="ans">
+    <p>Postfix ABC+*DE/−. Value 10. See <a href="#t-postfix">Infix to postfix</a> and <a href="#t-eval">Postfix evaluation</a>.</p></div></details>
+
+  <details class="q"><summary>List five applications of a stack. (3)</summary><div class="ans">
+    <p>Reversing a string, balanced parentheses, expression conversion and evaluation, undo/redo, browser history. See <a href="#t-stack">Stack</a>.</p></div></details>
+</section>
+
+<footer class="notes-footer" role="contentinfo">
+  <div class="notes-footer-inner">
+    <div class="notes-footer-nav">
+      <a href="index.html">← All Subjects</a>
+    </div>
+    <div class="notes-footer-meta">
+      <span>PCITT303 Data Structures · Module 1 · KTU 2024 Scheme</span>
+    </div>
+  </div>
+</footer>
