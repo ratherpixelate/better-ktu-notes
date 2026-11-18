@@ -1,143 +1,57 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>COA Module 1 Notes</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
-<style>
-/* Layout: sticky topic sidebar (becomes a scrolling strip on phones) + one reading column.
-   Palette: instrument-panel blue-teal accent, amber for "added by me", red for "fixed". */
-:root {
-  --bg:#F2F5F7; --surface:#FFFFFF; --surface-2:#E7EDF1; --fg:#15222C; --muted:#4F606C; --line:#C9D5DC;
-  --accent:#0B6A78; --accent-ink:#FFFFFF; --accent-soft:#D9EFF2;
-  --add:#8A4B00; --add-ink:#FFFFFF; --add-soft:#FBEBCF;
-  --fix:#A3201A; --fix-ink:#FFFFFF; --fix-soft:#FBDDDA;
-  --code-bg:#E6EDF1;
-  --f-display:'Archivo','Helvetica Neue',Arial,sans-serif;
-  --f-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg:#0E1820; --surface:#15232D; --surface-2:#1C2E3A; --fg:#E4EDF2; --muted:#9AAEBB; --line:#2B4150;
-    --accent:#5CC6D3; --accent-ink:#06222A; --accent-soft:#16363E;
-    --add:#F0B45E; --add-ink:#1D1405; --add-soft:#3A2B12;
-    --fix:#FF9A92; --fix-ink:#2A0907; --fix-soft:#3F1B19;
-    --code-bg:#0B141B; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg:#0E1820; --surface:#15232D; --surface-2:#1C2E3A; --fg:#E4EDF2; --muted:#9AAEBB; --line:#2B4150;
-  --accent:#5CC6D3; --accent-ink:#06222A; --accent-soft:#16363E;
-  --add:#F0B45E; --add-ink:#1D1405; --add-soft:#3A2B12;
-  --fix:#FF9A92; --fix-ink:#2A0907; --fix-soft:#3F1B19;
-  --code-bg:#0B141B; color-scheme: dark;
-}
-*,*::before,*::after { box-sizing: border-box; }
-body { background: var(--bg); color: var(--fg); font: 400 16px/1.65 var(--f-body); -webkit-text-size-adjust: 100%; }
-body::before { content:""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 30; }
-a { color: var(--accent); }
-.shell {
-  display: grid; grid-template-columns: 252px minmax(0, 1fr); column-gap: 40px;
-  max-width: 1160px; margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 28px 72px;
-}
-/* sidebar */
-.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start;
-  max-height: calc(100vh - 32px); overflow-y: auto; padding-right: 8px; font-size: 14px; }
-.toc .brand { font: 600 11px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
-.toc ul { list-style: none; margin: 0; padding: 0; }
-.toc li.grp { font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 6px; }
-.toc a { display: flex; justify-content: space-between; gap: 8px; padding: 5px 8px; margin-left: -8px; border-radius: 3px; color: var(--fg); text-decoration: none; }
-.toc a:hover { background: var(--surface-2); }
-.toc a.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-.toc a.done::after { content: "\2713"; color: var(--accent); font-weight: 600; }
-.toc .progress { margin-top: 18px; font: 500 12px/1.4 var(--f-mono); color: var(--muted); }
-a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* content */
-main { min-width: 0; max-width: 780px; }
-.eyebrow { font: 600 12px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
-h1 { font: 800 clamp(30px, 5vw, 44px)/1.08 var(--f-display); letter-spacing: -.01em; margin: 0 0 14px; text-wrap: balance; }
-h2 { font: 700 28px/1.15 var(--f-display); letter-spacing: -.005em; margin: 0; text-wrap: balance; }
-h3 { font: 600 18px/1.3 var(--f-display); margin: 28px 0 8px; text-wrap: balance; }
-p { margin: 10px 0; }
-ul.t, ol.t { margin: 10px 0; padding-left: 22px; }
-ul.t li, ol.t li { margin: 4px 0; }
-.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
-.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 20px; margin: 22px 0 8px; padding: 14px 0; border-block: 1px solid var(--line); font-size: 14px; }
-.legend div { display: flex; gap: 10px; align-items: baseline; min-width: 0; }
-section.topic { padding-top: 44px; scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 12px); }
-section.topic + section.topic { border-top: 1px solid var(--line); margin-top: 44px; }
-.head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; justify-content: space-between; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
-.chip { font: 600 11px/1 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; background: var(--surface-2); color: var(--muted); }
-.chip.add { background: var(--add-soft); color: var(--add); }
-.chip.fix { background: var(--fix-soft); color: var(--fix); }
-.rev { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--f-mono); color: var(--muted); cursor: pointer; white-space: nowrap; }
-.rev input { width: 16px; height: 16px; accent-color: var(--accent); margin: 0; }
-.note { margin: 16px 0; padding: 12px 14px; border-radius: 4px; background: var(--surface-2); font-size: 15px; }
-.note p { margin: 6px 0; }
-.note .lbl { display: inline-block; font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; padding: 3px 6px; border-radius: 3px; margin-right: 8px; vertical-align: 1px; background: var(--muted); color: var(--bg); }
-.note.def { background: var(--accent-soft); } .note.def .lbl { background: var(--accent); color: var(--accent-ink); }
-.note.add { background: var(--add-soft); } .note.add .lbl { background: var(--add); color: var(--add-ink); }
-.note.fix { background: var(--fix-soft); } .note.fix .lbl { background: var(--fix); color: var(--fix-ink); }
-code, kbd { font: 500 .9em var(--f-mono); background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
-pre { background: var(--code-bg); padding: 12px 14px; border-radius: 4px; overflow-x: auto; font: 400 14px/1.6 var(--f-mono); margin: 12px 0; }
-pre code { background: none; padding: 0; font: inherit; }
-.formula { font: 500 15px/1.7 var(--f-mono); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; margin: 12px 0; overflow-x: auto; }
-.wrap { overflow-x: auto; margin: 14px 0; }
-table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
-table.wide { min-width: 560px; }
-th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
-th { background: var(--surface-2); font: 600 12px/1.3 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
-td.m, th.m { font-family: var(--f-mono); font-size: 13.5px; }
-td.c, th.c { text-align: center; }
-.fig { margin: 16px 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
-.fig svg { display: block; width: 100%; min-width: 520px; height: auto; }
-.fig figcaption, figcaption { font-size: 13px; color: var(--muted); padding: 8px 12px; border-top: 1px solid var(--line); }
-.s-box { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
-.s-box2 { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
-.s-dash { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5 4; }
-.s-bus { fill: var(--accent); }
-.s-line { stroke: var(--muted); stroke-width: 1.5; fill: none; }
-.s-head { fill: var(--muted); }
-.s-t { fill: var(--fg); font: 600 13px var(--f-body); }
-.s-s { fill: var(--muted); font: 400 11.5px var(--f-body); }
-.s-m { fill: var(--accent); font: 600 11px var(--f-mono); letter-spacing: .05em; }
-.bitwrap { overflow-x: auto; margin: 12px 0; }
-.bits { display: grid; gap: 2px; min-width: 460px; font: 500 12.5px/1.3 var(--f-mono); text-align: center; }
-.bits div { background: var(--accent-soft); border: 1px solid var(--accent); padding: 7px 4px; min-width: 0; }
-.bits div small { display: block; font-weight: 400; color: var(--muted); font-size: 11px; }
-.bits.alt div { background: var(--surface-2); border-color: var(--muted); }
-.mem { max-width: 380px; }
-.mem td, .mem th { padding: 6px 10px; }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 14px 0; }
-.rc { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px; min-width: 0; }
-.rc h4 { margin: 0 0 6px; font: 600 12px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
-.rc p, .rc ul { margin: 4px 0; font-size: 14.5px; }
-.rc ul { padding-left: 18px; }
-.units { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px 22px; margin: 14px 0; }
-.units h4 { margin: 0 0 2px; font: 600 15px/1.3 var(--f-display); color: var(--accent); }
-.units p { margin: 2px 0; font-size: 15px; }
-footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
-/* phone: sidebar becomes a sticky strip */
-@media (max-width: 899px) {
-  .shell { display: block; padding-block: 0 56px; }
-  .toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 25; max-height: none; overflow: visible;
-    background: var(--bg); padding: 10px 0; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
-  .toc .brand, .toc li.grp, .toc .progress { display: none; }
-  .toc ul { display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
-  .toc a { margin-left: 0; border: 1px solid var(--line); padding: 5px 10px; }
-  .toc a.done::after { content: "\00a0\2713"; }
-  section.topic { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 64px); padding-top: 32px; }
-  section.topic + section.topic { margin-top: 32px; }
-  h2 { font-size: 24px; }
-  header.top { padding-top: 24px; }
-}
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-</style>
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>COA Module 1: Basic Structure & Machine Instructions · BetterKTUNotes</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/search-data.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
 
-<div class="shell">
+  <!-- Top Navigation Header -->
+  <header class="site-nav">
+    <div class="nav-container">
+      <a href="index.html" class="brand-wrap" aria-label="BetterKTUNotes Home">
+        <div class="brand-logo" aria-hidden="true">B</div>
+        <div class="brand-text">
+          <span class="brand-title">BetterKTUNotes</span>
+          <span class="brand-subtitle">KTU · 2024 Scheme</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-back-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          <span>All Subjects</span>
+        </a>
+        <button class="search-trigger" onclick="openSearch()" aria-label="Search notes (Ctrl+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <span>Search...</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+        <button class="btn-icon" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <span id="theme-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
 <nav class="toc" aria-label="Module sections">
   <p class="brand">PCITT302 · Module 1</p>
   <ul id="toclist">
@@ -168,7 +82,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   <p class="progress" id="progress" aria-live="polite"></p>
 </nav>
 
-<main>
+<main class="notes-main">
 <header class="top">
   <p class="eyebrow">PCITT302 · Computer Organization and Architecture</p>
   <h1>Module 1: Basic Structure of Computers</h1>
@@ -914,14 +828,32 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
   </div>
 </section>
 
-<footer>
+<footer class="notes-footer">
   Built from your Module1.md and the syllabus line for Module 1 (Fundamentals, 11 hours). Check the Added and Fixed blocks against Hamacher's <em>Computer Organization</em> (5th ed.) and your PYQs. The question-type chips describe the usual form of each topic. I haven't seen your PYQs, so use them to decide where to spend time.
 </footer>
 </main>
 </div>
 
-<script>
-(function () {
+  <!-- Global Search Modal (Ctrl+K) -->
+  <div class="search-modal-backdrop" id="search-modal-backdrop" role="dialog" aria-modal="true" aria-label="Global Topic Search">
+    <div class="search-modal">
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Search any topic, formula, or PYQ... (e.g. 'Booth', 'IEEE', 'Hazard')" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="search-results" id="search-results"></div>
+      <div class="search-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+        <span><kbd>Enter</kbd> to open</span>
+        <span><kbd>Esc</kbd> to close</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
   var KEY = 'coa-m1-revised';
   var done = {};
   try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { done = {}; }
@@ -969,6 +901,7 @@ LOOP    Determine address of "Next" number and Add "Next" to R0
   }, { passive: true });
   onScroll();
 })();
-</script>
+  </script>
 
-</body></html>
+</body>
+</html>
