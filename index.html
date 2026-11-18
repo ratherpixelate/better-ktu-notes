@@ -76,7 +76,7 @@
             <p style="font-size: 13px; color: var(--fg-muted); margin: 0;">Persists automatically in your browser as you revise each topic</p>
           </div>
         </div>
-        <div class="progress-score" id="overall-progress-score">0 of 4 Modules Revised (0%)</div>
+        <div class="progress-score" id="overall-progress-score">0 of 12 Modules Revised (0%)</div>
       </div>
 
       <div class="progress-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -85,20 +85,16 @@
 
       <div class="progress-breakdown">
         <div class="breakdown-item">
-          <span>COA Module 1</span>
-          <span class="breakdown-val" id="prog-coa-m1">0 / 18 (0%)</span>
+          <span>Computer Organisation (COA)</span>
+          <span class="breakdown-val" id="prog-subj-coa">0 / 4 Modules (0%)</span>
         </div>
         <div class="breakdown-item">
-          <span>COA Module 2</span>
-          <span class="breakdown-val" id="prog-coa-m2">0 / 12 (0%)</span>
+          <span>Data Structures (DS)</span>
+          <span class="breakdown-val" id="prog-subj-ds">0 / 4 Modules (0%)</span>
         </div>
         <div class="breakdown-item">
-          <span>DS Module 1</span>
-          <span class="breakdown-val" id="prog-ds-m1">0 / 16 (0%)</span>
-        </div>
-        <div class="breakdown-item">
-          <span>DBMS Module 1</span>
-          <span class="breakdown-val" id="prog-dbms-m1">0 / 15 (0%)</span>
+          <span>Database Systems (DBMS)</span>
+          <span class="breakdown-val" id="prog-subj-dbms">0 / 4 Modules (0%)</span>
         </div>
       </div>
     </section>
@@ -177,6 +173,26 @@
               <h3 class="module-title">Memory Hierarchy & Cache Architectures</h3>
               <p class="module-desc">
                 SRAM, DRAM, cache mapping functions (direct, associative, set-associative), replacement policies, and virtual memory paging.
+              </p>
+            </div>
+            <div class="card-footer">
+              <div class="card-status pending">
+                <span class="status-dot"></span>
+                <span>Upcoming Module</span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-muted);">Drafting</span>
+            </div>
+          </div>
+
+          <!-- COA Module 4 (Draft / Coming Soon) -->
+          <div class="module-card locked" aria-disabled="true">
+            <div>
+              <div class="card-top">
+                <span class="module-pill" style="color: var(--fg-muted); background: var(--border);">Module 4</span>
+              </div>
+              <h3 class="module-title">Parallel Processing & Multicore Architectures</h3>
+              <p class="module-desc">
+                Flynn's taxonomy (SISD, SIMD, MIMD), shared vs distributed memory multiprocessors, cache coherence, and hardware multithreading.
               </p>
             </div>
             <div class="card-footer">
@@ -268,6 +284,26 @@
             </div>
           </div>
 
+          <!-- DS Module 4 (Draft / Coming Soon) -->
+          <div class="module-card locked" aria-disabled="true">
+            <div>
+              <div class="card-top">
+                <span class="module-pill" style="color: var(--fg-muted); background: var(--border);">Module 4</span>
+              </div>
+              <h3 class="module-title">Sorting, Searching & Hashing</h3>
+              <p class="module-desc">
+                Selection, insertion, quick, merge, heap, and radix sort; linear and binary search; hash functions and collision resolution.
+              </p>
+            </div>
+            <div class="card-footer">
+              <div class="card-status pending">
+                <span class="status-dot"></span>
+                <span>Upcoming Module</span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-muted);">Drafting</span>
+            </div>
+          </div>
+
         </div>
       </article>
 
@@ -337,6 +373,26 @@
               <h3 class="module-title">Database Normalization &amp; Functional Dependencies</h3>
               <p class="module-desc">
                 Functional dependencies, Armstrong's axioms, 1NF, 2NF, 3NF, Boyce-Codd Normal Form (BCNF), and lossless join decomposition.
+              </p>
+            </div>
+            <div class="card-footer">
+              <div class="card-status pending">
+                <span class="status-dot"></span>
+                <span>Upcoming Module</span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-muted);">Drafting</span>
+            </div>
+          </div>
+
+          <!-- DBMS Module 4 (Draft / Coming Soon) -->
+          <div class="module-card locked" aria-disabled="true">
+            <div>
+              <div class="card-top">
+                <span class="module-pill" style="color: var(--fg-muted); background: var(--border);">Module 4</span>
+              </div>
+              <h3 class="module-title">Introduction to NoSQL Concepts &amp; Architecture</h3>
+              <p class="module-desc">
+                Need for NoSQL, CAP theorem, BASE properties, Key-Value stores, document stores, column-family stores, and graph databases.
               </p>
             </div>
             <div class="card-footer">

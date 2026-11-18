@@ -48,12 +48,36 @@
     }
   });
 
-  // 2. REVISION PROGRESS AGGREGATOR
-  const MODULES = [
-    { key: 'coa-m1-revised', total: 18, id: 'prog-coa-m1', fillId: 'fill-coa-m1', cardStatusId: 'status-coa-m1' },
-    { key: 'coa-m2-revised', total: 12, id: 'prog-coa-m2', fillId: 'fill-coa-m2', cardStatusId: 'status-coa-m2' },
-    { key: 'ds-m1-revised', total: 16, id: 'prog-ds-m1', fillId: 'fill-ds-m1', cardStatusId: 'status-ds-m1' },
-    { key: 'dbms-m1-revised', total: 15, id: 'prog-dbms-m1', fillId: 'fill-dbms-m1', cardStatusId: 'status-dbms-m1' }
+  // 2. REVISION PROGRESS AGGREGATOR (Count Modules per Subject; 4 Modules per Subject)
+  const SUBJECTS = [
+    {
+      code: 'PCITT302',
+      name: 'Computer Organisation (COA)',
+      totalModules: 4,
+      progElId: 'prog-subj-coa',
+      modules: [
+        { key: 'coa-m1-revised', total: 18, cardStatusId: 'status-coa-m1' },
+        { key: 'coa-m2-revised', total: 12, cardStatusId: 'status-coa-m2' }
+      ]
+    },
+    {
+      code: 'PCITT303',
+      name: 'Data Structures (DS)',
+      totalModules: 4,
+      progElId: 'prog-subj-ds',
+      modules: [
+        { key: 'ds-m1-revised', total: 16, cardStatusId: 'status-ds-m1' }
+      ]
+    },
+    {
+      code: 'PBITT304',
+      name: 'Database Systems (DBMS)',
+      totalModules: 4,
+      progElId: 'prog-subj-dbms',
+      modules: [
+        { key: 'dbms-m1-revised', total: 15, cardStatusId: 'status-dbms-m1' }
+      ]
+    }
   ];
 
   function getModuleCompleted(key) {
@@ -66,52 +90,63 @@
   }
 
   function updateDashboardProgress() {
-    let modulesCompleted = 0;
-    const totalModules = MODULES.length;
+    let totalModulesCompleted = 0;
+    let totalModulesAllSubjects = 0;
 
-    MODULES.forEach(function (m) {
-      const count = getModuleCompleted(m.key);
-      const isComplete = (count === m.total && m.total > 0);
-      if (isComplete) {
-        modulesCompleted++;
-      }
-      const pct = Math.round((count / m.total) * 100);
+    SUBJECTS.forEach(function (subj) {
+      let subjModulesDone = 0;
 
-      const el = document.getElementById(m.id);
-      if (el) {
-        el.textContent = count + ' / ' + m.total + ' (' + pct + '%)';
-      }
-
-      const fill = document.getElementById(m.fillId);
-      if (fill) {
-        fill.style.width = pct + '%';
-      }
-
-      const cardStatusEl = document.getElementById(m.cardStatusId);
-      if (cardStatusEl) {
+      subj.modules.forEach(function (m) {
+        const count = getModuleCompleted(m.key);
+        const isComplete = (count === m.total && m.total > 0);
         if (isComplete) {
-          cardStatusEl.innerHTML = '<span class="status-dot"></span><span>Module Revised ✓</span>';
-          cardStatusEl.classList.add('revised');
-        } else if (count > 0) {
-          cardStatusEl.innerHTML = '<span class="status-dot"></span><span>' + count + ' of ' + m.total + ' Revised</span>';
-          cardStatusEl.classList.remove('revised');
+          subjModulesDone++;
+        }
+
+        const cardStatusEl = document.getElementById(m.cardStatusId);
+        if (cardStatusEl) {
+          if (isComplete) {
+            cardStatusEl.innerHTML = '<span class="status-dot"></span><span>Module Revised ✓</span>';
+            cardStatusEl.classList.add('revised');
+          } else if (count > 0) {
+            cardStatusEl.innerHTML = '<span class="status-dot"></span><span>' + count + ' of ' + m.total + ' Revised</span>';
+            cardStatusEl.classList.remove('revised');
+          } else {
+            cardStatusEl.innerHTML = '<span class="status-dot"></span><span>' + m.total + ' Topics</span>';
+            cardStatusEl.classList.remove('revised');
+          }
+        }
+      });
+
+      totalModulesCompleted += subjModulesDone;
+      totalModulesAllSubjects += subj.totalModules;
+
+      const subjPct = Math.round((subjModulesDone / subj.totalModules) * 100);
+      const el = document.getElementById(subj.progElId);
+      if (el) {
+        el.textContent = subjModulesDone + ' / ' + subj.totalModules + ' Modules (' + subjPct + '%)';
+        if (subjModulesDone === subj.totalModules) {
+          el.classList.add('complete');
         } else {
-          cardStatusEl.innerHTML = '<span class="status-dot"></span><span>' + m.total + ' Topics</span>';
-          cardStatusEl.classList.remove('revised');
+          el.classList.remove('complete');
         }
       }
     });
 
-    const modulesPct = totalModules > 0 ? Math.round((modulesCompleted / totalModules) * 100) : 0;
+    const overallPct = totalModulesAllSubjects > 0 
+      ? Math.round((totalModulesCompleted / totalModulesAllSubjects) * 100) 
+      : 0;
     
     const fillEl = document.getElementById('overall-progress-fill');
     const scoreEl = document.getElementById('overall-progress-score');
     if (fillEl) {
-      fillEl.style.width = modulesPct + '%';
+      fillEl.style.width = overallPct + '%';
       const meter = fillEl.closest('.progress-meter');
-      if (meter) meter.setAttribute('aria-valuenow', modulesPct);
+      if (meter) meter.setAttribute('aria-valuenow', overallPct);
     }
-    if (scoreEl) scoreEl.textContent = modulesCompleted + ' of ' + totalModules + ' Modules Revised (' + modulesPct + '%)';
+    if (scoreEl) {
+      scoreEl.textContent = totalModulesCompleted + ' of ' + totalModulesAllSubjects + ' Modules Revised (' + overallPct + '%)';
+    }
   }
 
   // 3. FUZZY SEARCH (Ctrl+K)

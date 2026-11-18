@@ -504,6 +504,10 @@ input, textarea, select {
   color: var(--fg);
 }
 
+.breakdown-val.complete {
+  color: var(--badge-success);
+}
+
 /* --------------------------------------------------------------------------
    SUBJECTS GRID & MODULE CARDS
    -------------------------------------------------------------------------- */
