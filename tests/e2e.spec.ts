@@ -136,4 +136,36 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page).toHaveURL(/localhost:3000\/?$/);
   });
 
+  test('6. COA Module 1 TOC Selection Padding & Entity Parity', async ({ page }) => {
+    await page.goto('/notes/coa-module-1/');
+    await expect(page).toHaveTitle(/COA Module 1/);
+
+    const toc = page.locator('.toc');
+    await expect(toc).toBeVisible();
+
+    // Verify entity decoding (NO &amp;)
+    await expect(toc).toContainText('ISA & RISC');
+    await expect(toc).not.toContainText('&amp;');
+
+    // Verify active selection outline padding and border-radius
+    const activeLink = toc.locator('a.on');
+    await expect(activeLink).toBeVisible();
+    await expect(activeLink).toContainText('Organization vs architecture');
+
+    const paddingLeft = await activeLink.evaluate((el) => window.getComputedStyle(el).paddingLeft);
+    expect(parseInt(paddingLeft, 10)).toBeGreaterThanOrEqual(10);
+
+    const borderRadius = await activeLink.evaluate((el) => window.getComputedStyle(el).borderRadius);
+    expect(parseInt(borderRadius, 10)).toBeGreaterThanOrEqual(4);
+
+    // Capture screenshot of TOC sidebar (light mode)
+    await toc.screenshot({ path: 'tests/screenshots/06-coa-toc-sidebar.png' });
+    await page.screenshot({ path: 'tests/screenshots/07-coa-module-page.png', fullPage: false });
+
+    // Switch to dark mode and verify
+    const toggleBtn = page.locator('.btn-icon.theme-toggle');
+    await toggleBtn.click();
+    await toc.screenshot({ path: 'tests/screenshots/08-coa-toc-sidebar-dark.png' });
+  });
+
 });

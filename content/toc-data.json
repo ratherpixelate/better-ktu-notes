@@ -32,7 +32,7 @@
     },
     {
       "id": "t-memory",
-      "title": "Memory locations &amp; addresses",
+      "title": "Memory locations & addresses",
       "group": "Data"
     },
     {
@@ -47,12 +47,12 @@
     },
     {
       "id": "t-formats",
-      "title": "Instruction types &amp; formats",
+      "title": "Instruction types & formats",
       "group": "Instructions"
     },
     {
       "id": "t-seq",
-      "title": "Sequencing &amp; branching",
+      "title": "Sequencing & branching",
       "group": "Instructions"
     },
     {
@@ -68,22 +68,22 @@
     {
       "id": "t-isa",
       "title": "ISA principles",
-      "group": "ISA &amp; RISC"
+      "group": "ISA & RISC"
     },
     {
       "id": "t-encoding",
       "title": "Instruction encoding",
-      "group": "ISA &amp; RISC"
+      "group": "ISA & RISC"
     },
     {
       "id": "t-risc",
       "title": "RISC architecture",
-      "group": "ISA &amp; RISC"
+      "group": "ISA & RISC"
     },
     {
       "id": "t-riscvscisc",
       "title": "RISC vs CISC",
-      "group": "ISA &amp; RISC"
+      "group": "ISA & RISC"
     },
     {
       "id": "t-sheet",

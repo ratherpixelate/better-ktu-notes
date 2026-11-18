@@ -1458,7 +1458,7 @@ input, textarea, select {
   align-self: start;
   max-height: calc(100vh - var(--nav-height) - 40px);
   overflow-y: auto;
-  padding-right: 12px;
+  padding: 2px 10px 20px 2px;
   font-size: 13.5px;
 }
 
@@ -1477,11 +1477,17 @@ input, textarea, select {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg);
+  padding: 0 12px;
   margin: 0 0 14px;
 }
 
 .toc ul {
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc li {
   margin: 0;
   padding: 0;
 }
@@ -1493,7 +1499,8 @@ input, textarea, select {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg-muted);
-  margin: 20px 0 8px;
+  padding: 0 12px;
+  margin: 22px 0 6px;
 }
 
 .toc a {
@@ -1501,10 +1508,11 @@ input, textarea, select {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
-  margin-left: -8px;
-  border-radius: var(--radius-xs);
+  padding: 7px 12px;
+  margin: 2px 0;
+  border-radius: var(--radius-sm);
   color: var(--fg-secondary);
+  line-height: 1.4;
   text-decoration: none;
   transition: transform 120ms var(--ease-spring),
               background-color 150ms var(--ease-smooth),
@@ -1557,7 +1565,7 @@ input, textarea, select {
 
 .toc .progress {
   margin-top: 24px;
-  padding-top: 14px;
+  padding: 14px 12px 0;
   border-top: 1px solid var(--border);
   font-family: var(--font-mono);
   font-size: 12px;
