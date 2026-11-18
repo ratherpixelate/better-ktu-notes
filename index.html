@@ -433,16 +433,91 @@
     </div>
   </div>
 
-  <!-- Site Footer -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div>
-        <span>BetterKTUNotes · KTU 2024 Scheme Notes</span>
+  <!-- Site Footer (Swiss Editorial) -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-main">
+      
+      <!-- Brand & Academic Context Column -->
+      <div class="footer-col footer-col-brand">
+        <div class="footer-brand-title">
+          <span class="footer-brand-mark">B</span>
+          <span class="footer-brand-name">BetterKTUNotes</span>
+        </div>
+        <p class="footer-tagline">
+          Syllabus-aligned revision notes, derivations, and university PYQ patterns. Filtered to cut textbook fluff for KTU 2024 Scheme Semester 3.
+        </p>
+        <div class="footer-meta-tags">
+          <span class="footer-pill">KTU 2024 Scheme</span>
+          <span class="footer-pill">Semester 3 IT &amp; CSE</span>
+          <span class="footer-pill">Client-Side Storage</span>
+        </div>
       </div>
-      <div class="footer-links">
-        <a href="COA%20Module%201%20Notes.html">COA M1</a>
-        <a href="COA%20Module%202%20Notes.html">COA M2</a>
-        <a href="DS%20Module%201%20Notes.html">DS M1</a>
+
+      <!-- Modules Navigation Column -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Available Notes</h4>
+        <ul class="footer-nav-list">
+          <li><a href="COA%20Module%201%20Notes.html">COA Module 1 · Basic Structure &amp; RISC</a></li>
+          <li><a href="COA%20Module%202%20Notes.html">COA Module 2 · Pipelining &amp; Hazards</a></li>
+          <li><a href="DS%20Module%201%20Notes.html">DS Module 1 · Stacks &amp; Matrices</a></li>
+          <li><a href="DBMS%20Module%201%20Notes.html">DBMS Module 1 · ERD &amp; SQL DDL</a></li>
+        </ul>
+      </div>
+
+      <!-- Syllabus & Curriculum Column -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Curriculum Courses</h4>
+        <ul class="footer-nav-list">
+          <li><span class="footer-nav-static"><span class="footer-code">PCITT302</span> Computer Organisation</span></li>
+          <li><span class="footer-nav-static"><span class="footer-code">PCITT303</span> Data Structures</span></li>
+          <li><span class="footer-nav-static"><span class="footer-code">PBITT304</span> Database Management</span></li>
+          <li><span class="footer-nav-static">4 Modules per Subject</span></li>
+        </ul>
+      </div>
+
+      <!-- Utilities & Shortcuts Column -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Quick Actions</h4>
+        <ul class="footer-nav-list">
+          <li>
+            <button class="footer-action-btn" onclick="openSearch()" aria-label="Search all notes">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+              <span>Search Topics</span>
+              <kbd>Ctrl+K</kbd>
+            </button>
+          </li>
+          <li>
+            <button class="footer-action-btn" onclick="toggleTheme()" aria-label="Toggle light or dark theme">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+              <span>Switch Theme</span>
+            </button>
+          </li>
+          <li>
+            <button class="footer-action-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll back to top">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 15l-6-6-6 6"/>
+              </svg>
+              <span>Back to Top</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Colophon / Academic Attribution -->
+    <div class="footer-colophon">
+      <div class="colophon-inner">
+        <p class="colophon-legal">
+          Unofficial student-curated academic study resource. Syllabus items and PYQ classifications reference APJ Abdul Kalam Technological University curriculum documents.
+        </p>
+        <p class="colophon-copy">
+          Zero Tracking · Client-Side Storage · 2026 BetterKTUNotes
+        </p>
       </div>
     </div>
   </footer>
