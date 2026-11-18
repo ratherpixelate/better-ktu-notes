@@ -50,10 +50,10 @@
 
   // 2. REVISION PROGRESS AGGREGATOR
   const MODULES = [
-    { key: 'coa-m1-revised', total: 18, id: 'prog-coa-m1', fillId: 'fill-coa-m1' },
-    { key: 'coa-m2-revised', total: 12, id: 'prog-coa-m2', fillId: 'fill-coa-m2' },
-    { key: 'ds-m1-revised', total: 16, id: 'prog-ds-m1', fillId: 'fill-ds-m1' },
-    { key: 'dbms-m1-revised', total: 15, id: 'prog-dbms-m1', fillId: 'fill-dbms-m1' }
+    { key: 'coa-m1-revised', total: 18, id: 'prog-coa-m1', fillId: 'fill-coa-m1', cardStatusId: 'status-coa-m1' },
+    { key: 'coa-m2-revised', total: 12, id: 'prog-coa-m2', fillId: 'fill-coa-m2', cardStatusId: 'status-coa-m2' },
+    { key: 'ds-m1-revised', total: 16, id: 'prog-ds-m1', fillId: 'fill-ds-m1', cardStatusId: 'status-ds-m1' },
+    { key: 'dbms-m1-revised', total: 15, id: 'prog-dbms-m1', fillId: 'fill-dbms-m1', cardStatusId: 'status-dbms-m1' }
   ];
 
   function getModuleCompleted(key) {
@@ -66,13 +66,15 @@
   }
 
   function updateDashboardProgress() {
-    let totalCompleted = 0;
-    let totalTopics = 0;
+    let modulesCompleted = 0;
+    const totalModules = MODULES.length;
 
     MODULES.forEach(function (m) {
       const count = getModuleCompleted(m.key);
-      totalCompleted += count;
-      totalTopics += m.total;
+      const isComplete = (count === m.total && m.total > 0);
+      if (isComplete) {
+        modulesCompleted++;
+      }
       const pct = Math.round((count / m.total) * 100);
 
       const el = document.getElementById(m.id);
@@ -84,14 +86,32 @@
       if (fill) {
         fill.style.width = pct + '%';
       }
+
+      const cardStatusEl = document.getElementById(m.cardStatusId);
+      if (cardStatusEl) {
+        if (isComplete) {
+          cardStatusEl.innerHTML = '<span class="status-dot"></span><span>Module Revised ✓</span>';
+          cardStatusEl.classList.add('revised');
+        } else if (count > 0) {
+          cardStatusEl.innerHTML = '<span class="status-dot"></span><span>' + count + ' of ' + m.total + ' Revised</span>';
+          cardStatusEl.classList.remove('revised');
+        } else {
+          cardStatusEl.innerHTML = '<span class="status-dot"></span><span>' + m.total + ' Topics</span>';
+          cardStatusEl.classList.remove('revised');
+        }
+      }
     });
 
-    const overallPct = totalTopics > 0 ? Math.round((totalCompleted / totalTopics) * 100) : 0;
+    const modulesPct = totalModules > 0 ? Math.round((modulesCompleted / totalModules) * 100) : 0;
     
     const fillEl = document.getElementById('overall-progress-fill');
     const scoreEl = document.getElementById('overall-progress-score');
-    if (fillEl) fillEl.style.width = overallPct + '%';
-    if (scoreEl) scoreEl.textContent = totalCompleted + ' of ' + totalTopics + ' Topics Revised (' + overallPct + '%)';
+    if (fillEl) {
+      fillEl.style.width = modulesPct + '%';
+      const meter = fillEl.closest('.progress-meter');
+      if (meter) meter.setAttribute('aria-valuenow', modulesPct);
+    }
+    if (scoreEl) scoreEl.textContent = modulesCompleted + ' of ' + totalModules + ' Modules Revised (' + modulesPct + '%)';
   }
 
   // 3. FUZZY SEARCH (Ctrl+K)

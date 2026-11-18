@@ -67,8 +67,9 @@
   --badge-cut: #71717A;
   --badge-cut-bg: #F4F4F5;
 
-  --badge-success: #18181B;
-  --badge-success-bg: #F4F4F5;
+  --badge-success: #16A34A;
+  --badge-success-bg: #F0FDF4;
+  --badge-success-on-active: #4ADE80;
 
   --shadow-sm: none;
   --shadow-md: none;
@@ -110,8 +111,9 @@
   --badge-cut: #71717A;
   --badge-cut-bg: #1C1C1F;
 
-  --badge-success: #F4F4F5;
-  --badge-success-bg: #1C1C1F;
+  --badge-success: #4ADE80;
+  --badge-success-bg: #14532D;
+  --badge-success-on-active: #15803D;
 
   --shadow-sm: none;
   --shadow-md: none;
@@ -680,6 +682,11 @@ input, textarea, select {
   font-weight: 500;
 }
 
+.card-status.revised {
+  color: var(--badge-success);
+  font-weight: 600;
+}
+
 .card-status.pending {
   color: var(--fg-muted);
 }
@@ -688,7 +695,11 @@ input, textarea, select {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--badge-success);
+}
+
+.card-status.pending .status-dot {
+  background: var(--fg-muted);
 }
 
 .card-arrow {
@@ -1266,10 +1277,14 @@ input, textarea, select {
 .toc a.done::after {
   content: " ✓";
   display: inline-block;
-  color: var(--fg);
+  color: var(--badge-success);
   font-weight: 700;
   animation: checkPop 180ms var(--ease-pop) both;
   transform-origin: center center;
+}
+
+.toc a.on.done::after {
+  color: var(--badge-success-on-active);
 }
 
 .toc .progress {
@@ -1464,7 +1479,7 @@ section.topic + section.topic {
 .rev input {
   width: 15px;
   height: 15px;
-  accent-color: var(--accent);
+  accent-color: var(--badge-success);
   margin: 0;
   cursor: pointer;
 }
@@ -1949,6 +1964,11 @@ footer.notes-footer {
   }
   .toc a.done::after {
     content: " ✓";
+    color: var(--badge-success);
+    font-weight: 700;
+  }
+  .toc a.on.done::after {
+    color: var(--badge-success-on-active);
   }
   section.topic {
     scroll-margin-top: calc(var(--nav-height) + env(safe-area-inset-top, 0px) + 54px);
