@@ -29,9 +29,9 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('#pcitt303')).toBeVisible();
     await expect(page.locator('#pbitt304')).toBeVisible();
 
-    // Check 5 Active Modules (COA M1, COA M2, DS M1, DBMS M1, DBMS M2)
+    // Check 6 Active Modules (COA M1, COA M2, COA M3, DS M1, DBMS M1, DBMS M2)
     const activeCards = page.locator('.module-card:not(.locked)');
-    await expect(activeCards).toHaveCount(5);
+    await expect(activeCards).toHaveCount(6);
 
     // Verify Active Module Card shows "0/17 completed" and NO green status dot
     const coaM1Card = activeCards.first();
@@ -188,6 +188,26 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     expect(animName).toContain('ansIn');
 
     // Test footer navigation links in COA Module 2
+    const nextLink = page.locator('.notes-footer-nav a:has-text("Next: COA Module 3")');
+    await expect(nextLink).toBeVisible();
+    await nextLink.click();
+    await expect(page).toHaveURL(/localhost:3000\/notes\/coa-module-3\/?$/);
+    await expect(page).toHaveTitle(/COA Module 3/);
+
+    // Verify COA Module 3 TOC, Checkboxes & SVG Diagrams
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(16);
+    await expect(page.locator('input.rev')).toHaveCount(14);
+    await expect(page.locator('#t-sheet .rev')).not.toBeAttached();
+    await expect(page.locator('#t-qa .rev')).not.toBeAttached();
+    await expect(page.locator('.fig svg').first()).toBeVisible();
+
+    // Navigate back to COA Module 2
+    const prevToM2Link = page.locator('.notes-footer-nav a:has-text("Previous: COA Module 2")');
+    await expect(prevToM2Link).toBeVisible();
+    await prevToM2Link.click();
+    await expect(page).toHaveURL(/localhost:3000\/notes\/coa-module-2\/?$/);
+
     const prevLink = page.locator('.notes-footer-nav a:has-text("Previous: COA Module 1")');
     await expect(prevLink).toBeVisible();
     await prevLink.click();

@@ -84,7 +84,7 @@ export function useCourseStats() {
     totalModulesCompleted: 0,
     totalModules: 12,
     totalTopicsCompleted: 0,
-    totalTopics: 109,
+    totalTopics: 117,
     subjects: [],
   });
   const [mounted, setMounted] = useState(false);

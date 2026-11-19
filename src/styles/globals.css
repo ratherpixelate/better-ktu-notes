@@ -2338,6 +2338,11 @@ td.c, th.c {
 .st-stall { fill: var(--surface-subtle); stroke: var(--fg); stroke-dasharray: 4 3; }
 .st-flush { fill: var(--surface-subtle); stroke: var(--fg-muted); stroke-dasharray: 4 3; }
 .s-fwd { fill: none; stroke: var(--fg); stroke-width: 1.6; stroke-dasharray: 5 3; }
+.stc { stroke: var(--border-strong); stroke-width: 1; }
+
+/* Hit / Miss Reference Trace Tables */
+table.tr td.h { background: var(--accent-subtle); color: var(--fg); font-weight: 600; }
+table.tr td.x { background: var(--surface-subtle); color: var(--fg-muted); }
 
 /* DS Module 1 Graph Colors (Monochrome Grayscale Contrast) */
 :root {

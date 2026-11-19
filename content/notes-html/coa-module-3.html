@@ -1,0 +1,635 @@
+<header class="top">
+  <p class="eyebrow">PCITT302 · Computer Organization and Architecture</p>
+  <h1>Module 3: Memory Organization</h1>
+  <p class="lede">Syllabus coverage: memory hierarchy and locality, cache organization and addressing, cache mapping (direct, associative, set-associative), block replacement policies, write strategies, cache performance and AMAT optimizations, SRAM vs DRAM organization, interleaving, and DRAM controller architecture.</p>
+</header>
+
+<!-- ============ HIERARCHY ============ -->
+<section class="topic" id="t-hier">
+  <div class="head"><h2>Memory hierarchy and locality</h2><label class="rev" for="r-hier"><input class="rev" type="checkbox" id="r-hier" data-sec="t-hier">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Draw</span></div>
+  <div class="note def"><p><span class="lbl">Cache</span>A small, fast buffer between the processor and main memory. Old values are removed to make room for new ones.</p></div>
+  <ul class="t">
+    <li>Programmers want unlimited fast memory. The fix is a <strong>hierarchy</strong>: several levels of different speed and size. The whole address space sits in the largest, slowest level. Smaller, faster levels sit close to the processor.</li>
+    <li>It works because of the <strong>principle of locality</strong>: a program uses a small part of its address space at any instant.</li>
+  </ul>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Locality</th><th>Meaning</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Temporal</strong></td><td>An item used now is likely to be used again soon.</td><td>A loop counter, the instructions of a loop body.</td></tr>
+      <tr><td><strong>Spatial</strong></td><td>Items near an item just used are likely to be used soon.</td><td>Array elements, sequential instructions.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Temporal locality is why we keep recently used blocks. Spatial locality is why a miss fetches a whole <strong>block</strong>, not one word.</p>
+  <figure class="fig"><svg viewBox="0 0 640 272" role="img" aria-labelledby="fht fhd"><title id="fht">Memory hierarchy</title><desc id="fhd">Pyramid from registers to disk; upper levels are smaller and faster</desc><defs><marker id="fhah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs><rect class="s-box2" x="175.0" y="10" width="170" height="38" rx="3"/><text class="s-t" x="260.0" y="27" text-anchor="middle">Registers</text><text class="s-s" x="260.0" y="42" text-anchor="middle">smallest, fastest</text><rect class="s-box2" x="146.0" y="54" width="228" height="38" rx="3"/><text class="s-t" x="260.0" y="71" text-anchor="middle">L1 cache (I$ and D$)</text><text class="s-s" x="260.0" y="86" text-anchor="middle">SRAM</text><rect class="s-box2" x="117.0" y="98" width="286" height="38" rx="3"/><text class="s-t" x="260.0" y="115" text-anchor="middle">L2 cache</text><text class="s-s" x="260.0" y="130" text-anchor="middle">SRAM</text><rect class="s-box2" x="88.0" y="142" width="344" height="38" rx="3"/><text class="s-t" x="260.0" y="159" text-anchor="middle">L3 cache (shared)</text><text class="s-s" x="260.0" y="174" text-anchor="middle">SRAM</text><rect class="s-box" x="59.0" y="186" width="402" height="38" rx="3"/><text class="s-t" x="260.0" y="203" text-anchor="middle">Main memory</text><text class="s-s" x="260.0" y="218" text-anchor="middle">DRAM</text><rect class="s-box" x="30.0" y="230" width="460" height="38" rx="3"/><text class="s-t" x="260.0" y="247" text-anchor="middle">Disk / SSD</text><text class="s-s" x="260.0" y="262" text-anchor="middle">largest, slowest</text><path class="s-line" d="M560 14L560 250" marker-end="url(#fhah)"/><path class="s-line" d="M560 250L560 14" marker-end="url(#fhah)"/><text class="s-s" x="552" y="30" text-anchor="end">faster</text><text class="s-s" x="552" y="252" text-anchor="end">bigger</text><text class="s-m" x="568" y="132" text-anchor="start">CPU</text></svg><figcaption>Memory hierarchy. Each level holds a subset of the one below it.</figcaption></figure>
+  <div class="note example"><p><span class="lbl">Locality Illustration</span>In repetitive string processing (e.g. "MISSISSIPPI"), characters like S, I, and P repeat rapidly (temporal locality). In linear array traversal, adjacent index elements reside within the same fetched block (spatial locality).</p></div>
+</section>
+
+<!-- ============ BASICS ============ -->
+<section class="topic" id="t-basic">
+  <div class="head"><h2>Cache basics and addressing</h2><label class="rev" for="r-basic"><input class="rev" type="checkbox" id="r-basic" data-sec="t-basic">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Draw</span></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>Block / line</td><td>Smallest unit that is either present or absent in a cache level.</td></tr>
+      <tr><td>Hit</td><td>The requested data is in the cache.</td></tr>
+      <tr><td>Miss</td><td>The requested data is not in the cache.</td></tr>
+      <tr><td>Hit time</td><td>Time to find the block in the cache and return the data (indexing, tag compare, transfer).</td></tr>
+      <tr><td>Hit rate / miss rate</td><td>Fraction of accesses found (not found) in the cache. Miss rate = 1 − hit rate.</td></tr>
+      <tr><td>Miss penalty</td><td>Extra time to replace a block with the one from the next level.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Organization of a cache</h3>
+  <p>A cache is an array of <strong>S = 2<sup>s</sup> sets</strong>. Each set has <strong>E lines</strong> (E = associativity). Each line has a valid bit, a tag of <strong>t bits</strong>, and a data block of <strong>B = 2<sup>b</sup> bytes</strong>.</p>
+  <div class="formula">Cache size C = B × E × S  (data bytes only)<br>Number of sets S = C / (B × E)<br>Address (m bits) = tag (t) | set index (s) | block offset (b),   t = m − s − b</div>
+  <ul class="t">
+    <li><strong>Block offset</strong> picks the byte (or word) inside the block.</li>
+    <li><strong>Set index</strong> picks the set.</li>
+    <li><strong>Tag</strong> is compared with the tag of every valid line in that set. A match on a valid line is a hit.</li>
+  </ul>
+  <figure class="fig"><svg viewBox="0 0 640 240" role="img" aria-labelledby="fat fad"><title id="fat">Address split and set lookup</title><desc id="fad">Tag, index, offset fields and the lookup in an 8-way set</desc><defs><marker id="faah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs><text class="s-m" x="10" y="22" text-anchor="start">32-bit address 0xABC89984</text><rect class="s-box" x="10" y="32" width="260" height="44" rx="3"/><text class="s-t" x="140.0" y="52" text-anchor="middle">tag = 16 bits</text><text class="s-s" x="140.0" y="68" text-anchor="middle">1010 1011 1100 1000</text><rect class="s-box2" x="270" y="32" width="165" height="44" rx="3"/><text class="s-t" x="352.5" y="52" text-anchor="middle">index = 10 bits</text><text class="s-s" x="352.5" y="68" text-anchor="middle">10 0110 0110</text><rect class="s-box" x="435" y="32" width="105" height="44" rx="3"/><text class="s-t" x="487.5" y="52" text-anchor="middle">offset = 6</text><text class="s-s" x="487.5" y="68" text-anchor="middle">00 0100</text><text class="s-s" x="10" y="94" text-anchor="start">bit 31</text><text class="s-s" x="630" y="94" text-anchor="end">bit 0</text><path class="s-line" d="M352 76L352 118" marker-end="url(#faah)"/><text class="s-s" x="360" y="104" text-anchor="start">index = 614 picks the set</text><rect class="s-box2" x="10" y="120" width="620" height="24" rx="3"/><text class="s-t" x="320" y="137" text-anchor="middle">set 614 (8 lines, 8-way)</text><rect class="s-box" x="10.0" y="148" width="73" height="40" rx="3"/><text class="s-s" x="46.0" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="46.0" y="180" text-anchor="middle">64 B block</text><rect class="s-box" x="87.5" y="148" width="73" height="40" rx="3"/><text class="s-s" x="123.5" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="123.5" y="180" text-anchor="middle">64 B block</text><rect class="s-box" x="165.0" y="148" width="73" height="40" rx="3"/><text class="s-s" x="201.0" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="201.0" y="180" text-anchor="middle">64 B block</text><rect class="s-box" x="242.5" y="148" width="73" height="40" rx="3"/><text class="s-s" x="278.5" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="278.5" y="180" text-anchor="middle">64 B block</text><rect class="s-box" x="320.0" y="148" width="73" height="40" rx="3"/><text class="s-s" x="356.0" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="356.0" y="180" text-anchor="middle">64 B block</text><rect class="s-box" x="397.5" y="148" width="73" height="40" rx="3"/><text class="s-s" x="433.5" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="433.5" y="180" text-anchor="middle">64 B block</text><rect class="s-box" x="475.0" y="148" width="73" height="40" rx="3"/><text class="s-s" x="511.0" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="511.0" y="180" text-anchor="middle">64 B block</text><rect class="s-box" x="552.5" y="148" width="73" height="40" rx="3"/><text class="s-s" x="588.5" y="164" text-anchor="middle">v | tag</text><text class="s-s" x="588.5" y="180" text-anchor="middle">64 B block</text><path class="s-dash" d="M100 76L100 148" marker-end="url(#faah)"/><text class="s-s" x="110" y="206" text-anchor="start">tag compared with all 8 lines at once; hit = valid and equal</text><text class="s-s" x="110" y="224" text-anchor="start">offset 4 picks the byte inside the block, so word 1 (4 B words)</text></svg><figcaption>Lookup for the slide example. 512 KB, 64 B blocks, 8-way, 32-bit address.</figcaption></figure>
+
+  <h3>Worked example: Set and Word Lookup</h3>
+  <div class="note"><p><span class="lbl">Numerical</span>A cache has 512 KB capacity, 4 B words, 64 B blocks, 8-way set associative, 32-bit address. For address <span class="m">0xABC89984</span>, which set is searched and which word is forwarded on a hit?</p></div>
+  <div class="formula">Sets = 2^19 / (2^6 × 2^3) = 2^10 = 1024  → index 10 bits<br>Offset = 6 bits (64 B block),  tag = 32 − 10 − 6 = 16 bits<br>0xABC89984 → low 16 bits 1001 1001 1000 0100<br>offset = 00 0100 = 4 → byte 4 → word 4/4 = word 1<br>index  = 10 0110 0110 = 614<br>Answer: set 614, word 1.   (0x485669AC → set 422, word 11)</div>
+  <p>Verified: Both addresses resolve consistently with tag, set index, and offset formulas.</p>
+
+  <h3>Second example: total bits in a cache</h3>
+  <div class="note example"><p><span class="lbl">Exam Focus</span>Finding the total capacity of a cache including tag, valid, and status overhead bits is a frequent university examination problem.</p></div>
+  <div class="formula">32 KB direct mapped, 64 B blocks, 32-bit address, write back<br>Blocks = 32K / 64 = 512  → index 9, offset 6, tag = 32 − 9 − 6 = 17<br>Bits per line = 64×8 data + 17 tag + 1 valid + 1 dirty = 531<br>Total = 512 × 531 = 271,872 bits ≈ 33.2 KB  (3.7% overhead over 32 KB)</div>
+</section>
+
+<!-- ============ MAPPING ============ -->
+<section class="topic" id="t-map">
+  <div class="head"><h2>Cache mapping and block identification</h2><label class="rev" for="r-map"><input class="rev" type="checkbox" id="r-map" data-sec="t-map">revised</label></div>
+  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Draw</span><span class="chip">Numerical</span></div>
+  <p>Four design choices for any cache level: <strong>where</strong> a block can be placed, <strong>how</strong> it is found, <strong>which</strong> block is replaced on a miss, and <strong>what</strong> happens on a write.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Direct mapped</th><th>Set associative</th><th>Fully associative</th></tr></thead>
+    <tbody>
+      <tr><td>Placement</td><td>One place: (block no.) mod (no. of blocks)</td><td>Any line of one set: (block no.) mod (no. of sets)</td><td>Anywhere</td></tr>
+      <tr><td>Lines per set (E)</td><td>1</td><td>2, 4, 8 ...</td><td>All blocks, 1 set</td></tr>
+      <tr><td>Tag compares</td><td>1</td><td>E (in parallel)</td><td>One per block</td></tr>
+      <tr><td>Index bits</td><td>log<sub>2</sub>(blocks)</td><td>log<sub>2</sub>(sets)</td><td>0</td></tr>
+      <tr><td>Conflict misses</td><td>Most</td><td>Fewer</td><td>None</td></tr>
+      <tr><td>Hit time, cost</td><td>Lowest, simplest</td><td>Middle</td><td>Highest</td></tr>
+    </tbody>
+  </table></div>
+  <figure class="fig"><svg viewBox="0 0 640 240" role="img" aria-labelledby="fpt fpd"><title id="fpt">Block placement</title><desc id="fpd">Block 12 placed in direct mapped, 2-way and fully associative caches</desc><text class="s-t" x="320" y="16" text-anchor="middle">Where can memory block 12 go? (cache of 8 blocks)</text><text class="s-t" x="8" y="56" text-anchor="start">Direct mapped</text><rect class="s-box" x="190" y="34" width="50" height="32" rx="3"/><text class="s-s" x="215" y="55" text-anchor="middle">0</text><rect class="s-box" x="245" y="34" width="50" height="32" rx="3"/><text class="s-s" x="270" y="55" text-anchor="middle">1</text><rect class="s-box" x="300" y="34" width="50" height="32" rx="3"/><text class="s-s" x="325" y="55" text-anchor="middle">2</text><rect class="s-box" x="355" y="34" width="50" height="32" rx="3"/><text class="s-s" x="380" y="55" text-anchor="middle">3</text><rect class="s-box2" x="410" y="34" width="50" height="32" rx="3"/><text class="s-s" x="435" y="55" text-anchor="middle">4</text><rect class="s-box" x="465" y="34" width="50" height="32" rx="3"/><text class="s-s" x="490" y="55" text-anchor="middle">5</text><rect class="s-box" x="520" y="34" width="50" height="32" rx="3"/><text class="s-s" x="545" y="55" text-anchor="middle">6</text><rect class="s-box" x="575" y="34" width="50" height="32" rx="3"/><text class="s-s" x="600" y="55" text-anchor="middle">7</text><text class="s-s" x="190" y="84" text-anchor="start">12 mod 8 = 4: only slot 4</text><text class="s-t" x="8" y="126" text-anchor="start">2-way set assoc.</text><rect class="s-box2" x="190" y="104" width="50" height="32" rx="3"/><text class="s-s" x="215" y="125" text-anchor="middle">0</text><rect class="s-box2" x="245" y="104" width="50" height="32" rx="3"/><text class="s-s" x="270" y="125" text-anchor="middle">1</text><rect class="s-box" x="300" y="104" width="50" height="32" rx="3"/><text class="s-s" x="325" y="125" text-anchor="middle">2</text><rect class="s-box" x="355" y="104" width="50" height="32" rx="3"/><text class="s-s" x="380" y="125" text-anchor="middle">3</text><rect class="s-box" x="410" y="104" width="50" height="32" rx="3"/><text class="s-s" x="435" y="125" text-anchor="middle">4</text><rect class="s-box" x="465" y="104" width="50" height="32" rx="3"/><text class="s-s" x="490" y="125" text-anchor="middle">5</text><rect class="s-box" x="520" y="104" width="50" height="32" rx="3"/><text class="s-s" x="545" y="125" text-anchor="middle">6</text><rect class="s-box" x="575" y="104" width="50" height="32" rx="3"/><text class="s-s" x="600" y="125" text-anchor="middle">7</text><path class="s-dash" d="M188 100V142H296V100Z"/><path class="s-dash" d="M298 100V142H406V100Z"/><path class="s-dash" d="M408 100V142H516V100Z"/><path class="s-dash" d="M518 100V142H626V100Z"/><text class="s-s" x="190" y="158" text-anchor="start">4 sets of 2; 12 mod 4 = set 0: slot 0 or 1</text><text class="s-t" x="8" y="198" text-anchor="start">Fully associative</text><rect class="s-box2" x="190" y="176" width="50" height="32" rx="3"/><text class="s-s" x="215" y="197" text-anchor="middle">0</text><rect class="s-box2" x="245" y="176" width="50" height="32" rx="3"/><text class="s-s" x="270" y="197" text-anchor="middle">1</text><rect class="s-box2" x="300" y="176" width="50" height="32" rx="3"/><text class="s-s" x="325" y="197" text-anchor="middle">2</text><rect class="s-box2" x="355" y="176" width="50" height="32" rx="3"/><text class="s-s" x="380" y="197" text-anchor="middle">3</text><rect class="s-box2" x="410" y="176" width="50" height="32" rx="3"/><text class="s-s" x="435" y="197" text-anchor="middle">4</text><rect class="s-box2" x="465" y="176" width="50" height="32" rx="3"/><text class="s-s" x="490" y="197" text-anchor="middle">5</text><rect class="s-box2" x="520" y="176" width="50" height="32" rx="3"/><text class="s-s" x="545" y="197" text-anchor="middle">6</text><rect class="s-box2" x="575" y="176" width="50" height="32" rx="3"/><text class="s-s" x="600" y="197" text-anchor="middle">7</text><text class="s-s" x="190" y="226" text-anchor="start">any slot (all 8 tags compared)</text></svg><figcaption>Placement of block 12 in a cache of 8 blocks.</figcaption></figure>
+  <ul class="t">
+    <li><strong>Direct mapped</strong>: simplest, one tag compare. Two blocks that map to the same slot keep evicting each other.</li>
+    <li><strong>n-way set associative</strong>: the index picks a set, then n tags are compared in parallel and a multiplexer selects the matching way.</li>
+    <li><strong>Fully associative</strong>: no index field. The whole block address is the tag, so every tag is compared. Practical only for small caches (TLBs, for example).</li>
+    <li>Direct mapped is the special case E = 1. Fully associative is E = number of blocks.</li>
+  </ul>
+  <h3>Same cache, three mappings</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>512 KB, 64 B blocks (8192 blocks)</th><th class="c">Sets</th><th class="c">Index</th><th class="c">Tag</th><th class="c">Offset</th></tr></thead>
+    <tbody>
+      <tr><td>Direct mapped</td><td class="c">8192</td><td class="c">13</td><td class="c">13</td><td class="c">6</td></tr>
+      <tr><td>8-way</td><td class="c">1024</td><td class="c">10</td><td class="c">16</td><td class="c">6</td></tr>
+      <tr><td>Fully associative</td><td class="c">1</td><td class="c">0</td><td class="c">26</td><td class="c">6</td></tr>
+    </tbody>
+  </table></div>
+  <p>More associativity moves bits from the index into the tag.</p>
+</section>
+
+<!-- ============ REPLACEMENT ============ -->
+<section class="topic" id="t-repl">
+  <div class="head"><h2>Block replacement</h2><label class="rev" for="r-repl"><input class="rev" type="checkbox" id="r-repl" data-sec="t-repl">revised</label></div>
+  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Numerical</span><span class="chip">Key Concept</span></div>
+  <p>On a miss in a full set, one block must go. Direct mapped is easy: there is only one candidate. Set associative and fully associative caches need a policy.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Policy</th><th>How it chooses</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Random</strong></td><td>Any block in the set</td><td>Needs a pseudo-random number generator. Ignores temporal and spatial locality.</td></tr>
+      <tr><td><strong>FIFO</strong></td><td>The block that has been in the longest</td><td>Needs a queue: enqueue on fill, dequeue to evict. Ignores reuse.</td></tr>
+      <tr><td><strong>LRU</strong></td><td>The block unused for the longest time</td><td>Uses temporal locality. Needs a recency stack or counters.</td></tr>
+      <tr><td><strong>LFU</strong></td><td>The block with the lowest reference count</td><td>A counter per block, incremented on each reference. Storage and compare logic are costly.</td></tr>
+      <tr><td><strong>Optimal</strong></td><td>The block whose next use is farthest in the future</td><td class="">Needs future knowledge, so it cannot be built. Used as a yardstick.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note example"><p><span class="lbl">Replacement Anomalies &amp; Pseudo-LRU</span>True LRU tracking requires significant hardware logic as associativity grows beyond 4 ways; modern processors employ <strong>pseudo-LRU</strong> tree-bit approximations. Additionally, FIFO can exhibit <strong>Bélády's anomaly</strong> (where increasing cache blocks increases miss count, e.g. reference string <code>1 2 3 4 1 2 5 1 2 3 4 5</code> yielding 9 misses on 3 blocks vs 10 on 4 blocks). LRU and Optimal are stack algorithms and never suffer from Bélády's anomaly.</p></div>
+
+  <h3>LRU Stack Recency Tracking</h3>
+  <p>The slide shows 8 blocks ordered from LRU (top) to MRU (bottom). Hits move the block to the MRU end.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Position</th><th class="m c">Start</th><th class="m c">Hit 0</th><th class="m c">Hit 4</th><th class="m c">Hit 7</th><th>Next miss</th></tr></thead>
+    <tbody>
+      <tr><td>LRU</td><td class="m c">4</td><td class="m c">4</td><td class="m c">6</td><td class="m c">6</td><td>Evict <strong>6</strong>, the LRU block</td></tr>
+      <tr><td></td><td class="m c">6</td><td class="m c">6</td><td class="m c">3</td><td class="m c">3</td><td></td></tr>
+      <tr><td></td><td class="m c">3</td><td class="m c">3</td><td class="m c">1</td><td class="m c">1</td><td></td></tr>
+      <tr><td></td><td class="m c">1</td><td class="m c">1</td><td class="m c">7</td><td class="m c">5</td><td></td></tr>
+      <tr><td></td><td class="m c">0</td><td class="m c">7</td><td class="m c">5</td><td class="m c">2</td><td></td></tr>
+      <tr><td></td><td class="m c">7</td><td class="m c">5</td><td class="m c">2</td><td class="m c">0</td><td></td></tr>
+      <tr><td></td><td class="m c">5</td><td class="m c">2</td><td class="m c">0</td><td class="m c">4</td><td></td></tr>
+      <tr><td>MRU</td><td class="m c">2</td><td class="m c">0</td><td class="m c">4</td><td class="m c">7</td><td></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Compare the policies on one reference string</h3>
+  <div class="note"><p><span class="lbl">Numerical</span>Reference string 7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1, fully associative cache of 3 blocks. Count the misses for FIFO, LRU and Optimal.</p></div>
+  <div class="wrap"><table class="wide tr"><tbody><tr><td>Reference</td><td class="m c">7</td><td class="m c">0</td><td class="m c">1</td><td class="m c">2</td><td class="m c">0</td><td class="m c">3</td><td class="m c">0</td><td class="m c">4</td><td class="m c">2</td><td class="m c">3</td><td class="m c">0</td><td class="m c">3</td><td class="m c">2</td><td class="m c">1</td><td class="m c">2</td><td class="m c">0</td><td class="m c">1</td><td class="m c">7</td><td class="m c">0</td><td class="m c">1</td><td class="c">Misses</td></tr><tr><td>FIFO</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c h">H</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c x">M</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c"><strong>15</strong></td></tr><tr><td>LRU</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c"><strong>12</strong></td></tr><tr><td>Optimal</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c x">M</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c h">H</td><td class="c x">M</td><td class="c h">H</td><td class="c h">H</td><td class="c"><strong>9</strong></td></tr></tbody></table></div>
+  <p>Optimal (9 misses) is the lower bound. LRU (12) beats FIFO (15) here because it keeps the blocks that are being reused, such as 0.</p>
+</section>
+
+<!-- ============ WRITE ============ -->
+<section class="topic" id="t-write">
+  <div class="head"><h2>Write strategy and cache types</h2><label class="rev" for="r-write"><input class="rev" type="checkbox" id="r-write" data-sec="t-write">revised</label></div>
+  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Define</span></div>
+  <p>Two questions on a write: what if the block is in the cache (<strong>write hit</strong>), and what if it is not (<strong>write miss</strong>)?</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Write hit</th><th>Write through</th><th>Write back</th></tr></thead>
+    <tbody>
+      <tr><td>What happens</td><td>Data is written to the cache block <em>and</em> to main memory.</td><td>Data is written only to the cache block. The modified block goes to memory when it is replaced.</td></tr>
+      <tr><td>Extra state</td><td>None</td><td>A <strong>dirty bit</strong> per block (clean or modified).</td></tr>
+      <tr><td>Read miss</td><td>Evicted block needs no write back.</td><td>A dirty victim must be written back first.</td></tr>
+      <tr><td>Repeated writes</td><td>Every write goes to memory.</td><td>No extra work, and only the latest value is written on eviction.</td></tr>
+      <tr><td>Memory traffic</td><td>High (a write buffer hides the delay).</td><td>Low.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Write miss</th><th>Write allocate</th><th>No-write allocate</th></tr></thead>
+    <tbody>
+      <tr><td>What happens</td><td>The block is loaded into the cache on the miss, then written.</td><td>The block is modified in main memory only, not loaded into the cache.</td></tr>
+      <tr><td>Usually paired with</td><td>Write back</td><td>Write through</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Look-aside and look-through caches</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Look-aside</th><th>Look-through</th></tr></thead>
+    <tbody>
+      <tr><td>Request goes to</td><td>Cache and main memory <strong>in parallel</strong>. Both see the bus cycle.</td><td>The cache <strong>first</strong>, then memory if it misses.</td></tr>
+      <tr><td>Hit</td><td>Processor loaded from cache, bus cycle ends.</td><td>Processor loaded from cache.</td></tr>
+      <tr><td>Miss</td><td>Processor and cache loaded from memory together.</td><td>Cache loaded from memory, then processor loaded from the cache.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note example"><p><span class="lbl">Architectural Trade-off</span>Look-aside minimizes miss latency by driving bus cycles in parallel, but consumes bus bandwidth on hits. Look-through isolates main memory bus traffic to misses only, but serializes lookup latency on misses.</p></div>
+</section>
+
+<!-- ============ MISSES ============ -->
+<section class="topic" id="t-miss">
+  <div class="head"><h2>Types of cache misses</h2><label class="rev" for="r-miss"><input class="rev" type="checkbox" id="r-miss" data-sec="t-miss">revised</label></div>
+  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Key Concept</span></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Miss</th><th>Cause</th><th>Reduced by</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Compulsory</strong> (cold)</td><td>The very first access to a block. Happens even in an infinite cache.</td><td>Larger blocks, prefetching</td></tr>
+      <tr><td><strong>Capacity</strong></td><td>The cache cannot hold all the blocks the program needs. Also seen in a fully associative cache.</td><td>Larger cache</td></tr>
+      <tr><td><strong>Conflict</strong></td><td>Too many blocks map to the same set. Only in direct mapped and set associative caches.</td><td>Higher associativity</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note example"><p><span class="lbl">Comparative Miss Analysis</span>Evaluating miss types across mapping policies for a 4-block cache with block reference sequence <span class="m">0 8 0 6 8</span>.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Cache</th><th class="m c">0</th><th class="m c">8</th><th class="m c">0</th><th class="m c">6</th><th class="m c">8</th><th class="c">Misses</th></tr></thead>
+    <tbody>
+      <tr><td>Direct mapped (4 sets)</td><td class="c">M</td><td class="c">M</td><td class="c">M</td><td class="c">M</td><td class="c">M</td><td class="c"><strong>5</strong></td></tr>
+      <tr><td>2-way (2 sets, LRU)</td><td class="c">M</td><td class="c">M</td><td class="c">H</td><td class="c">M</td><td class="c">M</td><td class="c"><strong>4</strong></td></tr>
+      <tr><td>Fully associative</td><td class="c">M</td><td class="c">M</td><td class="c">H</td><td class="c">M</td><td class="c">H</td><td class="c"><strong>3</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p>Direct mapped: 0 and 8 both map to slot 0 (8 mod 4 = 0) and keep evicting each other. 2-way: 0, 8 and 6 all fall in set 0, which holds only 2. Fully associative: only the 3 compulsory misses remain.</p>
+</section>
+
+<!-- ============ PERFORMANCE ============ -->
+<section class="topic" id="t-perf">
+  <div class="head"><h2>Cache performance: AMAT</h2><label class="rev" for="r-perf"><input class="rev" type="checkbox" id="r-perf" data-sec="t-perf">revised</label></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Important</span><span class="chip">Key Concept</span></div>
+  <div class="formula">AMAT = Hit time + Miss rate × Miss penalty<br><br>Two levels:<br>AMAT = Hit time(L1) + Miss rate(L1) × [ Hit time(L2) + Miss rate(L2) × Miss penalty(L2) ]</div>
+  <ul class="t">
+    <li><strong>Local miss rate</strong> = misses in a level / accesses to <em>that</em> level.</li>
+    <li><strong>Global miss rate</strong> = misses in a level / accesses generated by the <em>CPU</em>. For L2: global = L1 miss rate × L2 local miss rate.</li>
+    <li>Optimising the cache means lowering AMAT by cutting the miss rate, the miss penalty or the hit time.</li>
+  </ul>
+  <div class="note example"><p><span class="lbl">Formula Discrepancy Note</span>Certain examination questions express AMAT as <strong>Hit rate × Hit time + Miss rate × Miss latency</strong> (e.g. <code>0.9 × 10ns + 0.1 × 100ns = 19ns</code>). The standard computer architecture formulation (Hennessy &amp; Patterson) is <strong>Hit time + Miss rate × Miss penalty</strong> (yielding 20ns). Clearly state your formula assumption when solving descriptive numericals.</p></div>
+
+  <h3>Numerical 1: Two-level cache performance</h3>
+  <div class="note"><p><span class="lbl">Numerical</span>In 1000 memory references there are 40 misses in L1 and 20 in L2. L2 miss penalty to memory is 200 cycles, L2 hit time 10, L1 hit time 1, and 1.5 memory references per instruction. Find the miss rates, the AMAT and the average stall cycles per instruction (ignore writes).</p></div>
+  <div class="formula">L1 miss rate = 40/1000 = 4%<br>L2 local miss rate = 20/40 = 50%     L2 global miss rate = 20/1000 = 2%<br>AMAT = 1 + 0.04 × (10 + 0.5 × 200) = 1 + 0.04 × 110 = 5.4 cycles<br>Stalls per instruction = 1.5 × (0.04 × 10 + 0.02 × 200) = 1.5 × 4.4 = 6.6 cycles</div>
+  <div class="note example"><p><span class="lbl">Stall Cycles Impact</span>Stalls per access = AMAT − L1 hit time = 4.4 cycles. Multiplying by 1.5 accesses per instruction yields 6.6 stall cycles per instruction. Combined with a baseline CPU execution CPI of 1.0, the effective CPI equals 7.6.</p></div>
+
+  <h3>Numerical 2: choosing a block size</h3>
+  <div class="note example"><p><span class="lbl">Block Size Trade-off Modeling</span>Assuming baseline hit time of 1 cycle with miss penalty modeled as: <code>Penalty = 80 cycles + 2 cycles × (Block Size / 16 B)</code>.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Block</th><th class="c">Miss rate</th><th class="c">Penalty</th><th class="c">AMAT</th></tr></thead>
+    <tbody>
+      <tr><td class="m">16 B</td><td class="c">5.7%</td><td class="c">82</td><td class="c">5.67</td></tr>
+      <tr><td class="m">32 B</td><td class="c">4.0%</td><td class="c">84</td><td class="c">4.36</td></tr>
+      <tr><td class="m"><strong>64 B</strong></td><td class="c">3.0%</td><td class="c">88</td><td class="c"><strong>3.64</strong></td></tr>
+      <tr><td class="m">128 B</td><td class="c">2.8%</td><td class="c">96</td><td class="c">3.69</td></tr>
+      <tr><td class="m">256 B</td><td class="c">3.5%</td><td class="c">112</td><td class="c">4.92</td></tr>
+    </tbody>
+  </table></div>
+  <p>The miss rate falls, then rises again (pollution and conflicts), while the penalty keeps growing. The best block size minimises AMAT, not the miss rate: 64 B here.</p>
+</section>
+
+<!-- ============ OPTIMIZATIONS ============ -->
+<section class="topic" id="t-opt">
+  <div class="head"><h2>Six basic cache optimizations</h2><label class="rev" for="r-opt"><input class="rev" type="checkbox" id="r-opt" data-sec="t-opt">revised</label></div>
+  <div class="chips"><span class="chip">Explain</span><span class="chip">Important</span><span class="chip">Key Concept</span></div>
+  <div class="note def"><p><span class="lbl">Syllabus Core</span>The KTU 2024 scheme syllabus targets the canonical <strong>six basic cache optimizations</strong> (Hennessy &amp; Patterson, Appendix B.3), systematically categorizing techniques to reduce miss rate, miss penalty, and hit time.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>#</th><th>Optimization</th><th>Reduces</th><th>Drawback</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td>Larger block size</td><td>Miss rate (compulsory)</td><td>Higher miss penalty, more conflict misses, pollution</td></tr>
+      <tr><td class="c">2</td><td>Larger cache</td><td>Miss rate (capacity)</td><td>Longer hit time, more cost, area and power</td></tr>
+      <tr><td class="c">3</td><td>Higher associativity</td><td>Miss rate (conflict)</td><td>Longer hit time, more complex</td></tr>
+      <tr><td class="c">4</td><td>Multilevel caches</td><td>Miss penalty</td><td>More hardware, more complex analysis</td></tr>
+      <tr><td class="c">5</td><td>Read misses before writes</td><td>Miss penalty</td><td>Must check the write buffer for a match</td></tr>
+      <tr><td class="c">6</td><td>No address translation when indexing</td><td>Hit time</td><td>Limits cache size, or needs extra care</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>1. Larger block size</h3>
+  <ul class="t">
+    <li>For: uses spatial locality, cuts compulsory misses.</li>
+    <li>Against: <strong>higher miss penalty</strong> (more bytes to fetch, bus width limits it), <strong>more conflict misses</strong> (fewer blocks in the cache), and <strong>pollution</strong> (useless data may evict useful data).</li>
+    <li>The miss rate against block size curve is U-shaped for a given cache size.</li>
+  </ul>
+  <h3>2. Larger cache</h3>
+  <ul class="t">
+    <li>For: cuts capacity misses, holds a bigger working set.</li>
+    <li>Against: longer hit time, higher cost, area and power. Common in L2 and L3, less in L1.</li>
+  </ul>
+  <h3>3. Higher associativity</h3>
+  <ul class="t">
+    <li>For: cuts conflict misses and the eviction rate. Fully associative is best for miss rate but its hit time is high, so pick a moderate associativity.</li>
+    <li>Against: longer hit time (search the set, compare more tags), more complex than direct mapped. A bigger hit time can outweigh the lower miss rate in AMAT.</li>
+    <li>As far as I know, 8-way is already about as good as fully associative for most programs.</li>
+  </ul>
+  <h3>4. Multilevel caches</h3>
+  <ul class="t">
+    <li>Caches must be fast to keep pace with the processor <em>and</em> large to bridge the gap to memory. One cache cannot be both.</li>
+    <li><strong>L1</strong> is small enough to match the clock cycle (low hit time). <strong>L2</strong> is large enough to catch many accesses that would go to memory (low miss rate), so it lowers the effective miss penalty.</li>
+    <li>Use local and global miss rates (see AMAT above). An <strong>inclusive</strong> cache keeps a copy of everything held in the level above. An <strong>exclusive</strong> one does not duplicate it.</li>
+  </ul>
+  <h3>5. Giving priority to read misses over writes</h3>
+  <div class="note add"><p><span class="lbl">Added</span>A read miss stalls the processor. A write usually does not need to, because the data can wait in a <strong>write buffer</strong>.</p></div>
+  <ul class="t">
+    <li>Put the write in the write buffer and let the read miss go to memory first.</li>
+    <li>Danger: the read may need the value still sitting in the buffer (a RAW hazard through memory). Example for a direct mapped write-through cache where addresses 512 and 1024 map to the same block: <span class="m">SW R3, 512(R0)</span> then <span class="m">LW R1, 1024(R0)</span> then <span class="m">LW R2, 512(R0)</span>. R3 must equal R2.</li>
+    <li>Fix: either wait until the buffer drains (slow), or <strong>check the write buffer</strong> on a read miss and take the data from it if there is a match (usual choice).</li>
+    <li>Write back: copy the dirty victim to a buffer, read the missing block first, then write the victim to memory.</li>
+  </ul>
+  <h3>6. Avoiding address translation during cache indexing</h3>
+  <div class="note add"><p><span class="lbl">Added</span>A physical cache needs the TLB translation <em>before</em> the lookup, which adds to hit time. Options:</p></div>
+  <ul class="t">
+    <li><strong>Virtual cache</strong>: index and tag with virtual addresses, so no translation on a hit. Problems: cache flush or process-ID tags on a context switch, and <strong>synonyms</strong> (two virtual addresses for the same physical address).</li>
+    <li><strong>Virtually indexed, physically tagged (VIPT)</strong>: use the page offset (same in virtual and physical addresses) as the index, so the cache lookup and TLB lookup go in parallel. Condition: index + block offset bits ≤ page offset bits.</li>
+    <li>Numerical: 4 KB pages (12 offset bits), 64 B blocks, 8-way. Largest VIPT cache = page size × associativity = 4 KB × 8 = <strong>32 KB</strong> (index 6 bits + offset 6 bits = 12).</li>
+  </ul>
+</section>
+
+<!-- ============ DRAM ============ -->
+<section class="topic" id="t-dram">
+  <div class="head"><h2>DRAM, SRAM and DRAM organization</h2><label class="rev" for="r-dram"><input class="rev" type="checkbox" id="r-dram" data-sec="t-dram">revised</label></div>
+  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Define</span><span class="chip">Draw</span></div>
+  <p>Main memory is built from <strong>DRAM</strong>. The controller sits on the processor side and talks to the DRAM banks through a DRAM interface.</p>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>SRAM</th><th>DRAM</th></tr></thead>
+    <tbody>
+      <tr><td>Cell</td><td>6 transistors</td><td>1 transistor + 1 capacitor</td></tr>
+      <tr><td>Speed</td><td>Faster (no capacitor)</td><td>Slower (capacitor)</td></tr>
+      <tr><td>Density, cost</td><td>Lower density, higher cost</td><td>Higher density, lower cost</td></tr>
+      <tr><td>Refresh</td><td>Not needed</td><td>Needed (costs power, performance, circuitry)</td></tr>
+      <tr><td>Process</td><td>Compatible with the logic process</td><td>Capacitor and logic made together</td></tr>
+      <tr><td>Used for</td><td>Caches</td><td>Main memory</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="t">
+    <li>A DRAM bit is a charge on a capacitor. The read is <strong>destructive</strong>: the cell loses its charge when read, so the sense amplifier regenerates the value. The charge also leaks over time.</li>
+    <li><strong>Refresh</strong>: the controller must periodically read every row within the refresh time so that the charge is restored.</li>
+    <li>A DRAM array has 2<sup>n</sup> rows and 2<sup>m</sup> columns. The row address (RAS) is applied first, then the column address (CAS). Both use the same address pins.</li>
+  </ul>
+  <div class="note example"><p><span class="lbl">DRAM Refresh Timing</span>Standard DDR SDRAM mandates refreshing all rows within a <strong>64 ms retention interval</strong>. For an 8192-row bank architecture, refresh operations occur every <code>64 ms / 8192 ≈ 7.8 µs</code> (tREFI). During refresh execution, target banks cannot service active memory requests.</p></div>
+
+  <h3>Nomenclature</h3>
+  <figure class="fig"><svg viewBox="0 0 640 270" role="img" aria-labelledby="fdt fdd"><title id="fdt">DRAM subsystem hierarchy</title><desc id="fdd">Nested boxes from channel down to row and column</desc><rect class="s-box2" x="10" y="10" width="620" height="36" rx="3"/><text class="s-t" x="20" y="32" text-anchor="start">Channel</text><text class="s-s" x="130" y="32" text-anchor="start">processor side bus: command, address, 64-bit data</text><rect class="s-box" x="24" y="52" width="592" height="36" rx="3"/><text class="s-t" x="34" y="74" text-anchor="start">DIMM</text><text class="s-s" x="144" y="74" text-anchor="start">module plugged into a channel; has 1 or more ranks</text><rect class="s-box2" x="38" y="94" width="564" height="36" rx="3"/><text class="s-t" x="48" y="116" text-anchor="start">Rank</text><text class="s-s" x="158" y="116" text-anchor="start">8 chips working together = 64-bit wide</text><rect class="s-box" x="52" y="136" width="536" height="36" rx="3"/><text class="s-t" x="62" y="158" text-anchor="start">Chip</text><text class="s-s" x="172" y="158" text-anchor="start">narrow interface (8 bits); 8 banks</text><rect class="s-box2" x="66" y="178" width="508" height="36" rx="3"/><text class="s-t" x="76" y="200" text-anchor="start">Bank</text><text class="s-s" x="186" y="200" text-anchor="start">2-D array: rows x columns + row buffer</text><rect class="s-box" x="80" y="220" width="480" height="36" rx="3"/><text class="s-t" x="90" y="242" text-anchor="start">Row, column</text><text class="s-s" x="200" y="242" text-anchor="start">row = DRAM page; column = 1 byte in a chip</text></svg><figcaption>DRAM subsystem, outermost to innermost.</figcaption></figure>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>Channel</td><td>A set of command, address and data buses between the memory controller and the DIMMs. 2 channels = 2 independent controllers.</td></tr>
+      <tr><td>DIMM</td><td>Dual in-line memory module, the board plugged into the motherboard. Has one or more ranks (front and back).</td></tr>
+      <tr><td>Rank</td><td>A set of chips that respond to the same command and address at the same time, each giving a different piece of the data.</td></tr>
+      <tr><td>Chip</td><td>One DRAM die with a narrow interface (4 to 16 bits per read) and several banks (2 to 16 in synchronous DRAM).</td></tr>
+      <tr><td>Bank</td><td>A 2-D array of cells (rows × columns). Banks share the command, address and data buses.</td></tr>
+      <tr><td>Row (page)</td><td>One row of the array. A DRAM row is also called a DRAM page.</td></tr>
+      <tr><td>Row buffer</td><td>The sense amplifiers that hold the open row.</td></tr>
+      <tr><td>Column</td><td>One unit of the open row (e.g. 1 byte per chip). Each DRAM address selects a (row, column) coordinate.</td></tr>
+      <tr><td>Physical address space</td><td>Maximum size of main memory: the number of uniquely identifiable locations.</td></tr>
+      <tr><td>Addressability</td><td>Smallest unit of data that can be addressed (byte, word, 64-bit).</td></tr>
+      <tr><td>Alignment</td><td>Whether the hardware handles unaligned accesses transparently to software.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Why a rank?</h3>
+  <ul class="t">
+    <li>An 8-bit chip is easier to make than a 32-bit or 64-bit chip. So make narrow chips but operate them together as a <strong>rank</strong>.</li>
+    <li>Slide example: 4 chips × 8 bits = 32 bits in one read. A normal DIMM rank uses <strong>8 chips × 8 bits = 64 bits</strong>.</li>
+    <li>Granularity: an access cannot be smaller than the interface width. Flexibility: the controller deals with the rank as one wide chip.</li>
+  </ul>
+  <div class="note example"><p><span class="lbl">Capacity Sizing</span>16K rows (2<sup>14</sup>) × 2 KB row buffer × 8 banks = 256 MB per chip. Combining 8 chips in a 64-bit rank yields <strong>2 GB</strong> total physical capacity.</p></div>
+  <div class="note"><p><span class="lbl">Numerical</span>Transferring a 64 B cache block over a 64-bit (8 B) bus: 64 / 8 = <strong>8 transfers</strong>, so 8 I/O cycles. The rank reads 8 columns one after another from the open row (a burst).</p></div>
+</section>
+
+<!-- ============ MODULES ============ -->
+<section class="topic" id="t-mod">
+  <div class="head"><h2>Memory modules, banks and interleaving</h2><label class="rev" for="r-mod"><input class="rev" type="checkbox" id="r-mod" data-sec="t-mod">revised</label></div>
+  <div class="chips"><span class="chip">Explain</span><span class="chip">Numerical</span><span class="chip">Differentiate</span></div>
+  <h3>Modules and channels</h3>
+  <ul class="t">
+    <li>A <strong>DIMM</strong> has chips on both sides. Rank 0 (front) and rank 1 (back) share the 64-bit data bus and are picked with chip-select (CS) lines.</li>
+    <li><strong>Multiple DIMMs</strong> on a channel: more capacity, but more interconnect complexity and energy.</li>
+    <li><strong>Multiple channels</strong>: each has its own controller and data bus, so more bandwidth, but more wires, area, power and processor pins.</li>
+  </ul>
+  <h3>Handling several accesses per cycle</h3>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Method</th><th>Idea</th><th>Problem</th></tr></thead>
+    <tbody>
+      <tr><td>True multiporting</td><td>Each cell has several read/write ports.</td><td>Expensive in latency, power, area. Same-cell read and write needs special logic.</td></tr>
+      <tr><td>Virtual multiporting</td><td>Time-share one port; each access is much shorter than a clock.</td><td>Not scalable.</td></tr>
+      <tr><td>Multiple cache copies</td><td>Stores update all copies, loads proceed in parallel.</td><td>Stores are a bottleneck; area grows with ports.</td></tr>
+      <tr><td>Banking (interleaving)</td><td>Split the address space into banks. Address bits pick the bank.</td><td>Two accesses to the same bank conflict. Needs a crossbar.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Interleaving</h3>
+  <ul class="t">
+    <li>A single big array is slow to access and cannot serve accesses in parallel. Divide it into <strong>banks</strong> that work independently. Each is smaller and faster, and accesses to different banks overlap.</li>
+    <li>Key issue: how data maps to banks. In <strong>low-order interleaving</strong>, adjacent words go to different banks (bank = word address mod number of banks).</li>
+    <li>Slide example: 13-bit physical address, 2 banks of 1K words, 4-byte words → 2 bits byte-in-word, 1 bit bank, 10 bits row. Even words in bank 0, odd words in bank 1.</li>
+    <li>With 2 banks the word sequence 0, 1, 2, 3, 4, 5 goes to banks 0, 1, 0, 1, 0, 1. A sequential stream keeps both banks busy.</li>
+  </ul>
+  <div class="note example"><p><span class="lbl">Peak Bandwidth Calculation</span>For a DDR4-2400 module with a 64-bit (8-byte) channel bus: <code>2400 MT/s × 8 B = 19.2 GB/s</code> peak throughput. Transferring one 64 B cache line requires 8 burst transfers (4 clock cycles at 1200 MHz = 3.33 ns bus transfer duration).</p></div>
+  <p>Multiple banks and channels let the controller overlap accesses: while bank 0 is busy opening a row, bank 1 can serve another request, as long as there are no <strong>bank conflicts</strong> or <strong>channel conflicts</strong>. Without banks, every access waits for the previous DRAM access to finish.</p>
+</section>
+
+<!-- ============ PROTOCOL ============ -->
+<section class="topic" id="t-proto">
+  <div class="head"><h2>DRAM access protocol and commands</h2><label class="rev" for="r-proto"><input class="rev" type="checkbox" id="r-proto" data-sec="t-proto">revised</label></div>
+  <div class="chips"><span class="chip">Explain</span><span class="chip">Numerical</span><span class="chip">Draw</span><span class="chip">Important</span></div>
+  <div class="note def"><p><span class="lbl">Access sequence</span><strong>ACTIVATE</strong> (RAS) → <strong>READ / WRITE</strong> (CAS) → <strong>PRECHARGE</strong></p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Command</th><th>What it does</th><th>Timing</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ACTIVATE</strong> (ACT, uses RAS)</td><td>Row address goes on the address bus, RAS is asserted. The row is copied from the cell array into the row buffer (sense amplifiers) and stays <strong>open</strong>.</td><td class="m">tRCD, the RAS-to-CAS delay</td></tr>
+      <tr><td><strong>READ / WRITE</strong> (uses CAS)</td><td>Column address goes on the bus, CAS is asserted. Read: data moves from the row buffer to the controller. Write: data goes through the row buffer into the column.</td><td class="m">tCL, the CAS latency (read)</td></tr>
+      <tr><td><strong>PRECHARGE</strong> (PRE)</td><td>Closes the open row. The bank returns to the idle (precharged) state, ready for another ACTIVATE.</td><td class="m">tRP, the row precharge time</td></tr>
+      <tr><td><strong>REFRESH</strong> (REF)</td><td>Reads and restores rows so that cells keep their charge.</td><td class="m">tRFC</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note example"><p><span class="lbl">Extended DRAM Timing Parameters</span>Key standard timing constraints include: <strong>tRAS</strong> (minimum duration a row must remain active following ACTIVATE), <strong>tRC = tRAS + tRP</strong> (minimum row cycle interval between consecutive ACTIVATE commands to the same bank), and <strong>burst length (BL=8)</strong> for streaming cache blocks over the 64-bit bus.</p></div>
+  <p>Mnemonic: <strong>RAS selects the ROW, CAS selects the COLUMN.</strong></p>
+
+  <h3>Row-buffer state decides the latency</h3>
+  <figure class="fig"><svg viewBox="0 0 640 244" role="img" aria-labelledby="ftt ftd"><title id="ftt">Row hit, empty and conflict latency</title><desc id="ftd">Bars show the commands needed for each row-buffer state</desc><text class="s-s" x="8" y="16" text-anchor="start">tRP = tRCD = tCL = 14 ns (example)  |  one block = 14 ns wide</text><text class="s-t" x="8" y="48" text-anchor="start">Row hit (row open)</text><rect class="stc st-mem" x="200" y="34" width="109" height="28" rx="2"/><text class="s-c" x="254.5" y="53" text-anchor="middle">CAS</text><text class="s-m" x="320" y="53" text-anchor="start">= 14 ns</text><text class="s-t" x="8" y="106" text-anchor="start">Row empty (bank precharged)</text><rect class="stc st-ex" x="200" y="92" width="109" height="28" rx="2"/><text class="s-c" x="254.5" y="111" text-anchor="middle">RAS</text><rect class="stc st-mem" x="312" y="92" width="109" height="28" rx="2"/><text class="s-c" x="366.5" y="111" text-anchor="middle">CAS</text><text class="s-m" x="432" y="111" text-anchor="start">= 28 ns</text><text class="s-t" x="8" y="164" text-anchor="start">Row conflict (other row open)</text><rect class="stc st-wb" x="200" y="150" width="109" height="28" rx="2"/><text class="s-c" x="254.5" y="169" text-anchor="middle">PRE</text><rect class="stc st-ex" x="312" y="150" width="109" height="28" rx="2"/><text class="s-c" x="366.5" y="169" text-anchor="middle">RAS</text><rect class="stc st-mem" x="424" y="150" width="109" height="28" rx="2"/><text class="s-c" x="478.5" y="169" text-anchor="middle">CAS</text><text class="s-m" x="544" y="169" text-anchor="start">= 42 ns</text><text class="s-s" x="8" y="214" text-anchor="start">PRE = precharge (tRP), RAS = activate (tRCD),</text><text class="s-s" x="8" y="232" text-anchor="start">CAS = column read (tCL), then the data burst</text></svg><figcaption>Latency of the three cases. The data burst follows the CAS in every case.</figcaption></figure>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>State</th><th>Operations</th><th>Latency</th><th class="c">Example</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Row hit</strong>: the row is already open</td><td class="m">CAS → READ/WRITE</td><td class="m">tCL</td><td class="c">14 ns</td></tr>
+      <tr><td><strong>Row empty</strong> (closed): bank precharged</td><td class="m">RAS → CAS → READ/WRITE</td><td class="m">tRCD + tCL</td><td class="c">28 ns</td></tr>
+      <tr><td><strong>Row conflict</strong>: another row is open</td><td class="m">PRE → RAS → CAS → READ/WRITE</td><td class="m">tRP + tRCD + tCL</td><td class="c">42 ns</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note example"><p><span class="lbl">Terminology Clarification</span>Literature variations: Some references term precharged banks as "closed row" and existing active rows as "open row conflict". In examination solutions, specify all three states explicitly (Row Hit, Row Empty/Closed, Row Conflict) to ensure full marks.</p></div>
+  <div class="note example"><p><span class="lbl">Step-by-Step Bank Access Latency</span>Access sequence: <code>(Row 0, Col 0)</code>, <code>(Row 0, Col 1)</code>, <code>(Row 0, Col 85)</code>, <code>(Row 1, Col 0)</code> with representative timings <code>tRP = tRCD = tCL = 14 ns</code>.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Access</th><th>Row buffer before</th><th>Result</th><th class="c">Time</th></tr></thead>
+    <tbody>
+      <tr><td class="m">(0, 0)</td><td>Empty</td><td>RAS + CAS</td><td class="c">28 ns</td></tr>
+      <tr><td class="m">(0, 1)</td><td>Row 0</td><td>Hit, CAS only</td><td class="c">14 ns</td></tr>
+      <tr><td class="m">(0, 85)</td><td>Row 0</td><td>Hit, CAS only</td><td class="c">14 ns</td></tr>
+      <tr><td class="m">(1, 0)</td><td>Row 0</td><td><strong>Conflict</strong>: PRE + RAS + CAS</td><td class="c">42 ns</td></tr>
+      <tr><td></td><td></td><td><strong>Total</strong></td><td class="c"><strong>98 ns</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Total latency of one request</h3>
+  <ol class="t">
+    <li>CPU → controller transfer.</li>
+    <li>Controller latency: queuing and scheduling delay, access converted to basic commands.</li>
+    <li>Controller → DRAM transfer.</li>
+    <li>DRAM bank latency: CAS if the row is open, RAS + CAS if precharged, PRE + RAS + CAS (worst case).</li>
+    <li>Bus latency for the data burst, DRAM → controller, then controller → CPU.</li>
+  </ol>
+</section>
+
+<!-- ============ CONTROLLER ============ -->
+<section class="topic" id="t-ctrl">
+  <div class="head"><h2>DRAM controller architecture</h2><label class="rev" for="r-ctrl"><input class="rev" type="checkbox" id="r-ctrl" data-sec="t-ctrl">revised</label></div>
+  <div class="chips"><span class="chip">Key Concept</span><span class="chip">Draw</span><span class="chip">Explain</span></div>
+  <div class="note def"><p><span class="lbl">Controller Subsystems</span>The memory controller coordinates front-end memory requests with back-end DRAM timing rules, managing queues, address arbitration, command scheduling, and refresh intervals.</p></div>
+  <p>The <strong>memory controller</strong> sits on the processor chip. It takes cache-miss requests and turns them into legal DRAM commands, in an order that gives good performance while obeying every timing rule.</p>
+  <figure class="fig"><svg viewBox="0 0 640 260" role="img" aria-labelledby="fct fcd"><title id="fct">DRAM controller block diagram</title><desc id="fcd">Request queues, address mapper, scheduler, bank timing state, refresh engine and buffers</desc><defs><marker id="fcah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs><rect class="s-box" x="10" y="60" width="100" height="60" rx="3"/><text class="s-t" x="60" y="86" text-anchor="middle">CPU /</text><text class="s-s" x="60" y="104" text-anchor="middle">last-level cache</text><rect class="s-dash" x="150" y="10" width="330" height="240" rx="3"/><text class="s-m" x="165" y="28" text-anchor="start">DRAM controller</text><rect class="s-box2" x="165" y="40" width="130" height="44" rx="3"/><text class="s-t" x="230" y="60" text-anchor="middle">Request queues</text><text class="s-s" x="230" y="76" text-anchor="middle">read / write</text><rect class="s-box2" x="165" y="100" width="130" height="44" rx="3"/><text class="s-t" x="230" y="120" text-anchor="middle">Address mapper</text><text class="s-s" x="230" y="136" text-anchor="middle">channel, bank, row, col</text><rect class="s-box2" x="165" y="160" width="130" height="44" rx="3"/><text class="s-t" x="230" y="180" text-anchor="middle">Refresh engine</text><text class="s-s" x="230" y="196" text-anchor="middle">periodic REF</text><rect class="s-box" x="330" y="70" width="140" height="70" rx="3"/><text class="s-t" x="400" y="94" text-anchor="middle">Command scheduler</text><text class="s-s" x="400" y="110" text-anchor="middle">row-hit first, oldest first</text><text class="s-s" x="400" y="126" text-anchor="middle">open / close page policy</text><rect class="s-box" x="330" y="160" width="140" height="44" rx="3"/><text class="s-t" x="400" y="180" text-anchor="middle">Bank state + timing</text><text class="s-s" x="400" y="196" text-anchor="middle">tRCD, tRP, tCL ...</text><rect class="s-box" x="165" y="216" width="305" height="28" rx="3"/><text class="s-s" x="317" y="235" text-anchor="middle">Data buffers (read data, write data)</text><rect class="s-box" x="520" y="60" width="110" height="60" rx="3"/><text class="s-t" x="575" y="86" text-anchor="middle">DRAM channel</text><text class="s-s" x="575" y="104" text-anchor="middle">cmd, addr, data</text><rect class="s-box2" x="520" y="150" width="110" height="60" rx="3"/><text class="s-t" x="575" y="176" text-anchor="middle">Ranks and</text><text class="s-t" x="575" y="194" text-anchor="middle">banks</text><path class="s-line" d="M110 90L150 90" marker-end="url(#fcah)"/><path class="s-line" d="M480 100L520 90" marker-end="url(#fcah)"/><path class="s-line" d="M575 120L575 150" marker-end="url(#fcah)"/><path class="s-line" d="M295 62L330 90" marker-end="url(#fcah)"/><path class="s-line" d="M295 122L330 110" marker-end="url(#fcah)"/><path class="s-line" d="M295 182L330 182" marker-end="url(#fcah)"/><path class="s-line" d="M400 140L400 160" marker-end="url(#fcah)"/></svg><figcaption>DRAM controller, simplified.</figcaption></figure>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Block</th><th>Job</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Request queues</strong></td><td>Hold pending read and write requests from the cores and caches.</td></tr>
+      <tr><td><strong>Address mapper</strong></td><td>Splits the physical address into channel, rank, bank, row and column (see the next section).</td></tr>
+      <tr><td><strong>Command scheduler</strong></td><td>Picks which request goes next and converts it into ACT, RD/WR and PRE commands. Applies the row-buffer policy.</td></tr>
+      <tr><td><strong>Bank state and timing checker</strong></td><td>Tracks which row is open in each bank and the timing constraints (tRCD, tCL, tRP, tRAS ...). A command is sent only when it is legal.</td></tr>
+      <tr><td><strong>Refresh engine</strong></td><td>Issues refresh commands on schedule.</td></tr>
+      <tr><td><strong>Data buffers</strong></td><td>Hold read data coming back and write data waiting to go out.</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Scheduling</h3>
+  <ul class="t">
+    <li><strong>FCFS</strong>: serve in arrival order. Simple, but ignores the row-buffer state.</li>
+    <li><strong>FR-FCFS</strong> (first-ready, first-come first-served): serve requests that hit the open row first, then the oldest. This raises the row-hit rate and the throughput. Risk: a stream of hits can starve other requests, so controllers add an age limit.</li>
+    <li>Reads are usually served before writes, since a read stalls the processor. Writes wait in a queue and are sent in batches.</li>
+    <li>On-chip controllers need more pins for more channels. Several cores share the controller, so a fair scheduler also limits interference between applications.</li>
+  </ul>
+</section>
+
+<!-- ============ ADDRESS MAPPING ============ -->
+<section class="topic" id="t-amap">
+  <div class="head"><h2>DRAM address mapping</h2><label class="rev" for="r-amap"><input class="rev" type="checkbox" id="r-amap" data-sec="t-amap">revised</label></div>
+  <div class="chips"><span class="chip">Numerical</span><span class="chip">Differentiate</span><span class="chip">Draw</span></div>
+  <p>The controller must map a physical address onto the channel, rank, bank, row and column. Slide system: single channel, 8-byte bus, <strong>2 GB</strong>, 8 banks, 16K rows, 2K columns per bank.</p>
+  <figure class="fig"><svg viewBox="0 0 640 192" role="img" aria-labelledby="fmt fmd"><title id="fmt">DRAM address mapping</title><desc id="fmd">Two bit-field layouts for 2 GB, 8 banks, 16K rows, 2K columns, 8-byte bus</desc><text class="s-t" x="8" y="18" text-anchor="start">Row interleaving (bits 30 to 0)</text><rect class="s-box" x="8" y="26" width="281.8" height="34" rx="3"/><text class="s-s" x="148.9" y="48" text-anchor="middle">Row 14</text><rect class="s-box2" x="289.8" y="26" width="60.4" height="34" rx="3"/><text class="s-s" x="320.0" y="48" text-anchor="middle">Bank 3</text><rect class="s-box" x="350.2" y="26" width="221.4" height="34" rx="3"/><text class="s-s" x="460.9" y="48" text-anchor="middle">Column 11</text><rect class="s-box" x="571.6" y="26" width="60.4" height="34" rx="3"/><text class="s-s" x="601.8" y="48" text-anchor="middle">Byte 3</text><text class="s-t" x="8" y="88" text-anchor="start">Cache-block interleaving (64 B block)</text><rect class="s-box" x="8" y="96" width="281.8" height="34" rx="3"/><text class="s-s" x="148.9" y="118" text-anchor="middle">Row 14</text><rect class="s-box" x="289.8" y="96" width="161.0" height="34" rx="3"/><text class="s-s" x="370.3" y="118" text-anchor="middle">High col 8</text><rect class="s-box2" x="450.8" y="96" width="60.4" height="34" rx="3"/><text class="s-s" x="481.0" y="118" text-anchor="middle">Bank 3</text><rect class="s-box" x="511.2" y="96" width="60.4" height="34" rx="3"/><text class="s-s" x="541.4" y="118" text-anchor="middle">Low col 3</text><rect class="s-box" x="571.6" y="96" width="60.4" height="34" rx="3"/><text class="s-s" x="601.8" y="118" text-anchor="middle">Byte 3</text><text class="s-s" x="8" y="156" text-anchor="start">Row interleaving: a whole 16 KB row stays in one bank, the next row goes to the next bank.</text><text class="s-s" x="8" y="176" text-anchor="start">Block interleaving: consecutive 64 B blocks go to banks 0, 1, 2 ... 7, 0, 1 ...</text></svg><figcaption>The two layouts from Lecture 24. Bits are numbered from the byte-in-bus end.</figcaption></figure>
+  <div class="formula">Bits = 14 (row) + 3 (bank) + 11 (column) + 3 (byte in 8 B bus) = 31 = log2(2 GB) ✓<br>Row size = 2K columns × 8 B = 16 KB per bank</div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Row interleaving</th><th>Cache-block interleaving</th></tr></thead>
+    <tbody>
+      <tr><td>Layout</td><td class="m">Row | Bank | Column | Byte</td><td class="m">Row | High col (8) | Bank | Low col (3) | Byte</td></tr>
+      <tr><td>Consecutive addresses</td><td>Whole 16 KB row in one bank, then the next row in the next bank</td><td>Each consecutive 64 B block goes to the next bank</td></tr>
+      <tr><td>Strength</td><td>Many row-buffer hits for sequential streams</td><td>Consecutive blocks are served from different banks in parallel</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note example"><p><span class="lbl">Address Field Derivation</span>In cache-block interleaving, <code>Low Col (3 bits) + Byte (3 bits) = 6 bits</code> matches the 64 B cache line offset. Bank selection bits sit immediately adjacent to enable round-robin distribution of successive blocks across memory banks.</p></div>
+  <div class="note example"><p><span class="lbl">Worked Address Decoding</span>Decoding 31-bit address <code>0x5A3C9D48</code> under row interleaving versus cache-block interleaving.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Layout</th><th class="c">Row</th><th class="c">Bank</th><th class="c">Column</th><th class="c">Byte</th></tr></thead>
+    <tbody>
+      <tr><td>Row interleaving</td><td class="c">11550</td><td class="c">2</td><td class="c">937</td><td class="c">0</td></tr>
+      <tr><td>Block interleaving</td><td class="c">11550</td><td class="c">5</td><td class="c">625 (high 78, low 1)</td><td class="c">0</td></tr>
+    </tbody>
+  </table></div>
+  <p>Where do blocks at addresses 0x00, 0x40, 0x80, ... 0x1C0 go? Row interleaving: all eight stay in <strong>bank 0, row 0</strong> (one miss, then 7 row hits). Block interleaving: <strong>banks 0, 1, 2, ... 7</strong>, so all eight accesses can be overlapped.</p>
+  <h3>More tricks from the slides</h3>
+  <ul class="t">
+    <li><strong>Bank mapping randomization</strong>: XOR the bank bits with some other address bits (for example low row bits) so that regular strides spread over banks and bank conflicts are less likely.</li>
+    <li><strong>Multiple channels</strong>: a channel bit C is added. Its position decides where consecutive blocks go. Put it just above the block offset and consecutive cache blocks alternate between channels. Put it among the row bits and a large region stays on one channel.</li>
+    <li><strong>Virtual to physical</strong>: a 64-bit virtual address has a 52-bit page number and a 12-bit page offset. The physical address here is a 19-bit frame number + 12-bit offset = 31 bits. The OS picks the frame, so it controls the upper bank, channel and row bits. It can use <strong>page coloring</strong> to minimise bank conflicts and interference between applications.</li>
+  </ul>
+</section>
+
+<!-- ============ ROW BUFFER POLICY ============ -->
+<section class="topic" id="t-rbm">
+  <div class="head"><h2>Row buffer management policies</h2><label class="rev" for="r-rbm"><input class="rev" type="checkbox" id="r-rbm" data-sec="t-rbm">revised</label></div>
+  <div class="chips"><span class="chip">Key Concept</span><span class="chip">Differentiate</span><span class="chip">Numerical</span></div>
+  <div class="note def"><p><span class="lbl">Row Buffer Management Policies</span>Controllers utilize row buffer policies to govern precharge timing: <strong>Open Page Policy</strong> keeps the row active anticipating spatial locality; <strong>Close Page Policy</strong> immediately precharges the bank to optimize for random workloads.</p></div>
+  <div class="note def"><p><span class="lbl">Row buffer management policy</span>The rule the controller uses to decide <strong>when to close (precharge) the row</strong> that is open in a bank after an access.</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th></th><th>Open page policy</th><th>Close page policy</th></tr></thead>
+    <tbody>
+      <tr><td>Rule</td><td>Leave the row open after the access. Precharge only when a request needs a different row.</td><td>Precharge right after the access (auto-precharge). The bank is idle again.</td></tr>
+      <tr><td>Next access, same row</td><td>Row hit: tCL only</td><td>Row empty: tRCD + tCL (it must activate again)</td></tr>
+      <tr><td>Next access, different row</td><td>Row conflict: tRP + tRCD + tCL</td><td>Row empty: tRCD + tCL (precharge was already done)</td></tr>
+      <tr><td>Best when</td><td>Good row locality (streaming, sequential access)</td><td>Little locality, random access, many cores interfering</td></tr>
+      <tr><td>Latency</td><td>Varies: fast on hits, slow on conflicts</td><td>Uniform and predictable</td></tr>
+      <tr><td>Power</td><td>Row stays active</td><td>Less time with an open row</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="t">
+    <li><strong>Hybrid / adaptive</strong> policies close the row after a timeout or when a predictor guesses no more hits are coming. This is how many real controllers work, as far as I know.</li>
+    <li>The controller scheduler (FR-FCFS) works with open page: it reorders requests to get more hits.</li>
+  </ul>
+  <h3>Numerical: open against close</h3>
+  <div class="note example"><p><span class="lbl">Policy Performance Comparison</span>Given <code>tRP = tRCD = tCL = 14 ns</code> for an initially idle single bank. Comparing cumulative access latency across workload streams under Open Page versus Close Page (assuming background auto-precharge).</p></div>
+  <div class="wrap"><table class="wide">
+    <thead><tr><th>Row stream</th><th>Open page</th><th>Close page</th><th>Better</th></tr></thead>
+    <tbody>
+      <tr><td class="m">5 5 5 5 (all hits)</td><td>28 + 14 + 14 + 14 = <strong>70 ns</strong></td><td>4 × 28 = 112 ns</td><td>Open</td></tr>
+      <tr><td class="m">5 5 5 8 8 5</td><td>28 + 14 + 14 + 42 + 14 + 42 = <strong>154 ns</strong></td><td>6 × 28 = 168 ns</td><td>Open</td></tr>
+      <tr><td class="m">1 2 3 4 (no hits)</td><td>28 + 42 + 42 + 42 = 154 ns</td><td>4 × 28 = <strong>112 ns</strong></td><td>Close</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Break-even:</strong> after the first access, an access costs 14 (hit) or 42 (conflict) under open page, against 28 under close page. With a row-hit probability p: 14p + 42(1 − p) = 28 gives p = 0.5. Open page wins when more than half the accesses hit the open row, for these timings.</p>
+</section>
+
+<!-- ============ CHEAT SHEET ============ -->
+<section class="topic" id="t-sheet">
+  <div class="head"><h2>One-page cheat sheet</h2></div>
+  <div class="chips"><span class="chip">Revise the night before</span></div>
+  <div class="cards">
+    <div class="rc"><h4>Cache address</h4><ul>
+      <li>Address = tag | index | offset</li>
+      <li>Sets = C / (B × E)</li>
+      <li>offset = log2 B, index = log2 sets, tag = rest</li>
+      <li>Total bits per line = data + tag + valid (+ dirty)</li></ul></div>
+    <div class="rc"><h4>Mapping</h4><ul>
+      <li>Direct: block mod blocks, 1 compare</li>
+      <li>n-way: block mod sets, n compares</li>
+      <li>Fully: anywhere, no index</li>
+      <li>More ways: fewer conflicts, slower hit</li></ul></div>
+    <div class="rc"><h4>Replacement</h4><ul>
+      <li>Random, FIFO, LRU, LFU, Optimal</li>
+      <li>Optimal = farthest next use, a yardstick</li>
+      <li>Trace example: FIFO 15, LRU 12, OPT 9</li>
+      <li>FIFO can show Belady's anomaly</li></ul></div>
+    <div class="rc"><h4>Writes</h4><ul>
+      <li>Through: write both. Back: write cache, dirty bit</li>
+      <li>Write allocate (with back), no-write allocate (with through)</li>
+      <li>Look-aside: parallel. Look-through: cache first</li></ul></div>
+    <div class="rc"><h4>Misses</h4><ul>
+      <li>Compulsory: first access</li>
+      <li>Capacity: cache too small</li>
+      <li>Conflict: same set overloaded</li></ul></div>
+    <div class="rc"><h4>AMAT</h4><ul>
+      <li>Hit time + miss rate × penalty</li>
+      <li>2-level: H1 + M1 × (H2 + M2 × P2)</li>
+      <li>Local = misses / accesses to that level</li>
+      <li>Global = misses / CPU accesses</li>
+      <li>Stalls/instr = refs/instr × (AMAT − H1)</li></ul></div>
+    <div class="rc"><h4>Six optimizations</h4><ul>
+      <li>Larger block, larger cache, higher assoc: miss rate</li>
+      <li>Multilevel, read priority over writes: miss penalty</li>
+      <li>No translation on index (VIPT): hit time</li>
+      <li>VIPT max size = page size × ways</li></ul></div>
+    <div class="rc"><h4>DRAM hierarchy</h4><ul>
+      <li>Channel → DIMM → rank → chip → bank → row, column</li>
+      <li>Rank = 8 chips × 8 bits = 64 bits</li>
+      <li>64 B block = 8 transfers on a 64-bit bus</li>
+      <li>DRAM: 1T1C, refresh. SRAM: 6T, faster</li></ul></div>
+    <div class="rc"><h4>DRAM commands</h4><ul>
+      <li>ACT (RAS, tRCD) → RD/WR (CAS, tCL) → PRE (tRP)</li>
+      <li>Hit = tCL</li>
+      <li>Empty = tRCD + tCL</li>
+      <li>Conflict = tRP + tRCD + tCL</li></ul></div>
+    <div class="rc"><h4>Controller</h4><ul>
+      <li>Queues, address mapper, scheduler, bank timing, refresh, buffers</li>
+      <li>FR-FCFS: row hits first, then oldest</li></ul></div>
+    <div class="rc"><h4>Address mapping (2 GB)</h4><ul>
+      <li>14 row + 3 bank + 11 col + 3 byte = 31 bits</li>
+      <li>Row interleave: row stays in one bank</li>
+      <li>Block interleave: blocks rotate across banks</li>
+      <li>XOR bank bits, page coloring</li></ul></div>
+    <div class="rc"><h4>Row buffer policy</h4><ul>
+      <li>Open: keep row open, good for locality</li>
+      <li>Close: precharge after access, uniform latency</li>
+      <li>Open wins above 50% hit rate (14 / 28 / 42 ns example)</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ QUESTIONS ============ -->
+<section class="topic" id="t-qa">
+  <div class="head"><h2>Likely questions with answer outlines</h2></div>
+  <div class="chips"><span class="chip">Covers every syllabus line</span></div>
+  <div class="note example"><p><span class="lbl">Exam Review</span>Standard university examination questions covering cache memory architectures, AMAT optimizations, and DRAM memory systems.</p></div>
+
+  <details class="q"><summary>What is a cache? Explain the principle of locality and the terms hit, miss, hit time and miss penalty. (3)</summary><div class="ans">
+    <p>Small fast buffer between processor and memory. Temporal and spatial locality with examples, then the five definitions. See <a href="#t-hier">Hierarchy</a> and <a href="#t-basic">Basics</a>.</p></div></details>
+
+  <details class="q"><summary>A cache has 512 KB, 64 B blocks, 8-way, 32-bit address. Find the tag, index and offset bits and the set for 0xABC89984. (7)</summary><div class="ans">
+    <p>Sets = 1024, tag 16, index 10, offset 6. Set 614, word 1. See <a href="#t-basic">Basics</a>.</p></div></details>
+
+  <details class="q"><summary>Explain direct mapped, set associative and fully associative mapping with diagrams. (7)</summary><div class="ans">
+    <p>Placement rule, tag compares, index bits for each, block 12 in an 8-block cache, and the trade-off. See <a href="#t-map">Cache mapping</a>.</p></div></details>
+
+  <details class="q"><summary>Explain the block replacement techniques. Compare FIFO, LRU and Optimal on a reference string. (7)</summary><div class="ans">
+    <p>Random, FIFO, LRU, LFU, Optimal with how each decides. Trace table: FIFO 15, LRU 12, Optimal 9 misses. Mention Belady's anomaly. See <a href="#t-repl">Replacement</a>.</p></div></details>
+
+  <details class="q"><summary>Differentiate write through and write back. Explain write allocate and no-write allocate. (3 or 7)</summary><div class="ans">
+    <p>The two tables: what happens, dirty bit, traffic, usual pairings. See <a href="#t-write">Write strategy</a>.</p></div></details>
+
+  <details class="q"><summary>Explain the three types of cache misses with an example. (3)</summary><div class="ans">
+    <p>Compulsory, capacity, conflict, with the 0 8 0 6 8 example: 5, 4, 3 misses. See <a href="#t-miss">Types of misses</a>.</p></div></details>
+
+  <details class="q"><summary>1000 references, 40 L1 misses, 20 L2 misses. L2 hit time 10, L2 miss penalty 200, L1 hit time 1, 1.5 references per instruction. Find the miss rates, AMAT and stall cycles per instruction. (7)</summary><div class="ans">
+    <p>L1 4%, L2 local 50%, global 2%. AMAT = 1 + 0.04 × (10 + 0.5 × 200) = 5.4 cycles. Stalls = 1.5 × 4.4 = 6.6. See <a href="#t-perf">Performance</a>.</p></div></details>
+
+  <details class="q"><summary>Explain the six basic cache optimizations. (7)</summary><div class="ans">
+    <p>Table of the six, what each reduces and its drawback, then a few lines each. Do not forget the last two: read priority over writes (write buffer) and VIPT. See <a href="#t-opt">Six optimizations</a>.</p></div></details>
+
+  <details class="q"><summary>Compare SRAM and DRAM. Why does DRAM need refresh? (3)</summary><div class="ans">
+    <p>6T against 1T1C table, destructive read, leakage, refresh about every 64 ms. See <a href="#t-dram">DRAM</a>.</p></div></details>
+
+  <details class="q"><summary>Explain the DRAM system organization with a diagram: channel, DIMM, rank, chip, bank, row, column. Why are chips grouped into ranks? (7)</summary><div class="ans">
+    <p>Nested diagram, one line for each term, 8 chips × 8 bits = 64 bits, a 64 B block = 8 transfers. See <a href="#t-dram">DRAM</a> and <a href="#t-mod">Modules</a>.</p></div></details>
+
+  <details class="q"><summary>Explain the basic DRAM access protocol and commands. Compare row hit, row empty and row conflict. (7)</summary><div class="ans">
+    <p>ACT (RAS, tRCD) → RD/WR (CAS, tCL) → PRE (tRP), plus refresh. Three cases with the latency formulas and the bar figure. See <a href="#t-proto">Access protocol</a>.</p></div></details>
+
+  <details class="q"><summary>Describe the architecture of a DRAM controller. (7)</summary><div class="ans">
+    <p>Block diagram: request queues, address mapper, command scheduler, bank state and timing, refresh engine, data buffers. Add FCFS against FR-FCFS. See <a href="#t-ctrl">DRAM controller</a>.</p></div></details>
+
+  <details class="q"><summary>Explain DRAM address mapping and bank interleaving. Decode an address for a 2 GB, 8-bank, 16K-row, 2K-column system. (7)</summary><div class="ans">
+    <p>14 + 3 + 11 + 3 = 31 bits. Row against block interleaving, the 0x5A3C9D48 decode, XOR randomisation, page coloring. See <a href="#t-amap">Address mapping</a> and <a href="#t-mod">Modules</a>.</p></div></details>
+
+  <details class="q"><summary>Explain open page and close page row buffer management policies. Which is better and when? (7)</summary><div class="ans">
+    <p>Rule, next-access cost, best case and power for each. The three-stream table (70/112, 154/168, 154/112 ns) and the 50% break-even. See <a href="#t-rbm">Row buffer policies</a>.</p></div></details>
+</section>
+
+<footer class="notes-footer" role="contentinfo">
+  <div class="notes-footer-inner">
+    <div class="notes-footer-nav">
+      <a href="/">← All Subjects</a>
+      <a href="/notes/coa-module-2/">← Previous: COA Module 2 (Pipelining)</a>
+    </div>
+    <div class="notes-footer-meta">
+      <span>PCITT302 COA · Module 3 · KTU 2024 Scheme</span>
+    </div>
+  </div>
+</footer>

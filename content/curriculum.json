@@ -28,12 +28,12 @@
         {
           "num": 3,
           "slug": "module-3",
-          "title": "Memory Hierarchy & Cache Architectures",
-          "desc": "SRAM, DRAM, cache mapping functions (direct, associative, set-associative), replacement policies, and virtual memory paging.",
-          "status": "drafting",
+          "title": "Memory Hierarchy, Caches & DRAM Organization",
+          "desc": "Memory hierarchy, cache organization & mapping (direct, associative, set-associative), replacement policies, write strategies, AMAT optimizations, and DRAM memory systems.",
+          "status": "active",
           "storageKey": "coa-m3-revised",
-          "totalTopics": 6,
-          "href": null
+          "totalTopics": 14,
+          "href": "/notes/coa-module-3/"
         },
         {
           "num": 4,

@@ -153,6 +153,88 @@
       "group": "Revise"
     }
   ],
+  "coa-m3": [
+    {
+      "id": "t-hier",
+      "title": "Memory hierarchy & locality",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-basic",
+      "title": "Cache basics & addressing",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-map",
+      "title": "Cache mapping",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-repl",
+      "title": "Block replacement",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-write",
+      "title": "Write strategy",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-miss",
+      "title": "Types of misses",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-perf",
+      "title": "Cache performance",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-opt",
+      "title": "Six basic optimizations",
+      "group": "Cache Memory"
+    },
+    {
+      "id": "t-dram",
+      "title": "DRAM, SRAM & organization",
+      "group": "DRAM"
+    },
+    {
+      "id": "t-mod",
+      "title": "Modules, banks & interleaving",
+      "group": "DRAM"
+    },
+    {
+      "id": "t-proto",
+      "title": "Access protocol & commands",
+      "group": "DRAM"
+    },
+    {
+      "id": "t-ctrl",
+      "title": "DRAM controller",
+      "group": "DRAM"
+    },
+    {
+      "id": "t-amap",
+      "title": "Address mapping",
+      "group": "DRAM"
+    },
+    {
+      "id": "t-rbm",
+      "title": "Row buffer policies",
+      "group": "DRAM"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
+  ],
   "ds-m1": [
     {
       "id": "t-basics",

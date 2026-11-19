@@ -99,7 +99,7 @@
       "Added",
       "Numerical"
     ],
-    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (−1)^s 2^(E bias) stored true"
+    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (\u22121)^s 2^(E bias) stored true"
   },
   {
     "id": "t-formats",
@@ -204,7 +204,7 @@
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: −1), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
+    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: \u22121), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
   },
   {
     "id": "t-single",
@@ -349,6 +349,193 @@
       "Covers every syllabus line"
     ],
     "keywords": "Likely questions with answer outlines revised Added Covers every syllabus line Added These guess typical KTU-style questions from syllabus. haven't seen your PYQs, match them against yours. Compare single-cycle multi-cycle processors. comparison table: CPI, clock"
+  },
+  {
+    "id": "t-hier",
+    "title": "Memory hierarchy and locality",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-hier",
+    "chips": [
+      "Define",
+      "Draw"
+    ],
+    "keywords": "Memory hierarchy and locality revised Define Draw Cache A small, fast buffer between the processor and main memory. Old values are removed to make room for new ones. Programmers want unlimited fast memory. The fix is a hierarchy : several levels of different speed and"
+  },
+  {
+    "id": "t-basic",
+    "title": "Cache basics and addressing",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-basic",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Draw"
+    ],
+    "keywords": "Cache basics and addressing revised Define Numerical Draw Term Meaning Block / line Smallest unit that is either present or absent in a cache level. Hit The requested data is in the cache. Miss The requested data is not in the cache. Hit time Time"
+  },
+  {
+    "id": "t-map",
+    "title": "Cache mapping and block identification",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-map",
+    "chips": [
+      "Differentiate",
+      "Draw",
+      "Numerical"
+    ],
+    "keywords": "Cache mapping and block identification revised Differentiate Draw Numerical Four design choices for any cache level: where a block can be placed, how it is found, which block is replaced on a miss, and what happens on a write. Direct mapped Set associative Fully associative"
+  },
+  {
+    "id": "t-repl",
+    "title": "Block replacement policies",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-repl",
+    "chips": [
+      "Differentiate",
+      "Numerical",
+      "Key Concept"
+    ],
+    "keywords": "Block replacement revised Differentiate Numerical Key Concept On a miss in a full set, one block must go. Direct mapped is easy: there is only one candidate. Set associative and fully associative caches need a policy. Policy How it chooses Notes Random Any block in"
+  },
+  {
+    "id": "t-write",
+    "title": "Write strategy and cache types",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-write",
+    "chips": [
+      "Differentiate",
+      "Define"
+    ],
+    "keywords": "Write strategy and cache types revised Differentiate Define Two questions on a write: what if the block is in the cache ( write hit ), and what if it is not ( write miss )? Write hit Write through Write back What happens Data is"
+  },
+  {
+    "id": "t-miss",
+    "title": "Types of cache misses",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-miss",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Key Concept"
+    ],
+    "keywords": "Types of cache misses revised Define Numerical Key Concept Miss Cause Reduced by Compulsory (cold) The very first access to a block. Happens even in an infinite cache. Larger blocks, prefetching Capacity The cache cannot hold all the blocks the program needs. Also seen in"
+  },
+  {
+    "id": "t-perf",
+    "title": "Cache performance and AMAT",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-perf",
+    "chips": [
+      "Numerical",
+      "Important",
+      "Key Concept"
+    ],
+    "keywords": "Cache performance: AMAT revised Numerical Important Key Concept AMAT = Hit time + Miss rate \u00d7 Miss penalty Two levels: AMAT = Hit time(L1) + Miss rate(L1) \u00d7 [ Hit time(L2) + Miss rate(L2) \u00d7 Miss penalty(L2) ] Local miss rate = misses in a"
+  },
+  {
+    "id": "t-opt",
+    "title": "Six basic cache optimizations",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-opt",
+    "chips": [
+      "Explain",
+      "Important",
+      "Key Concept"
+    ],
+    "keywords": "Six basic cache optimizations revised Explain Important Key Concept Syllabus Core The KTU 2024 scheme syllabus targets the canonical six basic cache optimizations (Hennessy &amp; Patterson, Appendix B.3), systematically categorizing techniques to reduce miss rate, miss penalty, and hit time. # Optimization Reduces Drawback 1"
+  },
+  {
+    "id": "t-dram",
+    "title": "DRAM, SRAM and DRAM organization",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-dram",
+    "chips": [
+      "Differentiate",
+      "Define",
+      "Draw"
+    ],
+    "keywords": "DRAM, SRAM and DRAM organization revised Differentiate Define Draw Main memory is built from DRAM . The controller sits on the processor side and talks to the DRAM banks through a DRAM interface. SRAM DRAM Cell 6 transistors 1 transistor + 1 capacitor Speed Faster"
+  },
+  {
+    "id": "t-mod",
+    "title": "Memory modules, banks and interleaving",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-mod",
+    "chips": [
+      "Explain",
+      "Numerical",
+      "Differentiate"
+    ],
+    "keywords": "Memory modules, banks and interleaving revised Explain Numerical Differentiate Modules and channels A DIMM has chips on both sides. Rank 0 (front) and rank 1 (back) share the 64-bit data bus and are picked with chip-select (CS) lines. Multiple DIMMs on a channel: more capacity,"
+  },
+  {
+    "id": "t-proto",
+    "title": "DRAM access protocol and commands",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-proto",
+    "chips": [
+      "Explain",
+      "Numerical",
+      "Draw",
+      "Important"
+    ],
+    "keywords": "DRAM access protocol and commands revised Explain Numerical Draw Important Access sequence ACTIVATE (RAS) \u2192 READ / WRITE (CAS) \u2192 PRECHARGE Command What it does Timing ACTIVATE (ACT, uses RAS) Row address goes on the address bus, RAS is asserted. The row is copied from"
+  },
+  {
+    "id": "t-ctrl",
+    "title": "DRAM controller architecture",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-ctrl",
+    "chips": [
+      "Key Concept",
+      "Draw",
+      "Explain"
+    ],
+    "keywords": "DRAM controller architecture revised Key Concept Draw Explain Controller Subsystems The memory controller coordinates front-end memory requests with back-end DRAM timing rules, managing queues, address arbitration, command scheduling, and refresh intervals. The memory controller sits on the processor chip. It takes cache-miss requests and turns"
+  },
+  {
+    "id": "t-amap",
+    "title": "DRAM address mapping",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-amap",
+    "chips": [
+      "Numerical",
+      "Differentiate",
+      "Draw"
+    ],
+    "keywords": "DRAM address mapping revised Numerical Differentiate Draw The controller must map a physical address onto the channel, rank, bank, row and column. Slide system: single channel, 8-byte bus, 2 GB , 8 banks, 16K rows, 2K columns per bank. DRAM address mapping Two bit-field layouts"
+  },
+  {
+    "id": "t-rbm",
+    "title": "Row buffer management policies",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-rbm",
+    "chips": [
+      "Key Concept",
+      "Differentiate",
+      "Numerical"
+    ],
+    "keywords": "Row buffer management policies revised Key Concept Differentiate Numerical Row Buffer Management Policies Controllers utilize row buffer policies to govern precharge timing: Open Page Policy keeps the row active anticipating spatial locality; Close Page Policy immediately precharges the bank to optimize for random workloads. Row"
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet Revise the night before Cache address Address = tag | index | offset Sets = C / (B \u00d7 E) offset = log2 B, index = log2 sets, tag = rest Total bits per line = data + tag + valid (+"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "COA M3",
+    "url": "/notes/coa-module-3/#t-qa",
+    "chips": [
+      "Covers every syllabus line"
+    ],
+    "keywords": "Likely questions with answer outlines Covers every syllabus line Exam Review Standard university examination questions covering cache memory architectures, AMAT optimizations, and DRAM memory systems. What is a cache? Explain the principle of locality and the terms hit, miss, hit time and miss penalty. (3)"
   },
   {
     "id": "t-basics",
@@ -531,7 +718,7 @@
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c·g, worst case, upper bound best case, lower bound c₁·g c₂·g, average case, tight"
+    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c\u00b7g, worst case, upper bound best case, lower bound c\u2081\u00b7g c\u2082\u00b7g, average case, tight"
   },
   {
     "id": "t-qa",
@@ -733,7 +920,7 @@
       "Numerical",
       "Added"
     ],
-    "keywords": "Functional dependencies revised Define Numerical Added Functional dependency X → Y holds in R if, whenever two tuples have the same value for X, they must have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X functionally determines Y. An"
+    "keywords": "Functional dependencies revised Define Numerical Added Functional dependency X \u2192 Y holds in R if, whenever two tuples have the same value for X, they must have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X functionally determines Y. An"
   },
   {
     "id": "t-nf",
@@ -759,7 +946,7 @@
       "Added",
       "Check"
     ],
-    "keywords": "Decomposition: lossless join, dependency preservation, algorithms revised Define Algorithm Added Check Decomposition splits the universal relation R into D = {R 1 , …, R n }, using the FDs. A good decomposition has three properties. Property Meaning Needed? Attribute preservation Every attribute of "
+    "keywords": "Decomposition: lossless join, dependency preservation, algorithms revised Define Algorithm Added Check Decomposition splits the universal relation R into D = {R 1 , \u2026, R n }, using the FDs. A good decomposition has three properties. Property Meaning Needed? Attribute preservation Every attribute of "
   },
   {
     "id": "t-mvd",
@@ -770,7 +957,7 @@
       "Define",
       "Added"
     ],
-    "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X →→ Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
+    "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X \u2192\u2192 Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
   },
   {
     "id": "t-solved",
@@ -805,7 +992,7 @@
       "Explain",
       "Check"
     ],
-    "keywords": "SELECT: basic queries revised Write SQL Explain Check SELECT block SELECT <attribute list> FROM <table list> WHERE <condition>. It corresponds to relational algebra select, project and join , but SQL's SELECT is not algebra's σ. SQL tables are multisets (bags) : duplicate rows are allowed. A relatio"
+    "keywords": "SELECT: basic queries revised Write SQL Explain Check SELECT block SELECT <attribute list> FROM <table list> WHERE <condition>. It corresponds to relational algebra select, project and join , but SQL's SELECT is not algebra's \u03c3. SQL tables are multisets (bags) : duplicate rows are allowed. A relatio"
   },
   {
     "id": "t-join",
@@ -817,7 +1004,7 @@
       "Differentiate",
       "Check"
     ],
-    "keywords": "Joins and nested queries revised Write SQL Differentiate Check Joined tables in FROM SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions. Join Result JOIN … ON (inner, theta) Only pairs of rows that satisfy the condition NATURAL JOIN Inner join "
+    "keywords": "Joins and nested queries revised Write SQL Differentiate Check Joined tables in FROM SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions. Join Result JOIN \u2026 ON (inner, theta) Only pairs of rows that satisfy the condition NATURAL JOIN Inner join "
   },
   {
     "id": "t-agg",
@@ -841,7 +1028,7 @@
       "Check",
       "Added"
     ],
-    "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE … SET … WHERE Delete DELETE FROM … WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
+    "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE \u2026 SET \u2026 WHERE Delete DELETE FROM \u2026 WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
   },
   {
     "id": "t-timeline",
@@ -861,7 +1048,7 @@
     "badge": "DBMS M2",
     "url": "/notes/dbms-module-2/#t-sheet",
     "chips": [],
-    "keywords": "One-page cheat sheet revised FD rules Reflexive: Y ⊆ X gives X→Y Augmentation: X→Y gives XZ→YZ Transitive: X→Y, Y→Z give X→Z Union, decomposition, pseudotransitivity X→Y implied iff Y ⊆ X⁺ Closure X⁺ Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Neve"
+    "keywords": "One-page cheat sheet revised FD rules Reflexive: Y \u2286 X gives X\u2192Y Augmentation: X\u2192Y gives XZ\u2192YZ Transitive: X\u2192Y, Y\u2192Z give X\u2192Z Union, decomposition, pseudotransitivity X\u2192Y implied iff Y \u2286 X\u207a Closure X\u207a Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Neve"
   },
   {
     "id": "t-qa",

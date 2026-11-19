@@ -41,6 +41,15 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 10,
     tocKey: 'coa-m2',
   },
+  'coa-module-3': {
+    slug: 'coa-module-3',
+    moduleCode: 'PCITT302 · Module 3',
+    title: 'COA Module 3: Memory Organization & Architecture',
+    desc: 'Memory hierarchy, cache organization & mapping (direct, associative, set-associative), replacement policies, write strategies, AMAT optimizations, and DRAM memory systems.',
+    storageKey: 'coa-m3-revised',
+    totalTopics: 14,
+    tocKey: 'coa-m3',
+  },
   'ds-module-1': {
     slug: 'ds-module-1',
     moduleCode: 'PCITT303 · Module 1',
