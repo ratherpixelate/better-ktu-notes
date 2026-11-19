@@ -102,8 +102,16 @@ export default async function NotePage({ params }: NotePageProps) {
   const filePath = path.join(process.cwd(), 'content', 'notes-html', `${slug}.html`);
   if (!fs.existsSync(filePath)) notFound();
 
-  const htmlContent = fs.readFileSync(filePath, 'utf8');
+  let htmlContent = fs.readFileSync(filePath, 'utf8');
   const items = (tocData as Record<string, any[]>)[config.tocKey] || [];
+
+  // Prefix internal routes with basePath in production export
+  const basePath = process.env.NODE_ENV === 'production' ? '/better-ktu-notes' : '';
+  if (basePath) {
+    htmlContent = htmlContent
+      .replaceAll('href="/notes/', `href="${basePath}/notes/`)
+      .replaceAll('href="/"', `href="${basePath}/"`);
+  }
 
   return (
     <NoteShell

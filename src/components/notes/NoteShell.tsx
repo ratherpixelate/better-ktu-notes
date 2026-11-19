@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { TableOfContents, TocItem } from './TableOfContents';
 import { useRevisionProgress } from '@/hooks/useRevisionProgress';
 
@@ -20,6 +21,7 @@ export function NoteShell({
   totalTopics,
   children,
 }: NoteShellProps) {
+  const router = useRouter();
   const { revisedTopics, toggleTopic } = useRevisionProgress(storageKey);
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -48,9 +50,33 @@ export function NoteShell({
       }
     };
 
+    // 3. Delegate internal note link clicks through Next.js router
+    const handleLinkClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('a');
+      if (!target) return;
+      const href = target.getAttribute('href');
+      if (!href) return;
+
+      // Ignore hash anchors
+      if (href.startsWith('#')) return;
+
+      // Ignore external protocols
+      if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) return;
+
+      // Intercept internal routes for client-side navigation
+      e.preventDefault();
+      // Remove any leading basePath because router.push adds basePath automatically
+      const cleanUrl = href.replace(/^\/better-ktu-notes/, '') || '/';
+      router.push(cleanUrl);
+    };
+
     main.addEventListener('change', handleChange);
-    return () => main.removeEventListener('change', handleChange);
-  }, [revisedTopics, toggleTopic]);
+    main.addEventListener('click', handleLinkClick);
+    return () => {
+      main.removeEventListener('change', handleChange);
+      main.removeEventListener('click', handleLinkClick);
+    };
+  }, [revisedTopics, toggleTopic, router]);
 
   return (
     <div className="shell">

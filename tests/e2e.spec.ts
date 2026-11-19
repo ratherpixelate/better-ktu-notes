@@ -187,6 +187,19 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     const animName = await firstAns.evaluate((el) => window.getComputedStyle(el).animationName);
     expect(animName).toContain('ansIn');
 
+    // Test footer navigation links in COA Module 2
+    const prevLink = page.locator('.notes-footer-nav a:has-text("Previous: COA Module 1")');
+    await expect(prevLink).toBeVisible();
+    await prevLink.click();
+    await expect(page).toHaveURL(/localhost:3000\/notes\/coa-module-1\/?$/);
+    await expect(page).toHaveTitle(/COA Module 1/);
+
+    // Test All Subjects link in COA Module 1 footer
+    const allSubjectsLink = page.locator('.notes-footer-nav a:has-text("All Subjects")');
+    await expect(allSubjectsLink).toBeVisible();
+    await allSubjectsLink.click();
+    await expect(page).toHaveURL(/localhost:3000\/?$/);
+
     // DBMS Module 1
     await page.goto('/notes/dbms-module-1/');
     await expect(page).toHaveTitle(/DBMS Module 1/);
