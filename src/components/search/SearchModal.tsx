@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Fuse from 'fuse.js';
 import searchData from '@/../content/search-index.json';
 
@@ -19,6 +21,7 @@ interface SearchModalProps {
 }
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const router = useRouter();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,6 +45,33 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
     return fuse.search(query).map((res) => res.item).slice(0, 12);
   }, [query, fuse]);
+
+  const handleSelect = useCallback(
+    (targetUrl: string) => {
+      onClose();
+
+      // Check if target is on the current page (in-page hash jump)
+      const [targetPath, hash] = targetUrl.split('#');
+      if (typeof window !== 'undefined') {
+        const currentPath = window.location.pathname.replace(/\/$/, '');
+        const cleanTargetPath = targetPath.replace(/\/$/, '');
+
+        // If already on the same module page, smooth scroll directly to the section
+        if (hash && (currentPath.endsWith(cleanTargetPath) || cleanTargetPath.endsWith(currentPath))) {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+            window.history.pushState(null, '', `#${hash}`);
+            return;
+          }
+        }
+      }
+
+      // Navigate via Next.js router (which automatically prepends basePath in production)
+      router.push(targetUrl);
+    },
+    [onClose, router]
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -73,15 +103,14 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         e.preventDefault();
         const selected = results[selectedIndex];
         if (selected) {
-          window.location.href = selected.url;
-          onClose();
+          handleSelect(selected.url);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, results, selectedIndex, onClose]);
+  }, [isOpen, results, selectedIndex, handleSelect, onClose]);
 
   if (!isOpen) return null;
 
@@ -133,10 +162,13 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </div>
           ) : (
             results.map((item, idx) => (
-              <a
+              <Link
                 key={`${item.badge}-${item.id}`}
                 href={item.url}
-                onClick={onClose}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSelect(item.url);
+                }}
                 className={`search-result-item ${idx === selectedIndex ? 'selected' : ''}`}
                 onMouseEnter={() => setSelectedIndex(idx)}
               >
@@ -144,8 +176,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <span className="result-title">{item.title}</span>
                   {item.chips && item.chips.length > 0 && (
                     <div className="result-chips">
-                      {item.chips.map((chip) => (
-                        <span key={chip} className="result-chip">
+                      {item.chips.map((chip, chipIdx) => (
+                        <span key={`${chip}-${chipIdx}`} className="result-chip">
                           {chip}
                         </span>
                       ))}
@@ -153,7 +185,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   )}
                 </div>
                 <span className="result-badge">{item.badge}</span>
-              </a>
+              </Link>
             ))
           )}
         </div>

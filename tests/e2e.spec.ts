@@ -85,9 +85,27 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     // Capture screenshot of search modal
     await page.screenshot({ path: 'tests/screenshots/03-search-modal.png' });
 
-    // Press Escape to close
-    await page.keyboard.press('Escape');
+    // Click the first search result ("Asymptotic notations")
+    await results.first().click();
+
+    // Verify modal closes and page navigates to target topic
     await expect(page.locator('.search-modal-backdrop')).not.toBeVisible();
+    await expect(page).toHaveURL(/notes\/ds-module-1\/#t-asym/);
+    await expect(page.locator('#t-asym')).toBeVisible();
+
+    // Now test in-page search navigation (within same note page)
+    await page.keyboard.press('Control+k');
+    await expect(page.locator('.search-modal-backdrop')).toBeVisible();
+
+    await page.locator('.search-input').fill('sparse');
+    const sparseResult = page.locator('.search-result-item').first();
+    await expect(sparseResult).toContainText('Sparse matrix');
+    await page.keyboard.press('Enter');
+
+    // Verify URL updated to sparse matrix on same page
+    await expect(page.locator('.search-modal-backdrop')).not.toBeVisible();
+    await expect(page).toHaveURL(/#t-sparse/);
+    await expect(page.locator('#t-sparse')).toBeVisible();
   });
 
   test('4. DS Module 1 Notes & SVG Graph Integrity', async ({ page }) => {
