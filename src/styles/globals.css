@@ -847,6 +847,14 @@ input, textarea, select {
   font-weight: 600;
 }
 
+.card-status .card-check {
+  display: inline-block;
+  color: var(--badge-success);
+  font-weight: 700;
+  animation: checkPop 180ms var(--ease-pop) both;
+  transform-origin: center center;
+}
+
 .card-status.pending {
   color: var(--fg-muted);
 }
@@ -1678,6 +1686,20 @@ input, textarea, select {
   color: var(--badge-success-on-active);
 }
 
+@keyframes milestonePop {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+  60% {
+    transform: scale(1.025);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .toc .progress {
   margin-top: 24px;
   padding: 14px 12px 0;
@@ -1686,12 +1708,40 @@ input, textarea, select {
   font-size: 12px;
   color: var(--fg-muted);
   font-weight: 600;
+  transition: color 200ms var(--ease-smooth),
+              border-color 200ms var(--ease-smooth),
+              background-color 200ms var(--ease-smooth);
+}
+
+.toc .progress.complete {
+  color: var(--badge-success);
+  border-top-color: var(--badge-success);
+  animation: milestonePop 260ms var(--ease-spring) both;
+  transform-origin: left center;
+}
+
+.toc .progress.complete .milestone-check {
+  display: inline-block;
+  margin-left: 4px;
+  animation: checkPop 220ms var(--ease-pop) both;
 }
 
 /* Note Content Main Column */
+@keyframes noteEnter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 main.notes-main {
   min-width: 0;
   max-width: 820px;
+  animation: noteEnter 160ms var(--ease-out) both;
 }
 
 .eyebrow {
@@ -2508,11 +2558,23 @@ details.q summary:focus-visible {
 details.q[open] summary {
   border-bottom: 1px solid var(--border);
 }
-details.q .ans {
+@keyframes ansIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+details.q[open] .ans {
   padding: 12px 16px 14px;
   font-size: 14.5px;
   color: var(--fg-secondary);
   line-height: 1.6;
+  animation: ansIn 200ms var(--ease-out) both;
 }
 details.q .ans p {
   margin: 6px 0;

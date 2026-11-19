@@ -181,6 +181,12 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await firstQuestion.locator('summary').click();
     expect(await firstQuestion.getAttribute('open')).not.toBeNull();
 
+    // Verify question accordion expansion animation
+    const firstAns = firstQuestion.locator('.ans');
+    await expect(firstAns).toBeVisible();
+    const animName = await firstAns.evaluate((el) => window.getComputedStyle(el).animationName);
+    expect(animName).toContain('ansIn');
+
     // DBMS Module 1
     await page.goto('/notes/dbms-module-1/');
     await expect(page).toHaveTitle(/DBMS Module 1/);
@@ -219,6 +225,12 @@ test.describe('BetterKTUNotes E2E Suite', () => {
 
     const borderRadius = await activeLink.evaluate((el) => window.getComputedStyle(el).borderRadius);
     expect(parseInt(borderRadius, 10)).toBeGreaterThanOrEqual(4);
+
+    // Verify note page content entrance bridge animation
+    const mainContent = page.locator('main.notes-main');
+    await expect(mainContent).toBeVisible();
+    const enterAnim = await mainContent.evaluate((el) => window.getComputedStyle(el).animationName);
+    expect(enterAnim).toContain('noteEnter');
 
     // Capture screenshot of TOC sidebar (light mode)
     await toc.screenshot({ path: 'tests/screenshots/06-coa-toc-sidebar.png' });

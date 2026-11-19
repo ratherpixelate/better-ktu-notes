@@ -59,7 +59,8 @@ export function ModuleCard({ module }: ModuleCardProps) {
       <div className="card-footer">
         <div className={`card-status ${isComplete ? 'revised' : ''}`}>
           <span>
-            {mounted ? completedCount : 0}/{module.totalTopics} completed{isComplete ? ' ✓' : ''}
+            {mounted ? completedCount : 0}/{module.totalTopics} completed
+            {isComplete && <span className="card-check" aria-hidden="true"> ✓</span>}
           </span>
         </div>
         <div className="card-arrow">

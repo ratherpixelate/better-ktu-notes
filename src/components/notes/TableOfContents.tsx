@@ -62,6 +62,7 @@ export function TableOfContents({
   }, [items, activeId]);
 
   const revisedCount = Object.values(revisedTopics).filter(Boolean).length;
+  const isAllRevised = totalTopics > 0 && revisedCount >= totalTopics;
 
   return (
     <nav className="toc" aria-label="Module sections">
@@ -87,8 +88,9 @@ export function TableOfContents({
           );
         })}
       </ul>
-      <div className="progress">
+      <div className={`progress ${isAllRevised ? 'complete' : ''}`}>
         {revisedCount} of {totalTopics} sections revised
+        {isAllRevised && <span className="milestone-check" aria-hidden="true"> ✓</span>}
       </div>
     </nav>
   );
