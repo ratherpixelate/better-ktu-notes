@@ -25,6 +25,12 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     const activeCards = page.locator('.module-card:not(.locked)');
     await expect(activeCards).toHaveCount(5);
 
+    // Verify Active Module Card shows "0/18 completed" and NO green status dot
+    const coaM1Card = activeCards.first();
+    await expect(coaM1Card.locator('.card-status')).toHaveText('0/18 completed');
+    await expect(coaM1Card.locator('.status-dot')).not.toBeAttached();
+    await expect(page.locator('.module-card:not(.locked)')).not.toContainText(['Complete Syllabus']);
+
     // Check Favicon links in document head
     const faviconSvg = page.locator('link[rel="icon"][type="image/svg+xml"]');
     await expect(faviconSvg).toBeAttached();

@@ -57,14 +57,9 @@ export function ModuleCard({ module }: ModuleCardProps) {
         <p className="module-desc">{module.desc}</p>
       </div>
       <div className="card-footer">
-        <div className="card-status">
-          <span className="status-dot"></span>
+        <div className={`card-status ${isComplete ? 'revised' : ''}`}>
           <span>
-            {mounted && completedCount > 0
-              ? isComplete
-                ? 'Module Revised ✓'
-                : `${completedCount} of ${module.totalTopics} Revised`
-              : 'Complete Syllabus'}
+            {mounted ? completedCount : 0}/{module.totalTopics} completed{isComplete ? ' ✓' : ''}
           </span>
         </div>
         <div className="card-arrow">

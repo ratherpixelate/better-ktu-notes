@@ -12,7 +12,7 @@
           "desc": "Functional units, operational concepts, bus structures, memory locations, addressing modes, instruction sequencing, and RISC principles.",
           "status": "active",
           "storageKey": "coa-m1-revised",
-          "totalTopics": 6,
+          "totalTopics": 18,
           "href": "/notes/coa-module-1/"
         },
         {
@@ -22,7 +22,7 @@
           "desc": "Single-cycle vs multi-cycle processors, hardwired vs microprogrammed control, 5-stage RISC pipeline, and structural/data/control hazards.",
           "status": "active",
           "storageKey": "coa-m2-revised",
-          "totalTopics": 10,
+          "totalTopics": 12,
           "href": "/notes/coa-module-2/"
         },
         {
@@ -59,7 +59,7 @@
           "desc": "ADT vs CDT, asymptotic notations (Big O, Ω, Θ), sparse matrices, polynomial addition, stack operations, and infix-to-postfix conversion.",
           "status": "active",
           "storageKey": "ds-m1-revised",
-          "totalTopics": 9,
+          "totalTopics": 16,
           "href": "/notes/ds-module-1/"
         },
         {
@@ -106,7 +106,7 @@
           "desc": "Database approach vs file systems, three-schema architecture, conceptual ER modeling, ER-to-relational mapping, and table creation with SQL DDL constraints.",
           "status": "active",
           "storageKey": "dbms-m1-revised",
-          "totalTopics": 8,
+          "totalTopics": 15,
           "href": "/notes/dbms-module-1/"
         },
         {
