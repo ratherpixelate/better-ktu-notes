@@ -29,7 +29,7 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     title: 'COA Module 1: Basic Structure & Machine Instructions',
     desc: 'Functional units, operational concepts, bus structures, memory locations, addressing modes, instruction sequencing, and RISC principles.',
     storageKey: 'coa-m1-revised',
-    totalTopics: 18,
+    totalTopics: 17,
     tocKey: 'coa-m1',
   },
   'coa-module-2': {
@@ -38,7 +38,7 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     title: 'COA Module 2: Processor Organization, Datapaths & Pipelining',
     desc: 'Single-cycle vs multi-cycle processors, hardwired vs microprogrammed control, 5-stage RISC pipeline, and structural/data/control hazards.',
     storageKey: 'coa-m2-revised',
-    totalTopics: 12,
+    totalTopics: 10,
     tocKey: 'coa-m2',
   },
   'ds-module-1': {
@@ -47,7 +47,7 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     title: 'DS Module 1: Introduction to Data Structures, Arrays & Stacks',
     desc: 'ADT vs CDT, asymptotic notations (Big O, Ω, Θ), sparse matrices, polynomial addition, stack operations, and infix-to-postfix conversion.',
     storageKey: 'ds-m1-revised',
-    totalTopics: 16,
+    totalTopics: 14,
     tocKey: 'ds-m1',
   },
   'dbms-module-1': {
@@ -56,7 +56,7 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     title: 'DBMS Module 1: Database Design and Creation',
     desc: 'Database approach vs file systems, three-schema architecture, conceptual ER modeling, ER-to-relational mapping, and table creation with SQL DDL constraints.',
     storageKey: 'dbms-m1-revised',
-    totalTopics: 15,
+    totalTopics: 13,
     tocKey: 'dbms-m1',
   },
   'dbms-module-2': {
@@ -65,7 +65,7 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     title: 'DBMS Module 2: Normalization and SQL Queries',
     desc: 'Functional dependencies, normal forms (1NF to 5NF), lossless join decomposition, SQL DDL/DML, joins, aggregates, and project milestones.',
     storageKey: 'dbms-m2-revised',
-    totalTopics: 14,
+    totalTopics: 12,
     tocKey: 'dbms-m2',
   },
 };

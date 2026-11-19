@@ -61,7 +61,9 @@ export function TableOfContents({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [items, activeId]);
 
-  const revisedCount = Object.values(revisedTopics).filter(Boolean).length;
+  const revisedCount = Object.entries(revisedTopics).filter(
+    ([key, val]) => Boolean(val) && key !== 't-sheet' && key !== 't-qa'
+  ).length;
   const isAllRevised = totalTopics > 0 && revisedCount >= totalTopics;
 
   return (
@@ -69,7 +71,7 @@ export function TableOfContents({
       <p className="brand">{moduleCode}</p>
       <ul ref={tocListRef} id="toclist">
         {items.map((item, idx) => {
-          const isDone = !!revisedTopics[item.id];
+          const isDone = item.id !== 't-sheet' && item.id !== 't-qa' && !!revisedTopics[item.id];
           const isCurrent = activeId === item.id;
           const showGroup = item.group && (idx === 0 || items[idx - 1].group !== item.group);
 

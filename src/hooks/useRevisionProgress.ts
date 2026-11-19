@@ -56,7 +56,9 @@ export function useRevisionProgress(storageKey?: string) {
     return !!revisedTopics[topicId];
   }, [revisedTopics]);
 
-  const completedCount = Object.values(revisedTopics).filter(Boolean).length;
+  const completedCount = Object.entries(revisedTopics).filter(
+    ([key, val]) => Boolean(val) && key !== 't-sheet' && key !== 't-qa'
+  ).length;
 
   return { revisedTopics, isTopicRevised, toggleTopic, completedCount, mounted };
 }
@@ -82,7 +84,7 @@ export function useCourseStats() {
     totalModulesCompleted: 0,
     totalModules: 12,
     totalTopicsCompleted: 0,
-    totalTopics: 118,
+    totalTopics: 109,
     subjects: [],
   });
   const [mounted, setMounted] = useState(false);
@@ -104,7 +106,9 @@ export function useCourseStats() {
           try {
             const raw = localStorage.getItem(mod.storageKey);
             const parsed: RevisionMap = raw ? JSON.parse(raw) : {};
-            const done = Object.values(parsed).filter(Boolean).length;
+            const done = Object.entries(parsed).filter(
+              ([k, v]) => Boolean(v) && k !== 't-sheet' && k !== 't-qa'
+            ).length;
             subCompletedTopics += done;
             if (done >= mod.totalTopics && mod.totalTopics > 0) {
               subCompletedModules++;
