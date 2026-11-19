@@ -711,5 +711,167 @@
       "Covers every syllabus line"
     ],
     "keywords": "Likely questions with answer outlines revised Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours. Explain the characteristics of the database approach and its advantages over file"
+  },
+  {
+    "id": "t-why",
+    "title": "Why normalise: design guidelines and anomalies",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-why",
+    "chips": [
+      "Explain",
+      "Example"
+    ],
+    "keywords": "Why normalise: design guidelines and anomalies revised Explain Example Normalization The process of decomposing \"bad\" relations into smaller relations, using keys and functional dependencies, so that redundancy and anomalies are removed. A normal form is a condition on keys and FDs that a relation m"
+  },
+  {
+    "id": "t-fd",
+    "title": "Functional dependencies",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-fd",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Added"
+    ],
+    "keywords": "Functional dependencies revised Define Numerical Added Functional dependency X → Y holds in R if, whenever two tuples have the same value for X, they must have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X functionally determines Y. An"
+  },
+  {
+    "id": "t-nf",
+    "title": "Normal forms: 1NF, 2NF, 3NF, BCNF",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-nf",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical",
+      "Check"
+    ],
+    "keywords": "Normal forms: 1NF, 2NF, 3NF, BCNF revised Define Differentiate Numerical Check Normal form hierarchy Six nested boxes: 1NF contains 2NF, which contains 3NF, then BCNF, 4NF and 5NF. Each label states the extra condition for that form. 1NF atomic values only: no composite, multivalued or nested attrib"
+  },
+  {
+    "id": "t-decomp",
+    "title": "Decomposition: lossless join, dependency preservation, algorithms",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-decomp",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Added",
+      "Check"
+    ],
+    "keywords": "Decomposition: lossless join, dependency preservation, algorithms revised Define Algorithm Added Check Decomposition splits the universal relation R into D = {R 1 , …, R n }, using the FDs. A good decomposition has three properties. Property Meaning Needed? Attribute preservation Every attribute of "
+  },
+  {
+    "id": "t-mvd",
+    "title": "Multivalued dependencies, 4NF, join dependencies, 5NF",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-mvd",
+    "chips": [
+      "Define",
+      "Added"
+    ],
+    "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X →→ Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
+  },
+  {
+    "id": "t-solved",
+    "title": "Your 27 exercises solved",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-solved",
+    "chips": [
+      "Added",
+      "Numerical",
+      "Check"
+    ],
+    "keywords": "Your 27 exercises solved revised Added Numerical Check Added The answers below come from running the methods above in code (closure, key search, minimal cover, synthesis, BCNF splitting, lossless chase). Try each yourself first and use this to check. Check Many answers are not unique : minimal cover"
+  },
+  {
+    "id": "t-ddl2",
+    "title": "SQL: defining tables and constraints",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-ddl2",
+    "chips": [
+      "Write SQL",
+      "Check"
+    ],
+    "keywords": "SQL: defining tables and constraints revised Write SQL Check The full CREATE TABLE walk-through with the COMPANY schema is in Module 1. All queries in this module run on that schema, filled with the sample data described below. CREATE TABLE: table name, each attribute with its data type (INTEGER, FL"
+  },
+  {
+    "id": "t-select",
+    "title": "SELECT: basic queries",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-select",
+    "chips": [
+      "Write SQL",
+      "Explain",
+      "Check"
+    ],
+    "keywords": "SELECT: basic queries revised Write SQL Explain Check SELECT block SELECT <attribute list> FROM <table list> WHERE <condition>. It corresponds to relational algebra select, project and join , but SQL's SELECT is not algebra's σ. SQL tables are multisets (bags) : duplicate rows are allowed. A relatio"
+  },
+  {
+    "id": "t-join",
+    "title": "Joins and nested queries",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-join",
+    "chips": [
+      "Write SQL",
+      "Differentiate",
+      "Check"
+    ],
+    "keywords": "Joins and nested queries revised Write SQL Differentiate Check Joined tables in FROM SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions. Join Result JOIN … ON (inner, theta) Only pairs of rows that satisfy the condition NATURAL JOIN Inner join "
+  },
+  {
+    "id": "t-agg",
+    "title": "Aggregates, GROUP BY and HAVING",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-agg",
+    "chips": [
+      "Write SQL",
+      "Differentiate",
+      "Check"
+    ],
+    "keywords": "Aggregates, GROUP BY and HAVING revised Write SQL Differentiate Check Aggregate functions: COUNT, SUM, MAX, MIN, AVG . Q15. Maximum, minimum and average salary. SELECT MAX(Salary), MIN(Salary), AVG(Salary) FROM EMPLOYEE; Result: 1 row MAX(Salary) MIN(Salary) AVG(Salary) 55000 25000 35125.0 Q18. Numb"
+  },
+  {
+    "id": "t-crud",
+    "title": "INSERT, UPDATE, DELETE and views",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-crud",
+    "chips": [
+      "Write SQL",
+      "Check",
+      "Added"
+    ],
+    "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE … SET … WHERE Delete DELETE FROM … WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
+  },
+  {
+    "id": "t-timeline",
+    "title": "Project timeline and milestones",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-timeline",
+    "chips": [
+      "Added",
+      "Design",
+      "Explain"
+    ],
+    "keywords": "Project timeline and milestones revised Added Design Explain Added Your slides have nothing on this syllabus line (\"create a timeline or project plan with milestones to ensure timely completion\"). This is a standard plan for a small database project, so adapt the weeks to your own deadline. Eight-we"
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-sheet",
+    "chips": [],
+    "keywords": "One-page cheat sheet revised FD rules Reflexive: Y ⊆ X gives X→Y Augmentation: X→Y gives XZ→YZ Transitive: X→Y, Y→Z give X→Z Union, decomposition, pseudotransitivity X→Y implied iff Y ⊆ X⁺ Closure X⁺ Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Neve"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "DBMS M2",
+    "url": "/notes/dbms-module-2/#t-qa",
+    "chips": [
+      "Added",
+      "Covers every syllabus line"
+    ],
+    "keywords": "Likely questions with answer outlines revised Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours. What are insertion, deletion and modification anomalies? Illustrate with an example. (5) Us"
   }
 ]

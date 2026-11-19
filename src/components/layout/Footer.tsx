@@ -43,6 +43,7 @@ export function Footer() {
             <li><Link href="/notes/coa-module-2/">COA Module 2 · Pipelining &amp; Hazards</Link></li>
             <li><Link href="/notes/ds-module-1/">DS Module 1 · Stacks &amp; Matrices</Link></li>
             <li><Link href="/notes/dbms-module-1/">DBMS Module 1 · ERD &amp; SQL DDL</Link></li>
+            <li><Link href="/notes/dbms-module-2/">DBMS Module 2 · Normalization &amp; SQL</Link></li>
           </ul>
         </div>
 

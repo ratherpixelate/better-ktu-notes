@@ -21,9 +21,9 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('#pcitt303')).toBeVisible();
     await expect(page.locator('#pbitt304')).toBeVisible();
 
-    // Check 4 Active Modules
+    // Check 5 Active Modules (COA M1, COA M2, DS M1, DBMS M1, DBMS M2)
     const activeCards = page.locator('.module-card:not(.locked)');
-    await expect(activeCards).toHaveCount(4);
+    await expect(activeCards).toHaveCount(5);
 
     // Capture screenshot
     await page.screenshot({ path: 'tests/screenshots/01-hub-page.png', fullPage: true });
@@ -163,6 +163,13 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await page.goto('/notes/dbms-module-1/');
     await expect(page).toHaveTitle(/DBMS Module 1/);
     await expect(page.locator('.toc')).toBeVisible();
+
+    // DBMS Module 2
+    await page.goto('/notes/dbms-module-2/');
+    await expect(page).toHaveTitle(/DBMS Module 2/);
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(14);
+    await expect(page.locator('.fig svg').first()).toBeVisible();
 
     // Click All Modules back link
     await page.locator('.nav-back-link').click();

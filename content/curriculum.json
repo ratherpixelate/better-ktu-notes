@@ -112,12 +112,12 @@
         {
           "num": 2,
           "slug": "module-2",
-          "title": "Relational Algebra & SQL Query Processing",
-          "desc": "Relational algebra operations (select, project, join, aggregate), SQL queries, subqueries, nested queries, views, and integrity assertions.",
-          "status": "drafting",
+          "title": "Normalization and SQL Queries",
+          "desc": "Functional dependencies, normal forms (1NF to 5NF), lossless join decomposition, SQL DDL/DML, joins, aggregates, views, and project milestones.",
+          "status": "active",
           "storageKey": "dbms-m2-revised",
-          "totalTopics": 7,
-          "href": null
+          "totalTopics": 14,
+          "href": "/notes/dbms-module-2/"
         },
         {
           "num": 3,

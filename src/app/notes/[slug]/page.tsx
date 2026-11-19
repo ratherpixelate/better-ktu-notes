@@ -59,6 +59,15 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 8,
     tocKey: 'dbms-m1',
   },
+  'dbms-module-2': {
+    slug: 'dbms-module-2',
+    moduleCode: 'PBITT304 · Module 2',
+    title: 'DBMS Module 2: Normalization and SQL Queries',
+    desc: 'Functional dependencies, normal forms (1NF to 5NF), lossless join decomposition, SQL DDL/DML, joins, aggregates, and project milestones.',
+    storageKey: 'dbms-m2-revised',
+    totalTopics: 14,
+    tocKey: 'dbms-m2',
+  },
 };
 
 export async function generateStaticParams() {

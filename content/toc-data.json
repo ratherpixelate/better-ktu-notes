@@ -311,5 +311,77 @@
       "title": "Likely questions",
       "group": "Revise"
     }
+  ],
+  "dbms-m2": [
+    {
+      "id": "t-why",
+      "title": "Why normalise: anomalies",
+      "group": "Normalization"
+    },
+    {
+      "id": "t-fd",
+      "title": "Functional dependencies",
+      "group": "Normalization"
+    },
+    {
+      "id": "t-nf",
+      "title": "Normal forms 1NF to BCNF",
+      "group": "Normalization"
+    },
+    {
+      "id": "t-decomp",
+      "title": "Decomposition properties",
+      "group": "Normalization"
+    },
+    {
+      "id": "t-mvd",
+      "title": "MVD, 4NF, JD, 5NF",
+      "group": "Normalization"
+    },
+    {
+      "id": "t-solved",
+      "title": "Your 27 exercises solved",
+      "group": "Normalization"
+    },
+    {
+      "id": "t-ddl2",
+      "title": "DDL and constraints",
+      "group": "SQL queries"
+    },
+    {
+      "id": "t-select",
+      "title": "SELECT basics",
+      "group": "SQL queries"
+    },
+    {
+      "id": "t-join",
+      "title": "Joins and nested queries",
+      "group": "SQL queries"
+    },
+    {
+      "id": "t-agg",
+      "title": "Aggregates and grouping",
+      "group": "SQL queries"
+    },
+    {
+      "id": "t-crud",
+      "title": "Insert, update, delete, views",
+      "group": "SQL queries"
+    },
+    {
+      "id": "t-timeline",
+      "title": "Timeline and milestones",
+      "group": "Project plan"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
   ]
 }
