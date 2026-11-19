@@ -8,6 +8,14 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     // Check Title
     await expect(page).toHaveTitle(/BetterKTUNotes/);
 
+    // Check Integrated <logo B>etterKTUNotes Brand Lockup
+    const brandWrap = page.locator('.brand-wrap');
+    await expect(brandWrap).toHaveAttribute('aria-label', 'BetterKTUNotes Home');
+    await expect(brandWrap.locator('.brand-logo')).toHaveText('B');
+    await expect(brandWrap.locator('.brand-title')).toHaveText('etterKTUNotes');
+    await expect(brandWrap.locator('.brand-subtitle')).not.toBeAttached();
+    await expect(brandWrap).not.toContainText(['2024 Scheme', 'S3 Studio']);
+
     // Check Hero
     await expect(page.locator('.hero-title')).toHaveText('BetterKTUNotes');
     await expect(page.locator('.hero-lead')).toBeVisible();

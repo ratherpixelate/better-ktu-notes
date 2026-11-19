@@ -38,15 +38,10 @@ export function Navbar({ currentSubject, currentModule }: NavbarProps) {
       <header className="site-nav">
         <div className="nav-container">
           <Link href="/" className="brand-wrap" aria-label="BetterKTUNotes Home">
-            <div className="brand-logo" aria-hidden="true">
+            <span className="brand-logo" aria-hidden="true">
               B
-            </div>
-            <div className="brand-text">
-              <span className="brand-title">BetterKTUNotes</span>
-              <span className="brand-subtitle">
-                {currentSubject ? `${currentSubject} · ${currentModule || 'Notes'}` : '2024 Scheme · S3 Studio'}
-              </span>
-            </div>
+            </span>
+            <span className="brand-title">etterKTUNotes</span>
           </Link>
 
           <div className="nav-actions">
