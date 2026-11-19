@@ -25,6 +25,14 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     const activeCards = page.locator('.module-card:not(.locked)');
     await expect(activeCards).toHaveCount(5);
 
+    // Check Favicon links in document head
+    const faviconSvg = page.locator('link[rel="icon"][type="image/svg+xml"]');
+    await expect(faviconSvg).toBeAttached();
+    const faviconIco = page.locator('link[rel="icon"][sizes="32x32"]');
+    await expect(faviconIco).toBeAttached();
+    const appleTouchIcon = page.locator('link[rel="apple-touch-icon"]');
+    await expect(appleTouchIcon).toBeAttached();
+
     // Capture screenshot
     await page.screenshot({ path: 'tests/screenshots/01-hub-page.png', fullPage: true });
   });

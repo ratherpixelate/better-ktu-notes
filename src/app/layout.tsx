@@ -3,6 +3,8 @@ import '@/styles/globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
+const basePath = process.env.NODE_ENV === 'production' ? '/better-ktu-notes' : '';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://ratherpixelate.github.io/better-ktu-notes/'),
   title: {
@@ -21,6 +23,15 @@ export const metadata: Metadata = {
     url: 'https://ratherpixelate.github.io/better-ktu-notes/',
     siteName: 'BetterKTUNotes',
     type: 'website',
+  },
+  icons: {
+    icon: [
+      { url: `${basePath}/favicon.svg`, type: 'image/svg+xml' },
+      { url: `${basePath}/favicon.ico`, sizes: '32x32' },
+    ],
+    apple: [
+      { url: `${basePath}/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 
