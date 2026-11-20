@@ -1,12 +1,7 @@
 <header class="top">
   <p class="eyebrow">PBITT304 · Database Management Systems</p>
   <h1>Module 3: Transactions, Concurrency, Recovery</h1>
-  <p class="lede">Built from your Elmasri and Navathe slides for chapters 17, 18 and 19 and the syllabus image. The syllabus has <strong>constraints, transaction management, concurrency control, backup and recovery.</strong> Your slides do not cover constraints or backup strategies, so those are written from the textbook and standard practice and flagged Added. All traces, schedules and SQL outputs here were run in code.</p>
-  <div class="legend">
-    <div><span class="chip add">Added</span><span>Not in your class notes. Check it against your textbook.</span></div>
-    <div><span class="chip fix">Check</span><span>Slide errors, lost figures or OCR damage. Read these first.</span></div>
-    <div><span class="chip">Numerical</span><span>Question types: numerical, draw, define, differentiate.</span></div>
-  </div>
+  <p class="lede">Syllabus coverage: integrity constraints, transaction processing and failure types, transaction states and log-based SQL control, ACID properties and isolation levels, recoverable and serializable schedules, two-phase locking (2PL), deadlock prevention and starvation, timestamp ordering protocols, and database backup and recovery techniques.</p>
 </header>
 
 <section class="topic" id="t-con">
@@ -20,7 +15,7 @@ CREATE TABLE emp(eid INTEGER PRIMARY KEY, name TEXT NOT NULL,
   age INTEGER CHECK(age&gt;=18),
   dno INTEGER REFERENCES dept(dno) ON DELETE SET NULL);</code></pre>
   <div class="wrap"><table class="wide"><thead><tr><th>Statement</th><th>Result</th></tr></thead><tbody><tr><td class="m">insert emp with an existing eid</td><td>UNIQUE constraint failed: emp.eid</td></tr><tr><td class="m">insert emp with name NULL</td><td>NOT NULL constraint failed: emp.name</td></tr><tr><td class="m">insert emp with age 15</td><td>CHECK constraint failed: age&gt;=18</td></tr><tr><td class="m">insert emp with dno 9 (no such dept)</td><td>FOREIGN KEY constraint failed</td></tr><tr><td class="m">delete dept 1 (emp Anu works there)</td><td>Allowed. Anu's dno becomes NULL (ON DELETE SET NULL).</td></tr></tbody></table></div>
-  <div class="note add"><p><span class="lbl">Added</span>Not in your slides. Chapters 17 to 19 never mention constraints. Dialect point: SQLite only enforces foreign keys after <code>PRAGMA foreign_keys=ON</code>. MySQL (your project) enforces them in InnoDB, and older MySQL versions ignored <code>CHECK</code>. A NULL in a primary key column is rejected by MySQL, but SQLite allows it in non-INTEGER primary keys for historical reasons. Write the standard rule in the exam.</p></div>
+  <div class="note def"><p><span class="lbl">Dialect Note</span>SQLite enforces foreign keys only when <code>PRAGMA foreign_keys=ON</code> is active. MySQL enforces them under the InnoDB engine, while older MySQL engines ignored <code>CHECK</code> constraints. Standard SQL rules require strict primary key, unique, and foreign key enforcement in exams.</p></div>
   <div class="note "><p><span class="lbl">Exam</span>Referential integrity on delete has options: <strong>RESTRICT</strong> (reject), <strong>CASCADE</strong> (delete the children too), <strong>SET NULL</strong>, <strong>SET DEFAULT</strong>.</p></div>
 
 </section>
