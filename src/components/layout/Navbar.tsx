@@ -1,9 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useTheme } from '@/hooks/useTheme';
-import { SearchModal } from '@/components/search/SearchModal';
+
+const SearchModal = dynamic(
+  () => import('@/components/search/SearchModal').then((mod) => mod.SearchModal),
+  { ssr: false }
+);
+
+// Preload search bundle on user intent (hover/focus/shortcut)
+const preloadSearch = () => {
+  import('@/components/search/SearchModal');
+};
 
 interface NavbarProps {
   currentSubject?: string;
@@ -17,6 +27,11 @@ export function Navbar({ currentSubject, currentModule }: NavbarProps) {
   // Global Ctrl+K / / shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Preload if user presses modifier key
+      if (e.ctrlKey || e.metaKey) {
+        preloadSearch();
+      }
+
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsSearchOpen((prev) => !prev);
@@ -48,6 +63,8 @@ export function Navbar({ currentSubject, currentModule }: NavbarProps) {
             <button
               className="search-trigger"
               onClick={() => setIsSearchOpen(true)}
+              onMouseEnter={preloadSearch}
+              onFocus={preloadSearch}
               aria-label="Search notes (Ctrl+K)"
             >
               <svg
@@ -134,7 +151,9 @@ export function Navbar({ currentSubject, currentModule }: NavbarProps) {
         </div>
       </header>
 
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      {isSearchOpen && (
+        <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      )}
     </>
   );
 }
