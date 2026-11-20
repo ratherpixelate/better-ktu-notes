@@ -29,9 +29,9 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('#pcitt303')).toBeVisible();
     await expect(page.locator('#pbitt304')).toBeVisible();
 
-    // Check 7 Active Modules (COA M1, COA M2, COA M3, COA M4, DS M1, DBMS M1, DBMS M2)
+    // Check 9 Active Modules (COA M1..M4, DS M1, DBMS M1..M4)
     const activeCards = page.locator('.module-card:not(.locked)');
-    await expect(activeCards).toHaveCount(7);
+    await expect(activeCards).toHaveCount(9);
 
     // Verify Active Module Card shows "0/17 completed" and NO green status dot
     const coaM1Card = activeCards.first();
@@ -252,6 +252,18 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('.toc')).toBeVisible();
     await expect(page.locator('.toc a')).toHaveCount(14);
     await expect(page.locator('.fig svg').first()).toBeVisible();
+
+    // DBMS Module 3
+    await page.goto('/notes/dbms-module-3/');
+    await expect(page).toHaveTitle(/DBMS Module 3/);
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(13);
+
+    // DBMS Module 4
+    await page.goto('/notes/dbms-module-4/');
+    await expect(page).toHaveTitle(/DBMS Module 4/);
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(10);
 
     // Click All Modules back link
     await page.locator('.nav-back-link').click();

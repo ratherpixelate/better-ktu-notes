@@ -46,6 +46,8 @@ export function Footer() {
             <li><Link href="/notes/ds-module-1/">DS Module 1 · Stacks &amp; Matrices</Link></li>
             <li><Link href="/notes/dbms-module-1/">DBMS Module 1 · ERD &amp; SQL DDL</Link></li>
             <li><Link href="/notes/dbms-module-2/">DBMS Module 2 · Normalization &amp; SQL</Link></li>
+            <li><Link href="/notes/dbms-module-3/">DBMS Module 3 · Transactions &amp; Concurrency</Link></li>
+            <li><Link href="/notes/dbms-module-4/">DBMS Module 4 · Testing &amp; Python</Link></li>
           </ul>
         </div>
 

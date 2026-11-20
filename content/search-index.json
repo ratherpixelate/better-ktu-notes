@@ -1166,5 +1166,281 @@
       "Covers every syllabus line"
     ],
     "keywords": "Likely questions with answer outlines revised Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours. What are insertion, deletion and modification anomalies? Illustrate with an example. (5) Us"
+  },
+  {
+    "id": "t-con",
+    "title": "Integrity constraints",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-con",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Added"
+    ],
+    "keywords": "Integrity constraints Define Differentiate Added Integrity constraints revised Define Differentiate Added Constraint A rule the DBMS enforces so that only valid data gets in. A violating insert, update or delete is rejected. Constraint Rule SQL Domain Every value must come from the attribute's domain: data type, range,"
+  },
+  {
+    "id": "t-txn",
+    "title": "Transactions and why they fail",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-txn",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Transactions and why they fail Define Numerical Likely exam Transactions and why they fail revised Define Numerical Likely exam Transaction A logical unit of database processing with one or more access operations (read, insert, update, delete). It is an atomic unit: done in full or not at all. Boundaries are begin and "
+  },
+  {
+    "id": "t-state",
+    "title": "States, log and SQL transaction control",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-state",
+    "chips": [
+      "Draw",
+      "Define",
+      "Added"
+    ],
+    "keywords": "States, log and SQL transaction control Draw Define Added States, log and SQL transaction control revised Draw Define Added Transaction state diagram Active to partially committed to committed; abort from active or partially committed to failed; committed and failed go to terminated Active Partially committed Committed"
+  },
+  {
+    "id": "t-acid",
+    "title": "ACID and isolation levels",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-acid",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "ACID and isolation levels Define Differentiate Likely exam ACID and isolation levels revised Define Differentiate Likely exam Property Meaning Enforced by A tomicity All operations happen or none do. Recovery manager (log, undo) C onsistency preservation A correct run moves the database from one consistent state to ano"
+  },
+  {
+    "id": "t-rec",
+    "title": "Schedules and recoverability",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-rec",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical"
+    ],
+    "keywords": "Schedules and recoverability Define Differentiate Numerical Schedules and recoverability revised Define Differentiate Numerical Schedule (history) An ordering of the operations of n transactions such that the operations of each Ti appear in the same order as in Ti. Operations of different transactions may interleave. R"
+  },
+  {
+    "id": "t-ser",
+    "title": "Serializability",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-ser",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Serializability Define Differentiate Numerical Draw Likely exam Serializability revised Define Differentiate Numerical Draw Likely exam Serial : every transaction runs consecutively, no interleaving. Serializable : equivalent to some serial schedule. Serializable is not the same as serial. It is correct and still effic"
+  },
+  {
+    "id": "t-lock",
+    "title": "Two-phase locking",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-lock",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Two-phase locking Define Differentiate Numerical Likely exam Two-phase locking revised Define Differentiate Numerical Likely exam Purpose Concurrency control enforces isolation through mutual exclusion among conflicting transactions, keeps the database consistent, and resolves read-write and write-write conflicts . It "
+  },
+  {
+    "id": "t-dead",
+    "title": "Deadlock and starvation",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-dead",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Deadlock and starvation Define Differentiate Draw Likely exam Deadlock and starvation revised Define Differentiate Draw Likely exam Deadlock A set of transactions where each waits for a lock held by another in the set, so none can proceed. Slide example T1' holds read_lock(Y) and asks write_lock(X). T2' holds read_lock"
+  },
+  {
+    "id": "t-to",
+    "title": "Timestamp ordering",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-to",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Timestamp ordering Define Numerical Likely exam Timestamp ordering revised Define Numerical Likely exam Timestamp A monotonically increasing number showing the age of a transaction. Larger = younger. Each item X keeps read_TS(X) (largest TS of a successful read) and write_TS(X) (largest TS of a successful write). The D"
+  },
+  {
+    "id": "t-rcv",
+    "title": "Recovery techniques",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-rcv",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Draw",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Recovery techniques Define Differentiate Draw Numerical Likely exam Recovery techniques revised Define Differentiate Draw Numerical Likely exam Purpose Bring the database back to the last consistent state before the failure and preserve ACID. Example: a crash in the middle of a fund transfer must not leave one account "
+  },
+  {
+    "id": "t-bkp",
+    "title": "Backup strategies",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-bkp",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Added"
+    ],
+    "keywords": "Backup strategies Define Differentiate Added Backup strategies revised Define Differentiate Added Added Your slides stop at recovery from crashes and do not cover backup at all. This section is from the textbook and standard practice. The log is already backed up to archival storage (slide 17-22), which is the link to "
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet Revise the night before One-page cheat sheet Revise the night before Constraints Domain, key, entity (PK not null), referential (FK matches PK or NULL) ON DELETE: restrict, cascade, set null ACID Atomicity: recovery Consistency: DBMS + programmer Isolation: concurrency control Durability: log, redo"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "DBMS M3",
+    "url": "/notes/dbms-module-3/#t-qa",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "Likely questions with answer outlines Revise the night before Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against your past papers. Define a transaction. Explain the ACID properties. (7) Unit of work, atomic. Four-row table with who enforces each"
+  },
+  {
+    "id": "t-need",
+    "title": "Why test, and types of testing",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-need",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "Why test, and types of testing Define Differentiate Likely exam Why test, and types of testing revised Define Differentiate Likely exam Database testing Checking that the schema is correct, constraints are enforced, queries give the right answers and transactions behave. Testing confirms the logic is correct, the const"
+  },
+  {
+    "id": "t-schema",
+    "title": "Schema and constraint testing",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-schema",
+    "chips": [
+      "Numerical",
+      "Define",
+      "Likely exam"
+    ],
+    "keywords": "Schema and constraint testing Numerical Define Likely exam Schema and constraint testing revised Numerical Define Likely exam Method Create test tables, insert valid and invalid records, modify keys, try deleting parent records. Valid data must succeed, invalid data must produce an error, and modify or delete must resp"
+  },
+  {
+    "id": "t-query",
+    "title": "Sample query testing",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-query",
+    "chips": [
+      "Numerical",
+      "Define",
+      "Added"
+    ],
+    "keywords": "Sample query testing Numerical Define Added Sample query testing revised Numerical Define Added SELECT : simple selection, filtering, pattern matching. Joins : INNER, LEFT, FULL. Aggregation : COUNT, AVG, SUM, MAX, MIN and GROUP BY. Views : output, and updates if allowed. Stored procedures : input and output parameters"
+  },
+  {
+    "id": "t-txn",
+    "title": "Transaction, concurrency, error and security testing",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-txn",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Added"
+    ],
+    "keywords": "Transaction, concurrency, error and security testing Define Differentiate Added Transaction, concurrency, error and security testing revised Define Differentiate Added Property How to test Expected Atomicity Insert several rows in one transaction and cause an error midway All rolled back, no partial change Consistency "
+  },
+  {
+    "id": "t-py",
+    "title": "Python and MySQL: connecting",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-py",
+    "chips": [
+      "Define",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Python and MySQL: connecting Define Draw Likely exam Python and MySQL: connecting revised Define Draw Likely exam Why connect Variables, lists and dictionaries lose data when the program ends. A database gives persistent storage . Python is the front end and application logic, MySQL stores and manages the data. Python "
+  },
+  {
+    "id": "t-crud",
+    "title": "CRUD from Python",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-crud",
+    "chips": [
+      "Numerical",
+      "Define",
+      "Added",
+      "Likely exam"
+    ],
+    "keywords": "CRUD from Python Numerical Define Added Likely exam CRUD from Python revised Numerical Define Added Likely exam Added Your notes stop at create database and create table. This section follows the W3Schools Python MySQL pages (insert, select, where, order by, limit, update, delete, join, drop). I ran the same logic in S"
+  },
+  {
+    "id": "t-safe",
+    "title": "Safe code: SQL injection, commit, errors",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-safe",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Safe code: SQL injection, commit, errors Define Differentiate Numerical Likely exam Safe code: SQL injection, commit, errors revised Define Differentiate Numerical Likely exam SQL injection An attacker puts SQL into an input so that it changes the meaning of your query. It can read, change or destroy data. Prevent it w"
+  },
+  {
+    "id": "t-doc",
+    "title": "Project documentation",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-doc",
+    "chips": [
+      "Define",
+      "Likely exam",
+      "Added"
+    ],
+    "keywords": "Project documentation Define Likely exam Added Project documentation revised Define Likely exam Added Added Nothing on documentation was in your notes. The syllabus line is: prepare comprehensive documentation covering project objectives, database schema, constraints, transactions, and implementation details . Below is"
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet Revise the night before One-page cheat sheet Revise the night before Testing types Functional (black-box), structural (white-box) Regression, performance, interface Validate a constraint PK: duplicate or NULL FK: child with no parent UNIQUE: duplicate NOT NULL: NULL CHECK: age = -1 DEFAULT: omit th"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "DBMS M4",
+    "url": "/notes/dbms-module-4/#t-qa",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "Likely questions with answer outlines Revise the night before Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against your past papers. What is database testing? Explain the types of database testing. (7) Definition, black-box and white-box with the "
   }
 ]

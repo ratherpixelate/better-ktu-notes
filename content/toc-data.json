@@ -512,5 +512,124 @@
       "title": "Likely questions",
       "group": "Revise"
     }
+  ],
+  "dbms-m3": [
+    {
+      "id": "t-con",
+      "title": "Integrity constraints",
+      "group": "Constraints"
+    },
+    {
+      "id": "t-txn",
+      "title": "Transactions and why they fail",
+      "group": "Transaction management"
+    },
+    {
+      "id": "t-state",
+      "title": "States, log and SQL control",
+      "group": "Transaction management"
+    },
+    {
+      "id": "t-acid",
+      "title": "ACID and isolation levels",
+      "group": "Transaction management"
+    },
+    {
+      "id": "t-rec",
+      "title": "Recoverable schedules",
+      "group": "Transaction management"
+    },
+    {
+      "id": "t-ser",
+      "title": "Serializability",
+      "group": "Transaction management"
+    },
+    {
+      "id": "t-lock",
+      "title": "Two-phase locking",
+      "group": "Concurrency control"
+    },
+    {
+      "id": "t-dead",
+      "title": "Deadlock and starvation",
+      "group": "Concurrency control"
+    },
+    {
+      "id": "t-to",
+      "title": "Timestamp ordering",
+      "group": "Concurrency control"
+    },
+    {
+      "id": "t-rcv",
+      "title": "Recovery techniques",
+      "group": "Backup and recovery"
+    },
+    {
+      "id": "t-bkp",
+      "title": "Backup strategies",
+      "group": "Backup and recovery"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
+  ],
+  "dbms-m4": [
+    {
+      "id": "t-need",
+      "title": "Why test, and types of testing",
+      "group": "Testing and validation"
+    },
+    {
+      "id": "t-schema",
+      "title": "Schema and constraint testing",
+      "group": "Testing and validation"
+    },
+    {
+      "id": "t-query",
+      "title": "Sample query testing",
+      "group": "Testing and validation"
+    },
+    {
+      "id": "t-txn",
+      "title": "Transaction, concurrency, security",
+      "group": "Testing and validation"
+    },
+    {
+      "id": "t-py",
+      "title": "Python and MySQL: connect",
+      "group": "Integration with applications"
+    },
+    {
+      "id": "t-crud",
+      "title": "CRUD from Python",
+      "group": "Integration with applications"
+    },
+    {
+      "id": "t-safe",
+      "title": "Safe code: injection, commit, errors",
+      "group": "Integration with applications"
+    },
+    {
+      "id": "t-doc",
+      "title": "Project documentation",
+      "group": "Documentation"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
   ]
 }

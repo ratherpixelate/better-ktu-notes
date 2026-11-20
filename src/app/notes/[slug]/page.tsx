@@ -86,6 +86,24 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 12,
     tocKey: 'dbms-m2',
   },
+  'dbms-module-3': {
+    slug: 'dbms-module-3',
+    moduleCode: 'PBITT304 · Module 3',
+    title: 'DBMS Module 3: Transactions, Concurrency, Recovery',
+    desc: 'Integrity constraints, transaction states, ACID properties, serializability, two-phase locking (2PL), deadlock prevention, timestamp ordering, and database recovery.',
+    storageKey: 'dbms-m3-revised',
+    totalTopics: 11,
+    tocKey: 'dbms-m3',
+  },
+  'dbms-module-4': {
+    slug: 'dbms-module-4',
+    moduleCode: 'PBITT304 · Module 4',
+    title: 'DBMS Module 4: Testing, Python Integration, Documentation',
+    desc: 'Database testing & validation, schema & constraint checks, Python MySQL connector CRUD operations, SQL injection security, and project documentation.',
+    storageKey: 'dbms-m4-revised',
+    totalTopics: 8,
+    tocKey: 'dbms-m4',
+  },
 };
 
 export async function generateStaticParams() {

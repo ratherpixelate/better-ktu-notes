@@ -122,22 +122,22 @@
         {
           "num": 3,
           "slug": "module-3",
-          "title": "Database Normalization & Functional Dependencies",
-          "desc": "Functional dependencies, Armstrong's axioms, 1NF, 2NF, 3NF, Boyce-Codd Normal Form (BCNF), and lossless join decomposition.",
-          "status": "drafting",
+          "title": "Transactions, Concurrency, Recovery",
+          "desc": "Integrity constraints, transaction states, ACID properties, serializability, two-phase locking (2PL), deadlock prevention, timestamp ordering, and database recovery.",
+          "status": "active",
           "storageKey": "dbms-m3-revised",
-          "totalTopics": 6,
-          "href": null
+          "totalTopics": 11,
+          "href": "/notes/dbms-module-3/"
         },
         {
           "num": 4,
           "slug": "module-4",
-          "title": "Introduction to NoSQL Concepts & Architecture",
-          "desc": "Need for NoSQL, CAP theorem, BASE properties, Key-Value stores, document stores, column-family stores, and graph databases.",
-          "status": "drafting",
+          "title": "Testing, Python Integration, Documentation",
+          "desc": "Database testing & validation, schema & constraint checks, Python MySQL connector CRUD operations, SQL injection security, and project documentation.",
+          "status": "active",
           "storageKey": "dbms-m4-revised",
-          "totalTopics": 5,
-          "href": null
+          "totalTopics": 8,
+          "href": "/notes/dbms-module-4/"
         }
       ]
     }
