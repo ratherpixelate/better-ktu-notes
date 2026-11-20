@@ -68,45 +68,68 @@ export function TableOfContents({
     let rafId: number | null = null;
 
     const handleScroll = () => {
-      // 1. Update reading progress indicator (GPU-accelerated, zero React re-renders)
-      if (readingBarRef.current) {
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
-        readingBarRef.current.style.transform = `scaleX(${progress})`;
-      }
+      // === PHASE 1: BATCHED DOM READS (No style mutations) ===
+      const scrollY = window.scrollY;
+      const innerHeight = window.innerHeight;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const maxScroll = scrollHeight - innerHeight;
+      const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scrollY / maxScroll)) : 0;
 
-      // If user recently clicked a pill, skip spy until smooth scroll settles
-      if (isClickScrollingRef.current) return;
+      let currentId = activeIdRef.current;
+      let targetScrollLeft: number | null = null;
 
-      if (!items || items.length === 0) return;
-
-      // 2. Bottom of document check
-      const isBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60;
-      let currentId = items[0].id;
-
-      if (isBottom) {
-        currentId = items[items.length - 1].id;
-      } else {
-        // Trigger when section top enters upper 35% of viewport (capped at 260px)
-        const triggerPoint = Math.max(120, Math.min(window.innerHeight * 0.35, 260));
-        for (const item of items) {
-          const el = document.getElementById(item.id);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            if (rect.top <= triggerPoint) {
-              currentId = item.id;
+      if (!isClickScrollingRef.current && items && items.length > 0) {
+        // Bottom of document check
+        const isBottom = innerHeight + scrollY >= scrollHeight - 60;
+        if (isBottom) {
+          currentId = items[items.length - 1].id;
+        } else {
+          // Trigger when section top enters upper 35% of viewport (capped at 260px)
+          const triggerPoint = Math.max(120, Math.min(innerHeight * 0.35, 260));
+          let candidateId = items[0].id;
+          for (const item of items) {
+            const el = document.getElementById(item.id);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              if (rect.top <= triggerPoint) {
+                candidateId = item.id;
+              }
             }
+          }
+          currentId = candidateId;
+        }
+
+        // If active section changed, read pill dimensions for centering BEFORE any writes
+        if (
+          currentId !== activeIdRef.current &&
+          window.matchMedia('(max-width: 899px)').matches &&
+          tocListRef.current
+        ) {
+          const activeLink = tocListRef.current.querySelector(`a[href="#${currentId}"]`) as HTMLElement;
+          if (activeLink) {
+            const list = tocListRef.current;
+            targetScrollLeft = Math.max(
+              0,
+              activeLink.offsetLeft - (list.clientWidth / 2) + (activeLink.offsetWidth / 2)
+            );
           }
         }
       }
 
-      // 3. Update active pill and center in horizontal strip
-      if (currentId && currentId !== activeIdRef.current) {
+      // === PHASE 2: BATCHED DOM WRITES (Zero layout invalidation / forced reflow) ===
+      if (readingBarRef.current) {
+        readingBarRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      if (currentId !== activeIdRef.current) {
         activeIdRef.current = currentId;
         setActiveId(currentId);
 
-        if (window.matchMedia('(max-width: 899px)').matches) {
-          centerPill(currentId, true);
+        if (targetScrollLeft !== null && tocListRef.current) {
+          tocListRef.current.scrollTo({
+            left: targetScrollLeft,
+            behavior: 'smooth',
+          });
         }
       }
     };
@@ -131,8 +154,13 @@ export function TableOfContents({
     window.addEventListener('wheel', onUserInteraction, { passive: true });
     window.addEventListener('touchstart', onUserInteraction, { passive: true });
 
-    // Initial check
-    handleScroll();
+    // Initial check: if already scrolled on load, defer check until after first paint to prevent forced reflow
+    if (typeof window !== 'undefined' && window.scrollY > 0) {
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        handleScroll();
+      });
+    }
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
