@@ -29,9 +29,9 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('#pcitt303')).toBeVisible();
     await expect(page.locator('#pbitt304')).toBeVisible();
 
-    // Check 6 Active Modules (COA M1, COA M2, COA M3, DS M1, DBMS M1, DBMS M2)
+    // Check 7 Active Modules (COA M1, COA M2, COA M3, COA M4, DS M1, DBMS M1, DBMS M2)
     const activeCards = page.locator('.module-card:not(.locked)');
-    await expect(activeCards).toHaveCount(6);
+    await expect(activeCards).toHaveCount(7);
 
     // Verify Active Module Card shows "0/17 completed" and NO green status dot
     const coaM1Card = activeCards.first();
@@ -201,6 +201,27 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('#t-sheet .rev')).not.toBeAttached();
     await expect(page.locator('#t-qa .rev')).not.toBeAttached();
     await expect(page.locator('.fig svg').first()).toBeVisible();
+
+    // Test forward navigation to COA Module 4
+    const nextToM4Link = page.locator('.notes-footer-nav a:has-text("Next: COA Module 4")');
+    await expect(nextToM4Link).toBeVisible();
+    await nextToM4Link.click();
+    await expect(page).toHaveURL(/localhost:3000\/notes\/coa-module-4\/?$/);
+    await expect(page).toHaveTitle(/COA Module 4/);
+
+    // Verify COA Module 4 TOC, Checkboxes & Multithreading Diagrams
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(9);
+    await expect(page.locator('input.rev')).toHaveCount(7);
+    await expect(page.locator('#t-sheet .rev')).not.toBeAttached();
+    await expect(page.locator('#t-qa .rev')).not.toBeAttached();
+    await expect(page.locator('.fig svg').first()).toBeVisible();
+
+    // Navigate back to COA Module 3
+    const prevToM3Link = page.locator('.notes-footer-nav a:has-text("Previous: COA Module 3")');
+    await expect(prevToM3Link).toBeVisible();
+    await prevToM3Link.click();
+    await expect(page).toHaveURL(/localhost:3000\/notes\/coa-module-3\/?$/);
 
     // Navigate back to COA Module 2
     const prevToM2Link = page.locator('.notes-footer-nav a:has-text("Previous: COA Module 2")');

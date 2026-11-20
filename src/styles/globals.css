@@ -2344,6 +2344,25 @@ td.c, th.c {
 table.tr td.h { background: var(--accent-subtle); color: var(--fg); font-weight: 600; }
 table.tr td.x { background: var(--surface-subtle); color: var(--fg-muted); }
 
+/* Multithreading Issue Slots Diagram */
+:root {
+  --mt-a: #D4D4D8;
+  --mt-b: #E4E4E7;
+  --mt-c: #CBD5E1;
+  --mt-d: #F4F4F5;
+}
+:root[data-theme="dark"] {
+  --mt-a: #27272A;
+  --mt-b: #3F3F46;
+  --mt-c: #334155;
+  --mt-d: #18181B;
+}
+
+.mt-a { fill: var(--mt-a); }
+.mt-b { fill: var(--mt-b); }
+.mt-c { fill: var(--mt-c); }
+.mt-d { fill: var(--mt-d); }
+
 /* DS Module 1 Graph Colors (Monochrome Grayscale Contrast) */
 :root {
   --g-log: #71717A;

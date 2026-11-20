@@ -42,6 +42,7 @@ export function Footer() {
             <li><Link href="/notes/coa-module-1/">COA Module 1 · Basic Structure &amp; RISC</Link></li>
             <li><Link href="/notes/coa-module-2/">COA Module 2 · Pipelining &amp; Hazards</Link></li>
             <li><Link href="/notes/coa-module-3/">COA Module 3 · Memory Organization</Link></li>
+            <li><Link href="/notes/coa-module-4/">COA Module 4 · Multicore &amp; Parallel</Link></li>
             <li><Link href="/notes/ds-module-1/">DS Module 1 · Stacks &amp; Matrices</Link></li>
             <li><Link href="/notes/dbms-module-1/">DBMS Module 1 · ERD &amp; SQL DDL</Link></li>
             <li><Link href="/notes/dbms-module-2/">DBMS Module 2 · Normalization &amp; SQL</Link></li>

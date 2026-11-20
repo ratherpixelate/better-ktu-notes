@@ -235,6 +235,53 @@
       "group": "Revise"
     }
   ],
+  "coa-m4": [
+    {
+      "id": "t-why",
+      "title": "Why multiprocessors",
+      "group": "Parallel Processors"
+    },
+    {
+      "id": "t-flynn",
+      "title": "SISD, MIMD, SIMD, SPMD",
+      "group": "Parallel Processors"
+    },
+    {
+      "id": "t-simd",
+      "title": "SIMD in detail",
+      "group": "Parallel Processors"
+    },
+    {
+      "id": "t-vec",
+      "title": "Vector architecture",
+      "group": "Parallel Processors"
+    },
+    {
+      "id": "t-mt",
+      "title": "Hardware multithreading",
+      "group": "Threads & Cores"
+    },
+    {
+      "id": "t-smp",
+      "title": "Multicore & shared memory",
+      "group": "Threads & Cores"
+    },
+    {
+      "id": "t-i7",
+      "title": "Intel Core i7 case study",
+      "group": "Case Study"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
+  ],
   "ds-m1": [
     {
       "id": "t-basics",

@@ -39,11 +39,11 @@
           "num": 4,
           "slug": "module-4",
           "title": "Parallel Processing & Multicore Architectures",
-          "desc": "Flynn's taxonomy (SISD, SIMD, MIMD), shared vs distributed memory multiprocessors, cache coherence, and hardware multithreading.",
-          "status": "drafting",
+          "desc": "Parallel processing goals and challenges, Flynn's taxonomy (SISD, MIMD, SIMD, SPMD), vector architectures, hardware multithreading, SMP, and Core i7 case study.",
+          "status": "active",
           "storageKey": "coa-m4-revised",
-          "totalTopics": 5,
-          "href": null
+          "totalTopics": 7,
+          "href": "/notes/coa-module-4/"
         }
       ]
     },

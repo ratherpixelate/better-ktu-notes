@@ -538,6 +538,112 @@
     "keywords": "Likely questions with answer outlines Covers every syllabus line Exam Review Standard university examination questions covering cache memory architectures, AMAT optimizations, and DRAM memory systems. What is a cache? Explain the principle of locality and the terms hit, miss, hit time and miss penalty. (3)"
   },
   {
+    "id": "t-why",
+    "title": "Why multiprocessors and parallel programs",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-why",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Key Concept"
+    ],
+    "keywords": "Why multiprocessors, and why parallel programs are hard revised Define Numerical Key Concept Multiprocessor A computer built by connecting many smaller processors, instead of one large inefficient one. A cluster is a set of computers connected over a network that works as one large multiprocessor."
+  },
+  {
+    "id": "t-flynn",
+    "title": "SISD, MIMD, SIMD, SPMD (Flynn's classification)",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-flynn",
+    "chips": [
+      "Likely exam",
+      "Define",
+      "Differentiate",
+      "Draw"
+    ],
+    "keywords": "SISD, MIMD, SIMD, SPMD (and MISD) revised Likely exam Define Differentiate Draw Classification by the number of instruction streams and data streams (Flynn, 1960s, still used). Flynn's classification 2 by 2 grid of instruction streams against data streams Data streams Instruction streams Single Multiple Single"
+  },
+  {
+    "id": "t-simd",
+    "title": "SIMD in detail",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-simd",
+    "chips": [
+      "Likely exam",
+      "Explain",
+      "Numerical"
+    ],
+    "keywords": "SIMD in detail revised Likely exam Explain Numerical SIMD operates on vectors of data. One SIMD instruction can add 64 numbers by sending 64 data streams to 64 ALUs and producing 64 sums in a single clock cycle. All execution units are synchronized and respond"
+  },
+  {
+    "id": "t-vec",
+    "title": "Vector architecture",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-vec",
+    "chips": [
+      "Explain",
+      "Differentiate",
+      "Numerical",
+      "Important"
+    ],
+    "keywords": "Vector architecture revised Explain Differentiate Numerical Important Vector architecture Instead of 64 ALUs adding 64 numbers at once, the ALU is pipelined . Collect data from memory into a large set of vector registers , operate on the elements in order using pipelined units, then"
+  },
+  {
+    "id": "t-mt",
+    "title": "Hardware multithreading",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-mt",
+    "chips": [
+      "Differentiate",
+      "Draw",
+      "Important"
+    ],
+    "keywords": "Hardware multithreading revised Differentiate Draw Important Hardware multithreading Several threads share the functional units of a single processor in an overlapping way, so the hardware stays busy. When one thread stalls, the processor switches to another. MIMD relies on many processes or threads to keep"
+  },
+  {
+    "id": "t-smp",
+    "title": "Multicore and shared memory multiprocessors",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-smp",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical"
+    ],
+    "keywords": "Multicore and other shared memory multiprocessors revised Define Differentiate Numerical Shared memory multiprocessor (SMP) A multiprocessor with a single physical address space shared by all processors. Processors communicate through shared variables, using ordinary loads and stores to any location. Programs need not care where their"
+  },
+  {
+    "id": "t-i7",
+    "title": "Case study: Intel Core i7",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-i7",
+    "chips": [
+      "Key Concept",
+      "Explain",
+      "Numerical"
+    ],
+    "keywords": "Case study: Intel Core i7 revised Key Concept Explain Numerical Case Study Reference The Intel Core i7 (Bloomfield/Nehalem architecture, Core i7-960) serves as the canonical textbook case study illustrating the convergence of MIMD multicore, SIMD multimedia units (SSE4.2), and 2-way SMT Hyper-Threading. The Core i7"
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet Revise the night before Flynn SISD: 1 instruction, 1 data. Uniprocessor SIMD: 1 instruction, many data. Vector, SSE, GPU MIMD: many instructions, many data. Multicore MISD: none today SPMD: one program on all MIMD cores SIMD One PC, units synchronized One copy"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "COA M4",
+    "url": "/notes/coa-module-4/#t-qa",
+    "chips": [
+      "Covers every syllabus line"
+    ],
+    "keywords": "Likely questions with answer outlines Covers every syllabus line Exam Review Standard university examination questions covering Flynn's classification, vector processing, multithreading paradigms, and multicore architectures. Explain Flynn's classification: SISD, SIMD, MISD and MIMD, with a neat diagram and one example each. (7) 2 by 2"
+  },
+  {
     "id": "t-basics",
     "title": "Data, information and data structures",
     "badge": "DS M1",

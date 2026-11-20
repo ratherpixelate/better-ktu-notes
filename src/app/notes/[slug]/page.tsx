@@ -50,6 +50,15 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 14,
     tocKey: 'coa-m3',
   },
+  'coa-module-4': {
+    slug: 'coa-module-4',
+    moduleCode: 'PCITT302 · Module 4',
+    title: 'COA Module 4: Parallel Processing & Multicore Architectures',
+    desc: 'Parallel processing goals and challenges, Flynn\'s taxonomy (SISD, MIMD, SIMD, SPMD), vector architectures, hardware multithreading, SMP, and Core i7 case study.',
+    storageKey: 'coa-m4-revised',
+    totalTopics: 7,
+    tocKey: 'coa-m4',
+  },
   'ds-module-1': {
     slug: 'ds-module-1',
     moduleCode: 'PCITT303 · Module 1',
