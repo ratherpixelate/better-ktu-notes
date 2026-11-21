@@ -60,9 +60,10 @@ export function ProgressOverview() {
               className="breakdown-item"
               title={`Jump to ${sub.name}`}
             >
-              <span className="breakdown-name">
-                {sub.name} ({sub.slug.toUpperCase()})
-              </span>
+              <div className="breakdown-info">
+                <span className="breakdown-tag">{sub.slug.toUpperCase()}</span>
+                <span className="breakdown-name">{sub.name}</span>
+              </div>
               <span className="breakdown-val">
                 {mounted ? sub.completedModules : 0} / {sub.totalModules} Modules ({mounted ? subPct : 0}%)
               </span>

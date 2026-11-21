@@ -619,17 +619,17 @@ input, textarea, select {
 
 .progress-breakdown {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  column-gap: 20px;
-  row-gap: 12px;
-  padding-top: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 10px;
+  padding-top: 16px;
   border-top: 1px solid var(--border-subtle);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 768px) {
   .progress-breakdown {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
   }
 }
 
@@ -637,27 +637,62 @@ input, textarea, select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   color: var(--fg-secondary);
   min-width: 0;
   text-decoration: none;
-  padding: 4px 6px;
-  margin: -4px -6px;
-  border-radius: var(--radius-xs);
-  transition: background-color 140ms var(--ease-smooth);
+  padding: 6px 10px;
+  margin: -4px -8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: background-color 140ms var(--ease-smooth),
+              border-color 140ms var(--ease-smooth),
+              transform 120ms var(--ease-spring);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .breakdown-item:hover {
     background-color: var(--surface-subtle);
+    border-color: var(--border);
+    transform: translateY(-1px);
   }
   .breakdown-item:hover .breakdown-name {
     color: var(--fg);
   }
+  .breakdown-item:hover .breakdown-tag {
+    border-color: var(--border-strong);
+    color: var(--fg);
+  }
+}
+
+.breakdown-item:active {
+  transform: scale(0.99);
+}
+
+.breakdown-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.breakdown-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--fg-secondary);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+  flex-shrink: 0;
+  transition: color 140ms var(--ease-smooth), border-color 140ms var(--ease-smooth);
 }
 
 .breakdown-name {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 500;
   color: var(--fg-secondary);
   white-space: nowrap;
