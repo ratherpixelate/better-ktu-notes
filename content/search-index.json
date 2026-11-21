@@ -99,7 +99,7 @@
       "Added",
       "Numerical"
     ],
-    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (\u22121)^s 2^(E bias) stored true"
+    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (−1)^s 2^(E bias) stored true"
   },
   {
     "id": "t-formats",
@@ -204,7 +204,7 @@
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: \u22121), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
+    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: −1), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
   },
   {
     "id": "t-single",
@@ -430,7 +430,7 @@
       "Important",
       "Key Concept"
     ],
-    "keywords": "Cache performance: AMAT revised Numerical Important Key Concept AMAT = Hit time + Miss rate \u00d7 Miss penalty Two levels: AMAT = Hit time(L1) + Miss rate(L1) \u00d7 [ Hit time(L2) + Miss rate(L2) \u00d7 Miss penalty(L2) ] Local miss rate = misses in a"
+    "keywords": "Cache performance: AMAT revised Numerical Important Key Concept AMAT = Hit time + Miss rate × Miss penalty Two levels: AMAT = Hit time(L1) + Miss rate(L1) × [ Hit time(L2) + Miss rate(L2) × Miss penalty(L2) ] Local miss rate = misses in a"
   },
   {
     "id": "t-opt",
@@ -479,7 +479,7 @@
       "Draw",
       "Important"
     ],
-    "keywords": "DRAM access protocol and commands revised Explain Numerical Draw Important Access sequence ACTIVATE (RAS) \u2192 READ / WRITE (CAS) \u2192 PRECHARGE Command What it does Timing ACTIVATE (ACT, uses RAS) Row address goes on the address bus, RAS is asserted. The row is copied from"
+    "keywords": "DRAM access protocol and commands revised Explain Numerical Draw Important Access sequence ACTIVATE (RAS) → READ / WRITE (CAS) → PRECHARGE Command What it does Timing ACTIVATE (ACT, uses RAS) Row address goes on the address bus, RAS is asserted. The row is copied from"
   },
   {
     "id": "t-ctrl",
@@ -525,7 +525,7 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet Revise the night before Cache address Address = tag | index | offset Sets = C / (B \u00d7 E) offset = log2 B, index = log2 sets, tag = rest Total bits per line = data + tag + valid (+"
+    "keywords": "One-page cheat sheet Revise the night before Cache address Address = tag | index | offset Sets = C / (B × E) offset = log2 B, index = log2 sets, tag = rest Total bits per line = data + tag + valid (+"
   },
   {
     "id": "t-qa",
@@ -824,7 +824,7 @@
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c\u00b7g, worst case, upper bound best case, lower bound c\u2081\u00b7g c\u2082\u00b7g, average case, tight"
+    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c·g, worst case, upper bound best case, lower bound c₁·g c₂·g, average case, tight"
   },
   {
     "id": "t-qa",
@@ -1026,7 +1026,7 @@
       "Numerical",
       "Added"
     ],
-    "keywords": "Functional dependencies revised Define Numerical Added Functional dependency X \u2192 Y holds in R if, whenever two tuples have the same value for X, they must have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X functionally determines Y. An"
+    "keywords": "Functional dependencies revised Define Numerical Added Functional dependency X → Y holds in R if, whenever two tuples have the same value for X, they must have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X functionally determines Y. An"
   },
   {
     "id": "t-nf",
@@ -1052,7 +1052,7 @@
       "Added",
       "Check"
     ],
-    "keywords": "Decomposition: lossless join, dependency preservation, algorithms revised Define Algorithm Added Check Decomposition splits the universal relation R into D = {R 1 , \u2026, R n }, using the FDs. A good decomposition has three properties. Property Meaning Needed? Attribute preservation Every attribute of "
+    "keywords": "Decomposition: lossless join, dependency preservation, algorithms revised Define Algorithm Added Check Decomposition splits the universal relation R into D = {R 1 , …, R n }, using the FDs. A good decomposition has three properties. Property Meaning Needed? Attribute preservation Every attribute of "
   },
   {
     "id": "t-mvd",
@@ -1063,7 +1063,7 @@
       "Define",
       "Added"
     ],
-    "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X \u2192\u2192 Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
+    "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X →→ Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
   },
   {
     "id": "t-ddl2",
@@ -1086,7 +1086,7 @@
       "Explain",
       "Check"
     ],
-    "keywords": "SELECT: basic queries revised Write SQL Explain Check SELECT block SELECT <attribute list> FROM <table list> WHERE <condition>. It corresponds to relational algebra select, project and join , but SQL's SELECT is not algebra's \u03c3. SQL tables are multisets (bags) : duplicate rows are allowed. A relatio"
+    "keywords": "SELECT: basic queries revised Write SQL Explain Check SELECT block SELECT <attribute list> FROM <table list> WHERE <condition>. It corresponds to relational algebra select, project and join , but SQL's SELECT is not algebra's σ. SQL tables are multisets (bags) : duplicate rows are allowed. A relatio"
   },
   {
     "id": "t-join",
@@ -1098,7 +1098,7 @@
       "Differentiate",
       "Check"
     ],
-    "keywords": "Joins and nested queries revised Write SQL Differentiate Check Joined tables in FROM SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions. Join Result JOIN \u2026 ON (inner, theta) Only pairs of rows that satisfy the condition NATURAL JOIN Inner join "
+    "keywords": "Joins and nested queries revised Write SQL Differentiate Check Joined tables in FROM SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions. Join Result JOIN … ON (inner, theta) Only pairs of rows that satisfy the condition NATURAL JOIN Inner join "
   },
   {
     "id": "t-agg",
@@ -1122,7 +1122,7 @@
       "Check",
       "Added"
     ],
-    "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE \u2026 SET \u2026 WHERE Delete DELETE FROM \u2026 WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
+    "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE … SET … WHERE Delete DELETE FROM … WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
   },
   {
     "id": "t-sheet",
@@ -1130,7 +1130,7 @@
     "badge": "DBMS M2",
     "url": "/notes/dbms-module-2/#t-sheet",
     "chips": [],
-    "keywords": "One-page cheat sheet FD rules Reflexive: Y \u2286 X gives X\u2192Y Augmentation: X\u2192Y gives XZ\u2192YZ Transitive: X\u2192Y, Y\u2192Z give X\u2192Z Union, decomposition, pseudotransitivity X\u2192Y implied iff Y \u2286 X\u207a Closure X\u207a Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Never on a R"
+    "keywords": "One-page cheat sheet FD rules Reflexive: Y ⊆ X gives X→Y Augmentation: X→Y gives XZ→YZ Transitive: X→Y, Y→Z give X→Z Union, decomposition, pseudotransitivity X→Y implied iff Y ⊆ X⁺ Closure X⁺ Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Never on a R"
   },
   {
     "id": "t-qa",
@@ -1406,5 +1406,163 @@
       "Revise the night before"
     ],
     "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. What is database testing? Explain the types of database testing. (7) Definition, black-box and white-box with the figure, regression, performance, interface. See"
+  },
+  {
+    "id": "t-abs",
+    "title": "Digital abstraction",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-abs",
+    "chips": [
+      "Define",
+      "Likely exam"
+    ],
+    "keywords": "Digital abstraction revised Define Likely exam Digital abstraction Treating a continuous analog signal (a voltage) as one of two discrete logic values , 0 and 1. A voltage below a threshold is read as logic 0, above a threshold as logic 1, and the region in between is not used. It lets you design wi"
+  },
+  {
+    "id": "t-num",
+    "title": "Number systems and conversion",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-num",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Number systems and conversion revised Define Numerical Likely exam System Base Digits Binary 2 0, 1 Octal 8 0 to 7 Decimal 10 0 to 9 Hexadecimal 16 0 to 9, A=10, B=11, C=12, D=13, E=14, F=15 Each position has a weight that is a power of the base. Position values to the left of the point are b 0 , b "
+  },
+  {
+    "id": "t-arith",
+    "title": "Binary addition and subtraction",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-arith",
+    "chips": [
+      "Numerical",
+      "Define",
+      "Likely exam"
+    ],
+    "keywords": "Binary addition and subtraction revised Numerical Define Likely exam Addition rule Result 0 + 0 0 0 + 1 or 1 + 0 1 1 + 1 0 carry 1 1 + 1 + 1 (with carry in) 1 carry 1 Subtraction rule Result 0 − 0, 1 − 1, 1 − 0 0, 0, 1 0 − 1 1 with borrow 1 from the next bit Numerical 1011 + 0110 = 10001 (11 + 6 = 1"
+  },
+  {
+    "id": "t-signed",
+    "title": "Signed numbers",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-signed",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Signed numbers revised Define Differentiate Numerical Likely exam Unsigned : all n bits are magnitude. Range 0 to 2 n − 1. Signed : the most significant bit (MSB) is the sign. 0 means positive, 1 means negative. Positive numbers look the same in all three methods below. Method How to write a negativ"
+  },
+  {
+    "id": "t-fixed",
+    "title": "Fixed-point numbers",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-fixed",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Added"
+    ],
+    "keywords": "Fixed-point numbers revised Define Numerical Added Added The syllabus lists fixed-point numbers but the class notes have nothing on them. Standard treatment: Fixed-point number A binary number with the binary point at a fixed position . In Qm.n format there are m integer bits and n fraction bits . T"
+  },
+  {
+    "id": "t-float",
+    "title": "Floating-point numbers",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-float",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Floating-point numbers revised Define Numerical Draw Likely exam Floating point A number stored as sign, exponent and mantissa , so the point \"floats\". Value = (−1) s × 1.mantissa × 2 (exponent − bias) . It gives a huge range at the cost of rounding. IEEE 754 single precision (32 bits) 1 sign (bit 3"
+  },
+  {
+    "id": "t-gates",
+    "title": "Logic circuits and gates",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-gates",
+    "chips": [
+      "Define",
+      "Draw",
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "Logic circuits and gates revised Define Draw Differentiate Likely exam Logic circuit A circuit built from logic gates connected to perform a Boolean function . Each signal is represented by a logic level: HIGH (1), typically +5 V or +3.3 V, and LOW (0), typically 0 V (ground). Logic gate symbols sym"
+  },
+  {
+    "id": "t-levels",
+    "title": "Logic levels, DC specifications and noise margins",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-levels",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Logic levels, DC specifications and noise margins revised Define Numerical Draw Likely exam Digital circuit operation Logic levels are voltage ranges , not exact voltages. Every logic family (TTL, CMOS, …) specifies input DC specifications , output DC specifications and noise margins so that switchi"
+  },
+  {
+    "id": "t-loads",
+    "title": "Driving loads",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-loads",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Driving loads revised Define Numerical Draw Likely exam I OH : current an output gives when it is HIGH. The gate sources current out of the pin. Datasheets show it as negative because current flows out of the pin. I OL : current the output takes when it is LOW. The gate sinks current into the pin. S"
+  },
+  {
+    "id": "t-hdl",
+    "title": "HDL abstraction and the design flow",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-hdl",
+    "chips": [
+      "Define",
+      "Draw",
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "HDL abstraction and the design flow revised Define Draw Differentiate Likely exam HDL A hardware description language (Verilog, VHDL) describes digital hardware in text. It describes concurrent hardware, not a sequence of instructions, and it can be simulated and then synthesised into gates. Abstrac"
+  },
+  {
+    "id": "t-vlog",
+    "title": "Verilog constructs: module, data types, operators",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-vlog",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Explain",
+      "Likely exam"
+    ],
+    "keywords": "Verilog constructs: module, data types, operators revised Define Differentiate Explain Likely exam The module Module The basic hardware unit in Verilog: a component with input and output ports , internal wires and logic. module <name> (port_list); declarations; statements; endmodule module inverter "
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet Revise the night before Grouping Binary to hex: groups of 4 Binary to octal: groups of 3 Decimal to binary: ÷2, read remainders up; fraction ×2, read down Signed 1's: invert all bits 2's: invert, add 1 2's range −2^(n−1) to 2^(n−1)−1 1's sub: carry = add back, no carry = negativ"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "DELD M1",
+    "url": "/notes/deld-module-1/#t-qa",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. Explain digital abstraction. Why are digital circuits reliable with noise? (3) Continuous voltage modelled as 0 and 1, thresholds, undefined region ignored, nois"
   }
 ]

@@ -73,6 +73,12 @@ export interface SubjectStats {
   totalTopics: number;
 }
 
+const defaultTotalModules = curriculum.subjects.reduce((acc, sub) => acc + sub.modules.length, 0);
+const defaultTotalTopics = curriculum.subjects.reduce(
+  (acc, sub) => acc + sub.modules.reduce((mAcc, m) => mAcc + m.totalTopics, 0),
+  0
+);
+
 export function useCourseStats() {
   const [stats, setStats] = useState<{
     totalModulesCompleted: number;
@@ -82,9 +88,9 @@ export function useCourseStats() {
     subjects: SubjectStats[];
   }>({
     totalModulesCompleted: 0,
-    totalModules: 12,
+    totalModules: defaultTotalModules,
     totalTopicsCompleted: 0,
-    totalTopics: 119,
+    totalTopics: defaultTotalTopics,
     subjects: [],
   });
   const [mounted, setMounted] = useState(false);

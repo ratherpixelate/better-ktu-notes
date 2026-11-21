@@ -24,14 +24,15 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('.progress-card')).toBeVisible();
     await expect(page.locator('.progress-title')).toHaveText('Your Exam Revision Progress');
 
-    // Check 3 Subjects are rendered
+    // Check 4 Subjects are rendered
     await expect(page.locator('#pcitt302')).toBeVisible();
     await expect(page.locator('#pcitt303')).toBeVisible();
     await expect(page.locator('#pbitt304')).toBeVisible();
+    await expect(page.locator('#gaest305')).toBeVisible();
 
-    // Check 9 Active Modules (COA M1..M4, DS M1, DBMS M1..M4)
+    // Check 10 Active Modules (COA M1..M4, DS M1, DBMS M1..M4, DELD M1)
     const activeCards = page.locator('.module-card:not(.locked)');
-    await expect(activeCards).toHaveCount(9);
+    await expect(activeCards).toHaveCount(10);
 
     // Verify Active Module Card shows "0/17 completed" and NO green status dot
     const coaM1Card = activeCards.first();
@@ -264,6 +265,13 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page).toHaveTitle(/DBMS Module 4/);
     await expect(page.locator('.toc')).toBeVisible();
     await expect(page.locator('.toc a')).toHaveCount(9);
+
+    // DELD Module 1
+    await page.goto('/notes/deld-module-1/');
+    await expect(page).toHaveTitle(/DELD Module 1/);
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(13);
+    await expect(page.locator('.fig svg').first()).toBeVisible();
 
     // Click All Modules back link
     await page.locator('.nav-back-link').click();

@@ -54,14 +54,19 @@ export function ProgressOverview() {
         {subjects.map((sub) => {
           const subPct = sub.totalModules > 0 ? Math.round((sub.completedModules / sub.totalModules) * 100) : 0;
           return (
-            <div key={sub.code} className="breakdown-item">
+            <a
+              key={sub.code}
+              href={`#${sub.code.toLowerCase()}`}
+              className="breakdown-item"
+              title={`Jump to ${sub.name}`}
+            >
               <span className="breakdown-name">
                 {sub.name} ({sub.slug.toUpperCase()})
               </span>
               <span className="breakdown-val">
                 {mounted ? sub.completedModules : 0} / {sub.totalModules} Modules ({mounted ? subPct : 0}%)
               </span>
-            </div>
+            </a>
           );
         })}
       </div>

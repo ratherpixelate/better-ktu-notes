@@ -616,5 +616,72 @@
       "title": "Likely questions",
       "group": "Revise"
     }
+  ],
+  "deld-m1": [
+    {
+      "id": "t-abs",
+      "title": "Digital abstraction",
+      "group": "Introduction"
+    },
+    {
+      "id": "t-num",
+      "title": "Number systems and conversion",
+      "group": "Number systems"
+    },
+    {
+      "id": "t-arith",
+      "title": "Binary addition and subtraction",
+      "group": "Number systems"
+    },
+    {
+      "id": "t-signed",
+      "title": "Signed numbers",
+      "group": "Number systems"
+    },
+    {
+      "id": "t-fixed",
+      "title": "Fixed-point numbers",
+      "group": "Number systems"
+    },
+    {
+      "id": "t-float",
+      "title": "Floating-point numbers",
+      "group": "Number systems"
+    },
+    {
+      "id": "t-gates",
+      "title": "Logic circuits and gates",
+      "group": "Basic gates"
+    },
+    {
+      "id": "t-levels",
+      "title": "Logic levels and noise margins",
+      "group": "Digital circuit operation"
+    },
+    {
+      "id": "t-loads",
+      "title": "Driving loads",
+      "group": "Digital circuit operation"
+    },
+    {
+      "id": "t-hdl",
+      "title": "HDL abstraction and design flow",
+      "group": "Verilog (Part 1)"
+    },
+    {
+      "id": "t-vlog",
+      "title": "Verilog constructs",
+      "group": "Verilog (Part 1)"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
   ]
 }

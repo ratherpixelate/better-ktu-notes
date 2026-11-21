@@ -104,6 +104,15 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 7,
     tocKey: 'dbms-m4',
   },
+  'deld-module-1': {
+    slug: 'deld-module-1',
+    moduleCode: 'GAEST305 · Module 1',
+    title: 'DELD Module 1: Introduction to Digital Systems and Verilog',
+    desc: 'Digital abstraction, number systems & conversions, binary & signed arithmetic, fixed/floating point (IEEE 754), logic gates, logic levels & noise margins, driving loads, and Verilog HDL basics.',
+    storageKey: 'deld-m1-revised',
+    totalTopics: 11,
+    tocKey: 'deld-m1',
+  },
 };
 
 export async function generateStaticParams() {

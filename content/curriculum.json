@@ -45,7 +45,9 @@
           "totalTopics": 7,
           "href": "/notes/coa-module-4/"
         }
-      ]
+      ],
+      "category": "Program Core Course (PCC)",
+      "credits": 4
     },
     {
       "code": "PCITT303",
@@ -92,7 +94,9 @@
           "totalTopics": 6,
           "href": null
         }
-      ]
+      ],
+      "category": "Program Core Course (PCC)",
+      "credits": 4
     },
     {
       "code": "PBITT304",
@@ -138,6 +142,57 @@
           "storageKey": "dbms-m4-revised",
           "totalTopics": 7,
           "href": "/notes/dbms-module-4/"
+        }
+      ],
+      "category": "Program Core Course (PCC)",
+      "credits": 4
+    },
+    {
+      "code": "GAEST305",
+      "slug": "deld",
+      "name": "Digital Electronics and Logic Design",
+      "category": "Engineering Science Course (ESC)",
+      "credits": 4,
+      "modules": [
+        {
+          "num": 1,
+          "slug": "module-1",
+          "title": "Introduction to Digital Systems and Verilog",
+          "desc": "Digital abstraction, number systems & conversions, binary & signed arithmetic, fixed/floating point (IEEE 754), logic gates, logic levels & noise margins, driving loads, and Verilog HDL basics.",
+          "status": "active",
+          "storageKey": "deld-m1-revised",
+          "totalTopics": 11,
+          "href": "/notes/deld-module-1/"
+        },
+        {
+          "num": 2,
+          "slug": "module-2",
+          "title": "Combinational Logic & Minimization",
+          "desc": "Boolean algebra, SOP/POS forms, Karnaugh maps (2-5 variables), don't cares, Quine-McCluskey method, and hazards in combinational circuits.",
+          "status": "drafting",
+          "storageKey": "deld-m2-revised",
+          "totalTopics": 8,
+          "href": null
+        },
+        {
+          "num": 3,
+          "slug": "module-3",
+          "title": "Combinational Logic Design & MSI Devices",
+          "desc": "Adders, subtractors, lookahead carry, multiplexers, demultiplexers, encoders, decoders, code converters, and magnitude comparators.",
+          "status": "drafting",
+          "storageKey": "deld-m3-revised",
+          "totalTopics": 8,
+          "href": null
+        },
+        {
+          "num": 4,
+          "slug": "module-4",
+          "title": "Sequential Logic & Finite State Machines",
+          "desc": "Latches, flip-flops (SR, JK, D, T), master-slave, shift registers, synchronous/asynchronous counters, and FSM design (Mealy & Moore).",
+          "status": "drafting",
+          "storageKey": "deld-m4-revised",
+          "totalTopics": 8,
+          "href": null
         }
       ]
     }
