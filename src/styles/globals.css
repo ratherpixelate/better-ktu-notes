@@ -76,6 +76,12 @@
   --shadow-md: none;
   --shadow-lg: none;
 
+  /* Custom Scrollbar Tokens (Light Mode - Swiss Monochrome) */
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.18);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.45);
+  --scrollbar-thumb-active: rgba(0, 0, 0, 0.70);
+
   color-scheme: light;
 }
 
@@ -119,6 +125,12 @@
   --shadow-sm: none;
   --shadow-md: none;
   --shadow-lg: none;
+
+  /* Custom Scrollbar Tokens (Dark Mode - High-Contrast Swiss Monochrome) */
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.20);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+  --scrollbar-thumb-active: rgba(255, 255, 255, 0.75);
 
   color-scheme: dark;
 }
@@ -166,6 +178,12 @@
     --shadow-md: none;
     --shadow-lg: none;
 
+    /* Custom Scrollbar Tokens (System Dark Fallback) */
+    --scrollbar-track: transparent;
+    --scrollbar-thumb: rgba(255, 255, 255, 0.20);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.45);
+    --scrollbar-thumb-active: rgba(255, 255, 255, 0.75);
+
     color-scheme: dark;
   }
 }
@@ -177,6 +195,51 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* --------------------------------------------------------------------------
+   CUSTOM SCROLLBARS (Swiss Precision Monochrome)
+   Rectangular architecture: zero radius, subtle resting state,
+   elevated contrast on hover & active drag/scroll.
+   -------------------------------------------------------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--scrollbar-thumb-active);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Elevated scrollbar contrast when user hovers over scrollable containers */
+:is(.wrap, pre, .search-results, .toc):hover {
+  scrollbar-color: var(--scrollbar-thumb-hover) var(--scrollbar-track);
+}
+
+:is(.wrap, pre, .search-results, .toc):hover::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-hover);
 }
 
 html {
@@ -1647,14 +1710,6 @@ input, textarea, select {
 
 .toc-reading-bar {
   display: none;
-}
-
-.toc::-webkit-scrollbar {
-  width: 4px;
-}
-.toc::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: var(--radius-full);
 }
 
 .toc .brand {
