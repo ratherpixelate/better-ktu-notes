@@ -250,7 +250,7 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await page.goto('/notes/dbms-module-2/');
     await expect(page).toHaveTitle(/DBMS Module 2/);
     await expect(page.locator('.toc')).toBeVisible();
-    await expect(page.locator('.toc a')).toHaveCount(14);
+    await expect(page.locator('.toc a')).toHaveCount(12);
     await expect(page.locator('.fig svg').first()).toBeVisible();
 
     // DBMS Module 3
@@ -263,7 +263,7 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await page.goto('/notes/dbms-module-4/');
     await expect(page).toHaveTitle(/DBMS Module 4/);
     await expect(page.locator('.toc')).toBeVisible();
-    await expect(page.locator('.toc a')).toHaveCount(10);
+    await expect(page.locator('.toc a')).toHaveCount(9);
 
     // Click All Modules back link
     await page.locator('.nav-back-link').click();

@@ -1,10 +1,9 @@
 <header class="top">
   <p class="eyebrow">PBITT304 · Database Management Systems</p>
   <h1>Module 1: Database Design and Creation</h1>
-  <p class="lede">Syllabus coverage: database approach vs file systems, three-schema architecture, data independence, conceptual modeling with ER diagrams, ER-to-relational mapping, and relational table creation using SQL DDL constraints.</p>
+  <p class="lede">Syllabus coverage: database approach vs file systems, three-schema architecture, conceptual ER modeling, ER-to-relational mapping, and table creation with SQL DDL constraints.</p>
 </header>
 
-<!-- ============ INTRO ============ -->
 <section class="topic" id="t-intro">
   <div class="head"><h2>Databases and DBMS</h2><label class="rev" for="r-intro"><input class="rev" type="checkbox" id="r-intro" data-sec="t-intro">revised</label></div>
   <div class="chips"><span class="chip">Define</span><span class="chip add">Added</span></div>
@@ -22,15 +21,6 @@
 
   <h3>Types of database applications</h3>
   <p>Traditional: numeric and textual databases. More recent: multimedia, geographic information systems (GIS), data warehouses, real-time and active databases. This course focuses on the traditional kind.</p>
-
-  <h3>Scope and objectives of a database project</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Your slides use the UNIVERSITY and COMPANY examples but never say how to scope a project. The syllabus asks for it, so here is the short version.</p></div>
-  <ul class="t">
-    <li><strong>Mini-world:</strong> the part of the real world the database models, for example one college's activity points.</li>
-    <li><strong>Objectives:</strong> the questions the database must answer and the transactions it must support (for example "list students below the required points").</li>
-    <li><strong>Scope:</strong> what is in (entities, users, reports) and what is deliberately left out. A small, well-defined scope is easier to design and test.</li>
-    <li><strong>Users:</strong> who inserts, who queries, who administers.</li>
-  </ul>
 
   <h3>Importance of a DBMS in real-world applications</h3>
   <ul class="t">
@@ -323,7 +313,7 @@
 </svg>
     <figcaption>The twelve symbols to memorise. Entities are rectangles, attributes are ovals, relationships are diamonds, and the double versions mean weak, multivalued, identifying and total.</figcaption>
   </figure>
-  <div class="note fix"><p><span class="lbl">Check</span>The slide text "min£max, min³0, max ³1" is OCR damage for <strong>min ≤ max, min ≥ 0, max ≥ 1</strong>. Min is not limited to 0 or 1: the COMPANY figure shows DEPARTMENT in WORKS_FOR as <strong>(4,N)</strong>, meaning every department has at least 4 employees.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>In some slide copies the text "min£max, min³0, max ³1" is OCR damage for <strong>min ≤ max, min ≥ 0, max ≥ 1</strong>. Min is not limited to 0 or 1: the COMPANY figure shows DEPARTMENT in WORKS_FOR as <strong>(4,N)</strong>, meaning every department has at least 4 employees.</p></div>
 </section>
 
 <section class="topic" id="t-relship">
@@ -371,7 +361,7 @@
 <section class="topic" id="t-example">
   <div class="head"><h2>Building an ERD from requirements</h2><label class="rev" for="r-example"><input class="rev" type="checkbox" id="r-example" data-sec="t-example">revised</label></div>
   <div class="chips"><span class="chip add">Added</span><span class="chip">Draw</span><span class="chip">Design</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>The method in steps 1 to 5 is the usual textbook approach and is not in your slides. The COMPANY diagram itself is from your slides.</p></div>
+  <div class="note add"><p><span class="lbl">Added</span>The method in steps 1 to 5 is the usual textbook approach and is not in the standard slides. The COMPANY diagram itself is from the textbook.</p></div>
   <ol class="t">
     <li><strong>Entities:</strong> underline the nouns that have their own properties. Those are candidate entity types.</li>
     <li><strong>Attributes:</strong> list each entity's properties. Mark the key, and mark composite, multivalued and derived ones.</li>
@@ -458,7 +448,7 @@
 <path class="s-line" d="M480 420 L510 420"/>
 <path class="s-line" d="M480 424 L510 424"/>
 </svg>
-    <figcaption>COMPANY ER diagram, redrawn with attributes inside the boxes. Double lines are total participation. Compare with Figure 3.2 in your slides.</figcaption>
+    <figcaption>COMPANY ER diagram, redrawn with attributes inside the boxes. Double lines are total participation. Compare with Figure 3.2 of the textbook.</figcaption>
   </figure>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Relationship</th><th>Between</th><th>Ratio</th><th>(min,max)</th></tr></thead>
@@ -471,9 +461,9 @@
       <tr><td class="m">DEPENDENTS_OF</td><td>EMPLOYEE, DEPENDENT</td><td>1:N</td><td class="m">EMPLOYEE (0,N), DEPENDENT (1,1)</td></tr>
     </tbody>
   </table></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide text says to specify <strong>(0,n)</strong> for DEPARTMENT in WORKS_FOR, but the diagram on the next slide shows <strong>(4,N)</strong>. Both are valid if the rule differs (any number, or at least 4 employees). Use whichever the question states. The OCR of this diagram is messy, so the other (min,max) pairs in the table are the standard textbook ones. Check them against your printed slide.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Some slides say to specify <strong>(0,n)</strong> for DEPARTMENT in WORKS_FOR, but the diagram on the next slide shows <strong>(4,N)</strong>. Both are valid if the rule differs (any number, or at least 4 employees). Use whichever the question states. The other (min,max) pairs in the table are the standard textbook ones. Check them against the figure in your edition.</p></div>
 
-  <h3>Small project example: library</h3>
+  <h3>Small example: library</h3>
   <div class="note add"><p><span class="lbl">Added</span><strong>Requirements:</strong> members borrow books. A book has an ISBN, title, and one or more authors. Each loan records the issue date and due date. A member has an id, a name and several phone numbers.</p>
   <p><strong>Entities:</strong> BOOK (<u>Isbn</u>, Title, {Author}), MEMBER (<u>Member_id</u>, Name, {Phone}).</p>
   <p><strong>Relationship:</strong> BORROWS between MEMBER and BOOK is <strong>M:N</strong> (a member borrows many books over time, a book is borrowed by many members), with attributes Issue_date and Due_date. Both participations are partial, so (0,N) on each side.</p>
@@ -537,7 +527,7 @@
   </ul>
   <div class="note add"><p><span class="lbl">Worked</span>CAR(State, Reg#, SerialNo, Make, Model, Year). Keys: {State, Reg#} and {SerialNo}. {SerialNo, Make} is a superkey but <strong>not</strong> a key, because Make can be removed.</p>
   <p><strong>Counting superkeys.</strong> R(A, B, C) with A as the only key: a superkey is any subset that contains A, so 2<sup>2</sup> = <strong>4</strong> superkeys (A, AB, AC, ABC).</p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide on CAR says "we chose SerialNo as the primary key" but the next slide's table picks <strong>LicenseNumber</strong>. Both are candidate keys, so either is allowed. In an exam, state which one you choose and underline only that one.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>The textbook's CAR example says "we chose SerialNo as the primary key" but the next slide's table picks <strong>LicenseNumber</strong>. Both are candidate keys, so either is allowed. In an exam, state which one you choose and underline only that one.</p></div>
 
   <h3>Update operations and constraint violations</h3>
   <div class="wrap"><table class="wide">
@@ -548,13 +538,13 @@
       <tr><td><strong>UPDATE</strong></td><td>Domain and NOT NULL on the changed attribute. A changed <strong>PK</strong> acts like delete plus insert. A changed <strong>FK</strong> may break referential integrity. An ordinary attribute can only break its domain.</td><td>Same options as delete for the PK. Reject for the rest.</td></tr>
     </tbody>
   </table></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide describes CASCADE for delete as "propagate the new primary key value into the foreign keys". That is the meaning for an <strong>update</strong> (<code>ON UPDATE CASCADE</code>). For a <strong>delete</strong>, CASCADE means the referencing tuples are <strong>deleted</strong> too. I used the second meaning here and in the SQL below.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Some slides describe CASCADE for delete as "propagate the new primary key value into the foreign keys". That is the meaning for an <strong>update</strong> (<code>ON UPDATE CASCADE</code>). For a <strong>delete</strong>, CASCADE means the referencing tuples are <strong>deleted</strong> too. I used the second meaning here and in the SQL below.</p></div>
 </section>
 
 <section class="topic" id="t-mapping">
   <div class="head"><h2>ER to relational mapping</h2><label class="rev" for="r-mapping"><input class="rev" type="checkbox" id="r-mapping" data-sec="t-mapping">revised</label></div>
   <div class="chips"><span class="chip">Algorithm</span><span class="chip">Design</span><span class="chip">Draw</span></div>
-  <p>Seven steps for a plain ER schema. Steps 8 and 9 in your slides (specialisation, generalisation and union types) are EER topics and are not in this module's syllabus, so they are left out.</p>
+  <p>Seven steps for a plain ER schema. Steps 8 and 9 in the textbook (specialisation, generalisation and union types) are EER topics and are not in this module's syllabus, so they are left out.</p>
   <div class="wrap"><table class="wide">
     <thead><tr><th>Step</th><th>ER construct</th><th>Rule</th><th>COMPANY result</th></tr></thead>
     <tbody>
@@ -643,7 +633,7 @@
 <text class="s-s" x="44" y="346" text-anchor="start" >foreign key</text>
 <text class="s-s" x="130" y="346" text-anchor="start" text-decoration="underline">underline = primary key</text>
 </svg>
-    <figcaption>The relational schema the seven steps produce for COMPANY. Shaded cells are foreign keys and underlined names are primary keys. Compare with Figure 7.2 in your slides.</figcaption>
+    <figcaption>The relational schema the seven steps produce for COMPANY. Shaded cells are foreign keys and underlined names are primary keys. Compare with Figure 7.2 of the textbook.</figcaption>
   </figure>
   <p>Table 7.1 in short: entity type gives an entity relation; 1:1 or 1:N relationship gives a foreign key (or a relationship relation); M:N gives a relationship relation with two foreign keys; n-ary gives a relation with n foreign keys; composite attribute gives its simple components; multivalued attribute gives a relation and a foreign key; value set gives a domain; key attribute gives the primary (or secondary) key.</p>
   <div class="note fix"><p><span class="lbl">Check</span>Slide 11 of chapter 7 has two slips: "SUPPY" should be SUPPLY, and "create a new relationship S" should read "create a new <strong>relation</strong> S". In the SUPPLY example the keys are SNAME, PARTNO and PROJNAME as in the slide's figure.</p></div>
@@ -659,7 +649,7 @@
 <section class="topic" id="t-ddl">
   <div class="head"><h2>Creating the database: tables in SQL</h2><label class="rev" for="r-ddl"><input class="rev" type="checkbox" id="r-ddl" data-sec="t-ddl">revised</label></div>
   <div class="chips"><span class="chip add">Added</span><span class="chip">Write SQL</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>Your slides stop at the relational schema. The syllabus asks you to implement a sample schema in a DBMS (MySQL, PostgreSQL or SQLite) and define tables with attributes and foreign keys, so this section is from standard SQL. I ran every statement below in SQLite. MySQL and PostgreSQL syntax is the same for these statements as far as I know, but I did not run them there.</p></div>
+  <div class="note add"><p><span class="lbl">Added</span>The standard slides stop at the relational schema. The syllabus asks you to implement a sample schema in a DBMS (MySQL, PostgreSQL or SQLite) and define tables with attributes and foreign keys, so this section is from standard SQL. I ran every statement below in SQLite. MySQL and PostgreSQL syntax is the same for these statements as far as I know, but I did not run them there.</p></div>
 
   <h3>What goes in a CREATE TABLE</h3>
   <div class="wrap"><table class="wide">
@@ -842,7 +832,7 @@ FROM EMPLOYEE E
 <section class="topic" id="t-qa">
   <div class="head"><h2>Likely questions with answer outlines</h2></div>
   <div class="chips"><span class="chip add">Added</span><span class="chip">Covers every syllabus line</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours.</p></div>
+  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I have not seen past papers, so match them against yours.</p></div>
 
   <details class="q"><summary>Explain the characteristics of the database approach and its advantages over file processing. (7)</summary><div class="ans">
     <p>Self-describing catalog, program-data independence, abstraction, multiple views, sharing with transaction support. Then advantages: less redundancy, access control, backup and recovery, integrity constraints. Add when not to use one. See <a href="#t-approach">Database approach</a>.</p></div></details>
@@ -888,7 +878,7 @@ FROM EMPLOYEE E
   <div class="notes-footer-inner">
     <div class="notes-footer-nav">
       <a href="/">← All Subjects</a>
-      <a href="/notes/dbms-module-2/">Next: DBMS Module 2 (Normalization & SQL) →</a>
+      <a href="/notes/dbms-module-2/">Next: DBMS Module 2 →</a>
     </div>
     <div class="notes-footer-meta">
       <span>PBITT304 DBMS · Module 1 · KTU 2024 Scheme</span>

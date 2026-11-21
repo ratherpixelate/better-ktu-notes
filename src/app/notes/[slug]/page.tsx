@@ -81,9 +81,9 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     slug: 'dbms-module-2',
     moduleCode: 'PBITT304 · Module 2',
     title: 'DBMS Module 2: Normalization and SQL Queries',
-    desc: 'Functional dependencies, normal forms (1NF to 5NF), lossless join decomposition, SQL DDL/DML, joins, aggregates, and project milestones.',
+    desc: 'Functional dependencies, normal forms (1NF to 5NF), lossless join decomposition, SQL DDL/DML, joins, aggregates, and views.',
     storageKey: 'dbms-m2-revised',
-    totalTopics: 12,
+    totalTopics: 10,
     tocKey: 'dbms-m2',
   },
   'dbms-module-3': {
@@ -98,10 +98,10 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
   'dbms-module-4': {
     slug: 'dbms-module-4',
     moduleCode: 'PBITT304 · Module 4',
-    title: 'DBMS Module 4: Testing, Python Integration, Documentation',
-    desc: 'Database testing & validation, schema & constraint checks, Python MySQL connector CRUD operations, SQL injection security, and project documentation.',
+    title: 'DBMS Module 4: Testing and Python Integration',
+    desc: 'Database testing & validation, schema & constraint checks, Python MySQL connector CRUD operations, and SQL injection security.',
     storageKey: 'dbms-m4-revised',
-    totalTopics: 8,
+    totalTopics: 7,
     tocKey: 'dbms-m4',
   },
 };

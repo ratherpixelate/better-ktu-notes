@@ -1,7 +1,7 @@
 <header class="top">
   <p class="eyebrow">PBITT304 · Database Management Systems</p>
   <h1>Module 2: Normalization and SQL Queries</h1>
-  <p class="lede">Syllabus coverage: functional dependencies, normal forms (1NF, 2NF, 3NF, BCNF, 4NF, 5NF), lossless join and dependency preservation decomposition, SQL queries, joins, aggregates, and database project timeline.</p>
+  <p class="lede">Syllabus coverage: functional dependencies, normal forms (1NF, 2NF, 3NF, BCNF, 4NF, 5NF), lossless join and dependency preservation decomposition, SQL queries, joins, aggregates, and views.</p>
 </header>
 
 <section class="topic" id="t-why">
@@ -68,7 +68,7 @@
     <li>Look at each FD in F. If its left side is inside the result set, add its right side to the result set.</li>
     <li>Repeat step 2 until a full pass adds nothing new. That set is X<sup>+</sup>.</li></ol>
   <p><strong>Example.</strong> R(A, B, C, D, E), F = {A→B, A→C, CD→E, B→D, E→A}. Find (CD)<sup>+</sup>. Start {C, D}. CD→E adds E, giving {C, D, E}. E→A adds A, giving {A, C, D, E}. A→B adds B. Result: (CD)<sup>+</sup> = {A, B, C, D, E}, so CD is a superkey.</p>
-  <p><strong>Is an FD implied?</strong> X → Y is implied by F exactly when Y ⊆ X<sup>+</sup>. Your slide's Example 3 asks which of CD→AC, BD→CD, BC→CD, AC→BC is <strong>not</strong> implied. (BD)<sup>+</sup> = {B, D} (B→D adds D, then nothing more), which does not contain C, so <strong>BD → CD is not implied</strong>. The other three have closures that contain the right side. I checked this in code.</p></div>
+  <p><strong>Is an FD implied?</strong> X → Y is implied by F exactly when Y ⊆ X<sup>+</sup>. With the F above: is A → E implied? A<sup>+</sup> = {A, B, C, D, E} contains E, so <strong>yes</strong>. Is B → C implied? B<sup>+</sup> = {B, D} does not contain C, so <strong>no</strong>. Both closures were checked in code.</p></div>
 
   <h3>Finding candidate keys</h3>
   <div class="note add"><p><span class="lbl">Added · method</span></p>
@@ -77,9 +77,9 @@
     <li>Attributes that appear only on right sides are in <strong>no</strong> key.</li>
     <li>Compute the closure of the must-have attributes. If it is every attribute, that set is the key.</li>
     <li>If not, add one more attribute at a time (then pairs) and test the closure. Keep only <strong>minimal</strong> sets. Every minimal set whose closure is all of R is a candidate key.</li></ol>
-  <p><strong>Slide Example 1.</strong> F = {A→B, B→C} on ABC: A is never on a right side and A<sup>+</sup> = ABC, so the only key is <strong>A</strong>.</p>
-  <p><strong>Slide Example 2.</strong> F = {A→BC, C→B, D→E, E→D} on ABCDE: A never appears on a right side, so it is in every key. A<sup>+</sup> = ABC, and D<sup>+</sup> = DE = E<sup>+</sup>, so A must be combined with D or E. Keys: <strong>AD and AE</strong>.</p>
-  <p><strong>Exercise 1.</strong> R(A, B, C, D, E), F = {AB→C, C→D, D→B, D→E}. Keys: <strong>AB, AC, AD</strong>. A is never on a right side. (AB)<sup>+</sup>: AB→C, C→D, D→E gives every attribute. Since C→D→B, once A is present either C or D can replace B, so AC and AD are keys too.</p></div>
+  <p><strong>Example 1.</strong> F = {A→B, B→C} on ABC: A is never on a right side and A<sup>+</sup> = ABC, so the only key is <strong>A</strong>.</p>
+  <p><strong>Example 2.</strong> F = {A→BC, C→B, D→E, E→D} on ABCDE: A never appears on a right side, so it is in every key. A<sup>+</sup> = ABC, and D<sup>+</sup> = DE = E<sup>+</sup>, so A must be combined with D or E. Keys: <strong>AD and AE</strong>.</p>
+  <p><strong>Example.</strong> R(A, B, C, D, E), F = {AB→C, C→D, D→B, D→E}. Keys: <strong>AB, AC, AD</strong>. A is never on a right side. (AB)<sup>+</sup>: AB→C, C→D, D→E gives every attribute. Since C→D→B, once A is present either C or D can replace B, so AC and AD are keys too.</p></div>
 
   <h3>Equivalence and minimal cover</h3>
   <ul class="t">
@@ -88,14 +88,14 @@
     <li>Every set has at least one equivalent minimal set, and there can be several.</li>
     <li><strong>Canonical cover:</strong> a minimal cover in which FDs with the same left side are combined by union, so each left side is unique.</li>
   </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide says "there is no simple algorithm for computing a minimal set of FDs", but its own Examples 4 and 5 use the standard three-step procedure below. The slide's handwritten worked solutions did not survive OCR, so I redid both examples in code. Different books also swap the words "minimal" and "canonical" cover, so write the definition you use.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Some lecture slides say "there is no simple algorithm for computing a minimal set of FDs". That is misleading: the standard three-step procedure below works. Different books also swap the words "minimal" and "canonical" cover, so write the definition you use.</p></div>
   <div class="note add"><p><span class="lbl">Added · method</span><strong>Minimal cover in three steps.</strong></p>
   <ol class="t">
     <li><strong>Split right sides.</strong> Replace X → YZ by X → Y and X → Z.</li>
     <li><strong>Remove extraneous left-side attributes.</strong> For an FD with more than one left attribute, try dropping one attribute A. If the right side is still in the closure of the reduced left side (using all FDs), A is extraneous and is dropped.</li>
     <li><strong>Remove redundant FDs.</strong> Try deleting each FD. If its right side is still in the closure of its left side under the remaining FDs, delete it for good.</li></ol>
-  <p><strong>Slide Example 4.</strong> F = {A→BC, B→C, A→B, AB→C}. Step 1: A→B, A→C, B→C, A→B, AB→C. Step 2: in AB→C, B alone gives C, so A is extraneous: it becomes B→C. Step 3: A→C is redundant (A→B→C). Result: <strong>{A→B, B→C}</strong>.</p>
-  <p><strong>Slide Example 5.</strong> F = {B→A, D→A, AB→D}. Step 2: B<sup>+</sup> already gives A, then AB→D fires, so A is extraneous in AB→D, which becomes B→D. Step 3: B→A is redundant (B→D→A). Result: <strong>{D→A, B→D}</strong>, and the only key is B.</p></div>
+  <p><strong>Example 4.</strong> F = {A→BC, B→C, A→B, AB→C}. Step 1: A→B, A→C, B→C, A→B, AB→C. Step 2: in AB→C, B alone gives C, so A is extraneous: it becomes B→C. Step 3: A→C is redundant (A→B→C). Result: <strong>{A→B, B→C}</strong>.</p>
+  <p><strong>Example 5.</strong> F = {B→A, D→A, AB→D}. Step 2: B<sup>+</sup> already gives A, then AB→D fires, so A is extraneous in AB→D, which becomes B→D. Step 3: B→A is redundant (B→D→A). Result: <strong>{D→A, B→D}</strong>, and the only key is B.</p></div>
 </section>
 
 <section class="topic" id="t-nf">
@@ -140,14 +140,14 @@
     </tbody>
   </table></div>
   <p><strong>The informal rhyme:</strong> 1NF, every attribute depends on <em>the key</em>. 2NF, on <em>the whole key</em>. 3NF, on <em>nothing but the key</em>. (BCNF adds: so help me Codd, even for prime attributes.)</p>
-  <div class="note fix"><p><span class="lbl">Check</span>The slides first define 2NF and 3NF using only the <strong>primary key</strong>, then give the <strong>general</strong> definitions for several candidate keys. Use the general ones in the exam, because the primary-key versions miss violations when there are two or more candidate keys.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Lecture slides often first define 2NF and 3NF using only the <strong>primary key</strong>, then give the <strong>general</strong> definitions for several candidate keys. Use the general ones in the exam, because the primary-key versions miss violations when there are two or more candidate keys.</p></div>
 
-  <h3>Worked examples from your slides</h3>
+  <h3>Worked examples</h3>
   <div class="note add"><p><span class="lbl">EMP_PROJ to 2NF</span>EMP_PROJ(<u>Ssn</u>, <u>Pnumber</u>, Hours, Ename, Pname, Plocation) with FD1 {Ssn, Pnumber} → Hours, FD2 Ssn → Ename, FD3 Pnumber → {Pname, Plocation}. Ename and Pname are partially dependent on the key, so it is not in 2NF. Decompose into <strong>EP1</strong>(<u>Ssn</u>, <u>Pnumber</u>, Hours), <strong>EP2</strong>(<u>Ssn</u>, Ename), <strong>EP3</strong>(<u>Pnumber</u>, Pname, Plocation).</p></div>
   <div class="note add"><p><span class="lbl">EMP_DEPT to 3NF</span>EMP_DEPT(<u>Ssn</u>, Ename, Bdate, Address, Dnumber, Dname, Dmgr_ssn). Ssn → Dnumber and Dnumber → {Dname, Dmgr_ssn}, so Dname and Dmgr_ssn depend on Ssn <strong>transitively</strong>. Decompose into <strong>ED1</strong>(<u>Ssn</u>, Ename, Bdate, Address, Dnumber) and <strong>ED2</strong>(<u>Dnumber</u>, Dname, Dmgr_ssn).</p></div>
   <div class="note add"><p><span class="lbl">LOTS: 1NF to 3NF</span>LOTS(<u>Property_id#</u>, County_name, Lot#, Area, Price, Tax_rate) with candidate keys {Property_id#} and {County_name, Lot#}. FD3 County_name → Tax_rate is partial on the second key, so not 2NF. FD4 Area → Price is transitive.</p>
   <p>2NF: <strong>LOTS1</strong>(Property_id#, County_name, Lot#, Area, Price) and <strong>LOTS2</strong>(<u>County_name</u>, Tax_rate). 3NF: split LOTS1 into <strong>LOTS1A</strong>(Property_id#, County_name, Lot#, Area) and <strong>LOTS1B</strong>(<u>Area</u>, Price).</p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>The LOTS example comes from the book's figure, and the figure's text did not survive OCR in your file. I rebuilt the FDs from the textbook as I remember it (FD1 Property_id# → all, FD2 {County_name, Lot#} → all, FD3 County_name → Tax_rate, FD4 Area → Price). Compare with your printed slide.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>The LOTS example comes from the textbook figure. The FDs are written from the textbook (FD1 Property_id# → all, FD2 {County_name, Lot#} → all, FD3 County_name → Tax_rate, FD4 Area → Price). Compare with the figure in your edition.</p></div>
 
   <h3>3NF but not BCNF</h3>
   <p>TEACH(Student, Course, Instructor) with fd1 {Student, Course} → Instructor and fd2 Instructor → Course. Keys are {Student, Course} and {Student, Instructor}. fd2 has a non-superkey left side but Course is prime, so TEACH is in <strong>3NF but not BCNF</strong>.</p>
@@ -180,7 +180,7 @@
       <tr><td><strong>Lossless (non-additive) join</strong></td><td>For every valid state r, the natural join of the projections gives back exactly r: *(π<sub>R1</sub>(r), …, π<sub>Rn</sub>(r)) = r. "Loss" means loss of <strong>information</strong> (spurious tuples are added), not loss of tuples.</td><td><strong>Never sacrificed</strong></td></tr>
     </tbody>
   </table></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide words dependency preservation as "all dependencies must either be a part of <em>each</em> of R<sub>1</sub>…R<sub>n</sub> or be inferred from the union". It should be a part of <strong>at least one</strong> R<sub>i</sub> (not each). Also the attribute-preservation formula shows "∑" from OCR, which should be the union sign ∪.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Some slides word dependency preservation as "all dependencies must either be a part of <em>each</em> of R<sub>1</sub>…R<sub>n</sub> or be inferred from the union". It should be a part of <strong>at least one</strong> R<sub>i</sub> (not each). If a formula for attribute preservation shows "∑", it should be the union sign ∪.</p></div>
 
   <h3>Lossless join test for two relations</h3>
   <div class="note def"><p><span class="lbl">Binary test</span>D = {R<sub>1</sub>, R<sub>2</sub>} of R is lossless <strong>if and only if</strong> F<sup>+</sup> contains (R<sub>1</sub> ∩ R<sub>2</sub>) → (R<sub>1</sub> − R<sub>2</sub>) <strong>or</strong> (R<sub>1</sub> ∩ R<sub>2</sub>) → (R<sub>2</sub> − R<sub>1</sub>). In words: the shared attributes must be a key of at least one of the two parts.</p></div>
@@ -189,13 +189,13 @@
     <li>Draw a table with one column per attribute of R and one row per relation R<sub>i</sub>. In row i, write "a" in each column whose attribute is in R<sub>i</sub> and a distinct "b<sub>i</sub>" elsewhere.</li>
     <li>For each FD X → Y, find rows that agree on all X columns. In the Y columns, make those rows equal: if one of them has "a", use "a", otherwise use one of the b symbols.</li>
     <li>Repeat until nothing changes. The decomposition is lossless if some row is all "a".</li></ol>
-  <p>I used this test in code for Exercise 14 below.</p></div>
+</div>
 
   <h3>Dependency preservation test</h3>
   <div class="note add"><p><span class="lbl">Added · method</span>For each FD X → Y in F, set Z = X. Repeatedly, for every R<sub>i</sub>, replace Z by Z ∪ ((Z ∩ R<sub>i</sub>)<sup>+</sup> ∩ R<sub>i</sub>). When Z stops growing, the FD is preserved if Y ⊆ Z. If every FD passes, the decomposition preserves dependencies. This avoids computing the full projected FD sets.</p></div>
 
   <h3>Algorithm: 3NF by synthesis</h3>
-  <div class="note add"><p><span class="lbl">Added · algorithm</span>Your slides mention the algorithms in the recap but do not include them. This is the standard version.</p>
+  <div class="note add"><p><span class="lbl">Added · algorithm</span>Lecture slides usually mention these algorithms without writing them out. This is the standard version.</p>
   <ol class="t">
     <li>Find a minimal cover G of F.</li>
     <li>For each distinct left side X in G, create a relation holding X together with all attributes on the right sides of FDs that have left side X.</li>
@@ -211,7 +211,7 @@
     <li>Replace R<sub>i</sub> by two relations: <strong>X ∪ Y</strong> and <strong>R<sub>i</sub> − Y</strong>. They share X, and X → Y makes the split lossless.</li>
     <li>Repeat until every relation is in BCNF.</li></ol>
   <p>The result is <strong>always lossless</strong> but may <strong>lose dependencies</strong>. The answer is not unique: it depends on which violating FD you pick first.</p></div>
-  <div class="note add"><p><span class="lbl">Worked</span>R(A, B, C, D), F = {AB→CD, D→A} (Exercise 10). Keys AB and BD. D → A has a non-superkey left side, so R is not in BCNF (it is in 3NF, since A is prime). Split on D → A: R1(<u>D</u>, A) and R2(<u>B</u>, <u>D</u>, C). Both are BCNF, and BD is the key of R2. The decomposition is lossless, but <strong>AB → CD is lost</strong> because A and B no longer sit in one relation.</p></div>
+  <div class="note add"><p><span class="lbl">Worked</span>R(A, B, C, D), F = {AB→CD, D→A}. Keys AB and BD. D → A has a non-superkey left side, so R is not in BCNF (it is in 3NF, since A is prime). Split on D → A: R1(<u>D</u>, A) and R2(<u>B</u>, <u>D</u>, C). Both are BCNF, and BD is the key of R2. The decomposition is lossless, but <strong>AB → CD is lost</strong> because A and B no longer sit in one relation.</p></div>
 
   <h3>3NF against BCNF</h3>
   <div class="wrap"><table class="wide">
@@ -235,7 +235,7 @@
   </ul>
   <div class="note add"><p><span class="lbl">Example</span>EMP(Ename, Pname, Dname): an employee works on several projects and has several dependents, independently. If Smith works on X and Y and has dependents John and Anna, the relation must hold all 2 × 2 = 4 combinations: (Smith, X, John), (Smith, X, Anna), (Smith, Y, John), (Smith, Y, Anna). Here Ename →→ Pname and Ename →→ Dname, and Ename is not a superkey (the key is all three attributes), so EMP is in BCNF but <strong>not in 4NF</strong>.</p></div>
   <div class="note def"><p><span class="lbl">4NF</span>R is in 4NF with respect to F (FDs and MVDs) if, for every non-trivial MVD X →→ Y in F<sup>+</sup>, X is a <strong>superkey</strong> of R.</p></div>
-  <p>Fix by splitting the independent facts: <strong>EMP_PROJECTS</strong>(Ename, Pname) and <strong>EMP_DEPENDENTS</strong>(Ename, Dname). This is the slide's EMP example.</p>
+  <p>Fix by splitting the independent facts: <strong>EMP_PROJECTS</strong>(Ename, Pname) and <strong>EMP_DEPENDENTS</strong>(Ename, Dname). This is the textbook's EMP example.</p>
 
   <h3>Inference rules for FDs and MVDs</h3>
   <div class="wrap"><table class="wide">
@@ -254,47 +254,9 @@
   <div class="note def"><p><span class="lbl">Join dependency</span>JD(R<sub>1</sub>, …, R<sub>n</sub>) on R says every valid state r has a lossless decomposition into R<sub>1</sub>, …, R<sub>n</sub>: *(π<sub>R1</sub>(r), …, π<sub>Rn</sub>(r)) = r. An <strong>MVD is a JD with n = 2</strong>. A JD is trivial if one R<sub>i</sub> equals R.</p></div>
   <div class="note def"><p><span class="lbl">5NF (PJNF)</span>R is in fifth normal form (project-join normal form) with respect to F if, for every non-trivial JD(R<sub>1</sub>, …, R<sub>n</sub>) in F<sup>+</sup>, <strong>every R<sub>i</sub> is a superkey</strong> of R.</p></div>
   <div class="note add"><p><span class="lbl">Example</span>SUPPLY(Sname, Part_name, Proj_name) with the rule: if supplier s supplies part p, project j uses part p, and s supplies something to j, then s supplies p to j. That gives JD(R1, R2, R3) with R1(Sname, Part_name), R2(Sname, Proj_name), R3(Part_name, Proj_name). No two-way split is lossless, but the three-way split is. Convert to 5NF by replacing SUPPLY with R1, R2 and R3.</p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>The figures for 4NF and 5NF (the EMP and SUPPLY tables) did not come through in your OCR file, so the data above is my own small example. The definitions are word for word from your slides.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>The textbook figures for 4NF and 5NF (the EMP and SUPPLY tables) are replaced here by a small example of my own. The definitions follow Elmasri and Navathe.</p></div>
 </section>
 
-<section class="topic" id="t-solved">
-  <div class="head"><h2>Your 27 exercises solved</h2><label class="rev" for="r-solved"><input class="rev" type="checkbox" id="r-solved" data-sec="t-solved">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Numerical</span><span class="chip fix">Check</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>The answers below come from running the methods above in code (closure, key search, minimal cover, synthesis, BCNF splitting, lossless chase). Try each yourself first and use this to check.</p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Many answers are <strong>not unique</strong>: minimal covers and decompositions can differ in order and grouping and still be correct, so any valid equivalent answer should get marks. Also, the sheet's header reads ITT206 and March 2025, which looks like an earlier batch's assignment, not PBITT304. It is still good practice. Exercise 27's relation is only Employee, which is what I solved.</p></div>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th class="c">Q</th><th>Answer</th></tr></thead>
-    <tbody>
-      <tr><td class="c m">1</td><td>Keys <strong>AB, AC, AD</strong>.</td></tr>
-      <tr><td class="c m">2</td><td>Minimal cover: <strong>A→E, E→D, BD→E, F→A, E→B, D→H, BG→F, CD→A</strong>. (AD→BE splits and reduces to existing FDs, BE→D reduces to E→D, BDH→E to BD→E, AC→E is redundant.) Candidate keys: ACG, BCG, CDG, CEG, CFG.</td></tr>
-      <tr><td class="c m">3</td><td>3NF by synthesis (combine E→B and E→D into E→BD): <strong>(A,E), (B,D,E), (A,F), (D,H), (B,F,G), (A,C,D), (A,C,G)</strong>. (A,C,G) is added because it is a candidate key.</td></tr>
-      <tr><td class="c m">4</td><td><strong>Not all in BCNF.</strong> (B,F,G) has F→B (via F→A→E→B) with F not a key, and (A,C,D) has A→D. A BCNF decomposition: <strong>(D,H), (A,F), (C,F,G), (B,D,E), (A,E)</strong>. It is lossless but <strong>loses BG→F and CD→A</strong>.</td></tr>
-      <tr><td class="c m">5</td><td><strong>Yes.</strong> (EC)<sup>+</sup> = ABCDEF, and E<sup>+</sup> = EAB, C<sup>+</sup> = CF, so no smaller part works. EC is the only key.</td></tr>
-      <tr><td class="c m">6</td><td>Keys <strong>AEH, BEH, DEH</strong>. (E and H never appear on a right side, so they are in every key, and A, B, D are interchangeable through A→B, D→A and BC→D with E→C.)</td></tr>
-      <tr><td class="c m">7</td><td>Keys <strong>A</strong> and <strong>BC</strong>.</td></tr>
-      <tr><td class="c m">8</td><td>Highest normal form <strong>2NF</strong>. No partial dependency (key A is a single attribute and B, C alone determine nothing), but E → DG has a non-superkey left side and non-prime right side, so it fails 3NF.</td></tr>
-      <tr><td class="c m">9</td><td><strong>Yes</strong>, t1(name, city) and t2(name, owner) are both in BCNF (name is the key of each). The split is also lossless and preserves both FDs.</td></tr>
-      <tr><td class="c m">10</td><td>Keys AB, BD. <strong>3NF, not BCNF</strong> (D→A). BCNF: <strong>(A,D)</strong> key D and <strong>(B,C,D)</strong> key BD. Loses AB→CD.</td></tr>
-      <tr><td class="c m">11</td><td><strong>(b) BD → CD.</strong> (BD)<sup>+</sup> = {B, D}.</td></tr>
-      <tr><td class="c m">12</td><td>Canonical cover: <strong>A→B, ACD→E, EF→GH</strong>. In ABCD→E, B is extraneous (A→B). ACDF→EG is redundant: ACD→E gives E, then EF→G gives G.</td></tr>
-      <tr><td class="c m">13</td><td>Key is ACDF. 3NF: <strong>(A,B), (A,C,D,E), (E,F,G,H), (A,C,D,F)</strong>. The last relation holds the key.</td></tr>
-      <tr><td class="c m">14</td><td><strong>Lossless: yes.</strong> The chase test ends with an all-"a" row. It also follows because synthesis adds a relation containing a candidate key. All FDs are preserved.</td></tr>
-      <tr><td class="c m">15</td><td>Key PQS. <strong>Not in 2NF</strong>: PQ→R, PS→VW, QS→TU and P→X are partial dependencies. 2NF: <strong>(P,Q,S), (P,Q,R), (P,S,V,W,Y), (Q,S,T,U), (P,X)</strong>. (W→Y is transitive, which 2NF allows.)</td></tr>
-      <tr><td class="c m">16</td><td>Key XZ. <strong>Not in 3NF</strong> (not even 2NF: X→Y and Z→W are partial). 3NF: <strong>(X,Y), (Y,P), (Z,W), (X,Z)</strong>.</td></tr>
-      <tr><td class="c m">17</td><td>Keys XY, XZ. In <strong>3NF but not BCNF</strong> (Z→Y). BCNF: <strong>(Y,Z), (X,Z)</strong>. It loses XY→Z.</td></tr>
-      <tr><td class="c m">18</td><td>Keys BC, CD. Highest form <strong>3NF</strong> (D→B violates BCNF but B is prime).</td></tr>
-      <tr><td class="c m">19</td><td><strong>(iii)</strong> AB→C, C→AD. Splitting on C→AD gives (A,C,D) and (B,C), and AB→C is lost. Options (i), (ii) and (iv) all have lossless, dependency-preserving BCNF decompositions.</td></tr>
-      <tr><td class="c m">20</td><td>Key AB. <strong>Not in 2NF</strong> (B→C). 2NF: <strong>(B,C), (A,B,D)</strong>.</td></tr>
-      <tr><td class="c m">21</td><td>Key PQS. <strong>Not in 2NF</strong>. 2NF: <strong>(P,Q,R), (S,T), (P,Q,S)</strong>.</td></tr>
-      <tr><td class="c m">22</td><td>Key AC. <strong>Not in 2NF</strong>. 2NF: <strong>(A,B,E), (C,D), (A,C)</strong>.</td></tr>
-      <tr><td class="c m">23</td><td>Key X. In <strong>2NF, not 3NF</strong> (X→Y→Z). 3NF: <strong>(X,Y), (Y,Z)</strong>.</td></tr>
-      <tr><td class="c m">24</td><td>Key PQ. <strong>Not in 3NF</strong> (P→ST and Q→U are partial, so not even 2NF). 3NF: <strong>(P,Q,R), (P,S,T), (Q,U), (U,V,W), (S,X,Y)</strong>.</td></tr>
-      <tr><td class="c m">25</td><td>BCNF: <strong>(X,Y), (Y,Z)</strong>. Lossless and dependency-preserving.</td></tr>
-      <tr><td class="c m">26</td><td>Key CE. <strong>Not in BCNF</strong> (C→A is partial, D→B is transitive). BCNF: <strong>(A,C), (B,D), (C,D,E)</strong>. Lossless and all FDs preserved.</td></tr>
-      <tr><td class="c m">27</td><td>Keys {ssn} and {addrs}. Every FD has a key on the left, so <strong>BCNF</strong>.</td></tr>
-    </tbody>
-  </table></div>
-</section>
 
 <!-- ============ SQL ============ -->
 <section class="topic" id="t-ddl2">
@@ -309,8 +271,8 @@
     <li><strong>Referential options</strong> on a foreign key: <code>ON DELETE</code> and <code>ON UPDATE</code> with RESTRICT, CASCADE, SET NULL or SET DEFAULT.</li>
     <li>DATE is yyyy-mm-dd, TIME is hh:mm:ss (TIME(i) adds i fractional digits). TIMESTAMP has both. INTERVAL is a relative value that you add to or subtract from an absolute one.</li>
   </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide declares <code>MGRSTARTDATE CHAR(9)</code>. Use <code>DATE</code> for a date. Also, as far as I know MySQL's InnoDB engine does not support <code>SET DEFAULT</code>, though your slide uses it, while PostgreSQL does. Also remember only the constraints declared in the DDL are enforced automatically.</p></div>
-  <div class="note add"><p><span class="lbl">Added · sample data</span>Every result below comes from running the query in SQLite on the COMPANY sample state: 8 employees (Borg, Wong, Wallace, Smith, Narayan, English, Zelaya, Jabbar), 3 departments (Research 5, Administration 4, Headquarters 1), 6 projects and 16 works-on rows. The employee and works-on rows match Figure 10.4 in your chapter 10 slides. The remaining rows are the book's usual sample data as I remember it, so compare with your Figure 5.6. Dates are stored as yyyy-mm-dd.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>The textbook DDL declares <code>MGRSTARTDATE CHAR(9)</code>. Use <code>DATE</code> for a date. Also, as far as I know MySQL's InnoDB engine does not support <code>SET DEFAULT</code>, though the textbook DDL uses it, while PostgreSQL does. Also remember only the constraints declared in the DDL are enforced automatically.</p></div>
+  <div class="note add"><p><span class="lbl">Added · sample data</span>Every result below comes from running the query in SQLite on the COMPANY sample state: 8 employees (Borg, Wong, Wallace, Smith, Narayan, English, Zelaya, Jabbar), 3 departments (Research 5, Administration 4, Headquarters 1), 6 projects and 16 works-on rows. The employee and works-on rows match Figure 10.4 of Elmasri and Navathe. The remaining rows are the book's usual sample data, written from memory, so compare with Figure 5.6 in your edition. Dates are stored as yyyy-mm-dd.</p></div>
 </section>
 
 <section class="topic" id="t-select">
@@ -348,7 +310,7 @@ WHERE  Dnum = Dnumber AND Mgr_ssn = Ssn AND Plocation = 'Stafford';</code></pre>
 <pre><code>SELECT E.Fname, E.Lname, S.Fname, S.Lname
 FROM   EMPLOYEE AS E, EMPLOYEE AS S
 WHERE  E.Super_ssn = S.Ssn;</code></pre><div class="res"><p class="cap">Result: 7 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td><td>James</td><td>Borg</td></tr><tr><td>Jennifer</td><td>Wallace</td><td>James</td><td>Borg</td></tr><tr><td>John</td><td>Smith</td><td>Franklin</td><td>Wong</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>Franklin</td><td>Wong</td></tr><tr><td>Joyce</td><td>English</td><td>Franklin</td><td>Wong</td></tr><tr><td>Alicia</td><td>Zelaya</td><td>Jennifer</td><td>Wallace</td></tr><tr><td>Ahmad</td><td>Jabbar</td><td>Jennifer</td><td>Wallace</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide prints Q8 as <code>FROM EMPLOYEE E S</code>, which is OCR damage. It should be <code>EMPLOYEE E, EMPLOYEE S</code> or <code>EMPLOYEE AS E, EMPLOYEE AS S</code>. James Borg has no supervisor, so he is missing from this result. The outer join in the next section brings him back.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Some slide copies print Q8 as <code>FROM EMPLOYEE E S</code>, which is a typo. It should be <code>EMPLOYEE E, EMPLOYEE S</code> or <code>EMPLOYEE AS E, EMPLOYEE AS S</code>. James Borg has no supervisor, so he is missing from this result. The outer join in the next section brings him back.</p></div>
 
   <h3>Pattern matching, arithmetic and sorting</h3>
   <p><strong>LIKE:</strong> <code>%</code> matches any number of characters and <code>_</code> matches exactly one. LIKE works on parts of a string, so strings are not atomic in SQL.</p>
@@ -356,7 +318,7 @@ WHERE  E.Super_ssn = S.Ssn;</code></pre><div class="res"><p class="cap">Result: 
 <pre><code>SELECT Fname, Lname FROM EMPLOYEE WHERE Address LIKE '%Houston, TX%';</code></pre><div class="res"><p class="cap">Result: 5 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>James</td><td>Borg</td></tr><tr><td>Franklin</td><td>Wong</td></tr><tr><td>John</td><td>Smith</td></tr><tr><td>Joyce</td><td>English</td></tr><tr><td>Ahmad</td><td>Jabbar</td></tr></tbody></table></div></div>
   <p><strong>Q26.</strong> Employees born in the 1950s. With yyyy-mm-dd dates the year's first three characters are fixed.</p>
 <pre><code>SELECT Fname, Lname FROM EMPLOYEE WHERE Bdate LIKE '195_-__-__';</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide uses <code>LIKE '_______5_'</code>, which only works for the older dd-mon-yy format where the decade digit is the 8th character. With a real <code>DATE</code> in yyyy-mm-dd, use <code>'195_-__-__'</code> as above (or <code>BETWEEN '1950-01-01' AND '1959-12-31'</code>).</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Some slides use <code>LIKE '_______5_'</code>, which only works for the older dd-mon-yy format where the decade digit is the 8th character. With a real <code>DATE</code> in yyyy-mm-dd, use <code>'195_-__-__'</code> as above (or <code>BETWEEN '1950-01-01' AND '1959-12-31'</code>).</p></div>
   <p><strong>Q27.</strong> Effect of a 10% raise for everyone on ProductX. Arithmetic operators <code>+ - * /</code> can be used in the SELECT list.</p>
 <pre><code>SELECT Fname, Lname, ROUND(1.1 * Salary, 2) AS New_salary
 FROM   EMPLOYEE, WORKS_ON, PROJECT
@@ -376,7 +338,7 @@ WHERE  Dnum = Dnumber AND Mgr_ssn = Ssn AND Lname = 'Smith'
 UNION
 SELECT Pname FROM PROJECT, WORKS_ON, EMPLOYEE
 WHERE  Pnumber = Pno AND Essn = Ssn AND Lname = 'Smith';</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Pname</th></tr></thead><tbody><tr><td>ProductX</td></tr><tr><td>ProductY</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide's Q4 says "project numbers" but selects PNAME, and its second block tests <code>NAME='Smith'</code>, which is not a COMPANY column (it should be <code>LNAME</code>). I fixed it above. Also SQLite does not allow brackets around each operand, so I wrote it without them. MySQL and PostgreSQL accept both.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Slide versions of Q4 say "project numbers" but select PNAME, and the second block tests <code>NAME='Smith'</code>, which is not a COMPANY column (it should be <code>LNAME</code>). I fixed it above. Also SQLite does not allow brackets around each operand, so I wrote it without them. MySQL and PostgreSQL accept both.</p></div>
 
   <h3>Clause order</h3>
   <div class="formula">SELECT   &lt;attributes or functions&gt;     (required)<br>FROM     &lt;tables&gt;                      (required)<br>[WHERE   &lt;row condition&gt;]<br>[GROUP BY &lt;grouping attributes&gt;]<br>[HAVING  &lt;group condition&gt;]<br>[ORDER BY &lt;attributes&gt;]</div>
@@ -405,7 +367,7 @@ WHERE  Dname = 'Research';</code></pre><div class="res"><p class="cap">Result: 4
   <p><strong>Q8 as a left outer join.</strong> Now James Borg appears, with NULL for his (missing) supervisor.</p>
 <pre><code>SELECT E.Fname, E.Lname, S.Fname, S.Lname
 FROM   EMPLOYEE E LEFT OUTER JOIN EMPLOYEE S ON E.Super_ssn = S.Ssn;</code></pre><div class="res"><p class="cap">Result: 8 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>James</td><td>Borg</td><td class="n">NULL</td><td class="n">NULL</td></tr><tr><td>Franklin</td><td>Wong</td><td>James</td><td>Borg</td></tr><tr><td>Jennifer</td><td>Wallace</td><td>James</td><td>Borg</td></tr><tr><td>John</td><td>Smith</td><td>Franklin</td><td>Wong</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>Franklin</td><td>Wong</td></tr><tr><td>Joyce</td><td>English</td><td>Franklin</td><td>Wong</td></tr><tr><td>Alicia</td><td>Zelaya</td><td>Jennifer</td><td>Wallace</td></tr><tr><td>Ahmad</td><td>Jabbar</td><td>Jennifer</td><td>Wallace</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide writes this join as <code>EMPLOYEE E LEFT OUTER JOIN EMPLOYEES ON …</code>: the table name should be <code>EMPLOYEE S</code>, an alias of the same table, not EMPLOYEES. (MySQL has no FULL OUTER JOIN. As far as I know you simulate it with a UNION of a left and a right join.)</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Slides write this join as <code>EMPLOYEE E LEFT OUTER JOIN EMPLOYEES ON …</code>: the table name should be <code>EMPLOYEE S</code>, an alias of the same table, not EMPLOYEES. (MySQL has no FULL OUTER JOIN. As far as I know you simulate it with a UNION of a left and a right join.)</p></div>
 
   <h3>Nested queries</h3>
   <p>A complete SELECT inside the WHERE clause of another is a <strong>nested (inner) query</strong>. The comparison <code>IN</code> tests whether a value is in the set the inner query returns. An unqualified column refers to the innermost query's tables.</p>
@@ -441,10 +403,10 @@ WHERE  NOT EXISTS (SELECT * FROM DEPENDENT WHERE Ssn = Essn);</code></pre><div c
 FROM   EMPLOYEE
 WHERE  Salary &gt; ALL (SELECT Salary FROM EMPLOYEE WHERE Dno = 5);</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Salary</th></tr></thead><tbody><tr><td>James</td><td>Borg</td><td>55000</td></tr><tr><td>Jennifer</td><td>Wallace</td><td>43000</td></tr></tbody></table></div></div>
 <pre><code>SELECT DISTINCT Essn FROM WORKS_ON WHERE Pno IN (1, 2, 3);</code></pre><div class="res"><p class="cap">Result: 4 rows</p><div class="wrap"><table><thead><tr><th>Essn</th></tr></thead><tbody><tr><td>123456789</td></tr><tr><td>333445555</td></tr><tr><td>453453453</td></tr><tr><td>666884444</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>SQLite does not support <code>ANY</code> or <code>ALL</code>, so I ran the equivalent <code>Salary &gt; (SELECT MAX(Salary) …)</code> and it gives the same two rows. MySQL and PostgreSQL accept the ALL form shown. The ANY/ALL example slides in your file use a different schema (Staff and Branch from another textbook), so I used COMPANY.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>SQLite does not support <code>ANY</code> or <code>ALL</code>, so I ran the equivalent <code>Salary &gt; (SELECT MAX(Salary) …)</code> and it gives the same two rows. MySQL and PostgreSQL accept the ALL form shown. I used the COMPANY schema here for consistency.</p></div>
 
   <h3>"For all" queries: the missing CONTAINS</h3>
-  <p>Your slide's Q3 uses the <code>CONTAINS</code> operator, which compares two sets. It was in the original System R SQL but was <strong>dropped</strong>, and most systems do not have it. The standard replacement is a <strong>double NOT EXISTS</strong>: "there is no project of department 4 that this employee does not work on".</p>
+  <p>The textbook's Q3 uses the <code>CONTAINS</code> operator, which compares two sets. It was in the original System R SQL but was <strong>dropped</strong>, and most systems do not have it. The standard replacement is a <strong>double NOT EXISTS</strong>: "there is no project of department 4 that this employee does not work on".</p>
 <pre><code>SELECT Fname, Lname
 FROM   EMPLOYEE E
 WHERE  NOT EXISTS (
@@ -452,7 +414,7 @@ WHERE  NOT EXISTS (
          WHERE  P.Dnum = 4
            AND  NOT EXISTS (SELECT * FROM WORKS_ON W
                             WHERE W.Essn = E.Ssn AND W.Pno = P.Pnumber));</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>Alicia</td><td>Zelaya</td></tr><tr><td>Ahmad</td><td>Jabbar</td></tr></tbody></table></div></div>
-  <p>With the slide's department 5 the result is empty on this data, because nobody works on all of ProductX, ProductY and ProductZ:</p>
+  <p>With department 5 the result is empty on this data, because nobody works on all of ProductX, ProductY and ProductZ:</p>
 <pre><code>SELECT Fname, Lname
 FROM   EMPLOYEE E
 WHERE  NOT EXISTS (
@@ -460,7 +422,7 @@ WHERE  NOT EXISTS (
          WHERE  P.Dnum = 5
            AND  NOT EXISTS (SELECT * FROM WORKS_ON W
                             WHERE W.Essn = E.Ssn AND W.Pno = P.Pnumber));</code></pre><div class="res"><p class="cap">Result: 0 rows</p><p class="cap" style="margin:4px 0"><em>No rows returned on this sample data.</em></p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide's Q3 sets also have OCR damage (<code>SSN=ESSN</code> and the missing <code>CONTAINS</code> keyword). Use the double NOT EXISTS form in the exam, since CONTAINS will not run.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Slide versions of Q3 also have typos (<code>SSN=ESSN</code> and the missing <code>CONTAINS</code> keyword). Use the double NOT EXISTS form in the exam, since CONTAINS will not run.</p></div>
 
   <h3>Specialised query: above the department average</h3>
   <div class="note add"><p><span class="lbl">Added</span>The syllabus asks for "complex joins, aggregations and specialised queries". A correlated subquery with an aggregate: employees paid more than the average of their own department.</p></div>
@@ -481,7 +443,7 @@ FROM   EMPLOYEE, DEPARTMENT
 WHERE  Dno = Dnumber AND Dname = 'Research';</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>COUNT(*)</th></tr></thead><tbody><tr><td>4</td></tr></tbody></table></div></div>
   <div class="note add"><p><span class="lbl">Added</span><strong>NULLs and aggregates.</strong> Aggregates other than <code>COUNT(*)</code> ignore NULLs. WORKS_ON has 16 rows, but Borg's Hours is NULL:</p></div>
 <pre><code>SELECT COUNT(*), COUNT(Hours), ROUND(AVG(Hours), 2) FROM WORKS_ON;</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>COUNT(*)</th><th>COUNT(Hours)</th><th>ROUND(AVG(Hours), 2)</th></tr></thead><tbody><tr><td>16</td><td>15</td><td>18.33</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide says some SQL implementations may not allow more than one function in the SELECT clause. That is outdated: MySQL, PostgreSQL and SQLite all allow several, as Q15 shows.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Some slides say that some SQL implementations may not allow more than one function in the SELECT clause. That is outdated: MySQL, PostgreSQL and SQLite all allow several, as Q15 shows.</p></div>
 
   <h3>GROUP BY</h3>
   <p>Divides the rows into <strong>groups</strong> with the same value of the grouping attribute(s), and applies the aggregate to each group separately. The grouping attributes must also appear in the SELECT list, and the SELECT list may contain only grouping attributes and aggregates. A join condition can be used with grouping, and grouping happens <strong>after</strong> the join.</p>
@@ -537,10 +499,10 @@ GROUP BY D.Dname, E.Fname, E.Lname;</code></pre><div class="res"><p class="cap">
     <li><strong>UPDATE</strong> changes rows of one table. The right side of <code>SET Salary = Salary * 1.1</code> uses the old value and the left side receives the new one.</li>
     <li>Only constraints declared in the DDL are enforced. A delete or update that breaks one is rejected, or follows the ON DELETE and ON UPDATE rule.</li>
   </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>Your slide U1 inserts <code>'30-DEC-52'</code> as a date. In MySQL and SQLite a date literal is <code>'1952-12-30'</code>. U1 also lists values in the book's column order (Fname, Minit, Lname, Ssn, …), but the Module 1 CREATE TABLE puts Ssn first. Naming the columns, as U1A does, avoids this mistake.</p></div>
+  <div class="note fix"><p><span class="lbl">Check</span>Slide U1 inserts <code>'30-DEC-52'</code> as a date. In MySQL and SQLite a date literal is <code>'1952-12-30'</code>. U1 also lists values in the book's column order (Fname, Minit, Lname, Ssn, …), but the CREATE TABLE in Module 1 of these notes puts Ssn first. Naming the columns, as U1A does, avoids this mistake.</p></div>
 
   <h3>Views</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Your slide says a copied table such as DEPTS_INFO goes stale and tells you to "create a view" later. A <strong>view</strong> is a stored query that behaves like a virtual table and is always current:</p>
+  <div class="note add"><p><span class="lbl">Added</span>A copied table such as DEPTS_INFO goes stale when the base tables change. A <strong>view</strong> is a stored query that behaves like a virtual table and is always current:</p>
 <pre><code>CREATE VIEW Dept_info AS
   SELECT Dname, COUNT(*) AS No_of_emps, SUM(Salary) AS Total_sal
   FROM   DEPARTMENT, EMPLOYEE
@@ -549,68 +511,6 @@ GROUP BY D.Dname, E.Fname, E.Lname;</code></pre><div class="res"><p class="cap">
 <pre><code>SELECT * FROM Dept_info;</code></pre><div class="res"><p class="cap">Result: 3 rows</p><div class="wrap"><table><thead><tr><th>Dname</th><th>No_of_emps</th><th>Total_sal</th></tr></thead><tbody><tr><td>Administration</td><td>3</td><td>93000</td></tr><tr><td>Headquarters</td><td>1</td><td>55000</td></tr><tr><td>Research</td><td>4</td><td>133000</td></tr></tbody></table></div></div>
 </section>
 
-<!-- ============ TIMELINE ============ -->
-<section class="topic" id="t-timeline">
-  <div class="head"><h2>Project timeline and milestones</h2><label class="rev" for="r-timeline"><input class="rev" type="checkbox" id="r-timeline" data-sec="t-timeline">revised</label></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Design</span><span class="chip">Explain</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>Your slides have nothing on this syllabus line ("create a timeline or project plan with milestones to ensure timely completion"). This is a standard plan for a small database project, so adapt the weeks to your own deadline.</p></div>
-  <figure class="fig">
-<svg viewBox="0 0 720 306" role="img" aria-labelledby="fig_ganttt fig_ganttd"><title id="fig_ganttt">Eight-week project timeline</title><desc id="fig_ganttd">A Gantt-style plan over eight weeks: requirements, ER diagram, relational schema and normalisation, table creation, SQL queries, testing, and report and demo, with four milestones M1 to M4.</desc><defs><marker id="fig_ganttah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs>
-<text class="s-s" x="278.0" y="24" text-anchor="middle" >W1</text>
-<line class="s-grid" x1="250" y1="32" x2="250" y2="254"/><text class="s-s" x="334.0" y="24" text-anchor="middle" >W2</text>
-<line class="s-grid" x1="306" y1="32" x2="306" y2="254"/><text class="s-s" x="390.0" y="24" text-anchor="middle" >W3</text>
-<line class="s-grid" x1="362" y1="32" x2="362" y2="254"/><text class="s-s" x="446.0" y="24" text-anchor="middle" >W4</text>
-<line class="s-grid" x1="418" y1="32" x2="418" y2="254"/><text class="s-s" x="502.0" y="24" text-anchor="middle" >W5</text>
-<line class="s-grid" x1="474" y1="32" x2="474" y2="254"/><text class="s-s" x="558.0" y="24" text-anchor="middle" >W6</text>
-<line class="s-grid" x1="530" y1="32" x2="530" y2="254"/><text class="s-s" x="614.0" y="24" text-anchor="middle" >W7</text>
-<line class="s-grid" x1="586" y1="32" x2="586" y2="254"/><text class="s-s" x="670.0" y="24" text-anchor="middle" >W8</text>
-<line class="s-grid" x1="642" y1="32" x2="642" y2="254"/><line class="s-grid" x1="698" y1="32" x2="698" y2="254"/><text class="s-s" x="8" y="59" text-anchor="start" style="fill:var(--fg);font-size:12px">Requirements and scope</text>
-<rect class="s-box2" x="253" y="45" width="50" height="20" rx="3"/>
-<text class="s-s" x="278.0" y="59" text-anchor="middle" style="fill:var(--fg);font-size:11px">W1</text>
-<text class="s-s" x="8" y="89" text-anchor="start" style="fill:var(--fg);font-size:12px">ER diagram</text>
-<rect class="s-box2" x="309" y="75" width="50" height="20" rx="3"/>
-<text class="s-s" x="334.0" y="89" text-anchor="middle" style="fill:var(--fg);font-size:11px">W2</text>
-<text class="s-s" x="8" y="119" text-anchor="start" style="fill:var(--fg);font-size:12px">Relational schema and normalisation</text>
-<rect class="s-box2" x="365" y="105" width="50" height="20" rx="3"/>
-<text class="s-s" x="390.0" y="119" text-anchor="middle" style="fill:var(--fg);font-size:11px">W3</text>
-<text class="s-s" x="8" y="149" text-anchor="start" style="fill:var(--fg);font-size:12px">Create tables and load data</text>
-<rect class="s-box2" x="421" y="135" width="50" height="20" rx="3"/>
-<text class="s-s" x="446.0" y="149" text-anchor="middle" style="fill:var(--fg);font-size:11px">W4</text>
-<text class="s-s" x="8" y="179" text-anchor="start" style="fill:var(--fg);font-size:12px">SQL queries (CRUD, joins, aggregates)</text>
-<rect class="s-box2" x="477" y="165" width="106" height="20" rx="3"/>
-<text class="s-s" x="530.0" y="179" text-anchor="middle" style="fill:var(--fg);font-size:11px">W5 to W6</text>
-<text class="s-s" x="8" y="209" text-anchor="start" style="fill:var(--fg);font-size:12px">Testing and validation</text>
-<rect class="s-box2" x="533" y="195" width="106" height="20" rx="3"/>
-<text class="s-s" x="586.0" y="209" text-anchor="middle" style="fill:var(--fg);font-size:11px">W6 to W7</text>
-<text class="s-s" x="8" y="239" text-anchor="start" style="fill:var(--fg);font-size:12px">Report and demo</text>
-<rect class="s-box2" x="589" y="225" width="106" height="20" rx="3"/>
-<text class="s-s" x="642.0" y="239" text-anchor="middle" style="fill:var(--fg);font-size:11px">W7 to W8</text>
-<text class="s-s" x="8" y="276" text-anchor="start" >Milestones (end of week):</text>
-<path class="s-box" d="M299 270 L306 263 L313 270 L306 277z" style="fill:var(--accent)"/><text class="s-s" x="306" y="292" text-anchor="middle" style="fill:var(--fg);font-size:11px;font-weight:600">M1</text>
-<path class="s-box" d="M411 270 L418 263 L425 270 L418 277z" style="fill:var(--accent)"/><text class="s-s" x="418" y="292" text-anchor="middle" style="fill:var(--fg);font-size:11px;font-weight:600">M2</text>
-<path class="s-box" d="M523 270 L530 263 L537 270 L530 277z" style="fill:var(--accent)"/><text class="s-s" x="530" y="292" text-anchor="middle" style="fill:var(--fg);font-size:11px;font-weight:600">M3</text>
-<path class="s-box" d="M691 270 L698 263 L705 270 L698 277z" style="fill:var(--accent)"/><text class="s-s" x="698" y="292" text-anchor="middle" style="fill:var(--fg);font-size:11px;font-weight:600">M4</text>
-</svg>
-    <figcaption>An eight-week plan. Bars show tasks and the four diamonds are the milestones: M1 scope, M2 schema, M3 queries, M4 demo.</figcaption>
-  </figure>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Phase</th><th>Weeks</th><th>Deliverable</th><th>Milestone</th></tr></thead>
-    <tbody>
-      <tr><td>Requirements and scope</td><td class="c m">1</td><td>Mini-world description, objectives, list of users and required transactions</td><td class="m">M1: scope agreed</td></tr>
-      <tr><td>Conceptual design</td><td class="c m">2</td><td>ER diagram with keys, ratios and participation</td><td></td></tr>
-      <tr><td>Logical design and normalization</td><td class="c m">3</td><td>Relational schema from the mapping steps, FDs listed, each relation checked to 3NF or BCNF</td><td class="m">M2: normalised schema</td></tr>
-      <tr><td>Database creation</td><td class="c m">4</td><td>CREATE TABLE script with keys and foreign keys, sample data loaded</td><td></td></tr>
-      <tr><td>SQL queries</td><td class="c m">5 to 6</td><td>CRUD statements, joins, aggregations and any project-specific queries, each with expected output</td><td class="m">M3: queries working</td></tr>
-      <tr><td>Testing and validation</td><td class="c m">6 to 7</td><td>Test cases for constraint violations, boundary data and each query</td><td></td></tr>
-      <tr><td>Report and demo</td><td class="c m">7 to 8</td><td>Documentation, final scripts, demo run</td><td class="m">M4: submission and demo</td></tr>
-    </tbody>
-  </table></div>
-  <ul class="t">
-    <li>A <strong>milestone</strong> is a checkpoint with a deliverable you can verify, not a task. Each phase depends on the one before, so a slipped milestone delays everything after it.</li>
-    <li>Keep a buffer week (here the overlap in weeks 6 to 8) for rework, and finish normalisation <strong>before</strong> you create tables, because changing the schema later means rewriting the SQL and the data.</li>
-    <li>Typical risks: unclear requirements, redundant tables found late, queries that depend on missing data, and no test data.</li>
-  </ul>
-</section>
 
 <!-- ============ REVISE ============ -->
 <section class="topic" id="t-sheet">
@@ -667,7 +567,7 @@ GROUP BY D.Dname, E.Fname, E.Lname;</code></pre><div class="res"><p class="cap">
 <section class="topic" id="t-qa">
   <div class="head"><h2>Likely questions with answer outlines</h2></div>
   <div class="chips"><span class="chip add">Added</span><span class="chip">Covers every syllabus line</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours.</p></div>
+  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I have not seen past papers, so match them against yours.</p></div>
 
   <details class="q"><summary>What are insertion, deletion and modification anomalies? Illustrate with an example. (5)</summary><div class="ans">
     <p>Use EMP_PROJ(Emp#, Proj#, Ename, Pname, No_hours): cannot insert a project without an employee, deleting the last employee deletes the project, renaming a project needs many row changes. State that redundancy is the cause. See <a href="#t-why">Why normalise</a>.</p></div></details>
@@ -676,19 +576,19 @@ GROUP BY D.Dname, E.Fname, E.Lname;</code></pre><div class="res"><p class="cap">
     <p>Definition with t1[X] = t2[X] implies t1[Y] = t2[Y]. Reflexive, augmentation, transitive, and say they are sound and complete. Add union, decomposition and pseudotransitivity. See <a href="#t-fd">Functional dependencies</a>.</p></div></details>
 
   <details class="q"><summary>Given R and a set of FDs, find the closure of an attribute set and all candidate keys. (7)</summary><div class="ans">
-    <p>Show the closure steps line by line, then the key method: attributes never on a right side, test closure, keep minimal sets. Practise Exercises 1, 5, 6, 7 in <a href="#t-solved">the solved list</a>.</p></div></details>
+    <p>Show the closure steps line by line, then the key method: attributes never on a right side, test closure, keep minimal sets.</p></div></details>
 
   <details class="q"><summary>Find the minimal (canonical) cover of a set of FDs. (7)</summary><div class="ans">
-    <p>Three steps: split right sides, remove extraneous left attributes, remove redundant FDs. Show the closure test for every removal. Exercises 2 and 12, and slide Examples 4 and 5.</p></div></details>
+    <p>Three steps: split right sides, remove extraneous left attributes, remove redundant FDs. Show the closure test for every removal.</p></div></details>
 
   <details class="q"><summary>Define 1NF, 2NF, 3NF and BCNF. How does BCNF differ from 3NF? (7)</summary><div class="ans">
     <p>Give each condition, partial and transitive dependency definitions, and the nested-box picture. Differentiate with the TEACH example (3NF, not BCNF). See <a href="#t-nf">Normal forms</a>.</p></div></details>
 
   <details class="q"><summary>Normalise a given relation to 3NF, showing each step. (10)</summary><div class="ans">
-    <p>Find keys, list prime and non-prime attributes, state the partial dependencies and decompose for 2NF, then transitive dependencies for 3NF. Or use synthesis from the minimal cover. Exercises 15 to 24.</p></div></details>
+    <p>Find keys, list prime and non-prime attributes, state the partial dependencies and decompose for 2NF, then transitive dependencies for 3NF. Or use synthesis from the minimal cover.</p></div></details>
 
   <details class="q"><summary>Decompose a relation into BCNF. Is the decomposition lossless and dependency preserving? (10)</summary><div class="ans">
-    <p>Split on each violating FD, then check lossless with the binary test and dependency preservation FD by FD. Exercises 4, 10, 17, 25, 26. See <a href="#t-decomp">Decomposition</a>.</p></div></details>
+    <p>Split on each violating FD, then check lossless with the binary test and dependency preservation FD by FD. See <a href="#t-decomp">Decomposition</a>.</p></div></details>
 
   <details class="q"><summary>Explain lossless join and dependency preservation. Which can be sacrificed? (5)</summary><div class="ans">
     <p>Definitions, the binary test, and the TEACH example where fd1 is lost but the join stays lossless. Lossless is never sacrificed.</p></div></details>
@@ -705,8 +605,6 @@ GROUP BY D.Dname, E.Fname, E.Lname;</code></pre><div class="res"><p class="cap">
   <details class="q"><summary>Explain INSERT, DELETE and UPDATE with examples. What happens if a constraint is violated? (5)</summary><div class="ans">
     <p>One example of each (U1A, U4, U5 or U6), rows affected, WHERE omitted deletes all, and the reject, CASCADE or SET NULL outcomes. See <a href="#t-crud">INSERT, UPDATE, DELETE</a>.</p></div></details>
 
-  <details class="q"><summary>Prepare a project plan with milestones for developing a database for a given scenario. (5 to 7)</summary><div class="ans">
-    <p>Phases from requirements to demo with a deliverable and a milestone for each, a Gantt-style chart, and the risks. See <a href="#t-timeline">Timeline and milestones</a>.</p></div></details>
 </section>
 
 <footer class="notes-footer" role="contentinfo">

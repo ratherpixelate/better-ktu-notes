@@ -113,10 +113,10 @@
           "num": 2,
           "slug": "module-2",
           "title": "Normalization and SQL Queries",
-          "desc": "Functional dependencies, normal forms (1NF to 5NF), lossless join decomposition, SQL DDL/DML, joins, aggregates, views, and project milestones.",
+          "desc": "Functional dependencies, normal forms (1NF to 5NF), lossless join decomposition, SQL DDL/DML, joins, aggregates, and views.",
           "status": "active",
           "storageKey": "dbms-m2-revised",
-          "totalTopics": 12,
+          "totalTopics": 10,
           "href": "/notes/dbms-module-2/"
         },
         {
@@ -132,11 +132,11 @@
         {
           "num": 4,
           "slug": "module-4",
-          "title": "Testing, Python Integration, Documentation",
-          "desc": "Database testing & validation, schema & constraint checks, Python MySQL connector CRUD operations, SQL injection security, and project documentation.",
+          "title": "Testing and Python Integration",
+          "desc": "Database testing & validation, schema & constraint checks, Python MySQL connector CRUD operations, and SQL injection security.",
           "status": "active",
           "storageKey": "dbms-m4-revised",
-          "totalTopics": 8,
+          "totalTopics": 7,
           "href": "/notes/dbms-module-4/"
         }
       ]

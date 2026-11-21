@@ -846,7 +846,7 @@
       "Define",
       "Added"
     ],
-    "keywords": "Databases and DBMS revised Define Added Database A collection of related data . Data is known facts that can be recorded and have an implicit meaning. Information is data with explicit meaning, that is, processed data. DBMS Database management system: software that lets users create"
+    "keywords": "Databases and DBMS revised Define Added Database A collection of related data . Data is known facts that can be recorded and have an implicit meaning. Information is data with explicit meaning, that is, processed data. DBMS Database management system: software that lets users create and maintain a c"
   },
   {
     "id": "t-approach",
@@ -857,7 +857,7 @@
       "List",
       "Explain"
     ],
-    "keywords": "Database approach: characteristics and advantages revised List Explain Main characteristics (file system vs database) Characteristic Meaning Self-describing The catalog stores a description of the database (structures, types, constraints). This description is meta-data , and it lets the same DBMS software work with any database. Program-data"
+    "keywords": "Database approach: characteristics and advantages revised List Explain Main characteristics (file system vs database) Characteristic Meaning Self-describing The catalog stores a description of the database (structures, types, constraints). This description is meta-data , and it lets the same DBMS so"
   },
   {
     "id": "t-users",
@@ -868,7 +868,7 @@
       "List",
       "Differentiate"
     ],
-    "keywords": "Database users revised List Differentiate Group Who Role Actors on the scene (use or manage the database) Database administrator (DBA) Authorises access, coordinates and monitors use, acquires hardware and software, monitors efficiency. Database designer Defines content, structure, constraints, and functions or transactions. Talks to end"
+    "keywords": "Database users revised List Differentiate Group Who Role Actors on the scene (use or manage the database) Database administrator (DBA) Authorises access, coordinates and monitors use, acquires hardware and software, monitors efficiency. Database designer Defines content, structure, constraints, and "
   },
   {
     "id": "t-models",
@@ -880,7 +880,7 @@
       "Draw",
       "Differentiate"
     ],
-    "keywords": "Data models, schemas and the three-schema architecture revised Define Draw Differentiate Data model A set of concepts to describe the structure of a database, the operations for manipulating it, and the constraints it must obey. Category Close to Examples Conceptual (high-level, semantic) How users see"
+    "keywords": "Data models, schemas and the three-schema architecture revised Define Draw Differentiate Data model A set of concepts to describe the structure of a database, the operations for manipulating it, and the constraints it must obey. Category Close to Examples Conceptual (high-level, semantic) How users "
   },
   {
     "id": "t-lang",
@@ -902,7 +902,7 @@
       "List",
       "Draw"
     ],
-    "keywords": "Database design process revised List Draw Two activities: database design (the conceptual schema, our focus) and application design (programs and interfaces, which is software engineering). Phase Output 1. Requirements collection and analysis Data requirements and functional requirements for the mini-world 2. Conceptual design Conceptual schema"
+    "keywords": "Database design process revised List Draw Two activities: database design (the conceptual schema, our focus) and application design (programs and interfaces, which is software engineering). Phase Output 1. Requirements collection and analysis Data requirements and functional requirements for the min"
   },
   {
     "id": "t-er",
@@ -913,7 +913,7 @@
       "Define",
       "Draw"
     ],
-    "keywords": "ER model: entities, attributes and keys revised Define Draw Entity A specific object or thing in the mini-world, for example the EMPLOYEE John Smith or the Research DEPARTMENT. An attribute is a property that describes it. A specific entity has a value for each attribute."
+    "keywords": "ER model: entities, attributes and keys revised Define Draw Entity A specific object or thing in the mini-world, for example the EMPLOYEE John Smith or the Research DEPARTMENT. An attribute is a property that describes it. A specific entity has a value for each attribute. Each attribute has a value "
   },
   {
     "id": "t-relship",
@@ -925,7 +925,7 @@
       "Draw",
       "Differentiate"
     ],
-    "keywords": "Relationships, constraints and weak entities revised Define Draw Differentiate Relationship Relates two or more distinct entities with a specific meaning, for example EMPLOYEE Franklin Wong manages the Research DEPARTMENT. Relationships of the same kind form a relationship type . Its degree is the number of"
+    "keywords": "Relationships, constraints and weak entities revised Define Draw Differentiate Relationship Relates two or more distinct entities with a specific meaning, for example EMPLOYEE Franklin Wong manages the Research DEPARTMENT. Relationships of the same kind form a relationship type . Its degree is the n"
   },
   {
     "id": "t-example",
@@ -937,7 +937,7 @@
       "Draw",
       "Design"
     ],
-    "keywords": "Building an ERD from requirements revised Added Draw Design Added The method in steps 1 to 5 is the usual textbook approach and is not in your slides. The COMPANY diagram itself is from your slides. Entities: underline the nouns that have their own properties."
+    "keywords": "Building an ERD from requirements revised Added Draw Design Added The method in steps 1 to 5 is the usual textbook approach and is not in the standard slides. The COMPANY diagram itself is from the textbook. Entities: underline the nouns that have their own properties. Those are candidate entity typ"
   },
   {
     "id": "t-relmodel",
@@ -949,7 +949,7 @@
       "Differentiate",
       "Numerical"
     ],
-    "keywords": "Relational model and its constraints revised Define Differentiate Numerical Proposed by E. F. Codd (IBM) in 1970. A relation is a mathematical concept based on sets, and informally it looks like a table of values . Informal Formal Table Relation Column header Attribute All possible"
+    "keywords": "Relational model and its constraints revised Define Differentiate Numerical Proposed by E. F. Codd (IBM) in 1970. A relation is a mathematical concept based on sets, and informally it looks like a table of values . Informal Formal Table Relation Column header Attribute All possible column values Dom"
   },
   {
     "id": "t-mapping",
@@ -961,7 +961,7 @@
       "Design",
       "Draw"
     ],
-    "keywords": "ER to relational mapping revised Algorithm Design Draw Seven steps for a plain ER schema. Steps 8 and 9 in your slides (specialisation, generalisation and union types) are EER topics and are not in this module's syllabus, so they are left out. Step ER construct"
+    "keywords": "ER to relational mapping revised Algorithm Design Draw Seven steps for a plain ER schema. Steps 8 and 9 in the textbook (specialisation, generalisation and union types) are EER topics and are not in this module's syllabus, so they are left out. Step ER construct Rule COMPANY result 1 Regular (strong"
   },
   {
     "id": "t-ddl",
@@ -972,7 +972,7 @@
       "Added",
       "Write SQL"
     ],
-    "keywords": "Creating the database: tables in SQL revised Added Write SQL Added Your slides stop at the relational schema. The syllabus asks you to implement a sample schema in a DBMS (MySQL, PostgreSQL or SQLite) and define tables with attributes and foreign keys, so this section"
+    "keywords": "Creating the database: tables in SQL revised Added Write SQL Added The standard slides stop at the relational schema. The syllabus asks you to implement a sample schema in a DBMS (MySQL, PostgreSQL or SQLite) and define tables with attributes and foreign keys, so this section is from standard SQL. I"
   },
   {
     "id": "t-fk",
@@ -984,7 +984,7 @@
       "Write SQL",
       "Trace"
     ],
-    "keywords": "Tables, relationships and foreign keys in action revised Added Write SQL Trace Relationships between tables exist only through matching key values, so you use them in queries with a join : SELECT E.Fname, P.Pname, W.Hours FROM EMPLOYEE E JOIN WORKS_ON W ON E.Ssn = W.Essn"
+    "keywords": "Tables, relationships and foreign keys in action revised Added Write SQL Trace Relationships between tables exist only through matching key values, so you use them in queries with a join : SELECT E.Fname, P.Pname, W.Hours FROM EMPLOYEE E JOIN WORKS_ON W ON E.Ssn = W.Essn JOIN PROJECT P ON W.Pno = P."
   },
   {
     "id": "t-sheet",
@@ -992,7 +992,7 @@
     "badge": "DBMS M1",
     "url": "/notes/dbms-module-1/#t-sheet",
     "chips": [],
-    "keywords": "One-page cheat sheet revised DBMS basics Define, construct, manipulate, share Self-describing catalog (meta-data) Program-data independence, views, abstraction Concurrency control and recovery Don't use for simple, real-time, single-user cases Users On the scene: DBA, designer, end users End users: casual, naive, sophisticated, stand-alone Behind the scene:"
+    "keywords": "One-page cheat sheet DBMS basics Define, construct, manipulate, share Self-describing catalog (meta-data) Program-data independence, views, abstraction Concurrency control and recovery Don't use for simple, real-time, single-user cases Users On the scene: DBA, designer, end users End users: casual, "
   },
   {
     "id": "t-qa",
@@ -1003,7 +1003,7 @@
       "Added",
       "Covers every syllabus line"
     ],
-    "keywords": "Likely questions with answer outlines revised Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours. Explain the characteristics of the database approach and its advantages over file"
+    "keywords": "Likely questions with answer outlines Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I have not seen past papers, so match them against yours. Explain the characteristics of the database approach and its advantages over file processing. (7"
   },
   {
     "id": "t-why",
@@ -1066,18 +1066,6 @@
     "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X \u2192\u2192 Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
   },
   {
-    "id": "t-solved",
-    "title": "Your 27 exercises solved",
-    "badge": "DBMS M2",
-    "url": "/notes/dbms-module-2/#t-solved",
-    "chips": [
-      "Added",
-      "Numerical",
-      "Check"
-    ],
-    "keywords": "Your 27 exercises solved revised Added Numerical Check Added The answers below come from running the methods above in code (closure, key search, minimal cover, synthesis, BCNF splitting, lossless chase). Try each yourself first and use this to check. Check Many answers are not unique : minimal cover"
-  },
-  {
     "id": "t-ddl2",
     "title": "SQL: defining tables and constraints",
     "badge": "DBMS M2",
@@ -1137,24 +1125,12 @@
     "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE \u2026 SET \u2026 WHERE Delete DELETE FROM \u2026 WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
   },
   {
-    "id": "t-timeline",
-    "title": "Project timeline and milestones",
-    "badge": "DBMS M2",
-    "url": "/notes/dbms-module-2/#t-timeline",
-    "chips": [
-      "Added",
-      "Design",
-      "Explain"
-    ],
-    "keywords": "Project timeline and milestones revised Added Design Explain Added Your slides have nothing on this syllabus line (\"create a timeline or project plan with milestones to ensure timely completion\"). This is a standard plan for a small database project, so adapt the weeks to your own deadline. Eight-we"
-  },
-  {
     "id": "t-sheet",
     "title": "One-page cheat sheet",
     "badge": "DBMS M2",
     "url": "/notes/dbms-module-2/#t-sheet",
     "chips": [],
-    "keywords": "One-page cheat sheet revised FD rules Reflexive: Y \u2286 X gives X\u2192Y Augmentation: X\u2192Y gives XZ\u2192YZ Transitive: X\u2192Y, Y\u2192Z give X\u2192Z Union, decomposition, pseudotransitivity X\u2192Y implied iff Y \u2286 X\u207a Closure X\u207a Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Neve"
+    "keywords": "One-page cheat sheet FD rules Reflexive: Y \u2286 X gives X\u2192Y Augmentation: X\u2192Y gives XZ\u2192YZ Transitive: X\u2192Y, Y\u2192Z give X\u2192Z Union, decomposition, pseudotransitivity X\u2192Y implied iff Y \u2286 X\u207a Closure X\u207a Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Never on a R"
   },
   {
     "id": "t-qa",
@@ -1165,7 +1141,7 @@
       "Added",
       "Covers every syllabus line"
     ],
-    "keywords": "Likely questions with answer outlines revised Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I haven't seen your PYQs, so match them against yours. What are insertion, deletion and modification anomalies? Illustrate with an example. (5) Us"
+    "keywords": "Likely questions with answer outlines Added Covers every syllabus line Added These are my guess at typical KTU-style questions from the syllabus. I have not seen past papers, so match them against yours. What are insertion, deletion and modification anomalies? Illustrate with an example. (5) Use EMP"
   },
   {
     "id": "t-con",
@@ -1177,7 +1153,7 @@
       "Differentiate",
       "Added"
     ],
-    "keywords": "Integrity constraints Define Differentiate Added Integrity constraints revised Define Differentiate Added Constraint A rule the DBMS enforces so that only valid data gets in. A violating insert, update or delete is rejected. Constraint Rule SQL Domain Every value must come from the attribute's domain: data type, range,"
+    "keywords": "Integrity constraints revised Define Differentiate Added Constraint A rule the DBMS enforces so that only valid data gets in. A violating insert, update or delete is rejected. Constraint Rule SQL Domain Every value must come from the attribute's domain: data type, range, format, NOT NULL. INT , CHEC"
   },
   {
     "id": "t-txn",
@@ -1189,7 +1165,7 @@
       "Numerical",
       "Likely exam"
     ],
-    "keywords": "Transactions and why they fail Define Numerical Likely exam Transactions and why they fail revised Define Numerical Likely exam Transaction A logical unit of database processing with one or more access operations (read, insert, update, delete). It is an atomic unit: done in full or not at all. Boundaries are begin and "
+    "keywords": "Transactions and why they fail revised Define Numerical Likely exam Transaction A logical unit of database processing with one or more access operations (read, insert, update, delete). It is an atomic unit: done in full or not at all. Boundaries are begin and end transaction. Single-user system: one"
   },
   {
     "id": "t-state",
@@ -1201,7 +1177,7 @@
       "Define",
       "Added"
     ],
-    "keywords": "States, log and SQL transaction control Draw Define Added States, log and SQL transaction control revised Draw Define Added Transaction state diagram Active to partially committed to committed; abort from active or partially committed to failed; committed and failed go to terminated Active Partially committed Committed"
+    "keywords": "States, log and SQL transaction control revised Draw Define Added Transaction state diagram Active to partially committed to committed; abort from active or partially committed to failed; committed and failed go to terminated Active Partially committed Committed Failed Terminated end commit abort ab"
   },
   {
     "id": "t-acid",
@@ -1213,7 +1189,7 @@
       "Differentiate",
       "Likely exam"
     ],
-    "keywords": "ACID and isolation levels Define Differentiate Likely exam ACID and isolation levels revised Define Differentiate Likely exam Property Meaning Enforced by A tomicity All operations happen or none do. Recovery manager (log, undo) C onsistency preservation A correct run moves the database from one consistent state to ano"
+    "keywords": "ACID and isolation levels revised Define Differentiate Likely exam Property Meaning Enforced by A tomicity All operations happen or none do. Recovery manager (log, undo) C onsistency preservation A correct run moves the database from one consistent state to another. Programmer and DBMS (constraints)"
   },
   {
     "id": "t-rec",
@@ -1225,7 +1201,7 @@
       "Differentiate",
       "Numerical"
     ],
-    "keywords": "Schedules and recoverability Define Differentiate Numerical Schedules and recoverability revised Define Differentiate Numerical Schedule (history) An ordering of the operations of n transactions such that the operations of each Ti appear in the same order as in Ti. Operations of different transactions may interleave. R"
+    "keywords": "Schedules and recoverability revised Define Differentiate Numerical Schedule (history) An ordering of the operations of n transactions such that the operations of each Ti appear in the same order as in Ti. Operations of different transactions may interleave. Recoverable : no transaction T commits un"
   },
   {
     "id": "t-ser",
@@ -1239,7 +1215,7 @@
       "Draw",
       "Likely exam"
     ],
-    "keywords": "Serializability Define Differentiate Numerical Draw Likely exam Serializability revised Define Differentiate Numerical Draw Likely exam Serial : every transaction runs consecutively, no interleaving. Serializable : equivalent to some serial schedule. Serializable is not the same as serial. It is correct and still effic"
+    "keywords": "Serializability revised Define Differentiate Numerical Draw Likely exam Serial : every transaction runs consecutively, no interleaving. Serializable : equivalent to some serial schedule. Serializable is not the same as serial. It is correct and still efficient. Result equivalent : same final databas"
   },
   {
     "id": "t-lock",
@@ -1252,7 +1228,7 @@
       "Numerical",
       "Likely exam"
     ],
-    "keywords": "Two-phase locking Define Differentiate Numerical Likely exam Two-phase locking revised Define Differentiate Numerical Likely exam Purpose Concurrency control enforces isolation through mutual exclusion among conflicting transactions, keeps the database consistent, and resolves read-write and write-write conflicts . It "
+    "keywords": "Two-phase locking revised Define Differentiate Numerical Likely exam Purpose Concurrency control enforces isolation through mutual exclusion among conflicting transactions, keeps the database consistent, and resolves read-write and write-write conflicts . It decides whether T1 or T2 gets item A and "
   },
   {
     "id": "t-dead",
@@ -1265,7 +1241,7 @@
       "Draw",
       "Likely exam"
     ],
-    "keywords": "Deadlock and starvation Define Differentiate Draw Likely exam Deadlock and starvation revised Define Differentiate Draw Likely exam Deadlock A set of transactions where each waits for a lock held by another in the set, so none can proceed. Slide example T1' holds read_lock(Y) and asks write_lock(X). T2' holds read_lock"
+    "keywords": "Deadlock and starvation revised Define Differentiate Draw Likely exam Deadlock A set of transactions where each waits for a lock held by another in the set, so none can proceed. Slide example T1' holds read_lock(Y) and asks write_lock(X). T2' holds read_lock(X) and asks write_lock(Y). Both follow 2P"
   },
   {
     "id": "t-to",
@@ -1277,7 +1253,7 @@
       "Numerical",
       "Likely exam"
     ],
-    "keywords": "Timestamp ordering Define Numerical Likely exam Timestamp ordering revised Define Numerical Likely exam Timestamp A monotonically increasing number showing the age of a transaction. Larger = younger. Each item X keeps read_TS(X) (largest TS of a successful read) and write_TS(X) (largest TS of a successful write). The D"
+    "keywords": "Timestamp ordering revised Define Numerical Likely exam Timestamp A monotonically increasing number showing the age of a transaction. Larger = younger. Each item X keeps read_TS(X) (largest TS of a successful read) and write_TS(X) (largest TS of a successful write). The DBMS runs conflicting operati"
   },
   {
     "id": "t-rcv",
@@ -1291,7 +1267,7 @@
       "Numerical",
       "Likely exam"
     ],
-    "keywords": "Recovery techniques Define Differentiate Draw Numerical Likely exam Recovery techniques revised Define Differentiate Draw Numerical Likely exam Purpose Bring the database back to the last consistent state before the failure and preserve ACID. Example: a crash in the middle of a fund transfer must not leave one account "
+    "keywords": "Recovery techniques revised Define Differentiate Draw Numerical Likely exam Purpose Bring the database back to the last consistent state before the failure and preserve ACID. Example: a crash in the middle of a fund transfer must not leave one account changed and the other not. Failure Examples Tran"
   },
   {
     "id": "t-bkp",
@@ -1303,7 +1279,7 @@
       "Differentiate",
       "Added"
     ],
-    "keywords": "Backup strategies Define Differentiate Added Backup strategies revised Define Differentiate Added Added Your slides stop at recovery from crashes and do not cover backup at all. This section is from the textbook and standard practice. The log is already backed up to archival storage (slide 17-22), which is the link to "
+    "keywords": "Backup strategies revised Define Differentiate Added Added The standard slides stop at recovery from crashes and do not cover backup at all. This section is from the textbook and standard practice. The log is already backed up to archival storage (slide 17-22), which is the link to this topic. Backu"
   },
   {
     "id": "t-sheet",
@@ -1313,7 +1289,7 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet Revise the night before One-page cheat sheet Revise the night before Constraints Domain, key, entity (PK not null), referential (FK matches PK or NULL) ON DELETE: restrict, cascade, set null ACID Atomicity: recovery Consistency: DBMS + programmer Isolation: concurrency control Durability: log, redo"
+    "keywords": "One-page cheat sheet Revise the night before Constraints Domain, key, entity (PK not null), referential (FK matches PK or NULL) ON DELETE: restrict, cascade, set null ACID Atomicity: recovery Consistency: DBMS + programmer Isolation: concurrency control Durability: log, redo Problems Lost update, di"
   },
   {
     "id": "t-qa",
@@ -1323,7 +1299,7 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "Likely questions with answer outlines Revise the night before Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against your past papers. Define a transaction. Explain the ACID properties. (7) Unit of work, atomic. Four-row table with who enforces each"
+    "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. Define a transaction. Explain the ACID properties. (7) Unit of work, atomic. Four-row table with who enforces each. See ACID and Transactions . Draw the transact"
   },
   {
     "id": "t-need",
@@ -1335,7 +1311,7 @@
       "Differentiate",
       "Likely exam"
     ],
-    "keywords": "Why test, and types of testing Define Differentiate Likely exam Why test, and types of testing revised Define Differentiate Likely exam Database testing Checking that the schema is correct, constraints are enforced, queries give the right answers and transactions behave. Testing confirms the logic is correct, the const"
+    "keywords": "Why test, and types of testing revised Define Differentiate Likely exam Database testing Checking that the schema is correct, constraints are enforced, queries give the right answers and transactions behave. Testing confirms the logic is correct, the constraints work and transactions behave as expec"
   },
   {
     "id": "t-schema",
@@ -1347,7 +1323,7 @@
       "Define",
       "Likely exam"
     ],
-    "keywords": "Schema and constraint testing Numerical Define Likely exam Schema and constraint testing revised Numerical Define Likely exam Method Create test tables, insert valid and invalid records, modify keys, try deleting parent records. Valid data must succeed, invalid data must produce an error, and modify or delete must resp"
+    "keywords": "Schema and constraint testing revised Numerical Define Likely exam Method Create test tables, insert valid and invalid records, modify keys, try deleting parent records. Valid data must succeed, invalid data must produce an error, and modify or delete must respect PK and FK rules. Constraint What it"
   },
   {
     "id": "t-query",
@@ -1359,7 +1335,7 @@
       "Define",
       "Added"
     ],
-    "keywords": "Sample query testing Numerical Define Added Sample query testing revised Numerical Define Added SELECT : simple selection, filtering, pattern matching. Joins : INNER, LEFT, FULL. Aggregation : COUNT, AVG, SUM, MAX, MIN and GROUP BY. Views : output, and updates if allowed. Stored procedures : input and output parameters"
+    "keywords": "Sample query testing revised Numerical Define Added SELECT : simple selection, filtering, pattern matching. Joins : INNER, LEFT, FULL. Aggregation : COUNT, AVG, SUM, MAX, MIN and GROUP BY. Views : output, and updates if allowed. Stored procedures : input and output parameters, logic, transaction han"
   },
   {
     "id": "t-txn",
@@ -1371,7 +1347,7 @@
       "Differentiate",
       "Added"
     ],
-    "keywords": "Transaction, concurrency, error and security testing Define Differentiate Added Transaction, concurrency, error and security testing revised Define Differentiate Added Property How to test Expected Atomicity Insert several rows in one transaction and cause an error midway All rolled back, no partial change Consistency "
+    "keywords": "Transaction, concurrency, error and security testing revised Define Differentiate Added Property How to test Expected Atomicity Insert several rows in one transaction and cause an error midway All rolled back, no partial change Consistency Check constraints after the transaction No invalid state Iso"
   },
   {
     "id": "t-py",
@@ -1383,7 +1359,7 @@
       "Draw",
       "Likely exam"
     ],
-    "keywords": "Python and MySQL: connecting Define Draw Likely exam Python and MySQL: connecting revised Define Draw Likely exam Why connect Variables, lists and dictionaries lose data when the program ends. A database gives persistent storage . Python is the front end and application logic, MySQL stores and manages the data. Python "
+    "keywords": "Python and MySQL: connecting revised Define Draw Likely exam Why connect Variables, lists and dictionaries lose data when the program ends. A database gives persistent storage . Python is the front end and application logic, MySQL stores and manages the data. Python to MySQL layers program, connecto"
   },
   {
     "id": "t-crud",
@@ -1396,7 +1372,7 @@
       "Added",
       "Likely exam"
     ],
-    "keywords": "CRUD from Python Numerical Define Added Likely exam CRUD from Python revised Numerical Define Added Likely exam Added Your notes stop at create database and create table. This section follows the W3Schools Python MySQL pages (insert, select, where, order by, limit, update, delete, join, drop). I ran the same logic in S"
+    "keywords": "CRUD from Python revised Numerical Define Added Likely exam Added The course notes stop at create database and create table. This section follows the W3Schools Python MySQL pages (insert, select, where, order by, limit, update, delete, join, drop). I ran the same logic in SQLite, where %s becomes ? "
   },
   {
     "id": "t-safe",
@@ -1409,19 +1385,7 @@
       "Numerical",
       "Likely exam"
     ],
-    "keywords": "Safe code: SQL injection, commit, errors Define Differentiate Numerical Likely exam Safe code: SQL injection, commit, errors revised Define Differentiate Numerical Likely exam SQL injection An attacker puts SQL into an input so that it changes the meaning of your query. It can read, change or destroy data. Prevent it w"
-  },
-  {
-    "id": "t-doc",
-    "title": "Project documentation",
-    "badge": "DBMS M4",
-    "url": "/notes/dbms-module-4/#t-doc",
-    "chips": [
-      "Define",
-      "Likely exam",
-      "Added"
-    ],
-    "keywords": "Project documentation Define Likely exam Added Project documentation revised Define Likely exam Added Added Nothing on documentation was in your notes. The syllabus line is: prepare comprehensive documentation covering project objectives, database schema, constraints, transactions, and implementation details . Below is"
+    "keywords": "Safe code: SQL injection, commit, errors revised Define Differentiate Numerical Likely exam SQL injection An attacker puts SQL into an input so that it changes the meaning of your query. It can read, change or destroy data. Prevent it with parameterized queries : put %s in the SQL and pass the value"
   },
   {
     "id": "t-sheet",
@@ -1431,7 +1395,7 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet Revise the night before One-page cheat sheet Revise the night before Testing types Functional (black-box), structural (white-box) Regression, performance, interface Validate a constraint PK: duplicate or NULL FK: child with no parent UNIQUE: duplicate NOT NULL: NULL CHECK: age = -1 DEFAULT: omit th"
+    "keywords": "One-page cheat sheet Revise the night before Testing types Functional (black-box), structural (white-box) Regression, performance, interface Validate a constraint PK: duplicate or NULL FK: child with no parent UNIQUE: duplicate NOT NULL: NULL CHECK: age = -1 DEFAULT: omit the column Method Valid dat"
   },
   {
     "id": "t-qa",
@@ -1441,6 +1405,6 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "Likely questions with answer outlines Revise the night before Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against your past papers. What is database testing? Explain the types of database testing. (7) Definition, black-box and white-box with the "
+    "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. What is database testing? Explain the types of database testing. (7) Definition, black-box and white-box with the figure, regression, performance, interface. See"
   }
 ]

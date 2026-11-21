@@ -468,11 +468,6 @@
       "group": "Normalization"
     },
     {
-      "id": "t-solved",
-      "title": "Your 27 exercises solved",
-      "group": "Normalization"
-    },
-    {
       "id": "t-ddl2",
       "title": "DDL and constraints",
       "group": "SQL queries"
@@ -496,11 +491,6 @@
       "id": "t-crud",
       "title": "Insert, update, delete, views",
       "group": "SQL queries"
-    },
-    {
-      "id": "t-timeline",
-      "title": "Timeline and milestones",
-      "group": "Project plan"
     },
     {
       "id": "t-sheet",
@@ -615,11 +605,6 @@
       "id": "t-safe",
       "title": "Safe code: injection, commit, errors",
       "group": "Integration with applications"
-    },
-    {
-      "id": "t-doc",
-      "title": "Project documentation",
-      "group": "Documentation"
     },
     {
       "id": "t-sheet",
