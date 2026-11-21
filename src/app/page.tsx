@@ -45,7 +45,6 @@ export default function HomePage() {
             code={sub.code}
             slug={sub.slug}
             name={sub.name}
-            category={sub.category}
             credits={sub.credits}
             modules={sub.modules}
           />
