@@ -70,11 +70,65 @@ export function NoteShell({
       router.push(cleanUrl);
     };
 
+    // 4. Smooth accordion animation fallback for browsers without CSS interpolate-size
+    const handleSummaryClick = (e: MouseEvent) => {
+      if (typeof window !== 'undefined' && window.CSS?.supports?.('interpolate-size: allow-keywords')) {
+        return;
+      }
+      const summary = (e.target as HTMLElement).closest('details.q summary');
+      if (!summary) return;
+      const details = summary.closest('details.q') as HTMLDetailsElement | null;
+      if (!details) return;
+
+      const ans = details.querySelector<HTMLElement>('.ans');
+      if (!ans) return;
+
+      e.preventDefault();
+
+      if (details.open) {
+        const startHeight = details.offsetHeight;
+        const endHeight = (summary as HTMLElement).offsetHeight;
+        details.style.overflow = 'hidden';
+
+        const anim = details.animate(
+          [
+            { height: `${startHeight}px`, opacity: 1 },
+            { height: `${endHeight}px`, opacity: 0 }
+          ],
+          { duration: 200, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
+        );
+        anim.onfinish = () => {
+          details.open = false;
+          details.style.height = '';
+          details.style.overflow = '';
+        };
+      } else {
+        details.open = true;
+        const endHeight = details.offsetHeight;
+        const startHeight = (summary as HTMLElement).offsetHeight;
+        details.style.overflow = 'hidden';
+
+        const anim = details.animate(
+          [
+            { height: `${startHeight}px`, opacity: 0 },
+            { height: `${endHeight}px`, opacity: 1 }
+          ],
+          { duration: 220, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
+        );
+        anim.onfinish = () => {
+          details.style.height = '';
+          details.style.overflow = '';
+        };
+      }
+    };
+
     main.addEventListener('change', handleChange);
     main.addEventListener('click', handleLinkClick);
+    main.addEventListener('click', handleSummaryClick);
     return () => {
       main.removeEventListener('change', handleChange);
       main.removeEventListener('click', handleLinkClick);
+      main.removeEventListener('click', handleSummaryClick);
     };
   }, [revisedTopics, toggleTopic, router]);
 

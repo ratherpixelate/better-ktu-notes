@@ -21,6 +21,7 @@
   --nav-height: 60px;
 
   /* Transitions & Motion Curves */
+  interpolate-size: allow-keywords;
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -2583,9 +2584,14 @@ details.q {
   border-radius: var(--radius-sm);
   background: var(--surface);
   margin: 10px 0;
+  overflow: hidden;
   transition: background-color 150ms var(--ease-smooth), border-color 150ms var(--ease-smooth);
 }
 details.q summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
   cursor: pointer;
   padding: 12px 16px;
   font-weight: 600;
@@ -2593,14 +2599,56 @@ details.q summary {
   line-height: 1.45;
   color: var(--fg);
   user-select: none;
+  transition: background-color 140ms var(--ease-smooth), transform 120ms var(--ease-spring);
+}
+details.q summary::-webkit-details-marker,
+details.q summary::marker {
+  display: none;
+}
+details.q summary::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(-45deg);
+  transition: transform 200ms var(--ease-out), border-color 140ms var(--ease-smooth);
+  flex-shrink: 0;
+  margin-left: 14px;
+}
+details.q[open] summary::after {
+  transform: rotate(45deg);
+  border-color: var(--fg);
+}
+@media (hover: hover) and (pointer: fine) {
+  details.q summary:hover {
+    background-color: var(--surface-hover);
+  }
+  details.q summary:hover::after {
+    border-color: var(--fg);
+  }
+}
+details.q summary:active {
+  transform: scale(0.995);
 }
 details.q summary:focus-visible {
   outline: 2px solid var(--fg);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
-details.q[open] summary {
-  border-bottom: 1px solid var(--border);
+details.q::details-content {
+  opacity: 0;
+  block-size: 0;
+  overflow-y: clip;
+  transition: content-visibility 220ms allow-discrete,
+              opacity 180ms var(--ease-smooth),
+              block-size 220ms var(--ease-out);
 }
+details.q[open]::details-content {
+  opacity: 1;
+  block-size: auto;
+}
+
 @keyframes ansIn {
   from {
     opacity: 0;
@@ -2612,11 +2660,14 @@ details.q[open] summary {
   }
 }
 
-details.q[open] .ans {
+details.q .ans {
+  border-top: 1px solid var(--border);
   padding: 12px 16px 14px;
   font-size: 14.5px;
   color: var(--fg-secondary);
   line-height: 1.6;
+}
+details.q[open] .ans {
   animation: ansIn 200ms var(--ease-out) both;
 }
 details.q .ans p {
@@ -2648,7 +2699,14 @@ details.q .ans p {
   .search-result-item:active,
   .nav-back-link:active,
   .toc a:active,
-  .rev:active {
+  .rev:active,
+  details.q summary:active,
+  details.q summary::after {
     transform: none !important;
+  }
+  details.q::details-content,
+  details.q summary,
+  details.q summary::after {
+    transition: none !important;
   }
 }
