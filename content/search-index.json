@@ -1564,5 +1564,150 @@
       "Revise the night before"
     ],
     "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. Explain digital abstraction. Why are digital circuits reliable with noise? (3) Continuous voltage modelled as 0 and 1, thresholds, undefined region ignored, nois"
+  },
+  {
+    "id": "t-alg",
+    "title": "Boolean algebra: operations, axioms, theorems",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-alg",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "Boolean algebra: operations, axioms, theorems revised Define Differentiate Likely exam Boolean algebra An algebra whose variables take only two values, 0 and 1 . Every function is built from three basic operations: AND (·), OR (+) and NOT (′ or a bar). NAND, NOR, XOR and XNOR are derived from them. "
+  },
+  {
+    "id": "t-can",
+    "title": "Combinational logic analysis: canonical SOP and POS",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-can",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Combinational logic analysis: canonical SOP and POS revised Define Numerical Likely exam Canonical form A standard way of writing a Boolean function in which every term contains every variable once. Two types: canonical SOP (a sum of minterms) and canonical POS (a product of maxterms). Minterm : an "
+  },
+  {
+    "id": "t-min",
+    "title": "Logic minimization: algebraic method",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-min",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Logic minimization: algebraic method revised Define Numerical Likely exam Logic minimization Reducing a Boolean expression to its simplest form (fewest terms and literals) without changing its truth table . Why : fewer gates, lower hardware cost, faster circuit, less power, fewer delays. Algebraic m"
+  },
+  {
+    "id": "t-kmap",
+    "title": "K-map (Karnaugh map) minimization",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-kmap",
+    "chips": [
+      "Define",
+      "Draw",
+      "Numerical",
+      "Likely exam",
+      "Added"
+    ],
+    "keywords": "K-map (Karnaugh map) minimization revised Define Draw Numerical Likely exam Added K-map A graphical method of minimization for 2, 3 or 4 variables. The truth table is redrawn as a grid in which neighbouring cells differ in exactly one variable . Group the 1s to get SOP, or group the 0s to get POS. A"
+  },
+  {
+    "id": "t-dc",
+    "title": "Don't care conditions",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-dc",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Don't care conditions revised Define Numerical Likely exam Don't care An input combination that never occurs , or whose output does not matter. It is marked X (or d) in the truth table and on the K-map. You are free to treat each X as 0 or as 1, whichever makes the groups bigger. Group an X only if "
+  },
+  {
+    "id": "t-conv",
+    "title": "Code converters",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-conv",
+    "chips": [
+      "Define",
+      "Draw",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Code converters revised Define Draw Numerical Likely exam Code converter A combinational circuit that converts a number from one binary code to another . Each output bit is a Boolean function of the input bits. Design steps: truth table, K-map for each output bit (using don't cares for unused codes)"
+  },
+  {
+    "id": "t-bcd",
+    "title": "BCD code addition",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-bcd",
+    "chips": [
+      "Numerical",
+      "Define",
+      "Likely exam"
+    ],
+    "keywords": "BCD code addition revised Numerical Define Likely exam BCD addition Add each pair of BCD digits as 4-bit binary numbers, with the carry from the digit below. If the 4-bit sum is greater than 9 or produces a carry out, add 0110 (6) to that digit. The carry out then moves to the next digit. Why add 6 "
+  },
+  {
+    "id": "t-vca",
+    "title": "Modeling concurrent functionality: continuous assignment",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-vca",
+    "chips": [
+      "Define",
+      "Explain",
+      "Likely exam"
+    ],
+    "keywords": "Modeling concurrent functionality: continuous assignment revised Define Explain Likely exam Continuous assignment A Verilog statement assign <net> = <expression>; that drives a net continuously . Whenever any signal in the expression changes, the output is recalculated. It models combinational logic"
+  },
+  {
+    "id": "t-vcond",
+    "title": "Continuous assignment with the conditional operator",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-vcond",
+    "chips": [
+      "Define",
+      "Explain",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Continuous assignment with the conditional operator revised Define Explain Draw Likely exam Conditional operator assign Y = (condition) ? value_if_true : value_if_false; It implements multiplexer (decision) logic . It can be nested to form an if, else-if, else chain. Circuit Code Behaviour (simulate"
+  },
+  {
+    "id": "t-vdel",
+    "title": "Continuous assignment with delay",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-vdel",
+    "chips": [
+      "Define",
+      "Draw",
+      "Explain",
+      "Likely exam"
+    ],
+    "keywords": "Continuous assignment with delay revised Define Draw Explain Likely exam Assignment with delay assign #delay Y = expression; The new value of Y appears after the given delay . It models the propagation delay of real gates. For simulation only . Synthesis tools ignore delays, so they cannot be used t"
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet Revise the night before Laws Identity, Null, Idempotent, Complement Absorption A+AB = A Combining AB+AB' = A A+A'B = A+B Consensus AB+A'C+BC = AB+A'C De Morgan: (A+B)' = A'B', (AB)' = A'+B' Dual: swap + and ·, 0 and 1 Canonical forms Minterm: AND term, bit 1 = A, bit 0 = A' Maxt"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "DELD M2",
+    "url": "/notes/deld-module-2/#t-qa",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. State De Morgan's theorems and prove them with a truth table. (3) (A+B)' = A'B' and (AB)' = A'+B'. Four-row truth table, extension to three variables. See Boolea"
   }
 ]

@@ -683,5 +683,67 @@
       "title": "Likely questions",
       "group": "Revise"
     }
+  ],
+  "deld-m2": [
+    {
+      "id": "t-alg",
+      "title": "Boolean algebra",
+      "group": "Boolean algebra"
+    },
+    {
+      "id": "t-can",
+      "title": "Canonical SOP and POS",
+      "group": "Combinational analysis"
+    },
+    {
+      "id": "t-min",
+      "title": "Algebraic minimization",
+      "group": "Logic minimization"
+    },
+    {
+      "id": "t-kmap",
+      "title": "K-map minimization",
+      "group": "Logic minimization"
+    },
+    {
+      "id": "t-dc",
+      "title": "Don't care conditions",
+      "group": "Logic minimization"
+    },
+    {
+      "id": "t-conv",
+      "title": "Code converters",
+      "group": "Logic minimization"
+    },
+    {
+      "id": "t-bcd",
+      "title": "BCD code addition",
+      "group": "Logic minimization"
+    },
+    {
+      "id": "t-vca",
+      "title": "Continuous assignment",
+      "group": "Verilog (Part 2)"
+    },
+    {
+      "id": "t-vcond",
+      "title": "Conditional operator",
+      "group": "Verilog (Part 2)"
+    },
+    {
+      "id": "t-vdel",
+      "title": "Assignment with delay",
+      "group": "Verilog (Part 2)"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
   ]
 }

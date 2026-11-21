@@ -167,12 +167,12 @@
         {
           "num": 2,
           "slug": "module-2",
-          "title": "Combinational Logic & Minimization",
-          "desc": "Boolean algebra, SOP/POS forms, Karnaugh maps (2-5 variables), don't cares, Quine-McCluskey method, and hazards in combinational circuits.",
-          "status": "drafting",
+          "title": "Combinational Logic Design and Verilog",
+          "desc": "Boolean algebra, canonical SOP/POS forms, algebraic & K-map minimization, don't care conditions, code converters, BCD addition, and Verilog continuous assignment.",
+          "status": "active",
           "storageKey": "deld-m2-revised",
-          "totalTopics": 8,
-          "href": null
+          "totalTopics": 10,
+          "href": "/notes/deld-module-2/"
         },
         {
           "num": 3,

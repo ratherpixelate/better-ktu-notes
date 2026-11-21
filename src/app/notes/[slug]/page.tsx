@@ -113,6 +113,15 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 11,
     tocKey: 'deld-m1',
   },
+  'deld-module-2': {
+    slug: 'deld-module-2',
+    moduleCode: 'GAEST305 · Module 2',
+    title: 'DELD Module 2: Combinational Logic Design and Verilog',
+    desc: 'Boolean algebra, canonical SOP/POS forms, algebraic & K-map minimization, don\'t care conditions, code converters, BCD addition, and Verilog continuous assignment.',
+    storageKey: 'deld-m2-revised',
+    totalTopics: 10,
+    tocKey: 'deld-m2',
+  },
 };
 
 export async function generateStaticParams() {
