@@ -99,7 +99,7 @@
       "Added",
       "Numerical"
     ],
-    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (−1)^s 2^(E bias) stored true"
+    "keywords": "IEEE floating point revised Added Numerical Added Your notes only \"float: IEEE standard\". This section entirely mine, from standard format. Sign Exponent Fraction Bias Single (32-bit) Double (64-bit) 1023 value (\u22121)^s 2^(E bias) stored true"
   },
   {
     "id": "t-formats",
@@ -204,7 +204,7 @@
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: −1), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
+    "keywords": "One-page cheat sheet revised Added Revise night before Number ranges bits) Unsigned: Sign-mag, comp: \u22121), zeros comp: zero comp invert Addresses bits locations Byte addressable, 32-bit words: Data width word length Load leaves memory unchanged,"
   },
   {
     "id": "t-single",
@@ -430,7 +430,7 @@
       "Important",
       "Key Concept"
     ],
-    "keywords": "Cache performance: AMAT revised Numerical Important Key Concept AMAT = Hit time + Miss rate × Miss penalty Two levels: AMAT = Hit time(L1) + Miss rate(L1) × [ Hit time(L2) + Miss rate(L2) × Miss penalty(L2) ] Local miss rate = misses in a"
+    "keywords": "Cache performance: AMAT revised Numerical Important Key Concept AMAT = Hit time + Miss rate \u00d7 Miss penalty Two levels: AMAT = Hit time(L1) + Miss rate(L1) \u00d7 [ Hit time(L2) + Miss rate(L2) \u00d7 Miss penalty(L2) ] Local miss rate = misses in a"
   },
   {
     "id": "t-opt",
@@ -479,7 +479,7 @@
       "Draw",
       "Important"
     ],
-    "keywords": "DRAM access protocol and commands revised Explain Numerical Draw Important Access sequence ACTIVATE (RAS) → READ / WRITE (CAS) → PRECHARGE Command What it does Timing ACTIVATE (ACT, uses RAS) Row address goes on the address bus, RAS is asserted. The row is copied from"
+    "keywords": "DRAM access protocol and commands revised Explain Numerical Draw Important Access sequence ACTIVATE (RAS) \u2192 READ / WRITE (CAS) \u2192 PRECHARGE Command What it does Timing ACTIVATE (ACT, uses RAS) Row address goes on the address bus, RAS is asserted. The row is copied from"
   },
   {
     "id": "t-ctrl",
@@ -525,7 +525,7 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet Revise the night before Cache address Address = tag | index | offset Sets = C / (B × E) offset = log2 B, index = log2 sets, tag = rest Total bits per line = data + tag + valid (+"
+    "keywords": "One-page cheat sheet Revise the night before Cache address Address = tag | index | offset Sets = C / (B \u00d7 E) offset = log2 B, index = log2 sets, tag = rest Total bits per line = data + tag + valid (+"
   },
   {
     "id": "t-qa",
@@ -824,7 +824,7 @@
       "Added",
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c·g, worst case, upper bound best case, lower bound c₁·g c₂·g, average case, tight"
+    "keywords": "One-page cheat sheet revised Added Revise night before Growth order &lt; &lt; &lt; &lt; &lt; &lt; Drop constants lower-order terms Notations c\u00b7g, worst case, upper bound best case, lower bound c\u2081\u00b7g c\u2082\u00b7g, average case, tight"
   },
   {
     "id": "t-qa",
@@ -1026,7 +1026,7 @@
       "Numerical",
       "Added"
     ],
-    "keywords": "Functional dependencies revised Define Numerical Added Functional dependency X → Y holds in R if, whenever two tuples have the same value for X, they must have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X functionally determines Y. An"
+    "keywords": "Functional dependencies revised Define Numerical Added Functional dependency X \u2192 Y holds in R if, whenever two tuples have the same value for X, they must have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X functionally determines Y. An"
   },
   {
     "id": "t-nf",
@@ -1052,7 +1052,7 @@
       "Added",
       "Check"
     ],
-    "keywords": "Decomposition: lossless join, dependency preservation, algorithms revised Define Algorithm Added Check Decomposition splits the universal relation R into D = {R 1 , …, R n }, using the FDs. A good decomposition has three properties. Property Meaning Needed? Attribute preservation Every attribute of "
+    "keywords": "Decomposition: lossless join, dependency preservation, algorithms revised Define Algorithm Added Check Decomposition splits the universal relation R into D = {R 1 , \u2026, R n }, using the FDs. A good decomposition has three properties. Property Meaning Needed? Attribute preservation Every attribute of "
   },
   {
     "id": "t-mvd",
@@ -1063,7 +1063,7 @@
       "Define",
       "Added"
     ],
-    "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X →→ Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
+    "keywords": "Multivalued dependencies, 4NF, join dependencies, 5NF revised Define Added Multivalued dependency X \u2192\u2192 Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], w"
   },
   {
     "id": "t-ddl2",
@@ -1086,7 +1086,7 @@
       "Explain",
       "Check"
     ],
-    "keywords": "SELECT: basic queries revised Write SQL Explain Check SELECT block SELECT <attribute list> FROM <table list> WHERE <condition>. It corresponds to relational algebra select, project and join , but SQL's SELECT is not algebra's σ. SQL tables are multisets (bags) : duplicate rows are allowed. A relatio"
+    "keywords": "SELECT: basic queries revised Write SQL Explain Check SELECT block SELECT <attribute list> FROM <table list> WHERE <condition>. It corresponds to relational algebra select, project and join , but SQL's SELECT is not algebra's \u03c3. SQL tables are multisets (bags) : duplicate rows are allowed. A relatio"
   },
   {
     "id": "t-join",
@@ -1098,7 +1098,7 @@
       "Differentiate",
       "Check"
     ],
-    "keywords": "Joins and nested queries revised Write SQL Differentiate Check Joined tables in FROM SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions. Join Result JOIN … ON (inner, theta) Only pairs of rows that satisfy the condition NATURAL JOIN Inner join "
+    "keywords": "Joins and nested queries revised Write SQL Differentiate Check Joined tables in FROM SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions. Join Result JOIN \u2026 ON (inner, theta) Only pairs of rows that satisfy the condition NATURAL JOIN Inner join "
   },
   {
     "id": "t-agg",
@@ -1122,7 +1122,7 @@
       "Check",
       "Added"
     ],
-    "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE … SET … WHERE Delete DELETE FROM … WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
+    "keywords": "INSERT, UPDATE, DELETE and views revised Write SQL Check Added CRUD SQL Create INSERT (and CREATE TABLE for structures) Read SELECT Update UPDATE \u2026 SET \u2026 WHERE Delete DELETE FROM \u2026 WHERE CRUD demo on the sample data Each statement was run in order, and the row count and a check query are real output"
   },
   {
     "id": "t-sheet",
@@ -1130,7 +1130,7 @@
     "badge": "DBMS M2",
     "url": "/notes/dbms-module-2/#t-sheet",
     "chips": [],
-    "keywords": "One-page cheat sheet FD rules Reflexive: Y ⊆ X gives X→Y Augmentation: X→Y gives XZ→YZ Transitive: X→Y, Y→Z give X→Z Union, decomposition, pseudotransitivity X→Y implied iff Y ⊆ X⁺ Closure X⁺ Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Never on a R"
+    "keywords": "One-page cheat sheet FD rules Reflexive: Y \u2286 X gives X\u2192Y Augmentation: X\u2192Y gives XZ\u2192YZ Transitive: X\u2192Y, Y\u2192Z give X\u2192Z Union, decomposition, pseudotransitivity X\u2192Y implied iff Y \u2286 X\u207a Closure X\u207a Start with X Add RHS of any FD whose LHS is inside Repeat until nothing is added Candidate keys Never on a R"
   },
   {
     "id": "t-qa",
@@ -1440,7 +1440,7 @@
       "Define",
       "Likely exam"
     ],
-    "keywords": "Binary addition and subtraction revised Numerical Define Likely exam Addition rule Result 0 + 0 0 0 + 1 or 1 + 0 1 1 + 1 0 carry 1 1 + 1 + 1 (with carry in) 1 carry 1 Subtraction rule Result 0 − 0, 1 − 1, 1 − 0 0, 0, 1 0 − 1 1 with borrow 1 from the next bit Numerical 1011 + 0110 = 10001 (11 + 6 = 1"
+    "keywords": "Binary addition and subtraction revised Numerical Define Likely exam Addition rule Result 0 + 0 0 0 + 1 or 1 + 0 1 1 + 1 0 carry 1 1 + 1 + 1 (with carry in) 1 carry 1 Subtraction rule Result 0 \u2212 0, 1 \u2212 1, 1 \u2212 0 0, 0, 1 0 \u2212 1 1 with borrow 1 from the next bit Numerical 1011 + 0110 = 10001 (11 + 6 = 1"
   },
   {
     "id": "t-signed",
@@ -1453,7 +1453,7 @@
       "Numerical",
       "Likely exam"
     ],
-    "keywords": "Signed numbers revised Define Differentiate Numerical Likely exam Unsigned : all n bits are magnitude. Range 0 to 2 n − 1. Signed : the most significant bit (MSB) is the sign. 0 means positive, 1 means negative. Positive numbers look the same in all three methods below. Method How to write a negativ"
+    "keywords": "Signed numbers revised Define Differentiate Numerical Likely exam Unsigned : all n bits are magnitude. Range 0 to 2 n \u2212 1. Signed : the most significant bit (MSB) is the sign. 0 means positive, 1 means negative. Positive numbers look the same in all three methods below. Method How to write a negativ"
   },
   {
     "id": "t-fixed",
@@ -1478,7 +1478,7 @@
       "Draw",
       "Likely exam"
     ],
-    "keywords": "Floating-point numbers revised Define Numerical Draw Likely exam Floating point A number stored as sign, exponent and mantissa , so the point \"floats\". Value = (−1) s × 1.mantissa × 2 (exponent − bias) . It gives a huge range at the cost of rounding. IEEE 754 single precision (32 bits) 1 sign (bit 3"
+    "keywords": "Floating-point numbers revised Define Numerical Draw Likely exam Floating point A number stored as sign, exponent and mantissa , so the point \"floats\". Value = (\u22121) s \u00d7 1.mantissa \u00d7 2 (exponent \u2212 bias) . It gives a huge range at the cost of rounding. IEEE 754 single precision (32 bits) 1 sign (bit 3"
   },
   {
     "id": "t-gates",
@@ -1504,7 +1504,7 @@
       "Draw",
       "Likely exam"
     ],
-    "keywords": "Logic levels, DC specifications and noise margins revised Define Numerical Draw Likely exam Digital circuit operation Logic levels are voltage ranges , not exact voltages. Every logic family (TTL, CMOS, …) specifies input DC specifications , output DC specifications and noise margins so that switchi"
+    "keywords": "Logic levels, DC specifications and noise margins revised Define Numerical Draw Likely exam Digital circuit operation Logic levels are voltage ranges , not exact voltages. Every logic family (TTL, CMOS, \u2026) specifies input DC specifications , output DC specifications and noise margins so that switchi"
   },
   {
     "id": "t-loads",
@@ -1553,7 +1553,7 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet Revise the night before Grouping Binary to hex: groups of 4 Binary to octal: groups of 3 Decimal to binary: ÷2, read remainders up; fraction ×2, read down Signed 1's: invert all bits 2's: invert, add 1 2's range −2^(n−1) to 2^(n−1)−1 1's sub: carry = add back, no carry = negativ"
+    "keywords": "One-page cheat sheet Revise the night before Grouping Binary to hex: groups of 4 Binary to octal: groups of 3 Decimal to binary: \u00f72, read remainders up; fraction \u00d72, read down Signed 1's: invert all bits 2's: invert, add 1 2's range \u22122^(n\u22121) to 2^(n\u22121)\u22121 1's sub: carry = add back, no carry = negativ"
   },
   {
     "id": "t-qa",
@@ -1575,7 +1575,7 @@
       "Differentiate",
       "Likely exam"
     ],
-    "keywords": "Boolean algebra: operations, axioms, theorems revised Define Differentiate Likely exam Boolean algebra An algebra whose variables take only two values, 0 and 1 . Every function is built from three basic operations: AND (·), OR (+) and NOT (′ or a bar). NAND, NOR, XOR and XNOR are derived from them. "
+    "keywords": "Boolean algebra: operations, axioms, theorems revised Define Differentiate Likely exam Boolean algebra An algebra whose variables take only two values, 0 and 1 . Every function is built from three basic operations: AND (\u00b7), OR (+) and NOT (\u2032 or a bar). NAND, NOR, XOR and XNOR are derived from them. "
   },
   {
     "id": "t-can",
@@ -1698,7 +1698,7 @@
     "chips": [
       "Revise the night before"
     ],
-    "keywords": "One-page cheat sheet Revise the night before Laws Identity, Null, Idempotent, Complement Absorption A+AB = A Combining AB+AB' = A A+A'B = A+B Consensus AB+A'C+BC = AB+A'C De Morgan: (A+B)' = A'B', (AB)' = A'+B' Dual: swap + and ·, 0 and 1 Canonical forms Minterm: AND term, bit 1 = A, bit 0 = A' Maxt"
+    "keywords": "One-page cheat sheet Revise the night before Laws Identity, Null, Idempotent, Complement Absorption A+AB = A Combining AB+AB' = A A+A'B = A+B Consensus AB+A'C+BC = AB+A'C De Morgan: (A+B)' = A'B', (AB)' = A'+B' Dual: swap + and \u00b7, 0 and 1 Canonical forms Minterm: AND term, bit 1 = A, bit 0 = A' Maxt"
   },
   {
     "id": "t-qa",
@@ -1709,5 +1709,165 @@
       "Revise the night before"
     ],
     "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. State De Morgan's theorems and prove them with a truth table. (3) (A+B)' = A'B' and (AB)' = A'+B'. Four-row truth table, extension to three variables. See Boolea"
+  },
+  {
+    "id": "t-dec",
+    "title": "Decoders and the one-hot decoder",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-dec",
+    "chips": [
+      "Define",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Decoders and the one-hot decoder revised Define Draw Likely exam Decoder A combinational circuit that converts an n-bit binary input into 2 n outputs , of which exactly one is HIGH . The HIGH output shows which binary value is on the input. Uses : memory address decoding, instruction decoding, chip "
+  },
+  {
+    "id": "t-seg",
+    "title": "Seven-segment display decoder (BCD to seven-segment)",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-seg",
+    "chips": [
+      "Define",
+      "Draw",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Seven-segment display decoder (BCD to seven-segment) revised Define Draw Numerical Likely exam Seven-segment decoder A combinational circuit that takes a 4-bit BCD digit (A B C D) and drives the seven LED segments S0 to S6 so that the decimal digit is displayed. A segment lights when its output is 1"
+  },
+  {
+    "id": "t-enc",
+    "title": "Encoders and the priority encoder",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-enc",
+    "chips": [
+      "Define",
+      "Differentiate",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Encoders and the priority encoder revised Define Differentiate Numerical Likely exam Encoder The reverse of a decoder . It has 2 n input lines, of which one is active, and produces the n-bit binary code of the active line. 4 to 2 encoder D0 D1 D2 D3 A B 1 0 0 0 0 0 0 1 0 0 0 1 0 0 1 0 1 0 0 0 0 1 1 "
+  },
+  {
+    "id": "t-mux",
+    "title": "Multiplexers (MUX)",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-mux",
+    "chips": [
+      "Define",
+      "Draw",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Multiplexers (MUX) revised Define Draw Numerical Likely exam Multiplexer Selects one of 2 n data inputs using n select lines and sends it to a single output. It is a data selector. MUX Select lines Output 2:1 S Y = S'\u00b7I0 + S\u00b7I1 4:1 S1, S0 Y = S1'S0'\u00b7I0 + S1'S0\u00b7I1 + S1S0'\u00b7I2 + S1S0\u00b7I3 8:1 S2, S1, S0 "
+  },
+  {
+    "id": "t-demux",
+    "title": "Demultiplexers (DEMUX)",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-demux",
+    "chips": [
+      "Define",
+      "Draw",
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "Demultiplexers (DEMUX) revised Define Draw Differentiate Likely exam Demultiplexer Takes one input D and sends it to one of several outputs chosen by the select lines. The reverse of a multiplexer. S1 S0 Y0 Y1 Y2 Y3 0 0 D 0 0 0 0 1 0 D 0 0 1 0 0 0 D 0 1 1 0 0 0 D Y0 = D\u00b7S1'S0'   Y1 = D\u00b7S1'S0   Y2 = "
+  },
+  {
+    "id": "t-add",
+    "title": "Arithmetic circuits: adders and subtractors",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-add",
+    "chips": [
+      "Define",
+      "Draw",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Arithmetic circuits: adders and subtractors revised Define Draw Numerical Likely exam Half adder and half subtractor (2 inputs) A B S C (carry) D Bout (borrow) 0 0 0 0 0 0 0 1 1 0 1 1 1 0 1 0 1 0 1 1 0 1 0 0 Half adder:       S = A \u2295 B,   C = A\u00b7B Half subtractor: D = A \u2295 B,   Bout = A'\u00b7B Full adder "
+  },
+  {
+    "id": "t-comp",
+    "title": "Comparators",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-comp",
+    "chips": [
+      "Define",
+      "Draw",
+      "Numerical",
+      "Likely exam",
+      "Added"
+    ],
+    "keywords": "Comparators revised Define Draw Numerical Likely exam Added Added The class notes list comparators in the contents but have no page on them. Everything in this section is written from the standard textbook treatment. All the equations were checked for every input combination (2-bit) in code and in t"
+  },
+  {
+    "id": "t-hier",
+    "title": "Structural design and hierarchy: module instantiation",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-hier",
+    "chips": [
+      "Define",
+      "Explain",
+      "Likely exam"
+    ],
+    "keywords": "Structural design and hierarchy: module instantiation revised Define Explain Likely exam Structural modelling Describes a digital circuit by connecting modules and gates , like drawing a circuit diagram in text. You instantiate (use) lower-level blocks inside a higher-level module to build a bigger "
+  },
+  {
+    "id": "t-prim",
+    "title": "Gate-level primitives",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-prim",
+    "chips": [
+      "Define",
+      "Explain",
+      "Likely exam"
+    ],
+    "keywords": "Gate-level primitives revised Define Explain Likely exam Gate-level primitive Verilog has built-in gate models so that you can write a circuit as gates: and, nand, or, nor, xor, xnor, not, buf . gate_type  instance_name (output, input1, input2, ...); The output comes first , then the inputs. The ins"
+  },
+  {
+    "id": "t-udp",
+    "title": "User defined primitives (UDP)",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-udp",
+    "chips": [
+      "Define",
+      "Explain",
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "User defined primitives (UDP) revised Define Explain Differentiate Likely exam UDP A primitive that you define yourself with a truth table , then use like a built-in gate. Two kinds: combinational UDP (output depends only on the current inputs) and sequential UDP (output also depends on the stored s"
+  },
+  {
+    "id": "t-pdel",
+    "title": "Adding delay to primitives",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-pdel",
+    "chips": [
+      "Define",
+      "Explain",
+      "Likely exam"
+    ],
+    "keywords": "Adding delay to primitives revised Define Explain Likely exam Delay on a primitive A delay written after the gate type models the propagation delay of that gate in simulation. It is not used for synthesis. and  #3      g1 (y, A, B);     // 3 time units for both rise and fall and  #(2,5)   g2 (y, A, "
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet Revise the night before Decoder and encoder Decoder: n bits to 2^n lines, one-hot, outputs are minterms Encoder: 2^n lines to n bits 4:2 encoder A = D2 + D3, B = D1 + D3 Priority: A = D3 + D2, B = D3 + D2'D1, V = D3+D2+D1+D0 7-segment (don't cares 10 to 15) S0 = A + C + BD + B'D"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "DELD M3",
+    "url": "/notes/deld-module-3/#t-qa",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. What is a decoder? Design a 3 to 8 decoder. What is a one-hot decoder? (7) Definition, 3 to 8 truth table, D i as minterms, gate figure, one-hot meaning and uses"
   }
 ]

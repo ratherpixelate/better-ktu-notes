@@ -2346,6 +2346,12 @@ td.c, th.c {
   stroke-width: 3px;
 }
 
+.k-off {
+  fill: var(--surface-subtle);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
 .s-cell {
   fill: var(--fg);
   font-family: var(--font-mono);

@@ -30,9 +30,9 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('#pbitt304')).toBeVisible();
     await expect(page.locator('#gaest305')).toBeVisible();
 
-    // Check 11 Active Modules (COA M1..M4, DS M1, DBMS M1..M4, DELD M1..M2)
+    // Check 12 Active Modules (COA M1..M4, DS M1, DBMS M1..M4, DELD M1..M3)
     const activeCards = page.locator('.module-card:not(.locked)');
-    await expect(activeCards).toHaveCount(11);
+    await expect(activeCards).toHaveCount(12);
 
     // Verify Active Module Card shows "0/17 completed" and NO green status dot
     const coaM1Card = activeCards.first();
@@ -278,6 +278,13 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page).toHaveTitle(/DELD Module 2/);
     await expect(page.locator('.toc')).toBeVisible();
     await expect(page.locator('.toc a')).toHaveCount(12);
+    await expect(page.locator('.fig svg').first()).toBeVisible();
+
+    // DELD Module 3
+    await page.goto('/notes/deld-module-3/');
+    await expect(page).toHaveTitle(/DELD Module 3/);
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(13);
     await expect(page.locator('.fig svg').first()).toBeVisible();
 
     // Click All Modules back link

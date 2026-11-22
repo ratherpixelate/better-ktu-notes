@@ -745,5 +745,72 @@
       "title": "Likely questions",
       "group": "Revise"
     }
+  ],
+  "deld-m3": [
+    {
+      "id": "t-dec",
+      "title": "Decoders (one-hot)",
+      "group": "MSI logic"
+    },
+    {
+      "id": "t-seg",
+      "title": "Seven-segment decoder",
+      "group": "MSI logic"
+    },
+    {
+      "id": "t-enc",
+      "title": "Encoders",
+      "group": "MSI logic"
+    },
+    {
+      "id": "t-mux",
+      "title": "Multiplexers",
+      "group": "MSI logic"
+    },
+    {
+      "id": "t-demux",
+      "title": "Demultiplexers",
+      "group": "MSI logic"
+    },
+    {
+      "id": "t-add",
+      "title": "Adders and subtractors",
+      "group": "Digital building blocks"
+    },
+    {
+      "id": "t-comp",
+      "title": "Comparators",
+      "group": "Digital building blocks"
+    },
+    {
+      "id": "t-hier",
+      "title": "Hierarchy & instantiation",
+      "group": "Structural Verilog"
+    },
+    {
+      "id": "t-prim",
+      "title": "Gate-level primitives",
+      "group": "Structural Verilog"
+    },
+    {
+      "id": "t-udp",
+      "title": "User defined primitives",
+      "group": "Structural Verilog"
+    },
+    {
+      "id": "t-pdel",
+      "title": "Delay on primitives",
+      "group": "Structural Verilog"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
   ]
 }

@@ -58,7 +58,7 @@
           "num": 1,
           "slug": "module-1",
           "title": "Introduction to Data Structures, Arrays & Stacks",
-          "desc": "ADT vs CDT, asymptotic notations (Big O, Ω, Θ), sparse matrices, polynomial addition, stack operations, and infix-to-postfix conversion.",
+          "desc": "ADT vs CDT, asymptotic notations (Big O, \u03a9, \u0398), sparse matrices, polynomial addition, stack operations, and infix-to-postfix conversion.",
           "status": "active",
           "storageKey": "ds-m1-revised",
           "totalTopics": 14,
@@ -177,12 +177,12 @@
         {
           "num": 3,
           "slug": "module-3",
-          "title": "Combinational Logic Design & MSI Devices",
-          "desc": "Adders, subtractors, lookahead carry, multiplexers, demultiplexers, encoders, decoders, code converters, and magnitude comparators.",
-          "status": "drafting",
+          "title": "MSI Logic and Digital Building Blocks",
+          "desc": "Decoders, BCD-to-7-segment, priority encoders, multiplexers, demultiplexers, adders, subtractors, comparators, structural Verilog hierarchy, gate primitives, and UDPs.",
+          "status": "active",
           "storageKey": "deld-m3-revised",
-          "totalTopics": 8,
-          "href": null
+          "totalTopics": 11,
+          "href": "/notes/deld-module-3/"
         },
         {
           "num": 4,

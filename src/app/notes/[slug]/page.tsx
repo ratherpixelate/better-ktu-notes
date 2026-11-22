@@ -122,6 +122,15 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 10,
     tocKey: 'deld-m2',
   },
+  'deld-module-3': {
+    slug: 'deld-module-3',
+    moduleCode: 'GAEST305 · Module 3',
+    title: 'DELD Module 3: MSI Logic and Digital Building Blocks',
+    desc: 'Decoders, BCD-to-7-segment, priority encoders, multiplexers, demultiplexers, adders, subtractors, comparators, structural Verilog hierarchy, gate primitives, and UDPs.',
+    storageKey: 'deld-m3-revised',
+    totalTopics: 11,
+    tocKey: 'deld-m3',
+  },
 };
 
 export async function generateStaticParams() {
