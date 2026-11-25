@@ -437,6 +437,33 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     // Assert that the list scrolled horizontally
     const newScrollLeft = await tocList.evaluate((el) => el.scrollLeft);
     expect(newScrollLeft).toBeGreaterThan(50);
+
+    // Verify that clicking a pill without dragging on mobile still navigates cleanly
+    const mapLink = page.locator('.toc a[href="#t-map"]');
+    await mapLink.click();
+    await expect(page).toHaveURL(/#t-map/);
+    await expect(mapLink).toHaveClass(/on/);
+  });
+
+  test('9. Desktop Sidebar TOC Click Navigation', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/notes/coa-module-1/');
+
+    const busLink = page.locator('.toc a[href="#t-bus"]');
+    await expect(busLink).toBeVisible();
+
+    // Click on "Bus structures"
+    await busLink.click();
+
+    // URL should have #t-bus hash
+    await expect(page).toHaveURL(/#t-bus/);
+
+    // Active link should now be "Bus structures"
+    await expect(busLink).toHaveClass(/on/);
+
+    // Target section #t-bus should be in viewport / scrolled
+    const busSection = page.locator('#t-bus');
+    await expect(busSection).toBeInViewport();
   });
 
 });

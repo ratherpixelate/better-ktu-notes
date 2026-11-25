@@ -54,14 +54,16 @@ export function TableOfContents({
     }
   };
 
-  // Mouse drag-to-scroll event handlers
+  // Helper to check if current viewport is mobile pill bar (< 900px)
+  const isMobilePillBar = () => {
+    return typeof window !== 'undefined' && window.matchMedia('(max-width: 899px)').matches;
+  };
+
+  // Mouse drag-to-scroll event handlers (Active ONLY on mobile horizontal pill bar)
   const handlePointerDown = (e: React.PointerEvent<HTMLUListElement>) => {
+    if (!isMobilePillBar()) return;
     if (e.pointerType === 'touch') return;
     if (!tocListRef.current) return;
-
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
 
     isPointerDownRef.current = true;
     hasDraggedRef.current = false;
@@ -70,12 +72,16 @@ export function TableOfContents({
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLUListElement>) => {
+    if (!isMobilePillBar()) return;
     if (!isPointerDownRef.current || !tocListRef.current) return;
 
     const dx = e.clientX - startXRef.current;
     if (!hasDraggedRef.current && Math.abs(dx) > 4) {
       hasDraggedRef.current = true;
       setIsDragging(true);
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch {}
     }
 
     if (hasDraggedRef.current) {
@@ -84,6 +90,13 @@ export function TableOfContents({
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLUListElement>) => {
+    if (!isMobilePillBar()) {
+      isPointerDownRef.current = false;
+      hasDraggedRef.current = false;
+      setIsDragging(false);
+      return;
+    }
+
     try {
       if (e.currentTarget.hasPointerCapture(e.pointerId)) {
         e.currentTarget.releasePointerCapture(e.pointerId);
@@ -102,7 +115,9 @@ export function TableOfContents({
   };
 
   const handleDragStart = (e: React.DragEvent) => {
-    e.preventDefault();
+    if (isMobilePillBar()) {
+      e.preventDefault();
+    }
   };
 
   // Instant click feedback & auto-scroll
