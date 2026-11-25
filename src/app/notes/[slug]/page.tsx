@@ -142,14 +142,18 @@ export async function generateMetadata({ params }: NotePageProps): Promise<Metad
   const config = NOTES_CONFIG[slug];
   if (!config) return {};
 
+  const fullTitle = `${config.title} | KTU 2024 Scheme Notes`;
+
   return {
-    title: config.title,
+    title: {
+      absolute: fullTitle,
+    },
     description: config.desc,
     alternates: {
       canonical: `https://ratherpixelate.github.io/better-ktu-notes/notes/${slug}/`,
     },
     openGraph: {
-      title: `${config.title} · BetterKTUNotes`,
+      title: fullTitle,
       description: config.desc,
       url: `https://ratherpixelate.github.io/better-ktu-notes/notes/${slug}/`,
       type: 'article',
@@ -176,14 +180,46 @@ export default async function NotePage({ params }: NotePageProps) {
       .replaceAll('href="/"', `href="${basePath}/"`);
   }
 
+  // JSON-LD structured data for BreadcrumbList
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://ratherpixelate.github.io/better-ktu-notes/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: config.moduleCode,
+        item: `https://ratherpixelate.github.io/better-ktu-notes/notes/${slug}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: config.title,
+        item: `https://ratherpixelate.github.io/better-ktu-notes/notes/${slug}/`,
+      },
+    ],
+  };
+
   return (
-    <NoteShell
-      moduleCode={config.moduleCode}
-      tocItems={items}
-      storageKey={config.storageKey}
-      totalTopics={config.totalTopics}
-    >
-      <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-    </NoteShell>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <NoteShell
+        moduleCode={config.moduleCode}
+        tocItems={items}
+        storageKey={config.storageKey}
+        totalTopics={config.totalTopics}
+      >
+        <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      </NoteShell>
+    </>
   );
 }

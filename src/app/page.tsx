@@ -7,7 +7,10 @@ export default function HomePage() {
     <main className="main-content">
       {/* Hero Header */}
       <section className="hero-section">
-        <h1 className="hero-title">BetterKTUNotes</h1>
+        <h1 className="hero-title">
+          BetterKTUNotes
+          <span className="hero-keyword">KTU 2024 Scheme S3 Notes</span>
+        </h1>
         <p className="hero-lead">
           Semester 3 · B.Tech Computer Science &amp; Information Technology · 2024 Scheme. Reference materials, worked derivations, and syllabus-aligned module notes.
         </p>

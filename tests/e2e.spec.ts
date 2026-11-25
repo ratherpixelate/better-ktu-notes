@@ -17,8 +17,17 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(brandWrap).not.toContainText(['2024 Scheme', 'S3 Studio']);
 
     // Check Hero
-    await expect(page.locator('.hero-title')).toHaveText('BetterKTUNotes');
+    await expect(page.locator('.hero-title')).toContainText('BetterKTUNotes');
+    await expect(page.locator('.hero-keyword')).toHaveText('KTU 2024 Scheme S3 Notes');
     await expect(page.locator('.hero-lead')).toBeVisible();
+
+    // Check SEO metadata tags
+    const canonicalLink = page.locator('link[rel="canonical"]');
+    await expect(canonicalLink).toHaveAttribute('href', 'https://ratherpixelate.github.io/better-ktu-notes/');
+    const ogImage = page.locator('meta[property="og:image"]');
+    await expect(ogImage).toHaveAttribute('content', 'https://ratherpixelate.github.io/better-ktu-notes/og-image.png');
+    const twitterCard = page.locator('meta[name="twitter:card"]');
+    await expect(twitterCard).toHaveAttribute('content', 'summary_large_image');
 
     // Check Progress Tracker
     await expect(page.locator('.progress-card')).toBeVisible();
@@ -142,8 +151,27 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await page.goto('/notes/ds-module-1/');
 
     // Check title and TOC
-    await expect(page).toHaveTitle(/DS Module 1/);
+    await expect(page).toHaveTitle(/DS Module 1: Introduction to Data Structures, Arrays & Stacks \| KTU 2024 Scheme Notes/);
     await expect(page.locator('.toc')).toBeVisible();
+
+    // Check SEO canonical link and JSON-LD BreadcrumbList
+    const canonical = page.locator('link[rel="canonical"]');
+    await expect(canonical).toHaveAttribute('href', 'https://ratherpixelate.github.io/better-ktu-notes/notes/ds-module-1/');
+
+    const ldJsonScripts = page.locator('script[type="application/ld+json"]');
+    await expect(ldJsonScripts).toHaveCount(2);
+    const breadcrumbContent = await page.evaluate(() => {
+      const scripts = Array.from(document.querySelectorAll('script[type="application/ld+json"]'));
+      for (const s of scripts) {
+        try {
+          const parsed = JSON.parse(s.textContent || '');
+          if (parsed['@type'] === 'BreadcrumbList') return parsed;
+        } catch {}
+      }
+      return null;
+    });
+    expect(breadcrumbContent).not.toBeNull();
+    expect(breadcrumbContent?.itemListElement).toHaveLength(3);
 
     // Verify the SVG Time Complexity Graph
     const graphSvg = page.locator('.fig svg').first();

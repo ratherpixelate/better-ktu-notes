@@ -23,6 +23,9 @@ const basePath = process.env.NODE_ENV === 'production' ? '/better-ktu-notes' : '
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ratherpixelate.github.io/better-ktu-notes/'),
+  alternates: {
+    canonical: 'https://ratherpixelate.github.io/better-ktu-notes/',
+  },
   title: {
     default: 'BetterKTUNotes · KTU 2024 Scheme',
     template: '%s · BetterKTUNotes',
@@ -39,6 +42,21 @@ export const metadata: Metadata = {
     url: 'https://ratherpixelate.github.io/better-ktu-notes/',
     siteName: 'BetterKTUNotes',
     type: 'website',
+    images: [
+      {
+        url: `${basePath}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'BetterKTUNotes · KTU 2024 Scheme S3 Revision Notes',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BetterKTUNotes · KTU 2024 Scheme',
+    description:
+      'Direct syllabus revision notes without textbook fluff for APJ Abdul Kalam Technological University (KTU) 2024 Scheme S3.',
+    images: [`${basePath}/og-image.png`],
   },
   icons: {
     icon: [
