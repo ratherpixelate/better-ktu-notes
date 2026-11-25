@@ -48,6 +48,13 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     const appleTouchIcon = page.locator('link[rel="apple-touch-icon"]');
     await expect(appleTouchIcon).toBeAttached();
 
+    // Verify Cloudflare Web Analytics beacon is attached with SPA tracking
+    const cfBeacon = page.locator('script[src*="cloudflareinsights.com/beacon.min.js"]');
+    await expect(cfBeacon).toBeAttached();
+    const beaconAttr = await cfBeacon.getAttribute('data-cf-beacon');
+    expect(beaconAttr).toContain('bf58f5fa5dc7458a94a865a1a71392c8');
+    expect(beaconAttr).toContain('"spa": true');
+
     // Capture screenshot
     await page.screenshot({ path: 'tests/screenshots/01-hub-page.png', fullPage: true });
   });

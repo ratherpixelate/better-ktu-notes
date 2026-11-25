@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { Navbar } from '@/components/layout/Navbar';
@@ -90,6 +91,11 @@ export default function RootLayout({
         <Navbar />
         {children}
         <Footer />
+        <Script
+          strategy="afterInteractive"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "bf58f5fa5dc7458a94a865a1a71392c8", "spa": true}'
+        />
       </body>
     </html>
   );
