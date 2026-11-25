@@ -382,4 +382,33 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await contextDarkOS.close();
   });
 
+  test('8. Mobile Horizontal TOC Pill Bar Drag-to-Scroll', async ({ page }) => {
+    // Set viewport to mobile width (750px)
+    await page.setViewportSize({ width: 750, height: 900 });
+    await page.goto('/notes/coa-module-3/');
+
+    const tocList = page.locator('#toclist');
+    await expect(tocList).toBeVisible();
+
+    // Check initial scrollLeft is 0
+    const initialScrollLeft = await tocList.evaluate((el) => el.scrollLeft);
+    expect(initialScrollLeft).toBe(0);
+
+    // Perform mouse drag from right to left (scroll right)
+    const box = await tocList.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      const startX = box.x + box.width - 50;
+      const startY = box.y + box.height / 2;
+      await page.mouse.move(startX, startY);
+      await page.mouse.down();
+      await page.mouse.move(startX - 200, startY, { steps: 10 });
+      await page.mouse.up();
+    }
+
+    // Assert that the list scrolled horizontally
+    const newScrollLeft = await tocList.evaluate((el) => el.scrollLeft);
+    expect(newScrollLeft).toBeGreaterThan(50);
+  });
+
 });

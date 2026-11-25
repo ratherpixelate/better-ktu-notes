@@ -2655,6 +2655,16 @@ footer.notes-footer {
     touch-action: pan-x;
     overscroll-behavior-x: contain;
     scrollbar-width: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .toc ul {
+      cursor: grab;
+    }
+    .toc ul.is-dragging {
+      cursor: grabbing;
+    }
   }
   .toc ul::-webkit-scrollbar {
     display: none;

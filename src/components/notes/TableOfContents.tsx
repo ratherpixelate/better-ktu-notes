@@ -22,11 +22,18 @@ export function TableOfContents({
   totalTopics,
 }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id || '');
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const tocListRef = useRef<HTMLUListElement>(null);
   const readingBarRef = useRef<HTMLDivElement>(null);
   const activeIdRef = useRef<string>(activeId);
   const isClickScrollingRef = useRef<boolean>(false);
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Mouse drag-to-scroll refs
+  const isPointerDownRef = useRef<boolean>(false);
+  const startXRef = useRef<number>(0);
+  const startScrollLeftRef = useRef<number>(0);
+  const hasDraggedRef = useRef<boolean>(false);
 
   // Keep activeIdRef updated
   useEffect(() => {
@@ -47,8 +54,63 @@ export function TableOfContents({
     }
   };
 
+  // Mouse drag-to-scroll event handlers
+  const handlePointerDown = (e: React.PointerEvent<HTMLUListElement>) => {
+    if (e.pointerType === 'touch') return;
+    if (!tocListRef.current) return;
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+
+    isPointerDownRef.current = true;
+    hasDraggedRef.current = false;
+    startXRef.current = e.clientX;
+    startScrollLeftRef.current = tocListRef.current.scrollLeft;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLUListElement>) => {
+    if (!isPointerDownRef.current || !tocListRef.current) return;
+
+    const dx = e.clientX - startXRef.current;
+    if (!hasDraggedRef.current && Math.abs(dx) > 4) {
+      hasDraggedRef.current = true;
+      setIsDragging(true);
+    }
+
+    if (hasDraggedRef.current) {
+      tocListRef.current.scrollLeft = startScrollLeftRef.current - dx;
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLUListElement>) => {
+    try {
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      }
+    } catch {}
+
+    isPointerDownRef.current = false;
+    if (hasDraggedRef.current) {
+      setTimeout(() => {
+        hasDraggedRef.current = false;
+        setIsDragging(false);
+      }, 50);
+    } else {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragStart = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
   // Instant click feedback & auto-scroll
-  const handlePillClick = (id: string) => {
+  const handlePillClick = (e: React.MouseEvent, id: string) => {
+    if (hasDraggedRef.current) {
+      e.preventDefault();
+      return;
+    }
     activeIdRef.current = id;
     setActiveId(id);
     if (window.matchMedia('(max-width: 899px)').matches) {
@@ -180,7 +242,16 @@ export function TableOfContents({
     <nav className="toc" aria-label="Module sections">
       <div ref={readingBarRef} className="toc-reading-bar" aria-hidden="true" />
       <p className="brand">{moduleCode}</p>
-      <ul ref={tocListRef} id="toclist">
+      <ul
+        ref={tocListRef}
+        id="toclist"
+        className={isDragging ? 'is-dragging' : ''}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onDragStart={handleDragStart}
+      >
         {items.map((item, idx) => {
           const isDone = item.id !== 't-sheet' && item.id !== 't-qa' && !!revisedTopics[item.id];
           const isCurrent = activeId === item.id;
@@ -192,8 +263,9 @@ export function TableOfContents({
               <li>
                 <a
                   href={`#${item.id}`}
+                  draggable={false}
                   className={`${isCurrent ? 'on' : ''} ${isDone ? 'done' : ''}`}
-                  onClick={() => handlePillClick(item.id)}
+                  onClick={(e) => handlePillClick(e, item.id)}
                 >
                   <span>{item.title}</span>
                 </a>
