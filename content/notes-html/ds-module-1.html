@@ -84,7 +84,7 @@
 <li><strong>Auxiliary space:</strong> the extra memory used during execution. Temporary variables, the recursion stack and extra arrays all count.</li>
 <li><strong>Input space:</strong> the memory the input itself occupies.</li>
 </ul>
-<div class="note def"><p><span class="lbl">Space Complexity</span>Space complexity is formally expressed as <strong>(P) = c + S_P(n)$</strong>, where $ is the fixed part (instruction space, scalar variables) and (n)$ is the variable instance space (arrays, recursion stack).</p></div>
+<div class="note def"><p><span class="lbl">Space Complexity</span>Space complexity is formally expressed as <strong>S(P) = c + S<sub>P</sub>(n)</strong>, where c is the fixed part (instruction space, scalar variables) and S<sub>P</sub>(n) is the variable instance space (arrays, recursion stack).</p></div>
 <div class="wrap"><table class="wide">
 <thead><tr><th>Algorithm</th><th>Auxiliary space</th><th>Reason</th></tr></thead>
 <tbody>
@@ -160,7 +160,7 @@
 </table></div>
 <p>At n = 32, 2ⁿ is already over four billion while n³ is about thirty-two thousand. That gap is why exponential algorithms are only usable for very small inputs.</p>
 <h3>Reading the complexity off code</h3>
-<div class="note def"><p><span class="lbl">Time Analysis Rule</span>Count the execution frequency of the critical innermost statement, then discard multiplicative constants and lower-order terms: n^2 + 5n + 2$ yields (n^2)$.</p></div>
+<div class="note def"><p><span class="lbl">Time Analysis Rule</span>Count the execution frequency of the critical innermost statement, then discard multiplicative constants and lower-order terms: 3n² + 5n + 2 yields O(n²).</p></div>
 <pre><code>for (i = 0; i &lt; n; i++)            // runs n times              → O(n)
     sum = sum + a[i];
 
@@ -190,7 +190,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 <div class="formula">Θ(g(n)) = { f(n) : there exist positive constants c₁, c₂ and n₀ such that 0 ≤ c₁·g(n) ≤ f(n) ≤ c₂·g(n) for all n ≥ n₀ }</div>
 <p>g(n) is an asymptotic upper bound (O), lower bound (Ω) or tight bound (Θ) for f(n).</p>
 <h3>Worked example</h3>
-<div class="note example"><p><span class="lbl">Worked Example</span><strong>Show that (n) = 3n + 2$ is $\Theta(n)$:</strong></p>
+<div class="note example"><p><span class="lbl">Worked Example</span><strong>Show that f(n) = 3n + 2 is Θ(n):</strong></p>
 <p>Upper bound: 3n + 2 ≤ 4n for all n ≥ 2, so c = 4 and n₀ = 2. Hence f(n) is O(n).</p>
 <p>Lower bound: 3n ≤ 3n + 2 for all n ≥ 1, so c = 3 and n₀ = 1. Hence f(n) is Ω(n).</p>
 <p>Both hold, so f(n) is Θ(n) with c₁ = 3, c₂ = 4, n₀ = 2.</p>
@@ -203,7 +203,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 <tr><td><strong>Binary search</strong> </td><td>Key at the middle: Ω(1)</td><td>Halve until one element is left: O(log n)</td><td>Θ(log n)</td></tr>
 </tbody>
 </table></div>
-<div class="note alert"><p><span class="lbl">Watch Out</span><strong>Bound vs Case:</strong> Formally, $, $\Omega$, and $\Theta$ represent mathematical bounds (upper, lower, tight), not specific cases. However, university exams commonly associate <strong>Worst case = $, Best case = $\Omega$, Average case = $\Theta$</strong>. Mention the mathematical definition and this pairing for complete marks.</p></div>
+<div class="note alert"><p><span class="lbl">Watch Out</span><strong>Bound vs Case:</strong> Formally, O, Ω, and Θ represent mathematical bounds (upper, lower, tight), not specific cases. However, university exams commonly associate <strong>Worst case = O, Best case = Ω, Average case = Θ</strong>. Mention the mathematical definition and this pairing for complete marks.</p></div>
 </section>
 <!-- ============ ARRAYS ============ -->
 <section class="topic" id="t-arrays">
@@ -220,7 +220,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 <li>Easy to traverse.</li>
 <li>Efficient for searching and sorting.</li>
 </ul>
-<div class="note def"><p><span class="lbl">Array Limitations</span>Key limitations to state in 3-mark questions: fixed static capacity allocated at compile time, and linear time (n)$ overhead for insertion/deletion due to element shifting.</p></div>
+<div class="note def"><p><span class="lbl">Array Limitations</span>Key limitations to state in 3-mark questions: fixed static capacity allocated at compile time, and linear time O(n) overhead for insertion/deletion due to element shifting.</p></div>
 <h3>One-dimensional array in memory</h3>
 <p><code>int A[5] = {10, 20, 30, 40, 50};</code> with base address BA = 2000 and element size w = 4 bytes.</p>
 <div class="bitwrap"><div class="bits" style="grid-template-columns: repeat(5, 1fr);">
@@ -228,7 +228,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 </div></div>
 <div class="formula">Address(A[i]) = BA + i × w          (index starts at 0)</div>
 <p>A[3] = 2000 + 3 × 4 = <strong>2012</strong>.</p>
-<div class="note example"><p><span class="lbl">Worked Example</span><strong>1D Array with Lower Bound (LB):</strong><br/><code>Address(A[i]) = BA + (i - LB) × w</code><br/><em>Example:</em> Base Address  = 500$, element size  = 2$ bytes, lower bound  = -5$. The address of [2]$ is 00 + (2 - (-5)) 	imes 2 = 500 + 14 = \mathbf{514}$.</p></div>
+<div class="note example"><p><span class="lbl">Worked Example</span><strong>1D Array with Lower Bound (LB):</strong><br/><code>Address(A[i]) = BA + (i - LB) × w</code><br/><em>Example:</em> Base Address BA = 500, element size w = 2 bytes, lower bound LB = −5. The address of A[2] is 500 + (2 − (−5)) × 2 = 500 + 14 = <strong>514</strong>.</p></div>
 <h3>Two-dimensional array: row-major and column-major</h3>
 <p><code>int B[3][3] = {{1,2,3},{4,5,6},{7,8,9}};</code> is stored as a single run of memory in one of two orders.</p>
 <div class="wrap"><table class="wide">
@@ -246,7 +246,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 <p>Row-major: 1000 + (1 × 3 + 2) × 4 = <strong>1020</strong>. Column-major: 1000 + (2 × 3 + 1) × 4 = <strong>1028</strong>.</p>
 <p>A[10][10], BA = 2000, w = 2, element A[3][4].</p>
 <p>Row-major: 2000 + (3 × 10 + 4) × 2 = <strong>2068</strong>. Column-major: 2000 + (4 × 10 + 3) × 2 = <strong>2086</strong>.</p></div>
-<div class="note def"><p><span class="lbl">Generalized Formulas</span><strong>2D Array with Arbitrary Lower Bounds [l_1 \dots u_1][l_2 \dots u_2]$:</strong><br/>Let total rows  = u_1 - l_1 + 1$ and columns  = u_2 - l_2 + 1$.</p>
+<div class="note def"><p><span class="lbl">Generalized Formulas</span><strong>2D Array with Arbitrary Lower Bounds A[l₁…u₁][l₂…u₂]:</strong><br/>Let total rows = u₁ − l₁ + 1 and columns cols = u₂ − l₂ + 1.</p>
 <div class="formula">Row-major:     BA + ((i − l₁) × cols + (j − l₂)) × w<br/>Column-major:  BA + ((j − l₂) × rows + (i − l₁)) × w</div>
 <p>Example: A[1…5][1…4], BA = 100, w = 2, element A[3][2]. rows = 5, cols = 4.</p>
 <p>Row-major: 100 + ((3 − 1) × 4 + (2 − 1)) × 2 = <strong>118</strong>. Column-major: 100 + ((2 − 1) × 5 + (3 − 1)) × 2 = <strong>114</strong>.</p></div>
@@ -282,7 +282,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 </tbody>
 </table></div>
 <p>The bold first row is the summary. Reading the next row: the element in row 0, column 4 has the value 9.</p>
-<div class="note def"><p><span class="lbl">Space Efficiency</span><strong>Sparse Matrix Triplet Space Criterion:</strong> A standard matrix requires  	imes n$ memory locations. The 3-tuple representation requires  	imes (t + 1)$ locations for $ non-zero elements. Triplet storage saves memory whenever (t + 1) &lt; m 	imes n$.</p></div>
+<div class="note def"><p><span class="lbl">Space Efficiency</span><strong>Sparse Matrix Triplet Space Criterion:</strong> A standard matrix requires m × n memory locations. The 3-tuple representation requires 3 × (t + 1) locations for t non-zero elements. Triplet storage saves memory whenever 3(t + 1) &lt; m × n.</p></div>
 <h3>Linked list representation</h3>
 <p>Each non-zero element is a node holding <code>row | column | value | next</code>. A pointer <code>first</code> points to the first node, and the nodes are linked in row order.</p>
 <pre><code>first → [0|4|9] → [1|1|8] → [2|0|4] → [3|3|2] → [5|5|5] → NULL</code></pre>
@@ -320,7 +320,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 </ol>
 <div class="note alert"><p><span class="lbl">Exam Tip</span><strong>Polynomial Addition Edge Case:</strong> When adding two terms with identical exponents, if their coefficients cancel out (sum equals 0), that term must not be inserted into the resultant polynomial.</p></div>
 <h3>Worked example</h3>
-<div class="note example"><p><span class="lbl">Polynomial Example</span>Adding (x) = 5x^3 + 3x + 2$ and (x) = 4x^3 + 2x^2 - 3x + 6$.</p></div>
+<div class="note example"><p><span class="lbl">Polynomial Example</span>Adding A(x) = 5x³ + 3x + 2 and B(x) = 4x³ + 2x² − 3x + 6.</p></div>
 <div class="wrap"><table class="wide">
 <thead><tr><th>Compare A[i], B[j]</th><th>Exponents</th><th>Action</th><th>C so far</th></tr></thead>
 <tbody>
@@ -543,7 +543,7 @@ for (i = 1; i &lt; n; i = i * 2)      // i doubles, so log₂ n times → O(log 
 </tbody>
 </table></div>
 <p><strong>Applications:</strong> job scheduling in an operating system, bandwidth management, network communication.</p>
-<div class="note def"><p><span class="lbl">Priority Queue</span>A priority queue is most efficiently implemented using a binary heap, providing (\log n)$ insertion and extraction of the extreme priority element.</p></div>
+<div class="note def"><p><span class="lbl">Priority Queue</span>A priority queue is most efficiently implemented using a binary heap, providing O(log n) insertion and extraction of the extreme priority element.</p></div>
 </section>
 <!-- ============ INFIX TO POSTFIX ============ -->
 <section class="topic" id="t-postfix">
