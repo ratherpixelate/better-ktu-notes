@@ -1,123 +1,84 @@
-# BetterKTUNotes (`better-ktu-notes`)
+# BetterKTUNotes
 
-A syllabus-aligned, Swiss-minimalist academic revision studio for APJ Abdul Kalam Technological University (KTU) 2024 Scheme (Semester 3).
+Exam-focused study notes for the **KTU 2024 Scheme, Semester 3**. Every page is built from the official syllabus, past question papers, and standard textbook references — written to be read on a phone the night before the exam.
 
-Built with **Next.js (App Router, Static Export)**, **React 19**, and **TypeScript**.
-
----
-
-## Live Website
-
-🔗 **[https://ratherpixelate.github.io/better-ktu-notes/](https://ratherpixelate.github.io/better-ktu-notes/)**
+**[→ Open the site](https://ratherpixelate.github.io/better-ktu-notes/)**
 
 ---
 
-## Subjects & Syllabus Coverage
+## What's covered
 
-Each technical subject follows the 4-module curriculum of the KTU 2024 scheme:
+| Subject | Code | Modules live | Topics |
+| :--- | :--- | :---: | :---: |
+| Computer Organisation & Architecture | PCITT302 | 4 / 4 | 48 |
+| Data Structures | PCITT303 | 2 / 4 | 30 |
+| Database Management Systems | PBITT304 | 4 / 4 | 41 |
+| Digital Electronics & Logic Design | GAEST305 | 3 / 4 | 32 |
+| **Total** | | **13 / 16** | **151** |
 
-1. **PCITT302: Computer Organisation and Architecture (COA)**
-   - Module 1: Basic Structure of Computers & Machine Instructions *(Available)*
-   - Module 2: Processor Organization, Datapaths & Pipelining *(Available)*
-   - Module 3: Memory Hierarchy & Cache Architectures *(Drafting)*
-   - Module 4: Parallel Processing & Multicore Architectures *(Drafting)*
+Each module page includes:
 
-2. **PCITT303: Data Structures (DS)**
-   - Module 1: Introduction to Data Structures, Arrays & Stacks *(Available)*
-   - Module 2: Linked Lists, Queues & Double-Ended Queues *(Drafting)*
-   - Module 3: Trees, Binary Search Trees & Traversals *(Drafting)*
-   - Module 4: Sorting, Searching & Hashing *(Drafting)*
+- Syllabus-aligned topic sections with revision checkboxes
+- Past paper questions mapped to the sections they test
+- Worked numericals, algorithm traces, and comparison tables
+- Expandable Q&A for likely exam questions with model answers
 
-3. **PBITT304: Database Management Systems (DBMS)**
-   - Module 1: Database Design and Creation *(Available)*
-   - Module 2: Relational Algebra & SQL Query Processing *(Drafting)*
-   - Module 3: Database Normalization & Functional Dependencies *(Drafting)*
-   - Module 4: Introduction to NoSQL Concepts & Architecture *(Drafting)*
+## How it's built
 
----
+| Layer | Stack |
+| :--- | :--- |
+| Framework | Next.js 16 (App Router, static export) |
+| Language | TypeScript, React 19 |
+| Search | Fuse.js — 176 indexed topics, `Ctrl+K` / `⌘K` |
+| Styling | Hand-written CSS, no component library |
+| Testing | Playwright, 11 E2E tests |
+| Hosting | GitHub Pages via GitHub Actions CI/CD |
+| Analytics | Cloudflare Web Analytics (cookie-free) |
 
-## Key Features
+The site is fully static — no server, no database, no login. `npm run build` outputs plain HTML into `out/` and the deploy workflow pushes it to Pages on every commit to `main`.
 
-- **Component-Driven Architecture**: Single source-of-truth React components for Navbar, Footer, NoteShell, TOC, and SearchModal.
-- **Swiss Monochrome Design**: High-contrast, typography-first academic interface with zero AI-slop gradients or fuzzy glassmorphism.
-- **Client-Side Revision Tracker**: Real-time progress tracker with `localStorage` persistence counting revision completion by module per subject.
-- **Global Instant Search (`Ctrl+K`)**: Fuzzy keyword search using Fuse.js covering 61 indexed syllabus topics, formulas, algorithms, and PYQ classifications.
-- **Static Export & Zero Downtime**: Fully pre-rendered static HTML via `next build` with GitHub Actions deployment to GitHub Pages.
-- **Legacy URL Continuity**: Auto-redirects preserve existing student bookmarks and search engine index links.
-- **Automated E2E Testing**: Headless Playwright test suite verifying theme toggling, search, revision state, and SVG rendering integrity.
-
----
-
-## Project Structure
+## Project structure
 
 ```
 better-ktu-notes/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml              # CI/CD: Automated build & deploy to GitHub Pages
 ├── content/
-│   ├── curriculum.json             # Canonical syllabus metadata for all 12 modules
-│   ├── search-index.json           # 61 indexed syllabus topics for instant search
-│   ├── toc-data.json               # Table of Contents structure by module
-│   └── notes-html/                 # Note content bodies (COA, DS, DBMS)
-├── public/
-│   ├── robots.txt                  # Search engine crawler instructions
-│   ├── sitemap.xml                 # XML sitemap with clean note URLs
-│   ├── .nojekyll                   # Bypasses Jekyll on GitHub Pages
-│   └── *.html                      # Backward-compatibility redirect files
+│   ├── curriculum.json          # Syllabus metadata for all modules
+│   ├── search-index.json        # Fuse.js search corpus
+│   ├── toc-data.json            # Table of contents per module
+│   └── notes-html/              # Static HTML content for each module
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx              # Root HTML layout, SEO metadata & fonts
-│   │   ├── page.tsx                # Revision dashboard & subject portal
-│   │   └── notes/[slug]/page.tsx   # Dynamic static note page renderer
+│   │   ├── layout.tsx           # Root layout, metadata, fonts
+│   │   ├── page.tsx             # Home — progress dashboard
+│   │   └── notes/[slug]/page.tsx
 │   ├── components/
-│   │   ├── layout/                 # Navbar, Footer
-│   │   ├── home/                   # ProgressOverview, SubjectSection, ModuleCard
-│   │   ├── notes/                  # NoteShell, TableOfContents, RevisionCheckbox
-│   │   └── search/                 # SearchModal (Fuse.js)
-│   ├── hooks/
-│   │   ├── useRevisionProgress.ts  # Reactive localStorage revision state hook
-│   │   └── useTheme.ts             # Dark/Light mode theme manager
-│   └── styles/
-│       └── globals.css             # Swiss editorial design tokens & layout
-├── tests/
-│   └── e2e.spec.ts                 # Playwright end-to-end test suite
-├── next.config.mjs                 # Next.js static export configuration
-├── playwright.config.ts            # Playwright test runner configuration
-├── package.json
-└── tsconfig.json
+│   │   ├── home/                # ModuleCard, ProgressOverview, SubjectSection
+│   │   ├── layout/              # Navbar, Footer
+│   │   ├── notes/               # NoteShell, TableOfContents, RevisionCheckbox
+│   │   └── search/              # SearchModal
+│   ├── hooks/                   # useRevisionProgress, useTheme
+│   └── styles/globals.css       # All styles — tokens, layout, typography
+├── tests/e2e.spec.ts            # Playwright end-to-end suite
+├── public/                      # Static assets, sitemap, redirects
+└── .github/workflows/deploy.yml # CI/CD pipeline
 ```
 
----
+## Getting started
 
-## Developer Workflow
-
-### 1. Local Development
 ```bash
 # Install dependencies
 npm install
 
-# Start local Next.js dev server at http://localhost:3000
+# Start the dev server on http://localhost:3000
 npm run dev
-```
 
-### 2. Static Build & Export
-```bash
-# Build production static export into ./out directory
+# Production build (outputs to ./out)
 npm run build
-```
 
-### 3. End-to-End Testing (Playwright)
-```bash
-# Run all E2E tests headlessly
+# Run the E2E test suite
 npx playwright test
-
-# Run tests with interactive UI
-npx playwright test --ui
 ```
-
----
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on drafting new syllabus modules, formatting formulas, adding block diagrams, and submitting PRs.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding new modules and submitting changes.
