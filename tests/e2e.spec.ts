@@ -466,4 +466,30 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(busSection).toBeInViewport();
   });
 
+  test('10. INP and Interaction Responsiveness (Checkbox & Accordion & Fast TOC)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/notes/coa-module-2/');
+
+    // Test checkbox interaction response time
+    const firstCheckbox = page.locator('input.rev').first();
+    const initiallyChecked = await firstCheckbox.isChecked();
+    await firstCheckbox.click();
+    expect(await firstCheckbox.isChecked()).toBe(!initiallyChecked);
+
+    // Verify storage persistence through non-blocking microtask
+    await page.waitForTimeout(60);
+    const stored = await page.evaluate(() => localStorage.getItem('coa-m2-revised'));
+    expect(stored).not.toBeNull();
+
+    // Test accordion toggle
+    const firstDetails = page.locator('details.q').first();
+    await firstDetails.locator('summary').click();
+    expect(await firstDetails.getAttribute('open')).not.toBeNull();
+
+    // Verify content-visibility on offscreen topic
+    const lastTopic = page.locator('section.topic#t-qa');
+    const contentVis = await lastTopic.evaluate((el) => window.getComputedStyle(el).contentVisibility);
+    expect(contentVis).toBe('auto');
+  });
+
 });

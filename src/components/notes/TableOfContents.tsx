@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, startTransition } from 'react';
 
 export interface TocItem {
   id: string;
@@ -127,9 +127,15 @@ export function TableOfContents({
       return;
     }
     activeIdRef.current = id;
-    setActiveId(id);
-    if (window.matchMedia('(max-width: 899px)').matches) {
-      centerPill(id, true);
+    // Non-blocking transition lets browser paint immediate click feedback (< 16ms)
+    startTransition(() => {
+      setActiveId(id);
+    });
+
+    if (isMobilePillBar()) {
+      requestAnimationFrame(() => {
+        centerPill(id, true);
+      });
     }
 
     // Lock spy during smooth-scroll transition so intermediate sections do not flicker

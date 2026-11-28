@@ -24,33 +24,46 @@ export function NoteShell({
   const router = useRouter();
   const { revisedTopics, toggleTopic } = useRevisionProgress(storageKey);
   const mainRef = useRef<HTMLDivElement>(null);
+  const toggleTopicRef = useRef(toggleTopic);
 
-  // Sync checkboxes with reactive state & listen to changes
+  useEffect(() => {
+    toggleTopicRef.current = toggleTopic;
+  }, [toggleTopic]);
+
+  // Fast, minimal DOM sync for checkboxes (only writes if state differs)
   useEffect(() => {
     const main = mainRef.current;
     if (!main) return;
 
-    // 1. Sync checked attribute
     const boxes = main.querySelectorAll<HTMLInputElement>('input.rev');
     boxes.forEach((box) => {
       const secId = box.getAttribute('data-sec') || box.id.replace('r-', 't-');
       if (secId) {
-        box.checked = !!revisedTopics[secId];
+        const shouldBeChecked = !!revisedTopics[secId];
+        if (box.checked !== shouldBeChecked) {
+          box.checked = shouldBeChecked;
+        }
       }
     });
+  }, [revisedTopics]);
 
-    // 2. Event listener for user toggling checkbox
+  // Attach stable event delegation listeners once on mount
+  useEffect(() => {
+    const main = mainRef.current;
+    if (!main) return;
+
+    // Fast delegation for checkbox changes
     const handleChange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       if (target && target.matches('input.rev')) {
         const secId = target.getAttribute('data-sec') || target.id.replace('r-', 't-');
         if (secId) {
-          toggleTopic(secId);
+          toggleTopicRef.current(secId);
         }
       }
     };
 
-    // 3. Delegate internal note link clicks through Next.js router
+    // Delegate internal note link clicks through Next.js router
     const handleLinkClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest('a');
       if (!target) return;
@@ -70,67 +83,14 @@ export function NoteShell({
       router.push(cleanUrl);
     };
 
-    // 4. Smooth accordion animation fallback for browsers without CSS interpolate-size
-    const handleSummaryClick = (e: MouseEvent) => {
-      if (typeof window !== 'undefined' && window.CSS?.supports?.('interpolate-size: allow-keywords')) {
-        return;
-      }
-      const summary = (e.target as HTMLElement).closest('details.q summary');
-      if (!summary) return;
-      const details = summary.closest('details.q') as HTMLDetailsElement | null;
-      if (!details) return;
-
-      const ans = details.querySelector<HTMLElement>('.ans');
-      if (!ans) return;
-
-      e.preventDefault();
-
-      if (details.open) {
-        const startHeight = details.offsetHeight;
-        const endHeight = (summary as HTMLElement).offsetHeight;
-        details.style.overflow = 'hidden';
-
-        const anim = details.animate(
-          [
-            { height: `${startHeight}px`, opacity: 1 },
-            { height: `${endHeight}px`, opacity: 0 }
-          ],
-          { duration: 200, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
-        );
-        anim.onfinish = () => {
-          details.open = false;
-          details.style.height = '';
-          details.style.overflow = '';
-        };
-      } else {
-        details.open = true;
-        const endHeight = details.offsetHeight;
-        const startHeight = (summary as HTMLElement).offsetHeight;
-        details.style.overflow = 'hidden';
-
-        const anim = details.animate(
-          [
-            { height: `${startHeight}px`, opacity: 0 },
-            { height: `${endHeight}px`, opacity: 1 }
-          ],
-          { duration: 220, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
-        );
-        anim.onfinish = () => {
-          details.style.height = '';
-          details.style.overflow = '';
-        };
-      }
-    };
-
     main.addEventListener('change', handleChange);
     main.addEventListener('click', handleLinkClick);
-    main.addEventListener('click', handleSummaryClick);
+
     return () => {
       main.removeEventListener('change', handleChange);
       main.removeEventListener('click', handleLinkClick);
-      main.removeEventListener('click', handleSummaryClick);
     };
-  }, [revisedTopics, toggleTopic, router]);
+  }, [router]);
 
   return (
     <div className="shell">

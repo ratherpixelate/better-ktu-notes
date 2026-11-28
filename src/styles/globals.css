@@ -1960,6 +1960,8 @@ ul.t li, ol.t li {
 section.topic {
   padding-top: 48px;
   scroll-margin-top: calc(var(--nav-height) + 16px);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
 }
 
 section.topic + section.topic {

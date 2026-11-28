@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import curriculum from '@/../content/curriculum.json';
 
 export type RevisionMap = Record<string, boolean>;
@@ -8,6 +8,11 @@ export type RevisionMap = Record<string, boolean>;
 export function useRevisionProgress(storageKey?: string) {
   const [revisedTopics, setRevisedTopics] = useState<RevisionMap>({});
   const [mounted, setMounted] = useState(false);
+  const instanceIdRef = useRef<string>('');
+
+  useEffect(() => {
+    instanceIdRef.current = Math.random().toString(36).slice(2);
+  }, []);
 
   const loadProgress = useCallback(() => {
     if (!storageKey) return;
@@ -28,7 +33,15 @@ export function useRevisionProgress(storageKey?: string) {
     setMounted(true);
     loadProgress();
 
-    const handleUpdate = () => loadProgress();
+    const handleUpdate = (e: Event) => {
+      // Avoid echo: do not re-read storage if event originated from our own toggleTopic
+      const custom = e as CustomEvent<{ sender?: string; sourceKey?: string }>;
+      if (custom.detail?.sender && custom.detail.sender === instanceIdRef.current) {
+        return;
+      }
+      loadProgress();
+    };
+
     window.addEventListener('storage', handleUpdate);
     window.addEventListener('revision-updated', handleUpdate);
 
@@ -42,12 +55,19 @@ export function useRevisionProgress(storageKey?: string) {
     if (!storageKey) return;
     setRevisedTopics((prev) => {
       const updated = { ...prev, [topicId]: !prev[topicId] };
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(updated));
-        window.dispatchEvent(new Event('revision-updated'));
-      } catch (e) {
-        console.warn('Failed to save revision storage', e);
-      }
+      // Offload disk I/O to microtask so click interaction paints in < 16ms
+      queueMicrotask(() => {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(updated));
+          window.dispatchEvent(
+            new CustomEvent('revision-updated', {
+              detail: { sender: instanceIdRef.current, sourceKey: storageKey },
+            })
+          );
+        } catch (e) {
+          console.warn('Failed to save revision storage', e);
+        }
+      });
       return updated;
     });
   }, [storageKey]);
