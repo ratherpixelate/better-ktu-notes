@@ -68,6 +68,15 @@ const NOTES_CONFIG: Record<string, NoteConfig> = {
     totalTopics: 14,
     tocKey: 'ds-m1',
   },
+  'ds-module-2': {
+    slug: 'ds-module-2',
+    moduleCode: 'PCITT303 · Module 2',
+    title: 'DS Module 2: Searching, Sorting and Hash Tables',
+    desc: 'Linear and binary search, comparison-based sorts (bubble, selection, insertion, quick, merge, heap), hashing techniques (open and closed), and collision resolution.',
+    storageKey: 'ds-m2-revised',
+    totalTopics: 16,
+    tocKey: 'ds-m2',
+  },
   'dbms-module-1': {
     slug: 'dbms-module-1',
     moduleCode: 'PBITT304 · Module 1',

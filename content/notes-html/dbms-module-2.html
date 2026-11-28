@@ -1,390 +1,357 @@
 <header class="top">
-  <p class="eyebrow">PBITT304 · Database Management Systems</p>
-  <h1>Module 2: Normalization and SQL Queries</h1>
-  <p class="lede">Syllabus coverage: functional dependencies, normal forms (1NF, 2NF, 3NF, BCNF, 4NF, 5NF), lossless join and dependency preservation decomposition, SQL queries, joins, aggregates, and views.</p>
+<p class="eyebrow">PBITT304 · Database Management Systems</p>
+<h1>Module 2: Normalization and SQL queries</h1>
+<p class="lede">Exam-oriented notes for KTU PBITT304, Module 2 (normalization and SQL queries), based on Elmasri and Navathe chapters 8, 10 and 11.</p>
 </header>
-
 <section class="topic" id="t-why">
-  <div class="head"><h2>Why normalise: design guidelines and anomalies</h2><label class="rev" for="r-why"><input class="rev" type="checkbox" id="r-why" data-sec="t-why">revised</label></div>
-  <div class="chips"><span class="chip">Explain</span><span class="chip">Example</span></div>
-  <div class="note def"><p><span class="lbl">Normalization</span>The process of <strong>decomposing</strong> "bad" relations into smaller relations, using keys and functional dependencies, so that redundancy and anomalies are removed. A <strong>normal form</strong> is a condition on keys and FDs that a relation must meet.</p></div>
-  <h3>Four informal guidelines</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Guideline</th><th>Meaning</th></tr></thead>
-    <tbody>
-      <tr><td><strong>1. Clear semantics</strong></td><td>Each tuple represents <strong>one</strong> entity or relationship instance. Do not mix attributes of different entities in one relation. Use foreign keys to refer to other entities.</td></tr>
-      <tr><td><strong>2. No anomalies</strong></td><td>Design so there are no insertion, deletion or update anomalies. If one is unavoidable, note it so applications handle it.</td></tr>
-      <tr><td><strong>3. Few nulls</strong></td><td>Avoid attributes that are often NULL. Put them in a separate relation with the key. Nulls arise when a value is not applicable, unknown, or known but unavailable.</td></tr>
-      <tr><td><strong>4. No spurious tuples</strong></td><td>Relations must satisfy the <strong>lossless join</strong> condition: a natural join of the decomposed relations must not create extra tuples.</td></tr>
-    </tbody>
-  </table></div>
-
-  <h3>Update anomalies</h3>
-  <p>They appear when information is stored redundantly. Take <code>EMP_PROJ(Emp#, Proj#, Ename, Pname, No_hours)</code>, where the project name repeats for every employee on the project and the employee name repeats for every project.</p>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Anomaly</th><th>What goes wrong in EMP_PROJ</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Insertion</strong></td><td>You cannot insert a project unless an employee is assigned to it, and cannot insert an employee who has no project yet.</td></tr>
-      <tr><td><strong>Deletion</strong></td><td>Deleting a project deletes every employee tuple that works only on it. Deleting the last employee on a project also deletes the project.</td></tr>
-      <tr><td><strong>Modification</strong></td><td>Renaming project P1 from "Billing" to "Customer-Accounting" means changing every row for P1 (100 rows if 100 employees work on it). Miss one and the data is inconsistent.</td></tr>
-    </tbody>
-  </table></div>
-  <p>Redundancy also wastes storage. The usual cause is a relation made by joining two entities, such as EMP_DEPT (employee plus department data) or EMP_PROJ.</p>
-  <div class="note def"><p><span class="lbl">Two properties of a good decomposition</span>(a) <strong>Lossless (non-additive) join</strong>: extremely important, never sacrificed. (b) <strong>Dependency preservation</strong>: less strict, may be sacrificed. Both are explained in the decomposition section.</p></div>
+<div class="head"><h2>Why normalise: design guidelines and anomalies</h2><label class="rev" for="r-why"><input class="rev" data-sec="t-why" id="r-why" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Explain</span><span class="chip">Example</span></div>
+<div class="note def"><p><span class="lbl">Normalization</span>The process of <strong>decomposing</strong> "bad" relations into smaller relations, using keys and functional dependencies, so that redundancy and anomalies are removed. A <strong>normal form</strong> is a condition on keys and FDs that a relation must meet.</p></div>
+<h3>Four informal guidelines</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Guideline</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Clear semantics</strong></td><td>Each tuple represents <strong>one</strong> entity or relationship instance. Do not mix attributes of different entities in one relation. Use foreign keys to refer to other entities.</td></tr>
+<tr><td><strong>2. No anomalies</strong></td><td>Design so there are no insertion, deletion or update anomalies. If one is unavoidable, note it so applications handle it.</td></tr>
+<tr><td><strong>3. Few nulls</strong></td><td>Avoid attributes that are often NULL. Put them in a separate relation with the key. Nulls arise when a value is not applicable, unknown, or known but unavailable.</td></tr>
+<tr><td><strong>4. No spurious tuples</strong></td><td>Relations must satisfy the <strong>lossless join</strong> condition: a natural join of the decomposed relations must not create extra tuples.</td></tr>
+</tbody>
+</table></div>
+<h3>Update anomalies</h3>
+<p>They appear when information is stored redundantly. Take <code>EMP_PROJ(Emp#, Proj#, Ename, Pname, No_hours)</code>, where the project name repeats for every employee on the project and the employee name repeats for every project.</p>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Anomaly</th><th>What goes wrong in EMP_PROJ</th></tr></thead>
+<tbody>
+<tr><td><strong>Insertion</strong></td><td>You cannot insert a project unless an employee is assigned to it, and cannot insert an employee who has no project yet.</td></tr>
+<tr><td><strong>Deletion</strong></td><td>Deleting a project deletes every employee tuple that works only on it. Deleting the last employee on a project also deletes the project.</td></tr>
+<tr><td><strong>Modification</strong></td><td>Renaming project P1 from "Billing" to "Customer-Accounting" means changing every row for P1 (100 rows if 100 employees work on it). Miss one and the data is inconsistent.</td></tr>
+</tbody>
+</table></div>
+<p>Redundancy also wastes storage. The usual cause is a relation made by joining two entities, such as EMP_DEPT (employee plus department data) or EMP_PROJ.</p>
+<div class="note def"><p><span class="lbl">Two properties of a good decomposition</span>(a) <strong>Lossless (non-additive) join</strong>: extremely important, never sacrificed. (b) <strong>Dependency preservation</strong>: less strict, may be sacrificed. Both are explained in the decomposition section.</p></div>
 </section>
-
 <section class="topic" id="t-fd">
-  <div class="head"><h2>Functional dependencies</h2><label class="rev" for="r-fd"><input class="rev" type="checkbox" id="r-fd" data-sec="t-fd">revised</label></div>
-  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip add">Added</span></div>
-  <div class="note def"><p><span class="lbl">Functional dependency</span>X → Y holds in R if, whenever two tuples have the same value for X, they <strong>must</strong> have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X <strong>functionally determines</strong> Y.</p></div>
-  <ul class="t">
-    <li>An FD is a <strong>constraint</strong> on all valid states, derived from the meaning of the data. You cannot prove one from a single state, you can only disprove it.</li>
-    <li>If K is a key of R, then K → every attribute of R.</li>
-    <li>Examples: SSN → ENAME; PNUMBER → {PNAME, PLOCATION}; {SSN, PNUMBER} → HOURS.</li>
-  </ul>
-
-  <h3>Inference rules (Armstrong's axioms)</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Rule</th><th>Statement</th></tr></thead>
-    <tbody>
-      <tr><td><strong>IR1 Reflexive</strong></td><td>If Y ⊆ X then X → Y</td></tr>
-      <tr><td><strong>IR2 Augmentation</strong></td><td>If X → Y then XZ → YZ</td></tr>
-      <tr><td><strong>IR3 Transitive</strong></td><td>If X → Y and Y → Z then X → Z</td></tr>
-      <tr><td>Decomposition</td><td>If X → YZ then X → Y and X → Z</td></tr>
-      <tr><td>Union</td><td>If X → Y and X → Z then X → YZ</td></tr>
-      <tr><td>Pseudotransitivity</td><td>If X → Y and WY → Z then WX → Z</td></tr>
-    </tbody>
-  </table></div>
-  <p>IR1 to IR3 are <strong>sound</strong> (they only produce valid FDs) and <strong>complete</strong> (every FD that follows from F can be derived with them). The last three rules can be derived from IR1 to IR3.</p>
-
-  <h3>Closure</h3>
-  <ul class="t">
-    <li><strong>F<sup>+</sup></strong>, the closure of a set of FDs, is the set of all FDs that can be inferred from F.</li>
-    <li><strong>X<sup>+</sup></strong>, the closure of an attribute set X under F, is the set of all attributes that X functionally determines.</li>
-  </ul>
-  <div class="note add"><p><span class="lbl">Added · method</span><strong>Computing X<sup>+</sup>.</strong></p>
-  <ol class="t">
-    <li>Start with the result set equal to X.</li>
-    <li>Look at each FD in F. If its left side is inside the result set, add its right side to the result set.</li>
-    <li>Repeat step 2 until a full pass adds nothing new. That set is X<sup>+</sup>.</li></ol>
-  <p><strong>Example.</strong> R(A, B, C, D, E), F = {A→B, A→C, CD→E, B→D, E→A}. Find (CD)<sup>+</sup>. Start {C, D}. CD→E adds E, giving {C, D, E}. E→A adds A, giving {A, C, D, E}. A→B adds B. Result: (CD)<sup>+</sup> = {A, B, C, D, E}, so CD is a superkey.</p>
-  <p><strong>Is an FD implied?</strong> X → Y is implied by F exactly when Y ⊆ X<sup>+</sup>. With the F above: is A → E implied? A<sup>+</sup> = {A, B, C, D, E} contains E, so <strong>yes</strong>. Is B → C implied? B<sup>+</sup> = {B, D} does not contain C, so <strong>no</strong>. Both closures were checked in code.</p></div>
-
-  <h3>Finding candidate keys</h3>
-  <div class="note add"><p><span class="lbl">Added · method</span></p>
-  <ol class="t">
-    <li>List the attributes that never appear on the right side of any FD. They must be in <strong>every</strong> key.</li>
-    <li>Attributes that appear only on right sides are in <strong>no</strong> key.</li>
-    <li>Compute the closure of the must-have attributes. If it is every attribute, that set is the key.</li>
-    <li>If not, add one more attribute at a time (then pairs) and test the closure. Keep only <strong>minimal</strong> sets. Every minimal set whose closure is all of R is a candidate key.</li></ol>
-  <p><strong>Example 1.</strong> F = {A→B, B→C} on ABC: A is never on a right side and A<sup>+</sup> = ABC, so the only key is <strong>A</strong>.</p>
-  <p><strong>Example 2.</strong> F = {A→BC, C→B, D→E, E→D} on ABCDE: A never appears on a right side, so it is in every key. A<sup>+</sup> = ABC, and D<sup>+</sup> = DE = E<sup>+</sup>, so A must be combined with D or E. Keys: <strong>AD and AE</strong>.</p>
-  <p><strong>Example.</strong> R(A, B, C, D, E), F = {AB→C, C→D, D→B, D→E}. Keys: <strong>AB, AC, AD</strong>. A is never on a right side. (AB)<sup>+</sup>: AB→C, C→D, D→E gives every attribute. Since C→D→B, once A is present either C or D can replace B, so AC and AD are keys too.</p></div>
-
-  <h3>Equivalence and minimal cover</h3>
-  <ul class="t">
-    <li>F <strong>covers</strong> G if every FD in G can be inferred from F. F and G are <strong>equivalent</strong> if each covers the other, that is F<sup>+</sup> = G<sup>+</sup>.</li>
-    <li>A set of FDs is <strong>minimal</strong> (a minimal cover) if: (1) every FD has a <strong>single attribute on the right</strong>; (2) no FD can be <strong>removed</strong> without changing the closure; (3) no attribute can be <strong>removed from a left side</strong> without changing the closure.</li>
-    <li>Every set has at least one equivalent minimal set, and there can be several.</li>
-    <li><strong>Canonical cover:</strong> a minimal cover in which FDs with the same left side are combined by union, so each left side is unique.</li>
-  </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>Some lecture slides say "there is no simple algorithm for computing a minimal set of FDs". That is misleading: the standard three-step procedure below works. Different books also swap the words "minimal" and "canonical" cover, so write the definition you use.</p></div>
-  <div class="note add"><p><span class="lbl">Added · method</span><strong>Minimal cover in three steps.</strong></p>
-  <ol class="t">
-    <li><strong>Split right sides.</strong> Replace X → YZ by X → Y and X → Z.</li>
-    <li><strong>Remove extraneous left-side attributes.</strong> For an FD with more than one left attribute, try dropping one attribute A. If the right side is still in the closure of the reduced left side (using all FDs), A is extraneous and is dropped.</li>
-    <li><strong>Remove redundant FDs.</strong> Try deleting each FD. If its right side is still in the closure of its left side under the remaining FDs, delete it for good.</li></ol>
-  <p><strong>Example 4.</strong> F = {A→BC, B→C, A→B, AB→C}. Step 1: A→B, A→C, B→C, A→B, AB→C. Step 2: in AB→C, B alone gives C, so A is extraneous: it becomes B→C. Step 3: A→C is redundant (A→B→C). Result: <strong>{A→B, B→C}</strong>.</p>
-  <p><strong>Example 5.</strong> F = {B→A, D→A, AB→D}. Step 2: B<sup>+</sup> already gives A, then AB→D fires, so A is extraneous in AB→D, which becomes B→D. Step 3: B→A is redundant (B→D→A). Result: <strong>{D→A, B→D}</strong>, and the only key is B.</p></div>
+<div class="head"><h2>Functional dependencies</h2><label class="rev" for="r-fd"><input class="rev" data-sec="t-fd" id="r-fd" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span></div>
+<div class="note def"><p><span class="lbl">Functional dependency</span>X → Y holds in R if, whenever two tuples have the same value for X, they <strong>must</strong> have the same value for Y. That is, for any t1, t2 in any state r(R): t1[X] = t2[X] implies t1[Y] = t2[Y]. We say X <strong>functionally determines</strong> Y.</p></div>
+<ul class="t">
+<li>An FD is a <strong>constraint</strong> on all valid states, derived from the meaning of the data. You cannot prove one from a single state, you can only disprove it.</li>
+<li>If K is a key of R, then K → every attribute of R.</li>
+<li>Examples: SSN → ENAME; PNUMBER → {PNAME, PLOCATION}; {SSN, PNUMBER} → HOURS.</li>
+</ul>
+<h3>Inference rules (Armstrong's axioms)</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Rule</th><th>Statement</th></tr></thead>
+<tbody>
+<tr><td><strong>IR1 Reflexive</strong></td><td>If Y ⊆ X then X → Y</td></tr>
+<tr><td><strong>IR2 Augmentation</strong></td><td>If X → Y then XZ → YZ</td></tr>
+<tr><td><strong>IR3 Transitive</strong></td><td>If X → Y and Y → Z then X → Z</td></tr>
+<tr><td>Decomposition</td><td>If X → YZ then X → Y and X → Z</td></tr>
+<tr><td>Union</td><td>If X → Y and X → Z then X → YZ</td></tr>
+<tr><td>Pseudotransitivity</td><td>If X → Y and WY → Z then WX → Z</td></tr>
+</tbody>
+</table></div>
+<p>IR1 to IR3 are <strong>sound</strong> (they only produce valid FDs) and <strong>complete</strong> (every FD that follows from F can be derived with them). The last three rules can be derived from IR1 to IR3.</p>
+<h3>Closure</h3>
+<ul class="t">
+<li><strong>F<sup>+</sup></strong>, the closure of a set of FDs, is the set of all FDs that can be inferred from F.</li>
+<li><strong>X<sup>+</sup></strong>, the closure of an attribute set X under F, is the set of all attributes that X functionally determines.</li>
+</ul>
+<div class="note"><p><span class="lbl">Method</span><strong>Computing X<sup>+</sup>.</strong></p>
+<ol class="t">
+<li>Start with the result set equal to X.</li>
+<li>Look at each FD in F. If its left side is inside the result set, add its right side to the result set.</li>
+<li>Repeat step 2 until a full pass adds nothing new. That set is X<sup>+</sup>.</li></ol>
+<p><strong>Example.</strong> R(A, B, C, D, E), F = {A→B, A→C, CD→E, B→D, E→A}. Find (CD)<sup>+</sup>. Start {C, D}. CD→E adds E, giving {C, D, E}. E→A adds A, giving {A, C, D, E}. A→B adds B. Result: (CD)<sup>+</sup> = {A, B, C, D, E}, so CD is a superkey.</p>
+<p><strong>Is an FD implied?</strong> X → Y is implied by F exactly when Y ⊆ X<sup>+</sup>. With the F above: is A → E implied? A<sup>+</sup> = {A, B, C, D, E} contains E, so <strong>yes</strong>. Is B → C implied? B<sup>+</sup> = {B, D} does not contain C, so <strong>no</strong>. Both closures were checked in code.</p></div>
+<h3>Finding candidate keys</h3>
+<div class="note">
+<ol class="t">
+<li>List the attributes that never appear on the right side of any FD. They must be in <strong>every</strong> key.</li>
+<li>Attributes that appear only on right sides are in <strong>no</strong> key.</li>
+<li>Compute the closure of the must-have attributes. If it is every attribute, that set is the key.</li>
+<li>If not, add one more attribute at a time (then pairs) and test the closure. Keep only <strong>minimal</strong> sets. Every minimal set whose closure is all of R is a candidate key.</li></ol>
+<p><strong>Example 1.</strong> F = {A→B, B→C} on ABC: A is never on a right side and A<sup>+</sup> = ABC, so the only key is <strong>A</strong>.</p>
+<p><strong>Example 2.</strong> F = {A→BC, C→B, D→E, E→D} on ABCDE: A never appears on a right side, so it is in every key. A<sup>+</sup> = ABC, and D<sup>+</sup> = DE = E<sup>+</sup>, so A must be combined with D or E. Keys: <strong>AD and AE</strong>.</p>
+<p><strong>Example.</strong> R(A, B, C, D, E), F = {AB→C, C→D, D→B, D→E}. Keys: <strong>AB, AC, AD</strong>. A is never on a right side. (AB)<sup>+</sup>: AB→C, C→D, D→E gives every attribute. Since C→D→B, once A is present either C or D can replace B, so AC and AD are keys too.</p></div>
+<h3>Equivalence and minimal cover</h3>
+<ul class="t">
+<li>F <strong>covers</strong> G if every FD in G can be inferred from F. F and G are <strong>equivalent</strong> if each covers the other, that is F<sup>+</sup> = G<sup>+</sup>.</li>
+<li>A set of FDs is <strong>minimal</strong> (a minimal cover) if: (1) every FD has a <strong>single attribute on the right</strong>; (2) no FD can be <strong>removed</strong> without changing the closure; (3) no attribute can be <strong>removed from a left side</strong> without changing the closure.</li>
+<li>Every set has at least one equivalent minimal set, and there can be several.</li>
+<li><strong>Canonical cover:</strong> a minimal cover in which FDs with the same left side are combined by union, so each left side is unique.</li>
+</ul>
+<div class="note"><p><span class="lbl">Note</span>The standard three-step procedure below works for any set of FDs. Different books also swap the words "minimal" and "canonical" cover, so write the definition you use.</p></div>
+<div class="note"><p><span class="lbl">Method</span><strong>Minimal cover in three steps.</strong></p>
+<ol class="t">
+<li><strong>Split right sides.</strong> Replace X → YZ by X → Y and X → Z.</li>
+<li><strong>Remove extraneous left-side attributes.</strong> For an FD with more than one left attribute, try dropping one attribute A. If the right side is still in the closure of the reduced left side (using all FDs), A is extraneous and is dropped.</li>
+<li><strong>Remove redundant FDs.</strong> Try deleting each FD. If its right side is still in the closure of its left side under the remaining FDs, delete it for good.</li></ol>
+<p><strong>Example 4.</strong> F = {A→BC, B→C, A→B, AB→C}. Step 1: A→B, A→C, B→C, A→B, AB→C. Step 2: in AB→C, B alone gives C, so A is extraneous: it becomes B→C. Step 3: A→C is redundant (A→B→C). Result: <strong>{A→B, B→C}</strong>.</p>
+<p><strong>Example 5.</strong> F = {B→A, D→A, AB→D}. Step 2: B<sup>+</sup> already gives A, then AB→D fires, so A is extraneous in AB→D, which becomes B→D. Step 3: B→A is redundant (B→D→A). Result: <strong>{D→A, B→D}</strong>, and the only key is B.</p></div>
 </section>
-
 <section class="topic" id="t-nf">
-  <div class="head"><h2>Normal forms: 1NF, 2NF, 3NF, BCNF</h2><label class="rev" for="r-nf"><input class="rev" type="checkbox" id="r-nf" data-sec="t-nf">revised</label></div>
-  <div class="chips"><span class="chip">Define</span><span class="chip">Differentiate</span><span class="chip">Numerical</span><span class="chip fix">Check</span></div>
-  <figure class="fig">
-<svg viewBox="0 0 720 360" role="img" aria-labelledby="fig_nft fig_nfd"><title id="fig_nft">Normal form hierarchy</title><desc id="fig_nfd">Six nested boxes: 1NF contains 2NF, which contains 3NF, then BCNF, 4NF and 5NF. Each label states the extra condition for that form.</desc><defs><marker id="fig_nfah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs>
-<rect class="s-box2" x="10" y="8" width="700" height="346" rx="6"/>
-<text class="s-t" x="20" y="30" text-anchor="start" >1NF</text>
-<text class="s-s" x="74" y="30" text-anchor="start" >atomic values only: no composite, multivalued or nested attributes</text>
-<rect class="s-box" x="32" y="44" width="656" height="304" rx="6"/>
-<text class="s-t" x="42" y="66" text-anchor="start" >2NF</text>
-<text class="s-s" x="96" y="66" text-anchor="start" >1NF + no partial dependency: every non-prime attribute depends on the whole of every key</text>
-<rect class="s-box2" x="54" y="80" width="612" height="262" rx="6"/>
-<text class="s-t" x="64" y="102" text-anchor="start" >3NF</text>
-<text class="s-s" x="118" y="102" text-anchor="start" >2NF + no transitive dependency: for every FD X→A, X is a superkey or A is prime</text>
-<rect class="s-box" x="76" y="116" width="568" height="220" rx="6"/>
-<text class="s-t" x="86" y="138" text-anchor="start" >BCNF</text>
-<text class="s-s" x="140" y="138" text-anchor="start" >3NF + for every FD X→A, X is a superkey (no exception for prime A)</text>
-<rect class="s-box2" x="98" y="152" width="524" height="178" rx="6"/>
-<text class="s-t" x="108" y="174" text-anchor="start" >4NF</text>
-<text class="s-s" x="162" y="174" text-anchor="start" >BCNF + every non-trivial MVD X→→Y has X a superkey</text>
-<rect class="s-box" x="120" y="188" width="480" height="136" rx="6"/>
-<text class="s-t" x="130" y="210" text-anchor="start" >5NF</text>
-<text class="s-s" x="184" y="210" text-anchor="start" >4NF + every non-trivial join dependency is implied by the keys</text>
+<div class="head"><h2>Normal forms: 1NF, 2NF, 3NF, BCNF</h2><label class="rev" for="r-nf"><input class="rev" data-sec="t-nf" id="r-nf" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Differentiate</span><span class="chip">Numerical</span></div>
+<figure class="fig">
+<svg aria-labelledby="fig_nft fig_nfd" role="img" viewbox="0 0 720 360"><title id="fig_nft">Normal form hierarchy</title><desc id="fig_nfd">Six nested boxes: 1NF contains 2NF, which contains 3NF, then BCNF, 4NF and 5NF. Each label states the extra condition for that form.</desc><defs><marker id="fig_nfah" markerheight="6" markerwidth="6" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="s-head" d="M0 0L10 5L0 10z"></path></marker></defs>
+<rect class="s-box2" height="346" rx="6" width="700" x="10" y="8"></rect>
+<text class="s-t" text-anchor="start" x="20" y="30">1NF</text>
+<text class="s-s" text-anchor="start" x="74" y="30">atomic values only: no composite, multivalued or nested attributes</text>
+<rect class="s-box" height="304" rx="6" width="656" x="32" y="44"></rect>
+<text class="s-t" text-anchor="start" x="42" y="66">2NF</text>
+<text class="s-s" text-anchor="start" x="96" y="66">1NF + no partial dependency: every non-prime attribute depends on the whole of every key</text>
+<rect class="s-box2" height="262" rx="6" width="612" x="54" y="80"></rect>
+<text class="s-t" text-anchor="start" x="64" y="102">3NF</text>
+<text class="s-s" text-anchor="start" x="118" y="102">2NF + no transitive dependency: for every FD X→A, X is a superkey or A is prime</text>
+<rect class="s-box" height="220" rx="6" width="568" x="76" y="116"></rect>
+<text class="s-t" text-anchor="start" x="86" y="138">BCNF</text>
+<text class="s-s" text-anchor="start" x="140" y="138">3NF + for every FD X→A, X is a superkey (no exception for prime A)</text>
+<rect class="s-box2" height="178" rx="6" width="524" x="98" y="152"></rect>
+<text class="s-t" text-anchor="start" x="108" y="174">4NF</text>
+<text class="s-s" text-anchor="start" x="162" y="174">BCNF + every non-trivial MVD X→→Y has X a superkey</text>
+<rect class="s-box" height="136" rx="6" width="480" x="120" y="188"></rect>
+<text class="s-t" text-anchor="start" x="130" y="210">5NF</text>
+<text class="s-s" text-anchor="start" x="184" y="210">4NF + every non-trivial join dependency is implied by the keys</text>
 </svg>
-    <figcaption>Each normal form is strictly stronger than the one outside it. Every BCNF relation is in 3NF, every 3NF relation is in 2NF, and so on.</figcaption>
-  </figure>
-  <h3>Definitions you need first</h3>
-  <ul class="t">
-    <li><strong>Prime attribute:</strong> a member of <em>some</em> candidate key. <strong>Non-prime:</strong> a member of no candidate key.</li>
-    <li><strong>Full functional dependency:</strong> Y → Z where removing any attribute from Y breaks it. If some smaller part of Y still determines Z, it is a <strong>partial dependency</strong>. {SSN, PNUMBER} → HOURS is full. {SSN, PNUMBER} → ENAME is partial because SSN → ENAME.</li>
-    <li><strong>Transitive dependency:</strong> X → Z derived from X → Y and Y → Z, where Y is not a key and Y does not determine X. SSN → DMGR_SSN is transitive through DNUMBER.</li>
-  </ul>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Form</th><th>Condition</th><th>Fix when violated</th></tr></thead>
-    <tbody>
-      <tr><td><strong>1NF</strong></td><td>All values atomic. No composite, multivalued or nested (relation-valued) attributes.</td><td>Split into one value per cell: a multivalued attribute gets its own relation with the key, a nested relation is flattened by propagating the primary key.</td></tr>
-      <tr><td><strong>2NF</strong></td><td>1NF and every non-prime attribute is <strong>fully</strong> dependent on every key.</td><td>Move each partial dependency to its own relation, with its determinant as key.</td></tr>
-      <tr><td><strong>3NF</strong></td><td>Whenever X → A holds, either (a) <strong>X is a superkey</strong> or (b) <strong>A is a prime attribute</strong>.</td><td>Move each transitive dependency to its own relation.</td></tr>
-      <tr><td><strong>BCNF</strong></td><td>Whenever X → A holds (non-trivial), <strong>X is a superkey</strong>. Condition (b) of 3NF is not allowed.</td><td>Split on the violating FD (see decomposition).</td></tr>
-    </tbody>
-  </table></div>
-  <p><strong>The informal rhyme:</strong> 1NF, every attribute depends on <em>the key</em>. 2NF, on <em>the whole key</em>. 3NF, on <em>nothing but the key</em>. (BCNF adds: so help me Codd, even for prime attributes.)</p>
-  <div class="note fix"><p><span class="lbl">Check</span>Lecture slides often first define 2NF and 3NF using only the <strong>primary key</strong>, then give the <strong>general</strong> definitions for several candidate keys. Use the general ones in the exam, because the primary-key versions miss violations when there are two or more candidate keys.</p></div>
-
-  <h3>Worked examples</h3>
-  <div class="note add"><p><span class="lbl">EMP_PROJ to 2NF</span>EMP_PROJ(<u>Ssn</u>, <u>Pnumber</u>, Hours, Ename, Pname, Plocation) with FD1 {Ssn, Pnumber} → Hours, FD2 Ssn → Ename, FD3 Pnumber → {Pname, Plocation}. Ename and Pname are partially dependent on the key, so it is not in 2NF. Decompose into <strong>EP1</strong>(<u>Ssn</u>, <u>Pnumber</u>, Hours), <strong>EP2</strong>(<u>Ssn</u>, Ename), <strong>EP3</strong>(<u>Pnumber</u>, Pname, Plocation).</p></div>
-  <div class="note add"><p><span class="lbl">EMP_DEPT to 3NF</span>EMP_DEPT(<u>Ssn</u>, Ename, Bdate, Address, Dnumber, Dname, Dmgr_ssn). Ssn → Dnumber and Dnumber → {Dname, Dmgr_ssn}, so Dname and Dmgr_ssn depend on Ssn <strong>transitively</strong>. Decompose into <strong>ED1</strong>(<u>Ssn</u>, Ename, Bdate, Address, Dnumber) and <strong>ED2</strong>(<u>Dnumber</u>, Dname, Dmgr_ssn).</p></div>
-  <div class="note add"><p><span class="lbl">LOTS: 1NF to 3NF</span>LOTS(<u>Property_id#</u>, County_name, Lot#, Area, Price, Tax_rate) with candidate keys {Property_id#} and {County_name, Lot#}. FD3 County_name → Tax_rate is partial on the second key, so not 2NF. FD4 Area → Price is transitive.</p>
-  <p>2NF: <strong>LOTS1</strong>(Property_id#, County_name, Lot#, Area, Price) and <strong>LOTS2</strong>(<u>County_name</u>, Tax_rate). 3NF: split LOTS1 into <strong>LOTS1A</strong>(Property_id#, County_name, Lot#, Area) and <strong>LOTS1B</strong>(<u>Area</u>, Price).</p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>The LOTS example comes from the textbook figure. The FDs are written from the textbook (FD1 Property_id# → all, FD2 {County_name, Lot#} → all, FD3 County_name → Tax_rate, FD4 Area → Price). Compare with the figure in your edition.</p></div>
-
-  <h3>3NF but not BCNF</h3>
-  <p>TEACH(Student, Course, Instructor) with fd1 {Student, Course} → Instructor and fd2 Instructor → Course. Keys are {Student, Course} and {Student, Instructor}. fd2 has a non-superkey left side but Course is prime, so TEACH is in <strong>3NF but not BCNF</strong>.</p>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Decomposition</th><th>Common attribute</th><th>Lossless?</th></tr></thead>
-    <tbody>
-      <tr><td>{Student, Instructor} and {Student, Course}</td><td>Student</td><td>No (Student determines neither side)</td></tr>
-      <tr><td>{Course, Instructor} and {Course, Student}</td><td>Course</td><td>No</td></tr>
-      <tr><td>{Instructor, Course} and {Instructor, Student}</td><td>Instructor</td><td><strong>Yes</strong> (Instructor → Course)</td></tr>
-    </tbody>
-  </table></div>
-  <p>All three lose fd1. The third is the only lossless one, so the designer gives up dependency preservation and keeps the lossless join.</p>
-
-  <h3>Practical use</h3>
-  <ul class="t">
-    <li>Designers usually normalise only up to 3NF, BCNF or 4NF. Higher forms rest on constraints that are hard to detect.</li>
-    <li><strong>Denormalization</strong> stores the join of higher-normal-form relations as one base relation, trading redundancy for faster reads.</li>
-  </ul>
+<figcaption>Each normal form is strictly stronger than the one outside it. Every BCNF relation is in 3NF, every 3NF relation is in 2NF, and so on.</figcaption>
+</figure>
+<h3>Definitions you need first</h3>
+<ul class="t">
+<li><strong>Prime attribute:</strong> a member of <em>some</em> candidate key. <strong>Non-prime:</strong> a member of no candidate key.</li>
+<li><strong>Full functional dependency:</strong> Y → Z where removing any attribute from Y breaks it. If some smaller part of Y still determines Z, it is a <strong>partial dependency</strong>. {SSN, PNUMBER} → HOURS is full. {SSN, PNUMBER} → ENAME is partial because SSN → ENAME.</li>
+<li><strong>Transitive dependency:</strong> X → Z derived from X → Y and Y → Z, where Y is not a key and Y does not determine X. SSN → DMGR_SSN is transitive through DNUMBER.</li>
+</ul>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Form</th><th>Condition</th><th>Fix when violated</th></tr></thead>
+<tbody>
+<tr><td><strong>1NF</strong></td><td>All values atomic. No composite, multivalued or nested (relation-valued) attributes.</td><td>Split into one value per cell: a multivalued attribute gets its own relation with the key, a nested relation is flattened by propagating the primary key.</td></tr>
+<tr><td><strong>2NF</strong></td><td>1NF and every non-prime attribute is <strong>fully</strong> dependent on every key.</td><td>Move each partial dependency to its own relation, with its determinant as key.</td></tr>
+<tr><td><strong>3NF</strong></td><td>Whenever X → A holds, either (a) <strong>X is a superkey</strong> or (b) <strong>A is a prime attribute</strong>.</td><td>Move each transitive dependency to its own relation.</td></tr>
+<tr><td><strong>BCNF</strong></td><td>Whenever X → A holds (non-trivial), <strong>X is a superkey</strong>. Condition (b) of 3NF is not allowed.</td><td>Split on the violating FD (see decomposition).</td></tr>
+</tbody>
+</table></div>
+<p><strong>The informal rhyme:</strong> 1NF, every attribute depends on <em>the key</em>. 2NF, on <em>the whole key</em>. 3NF, on <em>nothing but the key</em>. (BCNF adds: so help me Codd, even for prime attributes.)</p>
+<div class="note"><p><span class="lbl">Note</span>2NF and 3NF have a simpler definition that tests only the primary key and a general one that covers all candidate keys. Use the general ones in the exam, because the primary-key versions miss violations when there are two or more candidate keys.</p></div>
+<h3>Worked examples</h3>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl">EMP_PROJ to 2NF</span>EMP_PROJ(<u>Ssn</u>, <u>Pnumber</u>, Hours, Ename, Pname, Plocation) with FD1 {Ssn, Pnumber} → Hours, FD2 Ssn → Ename, FD3 Pnumber → {Pname, Plocation}. Ename and Pname are partially dependent on the key, so it is not in 2NF. Decompose into <strong>EP1</strong>(<u>Ssn</u>, <u>Pnumber</u>, Hours), <strong>EP2</strong>(<u>Ssn</u>, Ename), <strong>EP3</strong>(<u>Pnumber</u>, Pname, Plocation).</p></div>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl">EMP_DEPT to 3NF</span>EMP_DEPT(<u>Ssn</u>, Ename, Bdate, Address, Dnumber, Dname, Dmgr_ssn). Ssn → Dnumber and Dnumber → {Dname, Dmgr_ssn}, so Dname and Dmgr_ssn depend on Ssn <strong>transitively</strong>. Decompose into <strong>ED1</strong>(<u>Ssn</u>, Ename, Bdate, Address, Dnumber) and <strong>ED2</strong>(<u>Dnumber</u>, Dname, Dmgr_ssn).</p></div>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl">LOTS: 1NF to 3NF</span>LOTS(<u>Property_id#</u>, County_name, Lot#, Area, Price, Tax_rate) with candidate keys {Property_id#} and {County_name, Lot#}. FD3 County_name → Tax_rate is partial on the second key, so not 2NF. FD4 Area → Price is transitive.</p><p>2NF: <strong>LOTS1</strong>(Property_id#, County_name, Lot#, Area, Price) and <strong>LOTS2</strong>(<u>County_name</u>, Tax_rate). 3NF: split LOTS1 into <strong>LOTS1A</strong>(Property_id#, County_name, Lot#, Area) and <strong>LOTS1B</strong>(<u>Area</u>, Price).</p></div>
+<div class="note"><p><span class="lbl">Common mistake</span>The LOTS example comes from the textbook figure. The FDs are written from the textbook (FD1 Property_id# → all, FD2 {County_name, Lot#} → all, FD3 County_name → Tax_rate, FD4 Area → Price).</p></div>
+<h3>3NF but not BCNF</h3>
+<p>TEACH(Student, Course, Instructor) with fd1 {Student, Course} → Instructor and fd2 Instructor → Course. Keys are {Student, Course} and {Student, Instructor}. fd2 has a non-superkey left side but Course is prime, so TEACH is in <strong>3NF but not BCNF</strong>.</p>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Decomposition</th><th>Common attribute</th><th>Lossless?</th></tr></thead>
+<tbody>
+<tr><td>{Student, Instructor} and {Student, Course}</td><td>Student</td><td>No (Student determines neither side)</td></tr>
+<tr><td>{Course, Instructor} and {Course, Student}</td><td>Course</td><td>No</td></tr>
+<tr><td>{Instructor, Course} and {Instructor, Student}</td><td>Instructor</td><td><strong>Yes</strong> (Instructor → Course)</td></tr>
+</tbody>
+</table></div>
+<p>All three lose fd1. The third is the only lossless one, so the designer gives up dependency preservation and keeps the lossless join.</p>
+<h3>Practical use</h3>
+<ul class="t">
+<li>Designers usually normalise only up to 3NF, BCNF or 4NF. Higher forms rest on constraints that are hard to detect.</li>
+<li><strong>Denormalization</strong> stores the join of higher-normal-form relations as one base relation, trading redundancy for faster reads.</li>
+</ul>
 </section>
-
 <section class="topic" id="t-decomp">
-  <div class="head"><h2>Decomposition: lossless join, dependency preservation, algorithms</h2><label class="rev" for="r-decomp"><input class="rev" type="checkbox" id="r-decomp" data-sec="t-decomp">revised</label></div>
-  <div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip add">Added</span><span class="chip fix">Check</span></div>
-  <p><strong>Decomposition</strong> splits the universal relation R into D = {R<sub>1</sub>, …, R<sub>n</sub>}, using the FDs. A good decomposition has three properties.</p>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Property</th><th>Meaning</th><th>Needed?</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Attribute preservation</strong></td><td>Every attribute of R appears in at least one R<sub>i</sub>: R<sub>1</sub> ∪ … ∪ R<sub>n</sub> = R. Nothing is lost.</td><td>Always</td></tr>
-      <tr><td><strong>Dependency preservation</strong></td><td>The union of the FDs projected onto each R<sub>i</sub> is equivalent to F: (π<sub>R1</sub>(F) ∪ … ∪ π<sub>Rn</sub>(F))<sup>+</sup> = F<sup>+</sup>. Every FD can be checked inside a single relation, or derived from the ones that can.</td><td>Desirable, can be sacrificed</td></tr>
-      <tr><td><strong>Lossless (non-additive) join</strong></td><td>For every valid state r, the natural join of the projections gives back exactly r: *(π<sub>R1</sub>(r), …, π<sub>Rn</sub>(r)) = r. "Loss" means loss of <strong>information</strong> (spurious tuples are added), not loss of tuples.</td><td><strong>Never sacrificed</strong></td></tr>
-    </tbody>
-  </table></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Some slides word dependency preservation as "all dependencies must either be a part of <em>each</em> of R<sub>1</sub>…R<sub>n</sub> or be inferred from the union". It should be a part of <strong>at least one</strong> R<sub>i</sub> (not each). If a formula for attribute preservation shows "∑", it should be the union sign ∪.</p></div>
-
-  <h3>Lossless join test for two relations</h3>
-  <div class="note def"><p><span class="lbl">Binary test</span>D = {R<sub>1</sub>, R<sub>2</sub>} of R is lossless <strong>if and only if</strong> F<sup>+</sup> contains (R<sub>1</sub> ∩ R<sub>2</sub>) → (R<sub>1</sub> − R<sub>2</sub>) <strong>or</strong> (R<sub>1</sub> ∩ R<sub>2</sub>) → (R<sub>2</sub> − R<sub>1</sub>). In words: the shared attributes must be a key of at least one of the two parts.</p></div>
-  <div class="note add"><p><span class="lbl">Added · method</span><strong>Testing more than two relations (the tableau or chase test).</strong></p>
-  <ol class="t">
-    <li>Draw a table with one column per attribute of R and one row per relation R<sub>i</sub>. In row i, write "a" in each column whose attribute is in R<sub>i</sub> and a distinct "b<sub>i</sub>" elsewhere.</li>
-    <li>For each FD X → Y, find rows that agree on all X columns. In the Y columns, make those rows equal: if one of them has "a", use "a", otherwise use one of the b symbols.</li>
-    <li>Repeat until nothing changes. The decomposition is lossless if some row is all "a".</li></ol>
+<div class="head"><h2>Decomposition: lossless join, dependency preservation, algorithms</h2><label class="rev" for="r-decomp"><input class="rev" data-sec="t-decomp" id="r-decomp" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span></div>
+<p><strong>Decomposition</strong> splits the universal relation R into D = {R<sub>1</sub>, …, R<sub>n</sub>}, using the FDs. A good decomposition has three properties.</p>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Property</th><th>Meaning</th><th>Needed?</th></tr></thead>
+<tbody>
+<tr><td><strong>Attribute preservation</strong></td><td>Every attribute of R appears in at least one R<sub>i</sub>: R<sub>1</sub> ∪ … ∪ R<sub>n</sub> = R. Nothing is lost.</td><td>Always</td></tr>
+<tr><td><strong>Dependency preservation</strong></td><td>The union of the FDs projected onto each R<sub>i</sub> is equivalent to F: (π<sub>R1</sub>(F) ∪ … ∪ π<sub>Rn</sub>(F))<sup>+</sup> = F<sup>+</sup>. Every FD can be checked inside a single relation, or derived from the ones that can.</td><td>Desirable, can be sacrificed</td></tr>
+<tr><td><strong>Lossless (non-additive) join</strong></td><td>For every valid state r, the natural join of the projections gives back exactly r: *(π<sub>R1</sub>(r), …, π<sub>Rn</sub>(r)) = r. "Loss" means loss of <strong>information</strong> (spurious tuples are added), not loss of tuples.</td><td><strong>Never sacrificed</strong></td></tr>
+</tbody>
+</table></div>
+<div class="note"><p><span class="lbl">Note</span>Attribute preservation: every attribute of R must appear in at least one Ri (not in each one). In formulas the union sign is ∪, not ∑.</p></div>
+<h3>Lossless join test for two relations</h3>
+<div class="note def"><p><span class="lbl">Binary test</span>D = {R<sub>1</sub>, R<sub>2</sub>} of R is lossless <strong>if and only if</strong> F<sup>+</sup> contains (R<sub>1</sub> ∩ R<sub>2</sub>) → (R<sub>1</sub> − R<sub>2</sub>) <strong>or</strong> (R<sub>1</sub> ∩ R<sub>2</sub>) → (R<sub>2</sub> − R<sub>1</sub>). In words: the shared attributes must be a key of at least one of the two parts.</p></div>
+<div class="note"><p><span class="lbl">Method</span><strong>Testing more than two relations (the tableau or chase test).</strong></p>
+<ol class="t">
+<li>Draw a table with one column per attribute of R and one row per relation R<sub>i</sub>. In row i, write "a" in each column whose attribute is in R<sub>i</sub> and a distinct "b<sub>i</sub>" elsewhere.</li>
+<li>For each FD X → Y, find rows that agree on all X columns. In the Y columns, make those rows equal: if one of them has "a", use "a", otherwise use one of the b symbols.</li>
+<li>Repeat until nothing changes. The decomposition is lossless if some row is all "a".</li></ol>
 </div>
-
-  <h3>Dependency preservation test</h3>
-  <div class="note add"><p><span class="lbl">Added · method</span>For each FD X → Y in F, set Z = X. Repeatedly, for every R<sub>i</sub>, replace Z by Z ∪ ((Z ∩ R<sub>i</sub>)<sup>+</sup> ∩ R<sub>i</sub>). When Z stops growing, the FD is preserved if Y ⊆ Z. If every FD passes, the decomposition preserves dependencies. This avoids computing the full projected FD sets.</p></div>
-
-  <h3>Algorithm: 3NF by synthesis</h3>
-  <div class="note add"><p><span class="lbl">Added · algorithm</span>Lecture slides usually mention these algorithms without writing them out. This is the standard version.</p>
-  <ol class="t">
-    <li>Find a minimal cover G of F.</li>
-    <li>For each distinct left side X in G, create a relation holding X together with all attributes on the right sides of FDs that have left side X.</li>
-    <li>If no relation contains a candidate key of R, add one relation made of a candidate key.</li>
-    <li>Remove any relation that is wholly contained in another. Add any attribute not yet covered in a relation of its own.</li></ol>
-  <p>The result is <strong>always in 3NF, lossless, and dependency-preserving</strong>. It can be larger than needed and may not be in BCNF.</p></div>
-
-  <h3>Algorithm: BCNF by decomposition</h3>
-  <div class="note add"><p><span class="lbl">Added · algorithm</span></p>
-  <ol class="t">
-    <li>Start with the set {R}.</li>
-    <li>Pick a relation R<sub>i</sub> in the set and an FD X → Y that holds in it where X is <strong>not a superkey</strong> of R<sub>i</sub> (Y not inside X).</li>
-    <li>Replace R<sub>i</sub> by two relations: <strong>X ∪ Y</strong> and <strong>R<sub>i</sub> − Y</strong>. They share X, and X → Y makes the split lossless.</li>
-    <li>Repeat until every relation is in BCNF.</li></ol>
-  <p>The result is <strong>always lossless</strong> but may <strong>lose dependencies</strong>. The answer is not unique: it depends on which violating FD you pick first.</p></div>
-  <div class="note add"><p><span class="lbl">Worked</span>R(A, B, C, D), F = {AB→CD, D→A}. Keys AB and BD. D → A has a non-superkey left side, so R is not in BCNF (it is in 3NF, since A is prime). Split on D → A: R1(<u>D</u>, A) and R2(<u>B</u>, <u>D</u>, C). Both are BCNF, and BD is the key of R2. The decomposition is lossless, but <strong>AB → CD is lost</strong> because A and B no longer sit in one relation.</p></div>
-
-  <h3>3NF against BCNF</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th></th><th>3NF</th><th>BCNF</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Condition on X → A</strong></td><td>X superkey <strong>or</strong> A prime</td><td>X superkey</td></tr>
-      <tr><td><strong>Lossless join</strong></td><td>Always achievable</td><td>Always achievable</td></tr>
-      <tr><td><strong>Dependency preserving</strong></td><td><strong>Always</strong> achievable</td><td>Not always</td></tr>
-      <tr><td><strong>Redundancy</strong></td><td>Small amount can remain</td><td>None from FDs</td></tr>
-    </tbody>
-  </table></div>
+<h3>Dependency preservation test</h3>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl"></span>For each FD X → Y in F, set Z = X. Repeatedly, for every R<sub>i</sub>, replace Z by Z ∪ ((Z ∩ R<sub>i</sub>)<sup>+</sup> ∩ R<sub>i</sub>). When Z stops growing, the FD is preserved if Y ⊆ Z. If every FD passes, the decomposition preserves dependencies. This avoids computing the full projected FD sets.</p></div>
+<h3>Algorithm: 3NF by synthesis</h3>
+<div class="note"><p><span class="lbl">Method</span>This is the standard version.</p>
+<ol class="t">
+<li>Find a minimal cover G of F.</li>
+<li>For each distinct left side X in G, create a relation holding X together with all attributes on the right sides of FDs that have left side X.</li>
+<li>If no relation contains a candidate key of R, add one relation made of a candidate key.</li>
+<li>Remove any relation that is wholly contained in another. Add any attribute not yet covered in a relation of its own.</li></ol>
+<p>The result is <strong>always in 3NF, lossless, and dependency-preserving</strong>. It can be larger than needed and may not be in BCNF.</p></div>
+<h3>Algorithm: BCNF by decomposition</h3>
+<div class="note">
+<ol class="t">
+<li>Start with the set {R}.</li>
+<li>Pick a relation R<sub>i</sub> in the set and an FD X → Y that holds in it where X is <strong>not a superkey</strong> of R<sub>i</sub> (Y not inside X).</li>
+<li>Replace R<sub>i</sub> by two relations: <strong>X ∪ Y</strong> and <strong>R<sub>i</sub> − Y</strong>. They share X, and X → Y makes the split lossless.</li>
+<li>Repeat until every relation is in BCNF.</li></ol>
+<p>The result is <strong>always lossless</strong> but may <strong>lose dependencies</strong>. The answer is not unique: it depends on which violating FD you pick first.</p></div>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl">Worked</span>R(A, B, C, D), F = {AB→CD, D→A}. Keys AB and BD. D → A has a non-superkey left side, so R is not in BCNF (it is in 3NF, since A is prime). Split on D → A: R1(<u>D</u>, A) and R2(<u>B</u>, <u>D</u>, C). Both are BCNF, and BD is the key of R2. The decomposition is lossless, but <strong>AB → CD is lost</strong> because A and B no longer sit in one relation.</p></div>
+<h3>3NF against BCNF</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th></th><th>3NF</th><th>BCNF</th></tr></thead>
+<tbody>
+<tr><td><strong>Condition on X → A</strong></td><td>X superkey <strong>or</strong> A prime</td><td>X superkey</td></tr>
+<tr><td><strong>Lossless join</strong></td><td>Always achievable</td><td>Always achievable</td></tr>
+<tr><td><strong>Dependency preserving</strong></td><td><strong>Always</strong> achievable</td><td>Not always</td></tr>
+<tr><td><strong>Redundancy</strong></td><td>Small amount can remain</td><td>None from FDs</td></tr>
+</tbody>
+</table></div>
 </section>
-
 <section class="topic" id="t-mvd">
-  <div class="head"><h2>Multivalued dependencies, 4NF, join dependencies, 5NF</h2><label class="rev" for="r-mvd"><input class="rev" type="checkbox" id="r-mvd" data-sec="t-mvd">revised</label></div>
-  <div class="chips"><span class="chip">Define</span><span class="chip add">Added</span></div>
-  <div class="note def"><p><span class="lbl">Multivalued dependency</span>X →→ Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], where Z = R − (X ∪ Y). Put simply: for each X value, the set of Y values is independent of the Z values.</p></div>
-  <ul class="t">
-    <li>An MVD is <strong>trivial</strong> if (a) Y ⊆ X, or (b) X ∪ Y = R. Otherwise it is non-trivial.</li>
-    <li>MVDs arise when a relation holds two <strong>independent</strong> multivalued facts about the same entity.</li>
-  </ul>
-  <div class="note add"><p><span class="lbl">Example</span>EMP(Ename, Pname, Dname): an employee works on several projects and has several dependents, independently. If Smith works on X and Y and has dependents John and Anna, the relation must hold all 2 × 2 = 4 combinations: (Smith, X, John), (Smith, X, Anna), (Smith, Y, John), (Smith, Y, Anna). Here Ename →→ Pname and Ename →→ Dname, and Ename is not a superkey (the key is all three attributes), so EMP is in BCNF but <strong>not in 4NF</strong>.</p></div>
-  <div class="note def"><p><span class="lbl">4NF</span>R is in 4NF with respect to F (FDs and MVDs) if, for every non-trivial MVD X →→ Y in F<sup>+</sup>, X is a <strong>superkey</strong> of R.</p></div>
-  <p>Fix by splitting the independent facts: <strong>EMP_PROJECTS</strong>(Ename, Pname) and <strong>EMP_DEPENDENTS</strong>(Ename, Dname). This is the textbook's EMP example.</p>
-
-  <h3>Inference rules for FDs and MVDs</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Rule</th><th>Statement</th></tr></thead>
-    <tbody>
-      <tr><td>IR1 to IR3</td><td>Reflexive, augmentation, transitive rules for FDs (as before)</td></tr>
-      <tr><td>IR4 Complementation</td><td>X →→ Y implies X →→ (R − (X ∪ Y))</td></tr>
-      <tr><td>IR5 Augmentation (MVD)</td><td>If X →→ Y and W ⊇ Z then WX →→ YZ</td></tr>
-      <tr><td>IR6 Transitive (MVD)</td><td>X →→ Y and Y →→ Z imply X →→ (Z − Y)</td></tr>
-      <tr><td>IR7 Replication</td><td>X → Y implies X →→ Y (every FD is an MVD)</td></tr>
-      <tr><td>IR8 Coalescence</td><td>If X →→ Y, and some W with W ∩ Y empty, W → Z and Y ⊇ Z exist, then X → Z</td></tr>
-    </tbody>
-  </table></div>
-
-  <h3>Join dependency and 5NF</h3>
-  <div class="note def"><p><span class="lbl">Join dependency</span>JD(R<sub>1</sub>, …, R<sub>n</sub>) on R says every valid state r has a lossless decomposition into R<sub>1</sub>, …, R<sub>n</sub>: *(π<sub>R1</sub>(r), …, π<sub>Rn</sub>(r)) = r. An <strong>MVD is a JD with n = 2</strong>. A JD is trivial if one R<sub>i</sub> equals R.</p></div>
-  <div class="note def"><p><span class="lbl">5NF (PJNF)</span>R is in fifth normal form (project-join normal form) with respect to F if, for every non-trivial JD(R<sub>1</sub>, …, R<sub>n</sub>) in F<sup>+</sup>, <strong>every R<sub>i</sub> is a superkey</strong> of R.</p></div>
-  <div class="note add"><p><span class="lbl">Example</span>SUPPLY(Sname, Part_name, Proj_name) with the rule: if supplier s supplies part p, project j uses part p, and s supplies something to j, then s supplies p to j. That gives JD(R1, R2, R3) with R1(Sname, Part_name), R2(Sname, Proj_name), R3(Part_name, Proj_name). No two-way split is lossless, but the three-way split is. Convert to 5NF by replacing SUPPLY with R1, R2 and R3.</p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>The textbook figures for 4NF and 5NF (the EMP and SUPPLY tables) are replaced here by a small example of my own. The definitions follow Elmasri and Navathe.</p></div>
+<div class="head"><h2>Multivalued dependencies, 4NF, join dependencies, 5NF</h2><label class="rev" for="r-mvd"><input class="rev" data-sec="t-mvd" id="r-mvd" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span></div>
+<div class="note def"><p><span class="lbl">Multivalued dependency</span>X →→ Y holds in R if, whenever two tuples t1 and t2 have t1[X] = t2[X], there also exist tuples t3 and t4 with: t3[X] = t4[X] = t1[X]; t3[Y] = t1[Y] and t4[Y] = t2[Y]; t3[Z] = t2[Z] and t4[Z] = t1[Z], where Z = R − (X ∪ Y). Put simply: for each X value, the set of Y values is independent of the Z values.</p></div>
+<ul class="t">
+<li>An MVD is <strong>trivial</strong> if (a) Y ⊆ X, or (b) X ∪ Y = R. Otherwise it is non-trivial.</li>
+<li>MVDs arise when a relation holds two <strong>independent</strong> multivalued facts about the same entity.</li>
+</ul>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl">Example</span>EMP(Ename, Pname, Dname): an employee works on several projects and has several dependents, independently. If Smith works on X and Y and has dependents John and Anna, the relation must hold all 2 × 2 = 4 combinations: (Smith, X, John), (Smith, X, Anna), (Smith, Y, John), (Smith, Y, Anna). Here Ename →→ Pname and Ename →→ Dname, and Ename is not a superkey (the key is all three attributes), so EMP is in BCNF but <strong>not in 4NF</strong>.</p></div>
+<div class="note def"><p><span class="lbl">4NF</span>R is in 4NF with respect to F (FDs and MVDs) if, for every non-trivial MVD X →→ Y in F<sup>+</sup>, X is a <strong>superkey</strong> of R.</p></div>
+<p>Fix by splitting the independent facts: <strong>EMP_PROJECTS</strong>(Ename, Pname) and <strong>EMP_DEPENDENTS</strong>(Ename, Dname). This is the textbook's EMP example.</p>
+<h3>Inference rules for FDs and MVDs</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Rule</th><th>Statement</th></tr></thead>
+<tbody>
+<tr><td>IR1 to IR3</td><td>Reflexive, augmentation, transitive rules for FDs (as before)</td></tr>
+<tr><td>IR4 Complementation</td><td>X →→ Y implies X →→ (R − (X ∪ Y))</td></tr>
+<tr><td>IR5 Augmentation (MVD)</td><td>If X →→ Y and W ⊇ Z then WX →→ YZ</td></tr>
+<tr><td>IR6 Transitive (MVD)</td><td>X →→ Y and Y →→ Z imply X →→ (Z − Y)</td></tr>
+<tr><td>IR7 Replication</td><td>X → Y implies X →→ Y (every FD is an MVD)</td></tr>
+<tr><td>IR8 Coalescence</td><td>If X →→ Y, and some W with W ∩ Y empty, W → Z and Y ⊇ Z exist, then X → Z</td></tr>
+</tbody>
+</table></div>
+<h3>Join dependency and 5NF</h3>
+<div class="note def"><p><span class="lbl">Join dependency</span>JD(R<sub>1</sub>, …, R<sub>n</sub>) on R says every valid state r has a lossless decomposition into R<sub>1</sub>, …, R<sub>n</sub>: *(π<sub>R1</sub>(r), …, π<sub>Rn</sub>(r)) = r. An <strong>MVD is a JD with n = 2</strong>. A JD is trivial if one R<sub>i</sub> equals R.</p></div>
+<div class="note def"><p><span class="lbl">5NF (PJNF)</span>R is in fifth normal form (project-join normal form) with respect to F if, for every non-trivial JD(R<sub>1</sub>, …, R<sub>n</sub>) in F<sup>+</sup>, <strong>every R<sub>i</sub> is a superkey</strong> of R.</p></div>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl">Example</span>SUPPLY(Sname, Part_name, Proj_name) with the rule: if supplier s supplies part p, project j uses part p, and s supplies something to j, then s supplies p to j. That gives JD(R1, R2, R3) with R1(Sname, Part_name), R2(Sname, Proj_name), R3(Part_name, Proj_name). No two-way split is lossless, but the three-way split is. Convert to 5NF by replacing SUPPLY with R1, R2 and R3.</p></div>
 </section>
-
-
-<!-- ============ SQL ============ -->
 <section class="topic" id="t-ddl2">
-  <div class="head"><h2>SQL: defining tables and constraints</h2><label class="rev" for="r-ddl2"><input class="rev" type="checkbox" id="r-ddl2" data-sec="t-ddl2">revised</label></div>
-  <div class="chips"><span class="chip">Write SQL</span><span class="chip fix">Check</span></div>
-  <p>The full CREATE TABLE walk-through with the COMPANY schema is in Module 1. All queries in this module run on that schema, filled with the sample data described below.</p>
-  <ul class="t">
-    <li><strong>CREATE TABLE:</strong> table name, each attribute with its data type (INTEGER, FLOAT, DECIMAL(i,j), CHAR(n), VARCHAR(n), DATE, TIME, TIMESTAMP, INTERVAL), and constraints such as NOT NULL, PRIMARY KEY, UNIQUE, FOREIGN KEY.</li>
-    <li><strong>DROP TABLE</strong> removes the table and its definition. It can no longer be used in queries.</li>
-    <li><strong>ALTER TABLE … ADD</strong> adds an attribute, for example <code>ALTER TABLE EMPLOYEE ADD Job VARCHAR(12);</code>. The new column is NULL in every existing row, so <strong>NOT NULL is not allowed</strong> on it. Fill it in with UPDATE.</li>
-    <li><strong>CREATE SCHEMA</strong> creates a named database schema.</li>
-    <li><strong>Referential options</strong> on a foreign key: <code>ON DELETE</code> and <code>ON UPDATE</code> with RESTRICT, CASCADE, SET NULL or SET DEFAULT.</li>
-    <li>DATE is yyyy-mm-dd, TIME is hh:mm:ss (TIME(i) adds i fractional digits). TIMESTAMP has both. INTERVAL is a relative value that you add to or subtract from an absolute one.</li>
-  </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>The textbook DDL declares <code>MGRSTARTDATE CHAR(9)</code>. Use <code>DATE</code> for a date. Also, as far as I know MySQL's InnoDB engine does not support <code>SET DEFAULT</code>, though the textbook DDL uses it, while PostgreSQL does. Also remember only the constraints declared in the DDL are enforced automatically.</p></div>
-  <div class="note add"><p><span class="lbl">Added · sample data</span>Every result below comes from running the query in SQLite on the COMPANY sample state: 8 employees (Borg, Wong, Wallace, Smith, Narayan, English, Zelaya, Jabbar), 3 departments (Research 5, Administration 4, Headquarters 1), 6 projects and 16 works-on rows. The employee and works-on rows match Figure 10.4 of Elmasri and Navathe. The remaining rows are the book's usual sample data, written from memory, so compare with Figure 5.6 in your edition. Dates are stored as yyyy-mm-dd.</p></div>
+<div class="head"><h2>SQL: defining tables and constraints</h2><label class="rev" for="r-ddl2"><input class="rev" data-sec="t-ddl2" id="r-ddl2" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Write SQL</span></div>
+<p>The full CREATE TABLE walk-through with the COMPANY schema is in Module 1. All queries in this module run on that schema, filled with the sample data described below.</p>
+<ul class="t">
+<li><strong>CREATE TABLE:</strong> table name, each attribute with its data type (INTEGER, FLOAT, DECIMAL(i,j), CHAR(n), VARCHAR(n), DATE, TIME, TIMESTAMP, INTERVAL), and constraints such as NOT NULL, PRIMARY KEY, UNIQUE, FOREIGN KEY.</li>
+<li><strong>DROP TABLE</strong> removes the table and its definition. It can no longer be used in queries.</li>
+<li><strong>ALTER TABLE … ADD</strong> adds an attribute, for example <code>ALTER TABLE EMPLOYEE ADD Job VARCHAR(12);</code>. The new column is NULL in every existing row, so <strong>NOT NULL is not allowed</strong> on it. Fill it in with UPDATE.</li>
+<li><strong>CREATE SCHEMA</strong> creates a named database schema.</li>
+<li><strong>Referential options</strong> on a foreign key: <code>ON DELETE</code> and <code>ON UPDATE</code> with RESTRICT, CASCADE, SET NULL or SET DEFAULT.</li>
+<li>DATE is yyyy-mm-dd, TIME is hh:mm:ss (TIME(i) adds i fractional digits). TIMESTAMP has both. INTERVAL is a relative value that you add to or subtract from an absolute one.</li>
+</ul>
+<div class="note"><p><span class="lbl">Common mistake</span>The textbook DDL declares <code>MGRSTARTDATE CHAR(9)</code>. Use <code>DATE</code> for a date. Also MySQL's InnoDB engine does not support <code>SET DEFAULT</code>, though the textbook DDL uses it, while PostgreSQL does. Also remember only the constraints declared in the DDL are enforced automatically.</p></div>
+<div class="note"><p><span class="lbl">Note</span><span class="lbl"></span>Every result below comes from running the query in SQLite on the COMPANY sample state: 8 employees (Borg, Wong, Wallace, Smith, Narayan, English, Zelaya, Jabbar), 3 departments (Research 5, Administration 4, Headquarters 1), 6 projects and 16 works-on rows. The employee and works-on rows match Figure 10.4 of Elmasri and Navathe. Dates are stored as yyyy-mm-dd.</p></div>
 </section>
-
 <section class="topic" id="t-select">
-  <div class="head"><h2>SELECT: basic queries</h2><label class="rev" for="r-select"><input class="rev" type="checkbox" id="r-select" data-sec="t-select">revised</label></div>
-  <div class="chips"><span class="chip">Write SQL</span><span class="chip">Explain</span><span class="chip fix">Check</span></div>
-  <div class="note def"><p><span class="lbl">SELECT block</span><code>SELECT</code> &lt;attribute list&gt; <code>FROM</code> &lt;table list&gt; <code>WHERE</code> &lt;condition&gt;. It corresponds to relational algebra <strong>select, project and join</strong>, but SQL's SELECT is not algebra's σ.</p></div>
-  <ul class="t">
-    <li>SQL tables are <strong>multisets (bags)</strong>: duplicate rows are allowed. A relation in the formal model is a set. Use PRIMARY KEY or UNIQUE, or <code>DISTINCT</code> in the query, to remove duplicates.</li>
-    <li>A column name used in two tables must be <strong>qualified</strong>: <code>EMPLOYEE.Lname</code>. Use <strong>aliases</strong> (tuple variables) when a table is used twice.</li>
-    <li>A <strong>missing WHERE</strong> means no condition. With two or more tables and no join condition you get the <strong>Cartesian product</strong>: large and wrong.</li>
-    <li><code>SELECT *</code> returns all attributes.</li>
-    <li>Compare with NULL using <code>IS NULL</code> or <code>IS NOT NULL</code>, never <code>= NULL</code>. A join condition drops rows with NULL in the join attribute.</li>
-  </ul>
-
-  <h3>Selection and projection</h3>
-  <p><strong>Q0.</strong> Birth date and address of John B. Smith.</p>
+<div class="head"><h2>SELECT: basic queries</h2><label class="rev" for="r-select"><input class="rev" data-sec="t-select" id="r-select" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Write SQL</span><span class="chip">Explain</span></div>
+<div class="note def"><p><span class="lbl">SELECT block</span><code>SELECT</code> &lt;attribute list&gt; <code>FROM</code> &lt;table list&gt; <code>WHERE</code> &lt;condition&gt;. It corresponds to relational algebra <strong>select, project and join</strong>, but SQL's SELECT is not algebra's σ.</p></div>
+<ul class="t">
+<li>SQL tables are <strong>multisets (bags)</strong>: duplicate rows are allowed. A relation in the formal model is a set. Use PRIMARY KEY or UNIQUE, or <code>DISTINCT</code> in the query, to remove duplicates.</li>
+<li>A column name used in two tables must be <strong>qualified</strong>: <code>EMPLOYEE.Lname</code>. Use <strong>aliases</strong> (tuple variables) when a table is used twice.</li>
+<li>A <strong>missing WHERE</strong> means no condition. With two or more tables and no join condition you get the <strong>Cartesian product</strong>: large and wrong.</li>
+<li><code>SELECT *</code> returns all attributes.</li>
+<li>Compare with NULL using <code>IS NULL</code> or <code>IS NOT NULL</code>, never <code>= NULL</code>. A join condition drops rows with NULL in the join attribute.</li>
+</ul>
+<h3>Selection and projection</h3>
+<p><strong>Q0.</strong> Birth date and address of John B. Smith.</p>
 <pre><code>SELECT Bdate, Address
 FROM   EMPLOYEE
 WHERE  Fname = 'John' AND Minit = 'B' AND Lname = 'Smith';</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>Bdate</th><th>Address</th></tr></thead><tbody><tr><td>1965-01-09</td><td>731 Fondren, Houston, TX</td></tr></tbody></table></div></div>
-  <p><strong>Q9 / Q11A.</strong> <code>DISTINCT</code> removes duplicate salaries (8 employees, 6 distinct salaries).</p>
+<p><strong>Q9 / Q11A.</strong> <code>DISTINCT</code> removes duplicate salaries (8 employees, 6 distinct salaries).</p>
 <pre><code>SELECT DISTINCT Salary FROM EMPLOYEE;</code></pre><div class="res"><p class="cap">Result: 6 rows</p><div class="wrap"><table><thead><tr><th>Salary</th></tr></thead><tbody><tr><td>55000</td></tr><tr><td>40000</td></tr><tr><td>43000</td></tr><tr><td>30000</td></tr><tr><td>38000</td></tr><tr><td>25000</td></tr></tbody></table></div></div>
-  <p><strong>Q14.</strong> Employees with no supervisor.</p>
+<p><strong>Q14.</strong> Employees with no supervisor.</p>
 <pre><code>SELECT Fname, Lname FROM EMPLOYEE WHERE Super_ssn IS NULL;</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>James</td><td>Borg</td></tr></tbody></table></div></div>
-
-  <h3>Joins in the WHERE clause</h3>
-  <p><strong>Q1.</strong> Name and address of employees who work for Research. <code>Dname = 'Research'</code> is a selection condition and <code>Dnumber = Dno</code> is a join condition.</p>
+<h3>Joins in the WHERE clause</h3>
+<p><strong>Q1.</strong> Name and address of employees who work for Research. <code>Dname = 'Research'</code> is a selection condition and <code>Dnumber = Dno</code> is a join condition.</p>
 <pre><code>SELECT Fname, Lname, Address
 FROM   EMPLOYEE, DEPARTMENT
 WHERE  Dname = 'Research' AND Dnumber = Dno;</code></pre><div class="res"><p class="cap">Result: 4 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Address</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td><td>638 Voss, Houston, TX</td></tr><tr><td>John</td><td>Smith</td><td>731 Fondren, Houston, TX</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>975 Fire Oak, Humble, TX</td></tr><tr><td>Joyce</td><td>English</td><td>5631 Rice, Houston, TX</td></tr></tbody></table></div></div>
-  <p><strong>Q2.</strong> For each project located in Stafford: project number, controlling department number, and the department manager's last name, birth date and address. Two join conditions link project to department to manager.</p>
+<p><strong>Q2.</strong> For each project located in Stafford: project number, controlling department number, and the department manager's last name, birth date and address. Two join conditions link project to department to manager.</p>
 <pre><code>SELECT Pnumber, Dnum, Lname, Bdate, Address
 FROM   PROJECT, DEPARTMENT, EMPLOYEE
 WHERE  Dnum = Dnumber AND Mgr_ssn = Ssn AND Plocation = 'Stafford';</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Pnumber</th><th>Dnum</th><th>Lname</th><th>Bdate</th><th>Address</th></tr></thead><tbody><tr><td>10</td><td>4</td><td>Wallace</td><td>1941-06-20</td><td>291 Berry, Bellaire, TX</td></tr><tr><td>30</td><td>4</td><td>Wallace</td><td>1941-06-20</td><td>291 Berry, Bellaire, TX</td></tr></tbody></table></div></div>
-  <p><strong>Q8.</strong> Each employee with the name of the immediate supervisor. EMPLOYEE is used twice, so it needs two aliases: E in the supervisee role and S in the supervisor role.</p>
+<p><strong>Q8.</strong> Each employee with the name of the immediate supervisor. EMPLOYEE is used twice, so it needs two aliases: E in the supervisee role and S in the supervisor role.</p>
 <pre><code>SELECT E.Fname, E.Lname, S.Fname, S.Lname
 FROM   EMPLOYEE AS E, EMPLOYEE AS S
 WHERE  E.Super_ssn = S.Ssn;</code></pre><div class="res"><p class="cap">Result: 7 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td><td>James</td><td>Borg</td></tr><tr><td>Jennifer</td><td>Wallace</td><td>James</td><td>Borg</td></tr><tr><td>John</td><td>Smith</td><td>Franklin</td><td>Wong</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>Franklin</td><td>Wong</td></tr><tr><td>Joyce</td><td>English</td><td>Franklin</td><td>Wong</td></tr><tr><td>Alicia</td><td>Zelaya</td><td>Jennifer</td><td>Wallace</td></tr><tr><td>Ahmad</td><td>Jabbar</td><td>Jennifer</td><td>Wallace</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Some slide copies print Q8 as <code>FROM EMPLOYEE E S</code>, which is a typo. It should be <code>EMPLOYEE E, EMPLOYEE S</code> or <code>EMPLOYEE AS E, EMPLOYEE AS S</code>. James Borg has no supervisor, so he is missing from this result. The outer join in the next section brings him back.</p></div>
-
-  <h3>Pattern matching, arithmetic and sorting</h3>
-  <p><strong>LIKE:</strong> <code>%</code> matches any number of characters and <code>_</code> matches exactly one. LIKE works on parts of a string, so strings are not atomic in SQL.</p>
-  <p><strong>Q25.</strong> Employees whose address is in Houston, TX.</p>
+<div class="note"><p><span class="lbl">Note</span>Alias syntax: write EMPLOYEE E, EMPLOYEE S or EMPLOYEE AS E, EMPLOYEE AS S, and use the alias in the join. James Borg has no supervisor, so he is missing from this inner join result. The outer join in the next section brings him back.</p></div>
+<h3>Pattern matching, arithmetic and sorting</h3>
+<p><strong>LIKE:</strong> <code>%</code> matches any number of characters and <code>_</code> matches exactly one. LIKE works on parts of a string, so strings are not atomic in SQL.</p>
+<p><strong>Q25.</strong> Employees whose address is in Houston, TX.</p>
 <pre><code>SELECT Fname, Lname FROM EMPLOYEE WHERE Address LIKE '%Houston, TX%';</code></pre><div class="res"><p class="cap">Result: 5 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>James</td><td>Borg</td></tr><tr><td>Franklin</td><td>Wong</td></tr><tr><td>John</td><td>Smith</td></tr><tr><td>Joyce</td><td>English</td></tr><tr><td>Ahmad</td><td>Jabbar</td></tr></tbody></table></div></div>
-  <p><strong>Q26.</strong> Employees born in the 1950s. With yyyy-mm-dd dates the year's first three characters are fixed.</p>
+<p><strong>Q26.</strong> Employees born in the 1950s. With yyyy-mm-dd dates the year's first three characters are fixed.</p>
 <pre><code>SELECT Fname, Lname FROM EMPLOYEE WHERE Bdate LIKE '195_-__-__';</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Some slides use <code>LIKE '_______5_'</code>, which only works for the older dd-mon-yy format where the decade digit is the 8th character. With a real <code>DATE</code> in yyyy-mm-dd, use <code>'195_-__-__'</code> as above (or <code>BETWEEN '1950-01-01' AND '1959-12-31'</code>).</p></div>
-  <p><strong>Q27.</strong> Effect of a 10% raise for everyone on ProductX. Arithmetic operators <code>+ - * /</code> can be used in the SELECT list.</p>
+<div class="note"><p><span class="lbl">Common mistake</span>With a real <code>DATE</code> in yyyy-mm-dd, use <code>'195_-__-__'</code> as above (or <code>BETWEEN '1950-01-01' AND '1959-12-31'</code>).</p></div>
+<p><strong>Q27.</strong> Effect of a 10% raise for everyone on ProductX. Arithmetic operators <code>+ - * /</code> can be used in the SELECT list.</p>
 <pre><code>SELECT Fname, Lname, ROUND(1.1 * Salary, 2) AS New_salary
 FROM   EMPLOYEE, WORKS_ON, PROJECT
 WHERE  Ssn = Essn AND Pno = Pnumber AND Pname = 'ProductX';</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>New_salary</th></tr></thead><tbody><tr><td>John</td><td>Smith</td><td>33000.0</td></tr><tr><td>Joyce</td><td>English</td><td>27500.0</td></tr></tbody></table></div></div>
-  <p><strong>Q28 (first 6 rows).</strong> <code>ORDER BY</code> sorts the result. Default is ascending, <code>DESC</code> reverses it. Here: by department name and then employee last name.</p>
+<p><strong>Q28 (first 6 rows).</strong> <code>ORDER BY</code> sorts the result. Default is ascending, <code>DESC</code> reverses it. Here: by department name and then employee last name.</p>
 <pre><code>SELECT Dname, Lname, Fname, Pname
 FROM   DEPARTMENT, EMPLOYEE, WORKS_ON, PROJECT
 WHERE  Dnumber = Dno AND Ssn = Essn AND Pno = Pnumber
 ORDER BY Dname, Lname
 LIMIT 6;</code></pre><div class="res"><p class="cap">Result: 6 rows</p><div class="wrap"><table><thead><tr><th>Dname</th><th>Lname</th><th>Fname</th><th>Pname</th></tr></thead><tbody><tr><td>Administration</td><td>Jabbar</td><td>Ahmad</td><td>Computerization</td></tr><tr><td>Administration</td><td>Jabbar</td><td>Ahmad</td><td>Newbenefits</td></tr><tr><td>Administration</td><td>Wallace</td><td>Jennifer</td><td>Reorganization</td></tr><tr><td>Administration</td><td>Wallace</td><td>Jennifer</td><td>Newbenefits</td></tr><tr><td>Administration</td><td>Zelaya</td><td>Alicia</td><td>Computerization</td></tr><tr><td>Administration</td><td>Zelaya</td><td>Alicia</td><td>Newbenefits</td></tr></tbody></table></div></div>
-
-  <h3>Set operations</h3>
-  <p><code>UNION</code> always, and in some systems <code>INTERSECT</code> and <code>MINUS</code> (<code>EXCEPT</code> in standard SQL and PostgreSQL). The result is a <strong>set</strong>: duplicates are removed. The operands must be <strong>union compatible</strong>: same number of attributes, in the same order, with compatible types.</p>
-  <p><strong>Q4.</strong> Projects that involve an employee named Smith as a worker or as manager of the controlling department.</p>
+<h3>Set operations</h3>
+<p><code>UNION</code> always, and in some systems <code>INTERSECT</code> and <code>MINUS</code> (<code>EXCEPT</code> in standard SQL and PostgreSQL). The result is a <strong>set</strong>: duplicates are removed. The operands must be <strong>union compatible</strong>: same number of attributes, in the same order, with compatible types.</p>
+<p><strong>Q4.</strong> Projects that involve an employee named Smith as a worker or as manager of the controlling department.</p>
 <pre><code>SELECT Pname FROM PROJECT, DEPARTMENT, EMPLOYEE
 WHERE  Dnum = Dnumber AND Mgr_ssn = Ssn AND Lname = 'Smith'
 UNION
 SELECT Pname FROM PROJECT, WORKS_ON, EMPLOYEE
 WHERE  Pnumber = Pno AND Essn = Ssn AND Lname = 'Smith';</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Pname</th></tr></thead><tbody><tr><td>ProductX</td></tr><tr><td>ProductY</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Slide versions of Q4 say "project numbers" but select PNAME, and the second block tests <code>NAME='Smith'</code>, which is not a COMPANY column (it should be <code>LNAME</code>). I fixed it above. Also SQLite does not allow brackets around each operand, so I wrote it without them. MySQL and PostgreSQL accept both.</p></div>
-
-  <h3>Clause order</h3>
-  <div class="formula">SELECT   &lt;attributes or functions&gt;     (required)<br>FROM     &lt;tables&gt;                      (required)<br>[WHERE   &lt;row condition&gt;]<br>[GROUP BY &lt;grouping attributes&gt;]<br>[HAVING  &lt;group condition&gt;]<br>[ORDER BY &lt;attributes&gt;]</div>
-  <p>Only SELECT and FROM are mandatory. A query is <strong>evaluated</strong> in this order: FROM, WHERE, GROUP BY, HAVING, then SELECT and ORDER BY. The FROM clause lists tables for the outer query only, not those used in nested queries.</p>
+<div class="note"><p><span class="lbl">Note</span>Set operations: SQLite does not allow brackets around each operand, so the query is written without them. MySQL and PostgreSQL accept both.</p></div>
+<h3>Clause order</h3>
+<div class="formula">SELECT   &lt;attributes or functions&gt;     (required)<br/>FROM     &lt;tables&gt;                      (required)<br/>[WHERE   &lt;row condition&gt;]<br/>[GROUP BY &lt;grouping attributes&gt;]<br/>[HAVING  &lt;group condition&gt;]<br/>[ORDER BY &lt;attributes&gt;]</div>
+<p>Only SELECT and FROM are mandatory. A query is <strong>evaluated</strong> in this order: FROM, WHERE, GROUP BY, HAVING, then SELECT and ORDER BY. The FROM clause lists tables for the outer query only, not those used in nested queries.</p>
 </section>
-
 <section class="topic" id="t-join">
-  <div class="head"><h2>Joins and nested queries</h2><label class="rev" for="r-join"><input class="rev" type="checkbox" id="r-join" data-sec="t-join">revised</label></div>
-  <div class="chips"><span class="chip">Write SQL</span><span class="chip">Differentiate</span><span class="chip fix">Check</span></div>
-  <h3>Joined tables in FROM</h3>
-  <p>SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions.</p>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Join</th><th>Result</th></tr></thead>
-    <tbody>
-      <tr><td><code>JOIN … ON</code> (inner, theta)</td><td>Only pairs of rows that satisfy the condition</td></tr>
-      <tr><td><code>NATURAL JOIN</code></td><td>Inner join on all columns with the same name, which appear once</td></tr>
-      <tr><td><code>LEFT OUTER JOIN</code></td><td>All rows of the left table, with NULLs where there is no match</td></tr>
-      <tr><td><code>RIGHT OUTER JOIN</code></td><td>All rows of the right table, with NULLs where there is no match</td></tr>
-      <tr><td><code>FULL OUTER JOIN</code></td><td>All rows of both tables, NULL-filled</td></tr>
-      <tr><td><code>CROSS JOIN</code></td><td>Cartesian product</td></tr>
-    </tbody>
-  </table></div>
+<div class="head"><h2>Joins and nested queries</h2><label class="rev" for="r-join"><input class="rev" data-sec="t-join" id="r-join" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Write SQL</span><span class="chip">Differentiate</span></div>
+<h3>Joined tables in FROM</h3>
+<p>SQL2 lets you write the join in the FROM clause, so join conditions are separate from selection conditions.</p>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Join</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td><code>JOIN … ON</code> (inner, theta)</td><td>Only pairs of rows that satisfy the condition</td></tr>
+<tr><td><code>NATURAL JOIN</code></td><td>Inner join on all columns with the same name, which appear once</td></tr>
+<tr><td><code>LEFT OUTER JOIN</code></td><td>All rows of the left table, with NULLs where there is no match</td></tr>
+<tr><td><code>RIGHT OUTER JOIN</code></td><td>All rows of the right table, with NULLs where there is no match</td></tr>
+<tr><td><code>FULL OUTER JOIN</code></td><td>All rows of both tables, NULL-filled</td></tr>
+<tr><td><code>CROSS JOIN</code></td><td>Cartesian product</td></tr>
+</tbody>
+</table></div>
 <pre><code>SELECT Fname, Lname, Address
 FROM   EMPLOYEE JOIN DEPARTMENT ON Dnumber = Dno
 WHERE  Dname = 'Research';</code></pre><div class="res"><p class="cap">Result: 4 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Address</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td><td>638 Voss, Houston, TX</td></tr><tr><td>John</td><td>Smith</td><td>731 Fondren, Houston, TX</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>975 Fire Oak, Humble, TX</td></tr><tr><td>Joyce</td><td>English</td><td>5631 Rice, Houston, TX</td></tr></tbody></table></div></div>
-  <p><strong>Q8 as a left outer join.</strong> Now James Borg appears, with NULL for his (missing) supervisor.</p>
+<p><strong>Q8 as a left outer join.</strong> Now James Borg appears, with NULL for his (missing) supervisor.</p>
 <pre><code>SELECT E.Fname, E.Lname, S.Fname, S.Lname
 FROM   EMPLOYEE E LEFT OUTER JOIN EMPLOYEE S ON E.Super_ssn = S.Ssn;</code></pre><div class="res"><p class="cap">Result: 8 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>James</td><td>Borg</td><td class="n">NULL</td><td class="n">NULL</td></tr><tr><td>Franklin</td><td>Wong</td><td>James</td><td>Borg</td></tr><tr><td>Jennifer</td><td>Wallace</td><td>James</td><td>Borg</td></tr><tr><td>John</td><td>Smith</td><td>Franklin</td><td>Wong</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>Franklin</td><td>Wong</td></tr><tr><td>Joyce</td><td>English</td><td>Franklin</td><td>Wong</td></tr><tr><td>Alicia</td><td>Zelaya</td><td>Jennifer</td><td>Wallace</td></tr><tr><td>Ahmad</td><td>Jabbar</td><td>Jennifer</td><td>Wallace</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Slides write this join as <code>EMPLOYEE E LEFT OUTER JOIN EMPLOYEES ON …</code>: the table name should be <code>EMPLOYEE S</code>, an alias of the same table, not EMPLOYEES. (MySQL has no FULL OUTER JOIN. As far as I know you simulate it with a UNION of a left and a right join.)</p></div>
-
-  <h3>Nested queries</h3>
-  <p>A complete SELECT inside the WHERE clause of another is a <strong>nested (inner) query</strong>. The comparison <code>IN</code> tests whether a value is in the set the inner query returns. An unqualified column refers to the innermost query's tables.</p>
-  <p><strong>Q1 again, nested.</strong> Same result as the join version.</p>
+<div class="note"><p><span class="lbl">Note</span>MySQL has no FULL OUTER JOIN. Simulate it with a UNION of a left and a right outer join.</p></div>
+<h3>Nested queries</h3>
+<p>A complete SELECT inside the WHERE clause of another is a <strong>nested (inner) query</strong>. The comparison <code>IN</code> tests whether a value is in the set the inner query returns. An unqualified column refers to the innermost query's tables.</p>
+<p><strong>Q1 again, nested.</strong> Same result as the join version.</p>
 <pre><code>SELECT Fname, Lname, Address
 FROM   EMPLOYEE
 WHERE  Dno IN (SELECT Dnumber FROM DEPARTMENT WHERE Dname = 'Research');</code></pre><div class="res"><p class="cap">Result: 4 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Address</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td><td>638 Voss, Houston, TX</td></tr><tr><td>John</td><td>Smith</td><td>731 Fondren, Houston, TX</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>975 Fire Oak, Humble, TX</td></tr><tr><td>Joyce</td><td>English</td><td>5631 Rice, Houston, TX</td></tr></tbody></table></div></div>
-  <p><strong>Correlated queries.</strong> If the inner query uses a column from the outer query, the two are <strong>correlated</strong> and the inner query is evaluated once per outer row. Any nested query using <code>=</code> or <code>IN</code> can also be written as a single block.</p>
-  <p><strong>Q12.</strong> Employees who have a dependent with the same first name. Single-block version: join EMPLOYEE and DEPENDENT on <code>Ssn = Essn AND Fname = Dependent_name</code>.</p>
+<p><strong>Correlated queries.</strong> If the inner query uses a column from the outer query, the two are <strong>correlated</strong> and the inner query is evaluated once per outer row. Any nested query using <code>=</code> or <code>IN</code> can also be written as a single block.</p>
+<p><strong>Q12.</strong> Employees who have a dependent with the same first name. Single-block version: join EMPLOYEE and DEPENDENT on <code>Ssn = Essn AND Fname = Dependent_name</code>.</p>
 <pre><code>SELECT E.Fname, E.Lname
 FROM   EMPLOYEE AS E
 WHERE  E.Ssn IN (SELECT Essn FROM DEPENDENT
                  WHERE Essn = E.Ssn AND E.Fname = Dependent_name);</code></pre><div class="res"><p class="cap">Result: 0 rows</p><p class="cap" style="margin:4px 0"><em>No rows returned on this sample data.</em></p></div>
-  <div class="note add"><p><span class="lbl">Added</span>This returns <strong>no rows</strong> on our sample data: no employee shares a first name with their dependent (Alicia is not Alice). That is correct, not an error.</p></div>
-  <h3>EXISTS and NOT EXISTS</h3>
-  <p><code>EXISTS</code> is true if the inner query returns at least one row. <code>NOT EXISTS</code> is true if it returns none. Both are used with correlated inner queries.</p>
-  <p><strong>Q12B</strong> (same question as Q12, written with EXISTS), and <strong>Q6</strong>, employees with no dependents:</p>
+<div class="note"><p><span class="lbl">Note</span>This returns <strong>no rows</strong> on our sample data: no employee shares a first name with their dependent (Alicia is not Alice). That is correct, not an error.</p></div>
+<h3>EXISTS and NOT EXISTS</h3>
+<p><code>EXISTS</code> is true if the inner query returns at least one row. <code>NOT EXISTS</code> is true if it returns none. Both are used with correlated inner queries.</p>
+<p><strong>Q12B</strong> (same question as Q12, written with EXISTS), and <strong>Q6</strong>, employees with no dependents:</p>
 <pre><code>SELECT Fname, Lname
 FROM   EMPLOYEE
 WHERE  EXISTS (SELECT * FROM DEPENDENT
@@ -392,21 +359,19 @@ WHERE  EXISTS (SELECT * FROM DEPENDENT
 <pre><code>SELECT Fname, Lname
 FROM   EMPLOYEE
 WHERE  NOT EXISTS (SELECT * FROM DEPENDENT WHERE Ssn = Essn);</code></pre><div class="res"><p class="cap">Result: 5 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>James</td><td>Borg</td></tr><tr><td>Ramesh</td><td>Narayan</td></tr><tr><td>Joyce</td><td>English</td></tr><tr><td>Alicia</td><td>Zelaya</td></tr><tr><td>Ahmad</td><td>Jabbar</td></tr></tbody></table></div></div>
-
-  <h3>ANY, ALL and explicit sets</h3>
-  <ul class="t">
-    <li><code>&gt; ALL (subquery)</code>: true only if the condition holds for <strong>every</strong> value returned. If the subquery is empty, ALL is true.</li>
-    <li><code>&gt; ANY</code> (or <code>SOME</code>): true if it holds for <strong>at least one</strong> value. If the subquery is empty, ANY is false.</li>
-    <li>An <strong>explicit set</strong> can replace the subquery: <code>Pno IN (1, 2, 3)</code>.</li>
-  </ul>
+<h3>ANY, ALL and explicit sets</h3>
+<ul class="t">
+<li><code>&gt; ALL (subquery)</code>: true only if the condition holds for <strong>every</strong> value returned. If the subquery is empty, ALL is true.</li>
+<li><code>&gt; ANY</code> (or <code>SOME</code>): true if it holds for <strong>at least one</strong> value. If the subquery is empty, ANY is false.</li>
+<li>An <strong>explicit set</strong> can replace the subquery: <code>Pno IN (1, 2, 3)</code>.</li>
+</ul>
 <pre><code>SELECT Fname, Lname, Salary
 FROM   EMPLOYEE
 WHERE  Salary &gt; ALL (SELECT Salary FROM EMPLOYEE WHERE Dno = 5);</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Salary</th></tr></thead><tbody><tr><td>James</td><td>Borg</td><td>55000</td></tr><tr><td>Jennifer</td><td>Wallace</td><td>43000</td></tr></tbody></table></div></div>
 <pre><code>SELECT DISTINCT Essn FROM WORKS_ON WHERE Pno IN (1, 2, 3);</code></pre><div class="res"><p class="cap">Result: 4 rows</p><div class="wrap"><table><thead><tr><th>Essn</th></tr></thead><tbody><tr><td>123456789</td></tr><tr><td>333445555</td></tr><tr><td>453453453</td></tr><tr><td>666884444</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>SQLite does not support <code>ANY</code> or <code>ALL</code>, so I ran the equivalent <code>Salary &gt; (SELECT MAX(Salary) …)</code> and it gives the same two rows. MySQL and PostgreSQL accept the ALL form shown. I used the COMPANY schema here for consistency.</p></div>
-
-  <h3>"For all" queries: the missing CONTAINS</h3>
-  <p>The textbook's Q3 uses the <code>CONTAINS</code> operator, which compares two sets. It was in the original System R SQL but was <strong>dropped</strong>, and most systems do not have it. The standard replacement is a <strong>double NOT EXISTS</strong>: "there is no project of department 4 that this employee does not work on".</p>
+<div class="note"><p><span class="lbl">Note</span>SQLite does not support ANY or ALL, so the equivalent Salary &gt; (SELECT MAX(Salary) …) is used to run the query and gives the same rows. MySQL and PostgreSQL accept the ALL form shown.</p></div>
+<h3>"For all" queries: the missing CONTAINS</h3>
+<p>The textbook's Q3 uses the <code>CONTAINS</code> operator, which compares two sets. It was in the original System R SQL but was <strong>dropped</strong>, and most systems do not have it. The standard replacement is a <strong>double NOT EXISTS</strong>: "there is no project of department 4 that this employee does not work on".</p>
 <pre><code>SELECT Fname, Lname
 FROM   EMPLOYEE E
 WHERE  NOT EXISTS (
@@ -414,7 +379,7 @@ WHERE  NOT EXISTS (
          WHERE  P.Dnum = 4
            AND  NOT EXISTS (SELECT * FROM WORKS_ON W
                             WHERE W.Essn = E.Ssn AND W.Pno = P.Pnumber));</code></pre><div class="res"><p class="cap">Result: 2 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th></tr></thead><tbody><tr><td>Alicia</td><td>Zelaya</td></tr><tr><td>Ahmad</td><td>Jabbar</td></tr></tbody></table></div></div>
-  <p>With department 5 the result is empty on this data, because nobody works on all of ProductX, ProductY and ProductZ:</p>
+<p>With department 5 the result is empty on this data, because nobody works on all of ProductX, ProductY and ProductZ:</p>
 <pre><code>SELECT Fname, Lname
 FROM   EMPLOYEE E
 WHERE  NOT EXISTS (
@@ -422,87 +387,81 @@ WHERE  NOT EXISTS (
          WHERE  P.Dnum = 5
            AND  NOT EXISTS (SELECT * FROM WORKS_ON W
                             WHERE W.Essn = E.Ssn AND W.Pno = P.Pnumber));</code></pre><div class="res"><p class="cap">Result: 0 rows</p><p class="cap" style="margin:4px 0"><em>No rows returned on this sample data.</em></p></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Slide versions of Q3 also have typos (<code>SSN=ESSN</code> and the missing <code>CONTAINS</code> keyword). Use the double NOT EXISTS form in the exam, since CONTAINS will not run.</p></div>
-
-  <h3>Specialised query: above the department average</h3>
-  <div class="note add"><p><span class="lbl">Added</span>The syllabus asks for "complex joins, aggregations and specialised queries". A correlated subquery with an aggregate: employees paid more than the average of their own department.</p></div>
+<div class="note"><p><span class="lbl">Note</span>The CONTAINS operator in textbook notation does not exist in SQL systems. Use the double NOT EXISTS form.</p></div>
+<h3>Specialised query: above the department average</h3>
+<div class="note"><p><span class="lbl">Note</span>The syllabus asks for "complex joins, aggregations and specialised queries". A correlated subquery with an aggregate: employees paid more than the average of their own department.</p></div>
 <pre><code>SELECT E.Fname, E.Lname, E.Salary, E.Dno
 FROM   EMPLOYEE E
 WHERE  E.Salary &gt; (SELECT AVG(Salary) FROM EMPLOYEE WHERE Dno = E.Dno);</code></pre><div class="res"><p class="cap">Result: 3 rows</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Lname</th><th>Salary</th><th>Dno</th></tr></thead><tbody><tr><td>Franklin</td><td>Wong</td><td>40000</td><td>5</td></tr><tr><td>Jennifer</td><td>Wallace</td><td>43000</td><td>4</td></tr><tr><td>Ramesh</td><td>Narayan</td><td>38000</td><td>5</td></tr></tbody></table></div></div>
 </section>
-
 <section class="topic" id="t-agg">
-  <div class="head"><h2>Aggregates, GROUP BY and HAVING</h2><label class="rev" for="r-agg"><input class="rev" type="checkbox" id="r-agg" data-sec="t-agg">revised</label></div>
-  <div class="chips"><span class="chip">Write SQL</span><span class="chip">Differentiate</span><span class="chip fix">Check</span></div>
-  <p><strong>Aggregate functions:</strong> <code>COUNT, SUM, MAX, MIN, AVG</code>.</p>
-  <p><strong>Q15.</strong> Maximum, minimum and average salary.</p>
+<div class="head"><h2>Aggregates, GROUP BY and HAVING</h2><label class="rev" for="r-agg"><input class="rev" data-sec="t-agg" id="r-agg" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Write SQL</span><span class="chip">Differentiate</span></div>
+<p><strong>Aggregate functions:</strong> <code>COUNT, SUM, MAX, MIN, AVG</code>.</p>
+<p><strong>Q15.</strong> Maximum, minimum and average salary.</p>
 <pre><code>SELECT MAX(Salary), MIN(Salary), AVG(Salary) FROM EMPLOYEE;</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>MAX(Salary)</th><th>MIN(Salary)</th><th>AVG(Salary)</th></tr></thead><tbody><tr><td>55000</td><td>25000</td><td>35125.0</td></tr></tbody></table></div></div>
-  <p><strong>Q18.</strong> Number of employees in Research.</p>
+<p><strong>Q18.</strong> Number of employees in Research.</p>
 <pre><code>SELECT COUNT(*)
 FROM   EMPLOYEE, DEPARTMENT
 WHERE  Dno = Dnumber AND Dname = 'Research';</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>COUNT(*)</th></tr></thead><tbody><tr><td>4</td></tr></tbody></table></div></div>
-  <div class="note add"><p><span class="lbl">Added</span><strong>NULLs and aggregates.</strong> Aggregates other than <code>COUNT(*)</code> ignore NULLs. WORKS_ON has 16 rows, but Borg's Hours is NULL:</p></div>
+<div class="note"><p><span class="lbl">Note</span><strong>NULLs and aggregates.</strong> Aggregates other than <code>COUNT(*)</code> ignore NULLs. WORKS_ON has 16 rows, but Borg's Hours is NULL:</p></div>
 <pre><code>SELECT COUNT(*), COUNT(Hours), ROUND(AVG(Hours), 2) FROM WORKS_ON;</code></pre><div class="res"><p class="cap">Result: 1 row</p><div class="wrap"><table><thead><tr><th>COUNT(*)</th><th>COUNT(Hours)</th><th>ROUND(AVG(Hours), 2)</th></tr></thead><tbody><tr><td>16</td><td>15</td><td>18.33</td></tr></tbody></table></div></div>
-  <div class="note fix"><p><span class="lbl">Check</span>Some slides say that some SQL implementations may not allow more than one function in the SELECT clause. That is outdated: MySQL, PostgreSQL and SQLite all allow several, as Q15 shows.</p></div>
-
-  <h3>GROUP BY</h3>
-  <p>Divides the rows into <strong>groups</strong> with the same value of the grouping attribute(s), and applies the aggregate to each group separately. The grouping attributes must also appear in the SELECT list, and the SELECT list may contain only grouping attributes and aggregates. A join condition can be used with grouping, and grouping happens <strong>after</strong> the join.</p>
-  <p><strong>Q20.</strong> For each department: number of employees and average salary.</p>
+<div class="note"><p><span class="lbl">Note</span>Older texts say some SQL implementations allow only one aggregate function in the SELECT clause. That is outdated: MySQL, PostgreSQL and SQLite all allow several, as Q15 shows.</p></div>
+<h3>GROUP BY</h3>
+<p>Divides the rows into <strong>groups</strong> with the same value of the grouping attribute(s), and applies the aggregate to each group separately. The grouping attributes must also appear in the SELECT list, and the SELECT list may contain only grouping attributes and aggregates. A join condition can be used with grouping, and grouping happens <strong>after</strong> the join.</p>
+<p><strong>Q20.</strong> For each department: number of employees and average salary.</p>
 <pre><code>SELECT Dno, COUNT(*), AVG(Salary)
 FROM   EMPLOYEE
 GROUP BY Dno;</code></pre><div class="res"><p class="cap">Result: 3 rows</p><div class="wrap"><table><thead><tr><th>Dno</th><th>COUNT(*)</th><th>AVG(Salary)</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>55000.0</td></tr><tr><td>4</td><td>3</td><td>31000.0</td></tr><tr><td>5</td><td>4</td><td>33250.0</td></tr></tbody></table></div></div>
-  <p><strong>Q21.</strong> For each project: number, name and number of employees working on it.</p>
+<p><strong>Q21.</strong> For each project: number, name and number of employees working on it.</p>
 <pre><code>SELECT Pnumber, Pname, COUNT(*)
 FROM   PROJECT, WORKS_ON
 WHERE  Pnumber = Pno
 GROUP BY Pnumber, Pname;</code></pre><div class="res"><p class="cap">Result: 6 rows</p><div class="wrap"><table><thead><tr><th>Pnumber</th><th>Pname</th><th>COUNT(*)</th></tr></thead><tbody><tr><td>1</td><td>ProductX</td><td>2</td></tr><tr><td>2</td><td>ProductY</td><td>3</td></tr><tr><td>3</td><td>ProductZ</td><td>2</td></tr><tr><td>10</td><td>Computerization</td><td>3</td></tr><tr><td>20</td><td>Reorganization</td><td>3</td></tr><tr><td>30</td><td>Newbenefits</td><td>3</td></tr></tbody></table></div></div>
-
-  <h3>HAVING</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th></th><th>WHERE</th><th>HAVING</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Filters</strong></td><td>Individual <strong>rows</strong></td><td>Whole <strong>groups</strong></td></tr>
-      <tr><td><strong>When</strong></td><td>Before grouping</td><td>After grouping</td></tr>
-      <tr><td><strong>Can use aggregates?</strong></td><td>No</td><td>Yes</td></tr>
-    </tbody>
-  </table></div>
-  <p><strong>Q22.</strong> Projects on which more than two employees work.</p>
+<h3>HAVING</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th></th><th>WHERE</th><th>HAVING</th></tr></thead>
+<tbody>
+<tr><td><strong>Filters</strong></td><td>Individual <strong>rows</strong></td><td>Whole <strong>groups</strong></td></tr>
+<tr><td><strong>When</strong></td><td>Before grouping</td><td>After grouping</td></tr>
+<tr><td><strong>Can use aggregates?</strong></td><td>No</td><td>Yes</td></tr>
+</tbody>
+</table></div>
+<p><strong>Q22.</strong> Projects on which more than two employees work.</p>
 <pre><code>SELECT Pnumber, Pname, COUNT(*)
 FROM   PROJECT, WORKS_ON
 WHERE  Pnumber = Pno
 GROUP BY Pnumber, Pname
 HAVING COUNT(*) &gt; 2;</code></pre><div class="res"><p class="cap">Result: 4 rows</p><div class="wrap"><table><thead><tr><th>Pnumber</th><th>Pname</th><th>COUNT(*)</th></tr></thead><tbody><tr><td>2</td><td>ProductY</td><td>3</td></tr><tr><td>10</td><td>Computerization</td><td>3</td></tr><tr><td>20</td><td>Reorganization</td><td>3</td></tr><tr><td>30</td><td>Newbenefits</td><td>3</td></tr></tbody></table></div></div>
-  <div class="note add"><p><span class="lbl">Added</span>Aggregation with a join and an outer join: each department's manager and the number of projects the manager works on.</p></div>
+<div class="note"><p><span class="lbl">Note</span>Aggregation with a join and an outer join: each department's manager and the number of projects the manager works on.</p></div>
 <pre><code>SELECT D.Dname, E.Fname, E.Lname, COUNT(W.Pno) AS Projects
 FROM   DEPARTMENT D
   JOIN EMPLOYEE E ON D.Mgr_ssn = E.Ssn
   LEFT JOIN WORKS_ON W ON W.Essn = E.Ssn
 GROUP BY D.Dname, E.Fname, E.Lname;</code></pre><div class="res"><p class="cap">Result: 3 rows</p><div class="wrap"><table><thead><tr><th>Dname</th><th>Fname</th><th>Lname</th><th>Projects</th></tr></thead><tbody><tr><td>Administration</td><td>Jennifer</td><td>Wallace</td><td>2</td></tr><tr><td>Headquarters</td><td>James</td><td>Borg</td><td>1</td></tr><tr><td>Research</td><td>Franklin</td><td>Wong</td><td>4</td></tr></tbody></table></div></div>
 </section>
-
 <section class="topic" id="t-crud">
-  <div class="head"><h2>INSERT, UPDATE, DELETE and views</h2><label class="rev" for="r-crud"><input class="rev" type="checkbox" id="r-crud" data-sec="t-crud">revised</label></div>
-  <div class="chips"><span class="chip">Write SQL</span><span class="chip fix">Check</span><span class="chip add">Added</span></div>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>CRUD</th><th>SQL</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Create</strong></td><td><code>INSERT</code> (and <code>CREATE TABLE</code> for structures)</td></tr>
-      <tr><td><strong>Read</strong></td><td><code>SELECT</code></td></tr>
-      <tr><td><strong>Update</strong></td><td><code>UPDATE … SET … WHERE</code></td></tr>
-      <tr><td><strong>Delete</strong></td><td><code>DELETE FROM … WHERE</code></td></tr>
-    </tbody>
-  </table></div>
-  <h3>CRUD demo on the sample data</h3><p>Each statement was run in order, and the row count and a check query are real output.</p><p><strong>U1 insert a full tuple.</strong> Rows affected: 1.</p><pre><code>INSERT INTO EMPLOYEE VALUES ('653298653','Richard','K','Marini','1952-12-30','98 Oak Forest, Katy, TX','M',37000,'987654321',4);</code></pre><div class="res"><p class="cap">Check: SELECT Ssn, Fname, Lname, Salary FROM EMPLOYEE WHERE Ssn='653298653'</p><div class="wrap"><table><thead><tr><th>Ssn</th><th>Fname</th><th>Lname</th><th>Salary</th></tr></thead><tbody><tr><td>653298653</td><td>Richard</td><td>Marini</td><td>37000</td></tr></tbody></table></div></div><p><strong>U1A insert with a column list (others become NULL).</strong> Rows affected: 1.</p><pre><code>INSERT INTO EMPLOYEE (Ssn, Fname, Lname, Dno) VALUES ('111222333','Sam','Doe',1);</code></pre><div class="res"><p class="cap">Check: SELECT Ssn, Fname, Lname, Salary, Super_ssn FROM EMPLOYEE WHERE Ssn='111222333'</p><div class="wrap"><table><thead><tr><th>Ssn</th><th>Fname</th><th>Lname</th><th>Salary</th><th>Super_ssn</th></tr></thead><tbody><tr><td>111222333</td><td>Sam</td><td>Doe</td><td class="n">NULL</td><td class="n">NULL</td></tr></tbody></table></div></div><p><strong>U5 update several attributes of one tuple.</strong> Rows affected: 1.</p><pre><code>UPDATE PROJECT SET Plocation='Bellaire', Dnum=5 WHERE Pnumber=10;</code></pre><div class="res"><p class="cap">Check: SELECT Pnumber, Pname, Plocation, Dnum FROM PROJECT WHERE Pnumber=10</p><div class="wrap"><table><thead><tr><th>Pnumber</th><th>Pname</th><th>Plocation</th><th>Dnum</th></tr></thead><tbody><tr><td>10</td><td>Computerization</td><td>Bellaire</td><td>5</td></tr></tbody></table></div></div><p><strong>U6 update with a subquery (10% raise for Research).</strong> Rows affected: 4.</p><pre><code>UPDATE EMPLOYEE SET Salary = Salary * 1.1 WHERE Dno IN (SELECT Dnumber FROM DEPARTMENT WHERE Dname='Research');</code></pre><div class="res"><p class="cap">Check: SELECT Fname, ROUND(Salary, 2) AS Salary FROM EMPLOYEE WHERE Dno=5 ORDER BY Fname</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Salary</th></tr></thead><tbody><tr><td>Franklin</td><td>44000.0</td></tr><tr><td>John</td><td>33000.0</td></tr><tr><td>Joyce</td><td>27500.0</td></tr><tr><td>Ramesh</td><td>41800.0</td></tr></tbody></table></div></div><p><strong>U4B delete a tuple with no references.</strong> Rows affected: 1.</p><pre><code>DELETE FROM EMPLOYEE WHERE Ssn='653298653';</code></pre><div class="res"><p class="cap">Check: SELECT COUNT(*) AS Employees FROM EMPLOYEE</p><div class="wrap"><table><thead><tr><th>Employees</th></tr></thead><tbody><tr><td>9</td></tr></tbody></table></div></div><p><strong>A delete that breaks a constraint.</strong> Deleting an employee who still has a dependent is rejected by the foreign key (<code>FOREIGN KEY constraint failed</code>) because the default rule is RESTRICT. Delete the dependent first, or declare <code>ON DELETE CASCADE</code>.</p>
-  <ul class="t">
-    <li><strong>INSERT</strong> without a column list needs values in the order of the CREATE TABLE. With a column list, any column you leave out gets NULL (or its default). A variation inserts the result of a query: <code>INSERT INTO Depts_info (…) SELECT …</code>. The copied table is not kept up to date, so use a view if you need that.</li>
-    <li><strong>DELETE</strong> removes rows of <strong>one table</strong> at a time (unless CASCADE is declared on a foreign key). <strong>A missing WHERE deletes every row</strong>: the table stays but is empty.</li>
-    <li><strong>UPDATE</strong> changes rows of one table. The right side of <code>SET Salary = Salary * 1.1</code> uses the old value and the left side receives the new one.</li>
-    <li>Only constraints declared in the DDL are enforced. A delete or update that breaks one is rejected, or follows the ON DELETE and ON UPDATE rule.</li>
-  </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>Slide U1 inserts <code>'30-DEC-52'</code> as a date. In MySQL and SQLite a date literal is <code>'1952-12-30'</code>. U1 also lists values in the book's column order (Fname, Minit, Lname, Ssn, …), but the CREATE TABLE in Module 1 of these notes puts Ssn first. Naming the columns, as U1A does, avoids this mistake.</p></div>
-
-  <h3>Views</h3>
-  <div class="note add"><p><span class="lbl">Added</span>A copied table such as DEPTS_INFO goes stale when the base tables change. A <strong>view</strong> is a stored query that behaves like a virtual table and is always current:</p>
+<div class="head"><h2>INSERT, UPDATE, DELETE and views</h2><label class="rev" for="r-crud"><input class="rev" data-sec="t-crud" id="r-crud" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Write SQL</span></div>
+<div class="wrap"><table class="wide">
+<thead><tr><th>CRUD</th><th>SQL</th></tr></thead>
+<tbody>
+<tr><td><strong>Create</strong></td><td><code>INSERT</code> (and <code>CREATE TABLE</code> for structures)</td></tr>
+<tr><td><strong>Read</strong></td><td><code>SELECT</code></td></tr>
+<tr><td><strong>Update</strong></td><td><code>UPDATE … SET … WHERE</code></td></tr>
+<tr><td><strong>Delete</strong></td><td><code>DELETE FROM … WHERE</code></td></tr>
+</tbody>
+</table></div>
+<h3>CRUD demo on the sample data</h3><p>Each statement was run in order, and the row count and a check query are real output.</p><p><strong>U1 insert a full tuple.</strong> Rows affected: 1.</p><pre><code>INSERT INTO EMPLOYEE VALUES ('653298653','Richard','K','Marini','1952-12-30','98 Oak Forest, Katy, TX','M',37000,'987654321',4);</code></pre><div class="res"><p class="cap">Check: SELECT Ssn, Fname, Lname, Salary FROM EMPLOYEE WHERE Ssn='653298653'</p><div class="wrap"><table><thead><tr><th>Ssn</th><th>Fname</th><th>Lname</th><th>Salary</th></tr></thead><tbody><tr><td>653298653</td><td>Richard</td><td>Marini</td><td>37000</td></tr></tbody></table></div></div><p><strong>U1A insert with a column list (others become NULL).</strong> Rows affected: 1.</p><pre><code>INSERT INTO EMPLOYEE (Ssn, Fname, Lname, Dno) VALUES ('111222333','Sam','Doe',1);</code></pre><div class="res"><p class="cap">Check: SELECT Ssn, Fname, Lname, Salary, Super_ssn FROM EMPLOYEE WHERE Ssn='111222333'</p><div class="wrap"><table><thead><tr><th>Ssn</th><th>Fname</th><th>Lname</th><th>Salary</th><th>Super_ssn</th></tr></thead><tbody><tr><td>111222333</td><td>Sam</td><td>Doe</td><td class="n">NULL</td><td class="n">NULL</td></tr></tbody></table></div></div><p><strong>U5 update several attributes of one tuple.</strong> Rows affected: 1.</p><pre><code>UPDATE PROJECT SET Plocation='Bellaire', Dnum=5 WHERE Pnumber=10;</code></pre><div class="res"><p class="cap">Check: SELECT Pnumber, Pname, Plocation, Dnum FROM PROJECT WHERE Pnumber=10</p><div class="wrap"><table><thead><tr><th>Pnumber</th><th>Pname</th><th>Plocation</th><th>Dnum</th></tr></thead><tbody><tr><td>10</td><td>Computerization</td><td>Bellaire</td><td>5</td></tr></tbody></table></div></div><p><strong>U6 update with a subquery (10% raise for Research).</strong> Rows affected: 4.</p><pre><code>UPDATE EMPLOYEE SET Salary = Salary * 1.1 WHERE Dno IN (SELECT Dnumber FROM DEPARTMENT WHERE Dname='Research');</code></pre><div class="res"><p class="cap">Check: SELECT Fname, ROUND(Salary, 2) AS Salary FROM EMPLOYEE WHERE Dno=5 ORDER BY Fname</p><div class="wrap"><table><thead><tr><th>Fname</th><th>Salary</th></tr></thead><tbody><tr><td>Franklin</td><td>44000.0</td></tr><tr><td>John</td><td>33000.0</td></tr><tr><td>Joyce</td><td>27500.0</td></tr><tr><td>Ramesh</td><td>41800.0</td></tr></tbody></table></div></div><p><strong>U4B delete a tuple with no references.</strong> Rows affected: 1.</p><pre><code>DELETE FROM EMPLOYEE WHERE Ssn='653298653';</code></pre><div class="res"><p class="cap">Check: SELECT COUNT(*) AS Employees FROM EMPLOYEE</p><div class="wrap"><table><thead><tr><th>Employees</th></tr></thead><tbody><tr><td>9</td></tr></tbody></table></div></div><p><strong>A delete that breaks a constraint.</strong> Deleting an employee who still has a dependent is rejected by the foreign key (<code>FOREIGN KEY constraint failed</code>) because the default rule is RESTRICT. Delete the dependent first, or declare <code>ON DELETE CASCADE</code>.</p>
+<ul class="t">
+<li><strong>INSERT</strong> without a column list needs values in the order of the CREATE TABLE. With a column list, any column you leave out gets NULL (or its default). A variation inserts the result of a query: <code>INSERT INTO Depts_info (…) SELECT …</code>. The copied table is not kept up to date, so use a view if you need that.</li>
+<li><strong>DELETE</strong> removes rows of <strong>one table</strong> at a time (unless CASCADE is declared on a foreign key). <strong>A missing WHERE deletes every row</strong>: the table stays but is empty.</li>
+<li><strong>UPDATE</strong> changes rows of one table. The right side of <code>SET Salary = Salary * 1.1</code> uses the old value and the left side receives the new one.</li>
+<li>Only constraints declared in the DDL are enforced. A delete or update that breaks one is rejected, or follows the ON DELETE and ON UPDATE rule.</li>
+</ul>
+<div class="note"><p><span class="lbl">Note</span>A date literal in MySQL and SQLite is written '1952-12-30'. Name the columns in an INSERT: the textbook's U1 lists values in its own column order (Fname, Minit, Lname, Ssn, …), which does not match a table created with Ssn first.</p></div>
+<h3>Views</h3>
+<div class="note"><p><span class="lbl">Note</span>A copied table such as DEPTS_INFO goes stale when the base tables change. A <strong>view</strong> is a stored query that behaves like a virtual table and is always current:</p>
 <pre><code>CREATE VIEW Dept_info AS
   SELECT Dname, COUNT(*) AS No_of_emps, SUM(Salary) AS Total_sal
   FROM   DEPARTMENT, EMPLOYEE
@@ -510,112 +469,94 @@ GROUP BY D.Dname, E.Fname, E.Lname;</code></pre><div class="res"><p class="cap">
   GROUP BY Dname;</code></pre></div>
 <pre><code>SELECT * FROM Dept_info;</code></pre><div class="res"><p class="cap">Result: 3 rows</p><div class="wrap"><table><thead><tr><th>Dname</th><th>No_of_emps</th><th>Total_sal</th></tr></thead><tbody><tr><td>Administration</td><td>3</td><td>93000</td></tr><tr><td>Headquarters</td><td>1</td><td>55000</td></tr><tr><td>Research</td><td>4</td><td>133000</td></tr></tbody></table></div></div>
 </section>
-
-
-<!-- ============ REVISE ============ -->
 <section class="topic" id="t-sheet">
-  <div class="head"><h2>One-page cheat sheet</h2></div>
-  <div class="cards">
-    <div class="rc"><h4>FD rules</h4><ul>
-      <li>Reflexive: Y ⊆ X gives X→Y</li>
-      <li>Augmentation: X→Y gives XZ→YZ</li>
-      <li>Transitive: X→Y, Y→Z give X→Z</li>
-      <li>Union, decomposition, pseudotransitivity</li>
-      <li>X→Y implied iff Y ⊆ X⁺</li></ul></div>
-    <div class="rc"><h4>Closure X⁺</h4><ul>
-      <li>Start with X</li>
-      <li>Add RHS of any FD whose LHS is inside</li>
-      <li>Repeat until nothing is added</li></ul></div>
-    <div class="rc"><h4>Candidate keys</h4><ul>
-      <li>Never on a RHS: in every key</li>
-      <li>Only on RHS: in no key</li>
-      <li>Add attributes until closure = R, keep minimal sets</li></ul></div>
-    <div class="rc"><h4>Minimal cover</h4><ul>
-      <li>1 Split RHS to single attributes</li>
-      <li>2 Drop extraneous LHS attributes</li>
-      <li>3 Drop redundant FDs</li>
-      <li>Canonical: merge same LHS</li></ul></div>
-    <div class="rc"><h4>Normal forms</h4><ul>
-      <li>1NF atomic values</li>
-      <li>2NF no partial dependency</li>
-      <li>3NF X superkey or A prime</li>
-      <li>BCNF X superkey</li>
-      <li>4NF MVD needs superkey</li>
-      <li>5NF JD needs superkeys</li></ul></div>
-    <div class="rc"><h4>Decomposition</h4><ul>
-      <li>Attribute preservation: always</li>
-      <li>Lossless: never give up. Binary test: R1∩R2 → R1−R2 or R2−R1</li>
-      <li>Dependency preservation: can give up</li>
-      <li>3NF synthesis: always both. BCNF: lossless only</li></ul></div>
-    <div class="rc"><h4>SQL clause order</h4><ul>
-      <li>SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY</li>
-      <li>Only SELECT and FROM required</li>
-      <li>WHERE rows, HAVING groups</li></ul></div>
-    <div class="rc"><h4>Nested queries</h4><ul>
-      <li>IN, ANY, ALL, EXISTS, NOT EXISTS</li>
-      <li>Correlated: inner uses outer column</li>
-      <li>"For all" = double NOT EXISTS</li>
-      <li>NULL: IS NULL, not = NULL</li></ul></div>
-    <div class="rc"><h4>Joins and updates</h4><ul>
-      <li>JOIN ON, NATURAL, LEFT/RIGHT/FULL OUTER, CROSS</li>
-      <li>INSERT, UPDATE, DELETE affect one table</li>
-      <li>DELETE with no WHERE empties the table</li>
-      <li>View = stored query</li></ul></div>
-  </div>
+<div class="head"><h2>One-page cheat sheet</h2></div>
+<div class="cards">
+<div class="rc"><h4>FD rules</h4><ul>
+<li>Reflexive: Y ⊆ X gives X→Y</li>
+<li>Augmentation: X→Y gives XZ→YZ</li>
+<li>Transitive: X→Y, Y→Z give X→Z</li>
+<li>Union, decomposition, pseudotransitivity</li>
+<li>X→Y implied iff Y ⊆ X⁺</li></ul></div>
+<div class="rc"><h4>Closure X⁺</h4><ul>
+<li>Start with X</li>
+<li>Add RHS of any FD whose LHS is inside</li>
+<li>Repeat until nothing is added</li></ul></div>
+<div class="rc"><h4>Candidate keys</h4><ul>
+<li>Never on a RHS: in every key</li>
+<li>Only on RHS: in no key</li>
+<li>Add attributes until closure = R, keep minimal sets</li></ul></div>
+<div class="rc"><h4>Minimal cover</h4><ul>
+<li>1 Split RHS to single attributes</li>
+<li>2 Drop extraneous LHS attributes</li>
+<li>3 Drop redundant FDs</li>
+<li>Canonical: merge same LHS</li></ul></div>
+<div class="rc"><h4>Normal forms</h4><ul>
+<li>1NF atomic values</li>
+<li>2NF no partial dependency</li>
+<li>3NF X superkey or A prime</li>
+<li>BCNF X superkey</li>
+<li>4NF MVD needs superkey</li>
+<li>5NF JD needs superkeys</li></ul></div>
+<div class="rc"><h4>Decomposition</h4><ul>
+<li>Attribute preservation: always</li>
+<li>Lossless: never give up. Binary test: R1∩R2 → R1−R2 or R2−R1</li>
+<li>Dependency preservation: can give up</li>
+<li>3NF synthesis: always both. BCNF: lossless only</li></ul></div>
+<div class="rc"><h4>SQL clause order</h4><ul>
+<li>SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY</li>
+<li>Only SELECT and FROM required</li>
+<li>WHERE rows, HAVING groups</li></ul></div>
+<div class="rc"><h4>Nested queries</h4><ul>
+<li>IN, ANY, ALL, EXISTS, NOT EXISTS</li>
+<li>Correlated: inner uses outer column</li>
+<li>"For all" = double NOT EXISTS</li>
+<li>NULL: IS NULL, not = NULL</li></ul></div>
+<div class="rc"><h4>Joins and updates</h4><ul>
+<li>JOIN ON, NATURAL, LEFT/RIGHT/FULL OUTER, CROSS</li>
+<li>INSERT, UPDATE, DELETE affect one table</li>
+<li>DELETE with no WHERE empties the table</li>
+<li>View = stored query</li></ul></div>
+</div>
 </section>
-
 <section class="topic" id="t-qa">
-  <div class="head"><h2>Likely questions with answer outlines</h2></div>
-  <div class="chips"><span class="chip add">Added</span><span class="chip">Covers every syllabus line</span></div>
-  <div class="note add"><p><span class="lbl">Added</span>These are my guess at typical KTU-style questions from the syllabus. I have not seen past papers, so match them against yours.</p></div>
-
-  <details class="q"><summary>What are insertion, deletion and modification anomalies? Illustrate with an example. (5)</summary><div class="ans">
-    <p>Use EMP_PROJ(Emp#, Proj#, Ename, Pname, No_hours): cannot insert a project without an employee, deleting the last employee deletes the project, renaming a project needs many row changes. State that redundancy is the cause. See <a href="#t-why">Why normalise</a>.</p></div></details>
-
-  <details class="q"><summary>What is a functional dependency? State Armstrong's axioms. (5)</summary><div class="ans">
-    <p>Definition with t1[X] = t2[X] implies t1[Y] = t2[Y]. Reflexive, augmentation, transitive, and say they are sound and complete. Add union, decomposition and pseudotransitivity. See <a href="#t-fd">Functional dependencies</a>.</p></div></details>
-
-  <details class="q"><summary>Given R and a set of FDs, find the closure of an attribute set and all candidate keys. (7)</summary><div class="ans">
-    <p>Show the closure steps line by line, then the key method: attributes never on a right side, test closure, keep minimal sets.</p></div></details>
-
-  <details class="q"><summary>Find the minimal (canonical) cover of a set of FDs. (7)</summary><div class="ans">
-    <p>Three steps: split right sides, remove extraneous left attributes, remove redundant FDs. Show the closure test for every removal.</p></div></details>
-
-  <details class="q"><summary>Define 1NF, 2NF, 3NF and BCNF. How does BCNF differ from 3NF? (7)</summary><div class="ans">
-    <p>Give each condition, partial and transitive dependency definitions, and the nested-box picture. Differentiate with the TEACH example (3NF, not BCNF). See <a href="#t-nf">Normal forms</a>.</p></div></details>
-
-  <details class="q"><summary>Normalise a given relation to 3NF, showing each step. (10)</summary><div class="ans">
-    <p>Find keys, list prime and non-prime attributes, state the partial dependencies and decompose for 2NF, then transitive dependencies for 3NF. Or use synthesis from the minimal cover.</p></div></details>
-
-  <details class="q"><summary>Decompose a relation into BCNF. Is the decomposition lossless and dependency preserving? (10)</summary><div class="ans">
-    <p>Split on each violating FD, then check lossless with the binary test and dependency preservation FD by FD. See <a href="#t-decomp">Decomposition</a>.</p></div></details>
-
-  <details class="q"><summary>Explain lossless join and dependency preservation. Which can be sacrificed? (5)</summary><div class="ans">
-    <p>Definitions, the binary test, and the TEACH example where fd1 is lost but the join stays lossless. Lossless is never sacrificed.</p></div></details>
-
-  <details class="q"><summary>Explain multivalued dependency and 4NF with an example. (5)</summary><div class="ans">
-    <p>Definition, trivial MVD, the EMP(Ename, Pname, Dname) example with its 2 × 2 tuples, decomposition into two relations. Briefly mention JD and 5NF with SUPPLY. See <a href="#t-mvd">MVD, 4NF, JD, 5NF</a>.</p></div></details>
-
-  <details class="q"><summary>Write SQL queries on the COMPANY schema: joins, nested queries, aggregates. (7 to 10)</summary><div class="ans">
-    <p>Expect: employees of a department (join or IN), employees with no dependents (NOT EXISTS), department-wise count and average (GROUP BY), departments with more than N employees (HAVING), employees with no supervisor (IS NULL). See <a href="#t-select">SELECT</a>, <a href="#t-join">Joins</a> and <a href="#t-agg">Aggregates</a>.</p></div></details>
-
-  <details class="q"><summary>Explain GROUP BY and HAVING. How is HAVING different from WHERE? (3)</summary><div class="ans">
-    <p>Grouping rows by attribute values, aggregates per group, HAVING filters groups after grouping, WHERE filters rows before it. Give Q22.</p></div></details>
-
-  <details class="q"><summary>Explain INSERT, DELETE and UPDATE with examples. What happens if a constraint is violated? (5)</summary><div class="ans">
-    <p>One example of each (U1A, U4, U5 or U6), rows affected, WHERE omitted deletes all, and the reject, CASCADE or SET NULL outcomes. See <a href="#t-crud">INSERT, UPDATE, DELETE</a>.</p></div></details>
-
+<div class="head"><h2>Likely questions with answer outlines</h2></div>
+<div class="chips"><span class="chip">Covers every syllabus line</span></div>
+<details class="q"><summary>What are insertion, deletion and modification anomalies? Illustrate with an example. (5)</summary><div class="ans">
+<p>Use EMP_PROJ(Emp#, Proj#, Ename, Pname, No_hours): cannot insert a project without an employee, deleting the last employee deletes the project, renaming a project needs many row changes. State that redundancy is the cause. See <a href="#t-why">Why normalise</a>.</p></div></details>
+<details class="q"><summary>What is a functional dependency? State Armstrong's axioms. (5)</summary><div class="ans">
+<p>Definition with t1[X] = t2[X] implies t1[Y] = t2[Y]. Reflexive, augmentation, transitive, and say they are sound and complete. Add union, decomposition and pseudotransitivity. See <a href="#t-fd">Functional dependencies</a>.</p></div></details>
+<details class="q"><summary>Given R and a set of FDs, find the closure of an attribute set and all candidate keys. (7)</summary><div class="ans">
+<p>Show the closure steps line by line, then the key method: attributes never on a right side, test closure, keep minimal sets.</p></div></details>
+<details class="q"><summary>Find the minimal (canonical) cover of a set of FDs. (7)</summary><div class="ans">
+<p>Three steps: split right sides, remove extraneous left attributes, remove redundant FDs. Show the closure test for every removal.</p></div></details>
+<details class="q"><summary>Define 1NF, 2NF, 3NF and BCNF. How does BCNF differ from 3NF? (7)</summary><div class="ans">
+<p>Give each condition, partial and transitive dependency definitions, and the nested-box picture. Differentiate with the TEACH example (3NF, not BCNF). See <a href="#t-nf">Normal forms</a>.</p></div></details>
+<details class="q"><summary>Normalise a given relation to 3NF, showing each step. (10)</summary><div class="ans">
+<p>Find keys, list prime and non-prime attributes, state the partial dependencies and decompose for 2NF, then transitive dependencies for 3NF. Or use synthesis from the minimal cover.</p></div></details>
+<details class="q"><summary>Decompose a relation into BCNF. Is the decomposition lossless and dependency preserving? (10)</summary><div class="ans">
+<p>Split on each violating FD, then check lossless with the binary test and dependency preservation FD by FD. See <a href="#t-decomp">Decomposition</a>.</p></div></details>
+<details class="q"><summary>Explain lossless join and dependency preservation. Which can be sacrificed? (5)</summary><div class="ans">
+<p>Definitions, the binary test, and the TEACH example where fd1 is lost but the join stays lossless. Lossless is never sacrificed.</p></div></details>
+<details class="q"><summary>Explain multivalued dependency and 4NF with an example. (5)</summary><div class="ans">
+<p>Definition, trivial MVD, the EMP(Ename, Pname, Dname) example with its 2 × 2 tuples, decomposition into two relations. Briefly mention JD and 5NF with SUPPLY. See <a href="#t-mvd">MVD, 4NF, JD, 5NF</a>.</p></div></details>
+<details class="q"><summary>Write SQL queries on the COMPANY schema: joins, nested queries, aggregates. (7 to 10)</summary><div class="ans">
+<p>Expect: employees of a department (join or IN), employees with no dependents (NOT EXISTS), department-wise count and average (GROUP BY), departments with more than N employees (HAVING), employees with no supervisor (IS NULL). See <a href="#t-select">SELECT</a>, <a href="#t-join">Joins</a> and <a href="#t-agg">Aggregates</a>.</p></div></details>
+<details class="q"><summary>Explain GROUP BY and HAVING. How is HAVING different from WHERE? (3)</summary><div class="ans">
+<p>Grouping rows by attribute values, aggregates per group, HAVING filters groups after grouping, WHERE filters rows before it. Give Q22.</p></div></details>
+<details class="q"><summary>Explain INSERT, DELETE and UPDATE with examples. What happens if a constraint is violated? (5)</summary><div class="ans">
+<p>One example of each (U1A, U4, U5 or U6), rows affected, WHERE omitted deletes all, and the reject, CASCADE or SET NULL outcomes. See <a href="#t-crud">INSERT, UPDATE, DELETE</a>.</p></div></details>
 </section>
-
 <footer class="notes-footer" role="contentinfo">
-  <div class="notes-footer-inner">
-    <div class="notes-footer-nav">
-      <a href="/">← All Subjects</a>
-      <a href="/notes/dbms-module-1/">← Previous: DBMS Module 1</a>
-      <a href="/notes/dbms-module-3/">Next: DBMS Module 3 →</a>
-    </div>
-    <div class="notes-footer-meta">
-      <span>PBITT304 DBMS · Module 2 · KTU 2024 Scheme</span>
-    </div>
-  </div>
+<div class="notes-footer-inner">
+<div class="notes-footer-nav">
+<a href="/">← All Subjects</a>
+<a href="/notes/dbms-module-1/">← Previous: DBMS Module 1</a>
+<a href="/notes/dbms-module-3/">Next: DBMS Module 3 →</a>
+</div>
+<div class="notes-footer-meta">
+<span>PBITT304 DBMS · Module 2 · KTU 2024 Scheme</span>
+<p class="notes-ref">Based on Elmasri and Navathe, <em>Fundamentals of Database Systems</em> (chapters 8, 10 and 11). SQL results were produced by running the queries in SQLite on the COMPANY sample data; closures, keys and covers were checked in code. The likely-questions list is a guide to typical question types.</p></div>
+</div>
 </footer>
+

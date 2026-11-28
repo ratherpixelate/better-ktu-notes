@@ -1,8 +1,7 @@
 <header class="top">
 <p class="eyebrow">GAEST305 · Digital Electronics and Logic Design</p>
 <h1>Module 3: MSI Logic and Digital Building Blocks</h1>
-<p class="lede">Syllabus coverage: Decoders, BCD-to-seven-segment display decoders, encoders, priority encoders, multiplexers (MUX), demultiplexers (DEMUX), arithmetic circuits (half/full adders and subtractors), magnitude comparators, structural Verilog hierarchy, gate-level primitives, user-defined primitives (UDP), and gate delays.</p>
-
+<p class="lede"> Covers decoders, encoders, multiplexers, demultiplexers, adders, subtractors, comparators and structural Verilog.</p>
 </header>
 <section class="topic" id="t-dec">
 <div class="head"><h2>Decoders and the one-hot decoder</h2><label class="rev" for="r-dec"><input class="rev" data-sec="t-dec" id="r-dec" type="checkbox"/>revised</label></div>
@@ -21,8 +20,8 @@
   assign d = 8'b1 &lt;&lt; a;     // bit a of d is 1, all others 0
 endmodule</code></pre>
 <p>Simulated: input 000 gives 00000001, input 101 gives 00100000.</p>
-<div class="note add"><p><span class="lbl">Added</span><strong>Enable input.</strong> Real decoder chips have an enable input EN. When EN = 0 all outputs are 0, when EN = 1 the decoder works normally (<code>D0 = EN·x'·y'</code> and so on). Enable inputs let you build a larger decoder from smaller ones and are used for chip select. Simulated: with EN = 0 and xy = 10, all outputs stayed 0.</p></div>
-<div class="note add"><p><span class="lbl">Added</span><strong>A decoder can implement any function.</strong> Take the outputs of the minterms where F = 1 and OR them. A full adder from a 3 to 8 decoder: <strong>S = Σm(1,2,4,7) = D1 + D2 + D4 + D7</strong> and <strong>Cout = Σm(3,5,6,7) = D3 + D5 + D6 + D7</strong> (checked in code and in the simulator for all 8 inputs).</p></div>
+<div class="note"><p><span class="lbl">Note</span><strong>Enable input.</strong> Real decoder chips have an enable input EN. When EN = 0 all outputs are 0, when EN = 1 the decoder works normally (<code>D0 = EN·x'·y'</code> and so on). Enable inputs let you build a larger decoder from smaller ones and are used for chip select. Simulated: with EN = 0 and xy = 10, all outputs stayed 0.</p></div>
+<div class="note"><p><span class="lbl">Note</span><strong>A decoder can implement any function.</strong> Take the outputs of the minterms where F = 1 and OR them. A full adder from a 3 to 8 decoder: <strong>S = Σm(1,2,4,7) = D1 + D2 + D4 + D7</strong> and <strong>Cout = Σm(3,5,6,7) = D3 + D5 + D6 + D7</strong> (checked in code and in the simulator for all 8 inputs).</p></div>
 </section>
 <section class="topic" id="t-seg">
 <div class="head"><h2>Seven-segment display decoder (BCD to seven-segment)</h2><label class="rev" for="r-seg"><input class="rev" data-sec="t-seg" id="r-seg" type="checkbox"/>revised</label></div>
@@ -34,8 +33,8 @@ endmodule</code></pre>
 <h3>Minimized equations</h3>
 <div class="wrap"><table class="wide"><thead><tr><th>Segment</th><th>Lit for digits</th><th>Minimized expression</th></tr></thead><tbody><tr><td>S0 (top)</td><td>0 2 3 5 6 7 8 9</td><td class="m"><strong>A + C + BD + B'D'</strong></td></tr><tr><td>S1 (upper right)</td><td>0 1 2 3 4 7 8 9</td><td class="m"><strong>B' + C'D' + CD</strong></td></tr><tr><td>S2 (lower right)</td><td>0 1 3 4 5 6 7 8 9</td><td class="m"><strong>C' + B + D</strong></td></tr><tr><td>S3 (bottom)</td><td>0 2 3 5 6 8 9</td><td class="m"><strong>A + B'D' + B'C + CD' + BC'D</strong></td></tr><tr><td>S4 (lower left)</td><td>0 2 6 8</td><td class="m"><strong>B'D' + CD' = D'(B' + C)</strong></td></tr><tr><td>S5 (upper left)</td><td>0 4 5 6 8 9</td><td class="m"><strong>A + C'D' + BC' + BD'</strong></td></tr><tr><td>S6 (middle)</td><td>2 3 4 5 6 8 9</td><td class="m"><strong>A + BC' + B'C + CD'</strong></td></tr></tbody></table></div>
 <p>The truth table was entered from the standard digit shapes and each equation was minimized in code. A Verilog module using exactly these seven equations was simulated for all ten digits and every output matched the table.</p>
-<div class="note fix"><p><span class="lbl">Check</span>All seven equations in the class notes match this table <strong>except that S3 is garbled in the scan</strong>. It reads best as <code>S3 = BC'D + A + B'D' + A'B'C + CD'</code>, which is correct for digits 0 to 9, but <code>A'B'C</code> can be shortened to <code>B'C</code> because A is already in the sum, giving the form in the table. Either version is acceptable. The scan also shows <code>CD</code> where <code>CD'</code> is needed. Reading it with <code>CD</code> fails for digits 6 and 7, so use <code>CD'</code>.</p></div>
-<div class="note add"><p><span class="lbl">Added</span>A <strong>common-anode</strong> display lights a segment when the output is 0, so every output is inverted. The digits 6 and 9 can be drawn with or without the top (6) and bottom (9) bar. This page uses the version with the bars, the same as the equations above. A different drawing gives different equations for S0 and S3.</p></div>
+<div class="note"><p><span class="lbl">Note</span>Seven-segment equation for S3: the form in the table is the simplified one. Take care to write CD' (not CD); reading the term as CD gives wrong outputs for digits 6 and 7.</p></div>
+<div class="note"><p><span class="lbl">Note</span>A <strong>common-anode</strong> display lights a segment when the output is 0, so every output is inverted. The digits 6 and 9 can be drawn with or without the top (6) and bottom (9) bar. This page uses the version with the bars, the same as the equations above. A different drawing gives different equations for S0 and S3.</p></div>
 </section>
 <section class="topic" id="t-enc">
 <div class="head"><h2>Encoders and the priority encoder</h2><label class="rev" for="r-enc"><input class="rev" data-sec="t-enc" id="r-enc" type="checkbox"/>revised</label></div>
@@ -50,8 +49,7 @@ endmodule</code></pre>
 <div class="wrap"><table class="wide"><thead><tr><th class="c">D3</th><th class="c">D2</th><th class="c">D1</th><th class="c">D0</th><th class="c">A</th><th class="c">B</th><th class="c">V</th></tr></thead><tbody><tr><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td></tr><tr><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">1</td><td class="c m">0</td><td class="c m">0</td><td class="c m">1</td></tr><tr><td class="c m">0</td><td class="c m">0</td><td class="c m">1</td><td class="c m">X</td><td class="c m">0</td><td class="c m">1</td><td class="c m">1</td></tr><tr><td class="c m">0</td><td class="c m">1</td><td class="c m">X</td><td class="c m">X</td><td class="c m">1</td><td class="c m">0</td><td class="c m">1</td></tr><tr><td class="c m">1</td><td class="c m">X</td><td class="c m">X</td><td class="c m">X</td><td class="c m">1</td><td class="c m">1</td><td class="c m">1</td></tr></tbody></table></div>
 <div class="formula">A = D3 + D2<br/>B = D3 + D2'·D1<br/>V = D3 + D2 + D1 + D0</div>
 <p>Simulated: D = 0110 gives 10 with V = 1 (D2 wins), D = 1011 gives 11 with V = 1, D = 0000 gives 00 with V = 0. The plain encoder given 0110 gives 11, which is wrong. V matched for all 16 inputs.</p>
-<div class="note fix"><p><span class="lbl">Check</span><strong>The priority encoder equation for the lower output bit is wrong in the class notes.</strong> They give <code>y = D1 + D3</code>, which is the equation of the plain encoder. With D2 = 1 and D1 = 1 it gives y = 1, but the output should be 10 (D2 wins), so y should be 0. The correct equation is <strong>y = D3 + D2'D1</strong>. The notes' other priority-encoder results, <code>x = D2 + D3</code> and <code>V = D0 + D1 + D2 + D3</code>, are correct. Verified for all 16 input combinations. One line in the notes also reads like <code>B = D2 ⊕ D3</code> for the plain encoder. That is not right for the table (D2 alone would give B = 1). Use B = D1 + D3.</p></div>
-<div class="note add"><p><span class="lbl">Added</span>The notes' priority table has an enable input En: when En = 0 all outputs are 0, which is the same idea as the enable of a decoder.</p></div>
+<div class="note"><p><span class="lbl">Common mistake</span>Priority encoder, lower output bit: y = D3 + D2'D1, not D1 + D3. The equation y = D1 + D3 belongs to the plain encoder. With D2 = 1 and D1 = 1 it gives y = 1, but the output should be 10 (D2 wins), so y must be 0. The other outputs, x = D2 + D3 and V = D0 + D1 + D2 + D3, are as shown. Verified for all 16 input combinations. For the plain encoder, use B = D1 + D3, not B = D2 ⊕ D3 (D2 alone would wrongly give B = 1).</p></div>
 </section>
 <section class="topic" id="t-mux">
 <div class="head"><h2>Multiplexers (MUX)</h2><label class="rev" for="r-mux"><input class="rev" data-sec="t-mux" id="r-mux" type="checkbox"/>revised</label></div>
@@ -68,7 +66,6 @@ endmodule</code></pre>
 <h3>Verilog</h3>
 <pre><code>assign Y = I[S];                              // 4:1 mux, I is [3:0], S is [1:0]
 assign Y = S ? I1 : I0;                       // 2:1 mux (conditional operator)</code></pre>
-<div class="note add"><p><span class="lbl">Added</span>Multiplexer-based function implementation is not in the class notes, only the heading "used in implementing any Boolean function". The method above is the standard one and is a frequent exam question.</p></div>
 </section>
 <section class="topic" id="t-demux">
 <div class="head"><h2>Demultiplexers (DEMUX)</h2><label class="rev" for="r-demux"><input class="rev" data-sec="t-demux" id="r-demux" type="checkbox"/>revised</label></div>
@@ -77,7 +74,7 @@ assign Y = S ? I1 : I0;                       // 2:1 mux (conditional operator)<
 <div class="wrap"><table class="wide"><thead><tr><th class="c">S1</th><th class="c">S0</th><th class="c">Y0</th><th class="c">Y1</th><th class="c">Y2</th><th class="c">Y3</th></tr></thead><tbody><tr><td class="c m">0</td><td class="c m">0</td><td class="c m">D</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td></tr><tr><td class="c m">0</td><td class="c m">1</td><td class="c m">0</td><td class="c m">D</td><td class="c m">0</td><td class="c m">0</td></tr><tr><td class="c m">1</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">D</td><td class="c m">0</td></tr><tr><td class="c m">1</td><td class="c m">1</td><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">D</td></tr></tbody></table></div>
 <div class="formula">Y0 = D·S1'S0'   Y1 = D·S1'S0   Y2 = D·S1S0'   Y3 = D·S1S0</div>
 <p>Simulated with D = 1: S = 00, 01, 10, 11 gave Y = 0001, 0010, 0100, 1000. With D = 0 every output was 0.</p>
-<div class="note add"><p><span class="lbl">Added</span><strong>A DEMUX is the same circuit as a decoder with enable.</strong> Use D as the enable input of an n to 2<sup>n</sup> decoder. Compare: MUX many to one, DEMUX one to many, decoder n bits to 2<sup>n</sup> lines, encoder 2<sup>n</sup> lines to n bits.</p></div>
+<div class="note"><p><span class="lbl">Note</span><strong>A DEMUX is the same circuit as a decoder with enable.</strong> Use D as the enable input of an n to 2<sup>n</sup> decoder. Compare: MUX many to one, DEMUX one to many, decoder n bits to 2<sup>n</sup> lines, encoder 2<sup>n</sup> lines to n bits.</p></div>
 </section>
 <section class="topic" id="t-add">
 <div class="head"><h2>Arithmetic circuits: adders and subtractors</h2><label class="rev" for="r-add"><input class="rev" data-sec="t-add" id="r-add" type="checkbox"/>revised</label></div>
@@ -93,13 +90,12 @@ assign Y = S ? I1 : I0;                       // 2:1 mux (conditional operator)<
 <figure class="fig"><svg aria-labelledby="ffat ffad" role="img" viewbox="0 0 650 225"><title id="ffat">Full adder from two half adders</title><desc id="ffad">two half adders and an OR gate make a full adder</desc><defs><marker id="ffaah" markerheight="6" markerwidth="6" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="s-head" d="M0 0L10 5L0 10z"></path></marker></defs><rect class="s-box2" height="70" rx="3" width="110" x="130" y="25"></rect><text class="s-t" text-anchor="middle" x="185" y="52">Half adder 1</text><text class="s-s" text-anchor="middle" x="185" y="72">HA1</text><rect class="s-box2" height="70" rx="3" width="110" x="300" y="25"></rect><text class="s-t" text-anchor="middle" x="355" y="52">Half adder 2</text><text class="s-s" text-anchor="middle" x="355" y="72">HA2</text><rect class="s-box2" height="90" rx="3" width="80" x="470" y="120"></rect><text class="s-t" text-anchor="middle" x="510" y="170">OR</text><path class="s-line" d="M30 45L130 45" marker-end="url(#ffaah)"></path><text class="s-t" text-anchor="end" x="22" y="49">A</text><path class="s-line" d="M30 75L130 75" marker-end="url(#ffaah)"></path><text class="s-t" text-anchor="end" x="22" y="79">B</text><path class="s-line" d="M240 45L300 45" marker-end="url(#ffaah)"></path><text class="s-m" text-anchor="middle" x="270" y="38">S1</text><path class="s-line" d="M40 10L355 10L355 25" marker-end="url(#ffaah)"></path><text class="s-t" text-anchor="end" x="30" y="14">Cin</text><path class="s-line" d="M410 45L580 45" marker-end="url(#ffaah)"></path><text class="s-t" text-anchor="start" x="590" y="49">S</text><path class="s-line" d="M240 80L270 80L270 195L470 195" marker-end="url(#ffaah)"></path><text class="s-m" text-anchor="start" x="278" y="100">C1</text><path class="s-line" d="M410 80L440 80L440 145L470 145" marker-end="url(#ffaah)"></path><text class="s-m" text-anchor="end" x="428" y="100">C2</text><path class="s-line" d="M550 165L580 165" marker-end="url(#ffaah)"></path><text class="s-t" text-anchor="start" x="590" y="169">Cout</text><text class="s-s" text-anchor="start" x="290" y="170">S = S1 ⊕ Cin = A ⊕ B ⊕ Cin</text><text class="s-s" text-anchor="start" x="290" y="188">Cout = C1 + C2</text></svg><figcaption>Full adder from two half adders and an OR gate: HA1 adds A and B, HA2 adds that sum S1 and Cin, and the two carries are ORed.</figcaption></figure>
 <ul class="t"><li><strong>Full adder</strong>: HA1 gets A, B and gives S1, C1. HA2 gets S1, Cin and gives S, C2. <strong>Cout = C1 + C2</strong>.</li><li><strong>Full subtractor</strong>: HS1 gets A, B and gives D1, B1. HS2 gets D1, Bin and gives D, B2. <strong>Bout = B1 + B2</strong>.</li><li><strong>Ripple-carry adder</strong>: chain n full adders, connecting the Cout of each to the Cin of the next.</li></ul>
 <div class="note"><p><span class="lbl">Numerical</span><strong>1 + 1 + 1</strong>: S = 1, Cout = 1 (binary 11). <strong>0 − 1 − 1</strong> = −2: D = 0, Bout = 1 (check: A − B − Bin = D − 2·Bout, so 0 − 1 − 1 = 0 − 2). The full adder and full subtractor were checked for all 8 rows in code.</p></div>
-<div class="note fix"><p><span class="lbl">Check</span>The scan of the full subtractor equations is partly damaged. <code>D = Bin + A + B</code> should be <strong>D = A ⊕ B ⊕ Bin</strong> (an exclusive OR, not an OR). <code>Bout = BinB + BinA + AB</code> has lost its prime marks and should be <strong>Bout = B·Bin + A'·Bin + A'·B</strong>. The half subtractor and the full adder equations in the notes are fine.</p></div>
-<div class="note add"><p><span class="lbl">Added</span>The notes use K-maps for the sum and carry of the full adder. The XOR forms above are what you draw as a circuit. A full adder was also built from a 3 to 8 decoder and OR gates (see Decoders) and simulated.</p></div>
+<div class="note"><p><span class="lbl">Common mistake</span>Full subtractor: D = A ⊕ B ⊕ Bin (an exclusive OR, not an OR) and Bout = B·Bin + A'·Bin + A'·B. A common slip is losing the prime marks.</p></div>
+<div class="note"><p><span class="lbl">Note</span>The XOR forms above are what you draw as a circuit. A full adder was also built from a 3 to 8 decoder and OR gates (see Decoders) and simulated.</p></div>
 </section>
 <section class="topic" id="t-comp">
 <div class="head"><h2>Comparators</h2><label class="rev" for="r-comp"><input class="rev" data-sec="t-comp" id="r-comp" type="checkbox"/>revised</label></div>
-<div class="chips"><span class="chip">Define</span><span class="chip">Draw</span><span class="chip">Numerical</span><span class="chip">Likely exam</span><span class="chip add">Added</span></div>
-<div class="note add"><p><span class="lbl">Added</span><strong>The class notes list comparators in the contents but have no page on them.</strong> Everything in this section is written from the standard textbook treatment. All the equations were checked for every input combination (2-bit) in code and in the simulator.</p></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Draw</span><span class="chip">Numerical</span><span class="chip">Likely exam</span></div>
 <div class="note def"><p><span class="lbl">Comparator</span>A combinational circuit that <strong>compares two binary numbers A and B</strong> and gives three outputs: A &gt; B, A = B and A &lt; B. Exactly one output is 1.</p></div>
 <h3>1-bit comparator</h3>
 <div class="wrap"><table class="wide"><thead><tr><th class="c">A</th><th class="c">B</th><th class="c">A &gt; B</th><th class="c">A = B</th><th class="c">A &lt; B</th></tr></thead><tbody><tr><td class="c m">0</td><td class="c m">0</td><td class="c m">0</td><td class="c m">1</td><td class="c m">0</td></tr><tr><td class="c m">0</td><td class="c m">1</td><td class="c m">0</td><td class="c m">0</td><td class="c m">1</td></tr><tr><td class="c m">1</td><td class="c m">0</td><td class="c m">1</td><td class="c m">0</td><td class="c m">0</td></tr><tr><td class="c m">1</td><td class="c m">1</td><td class="c m">0</td><td class="c m">1</td><td class="c m">0</td></tr></tbody></table></div>
@@ -110,7 +106,7 @@ assign Y = S ? I1 : I0;                       // 2:1 mux (conditional operator)<
 <div class="note"><p><span class="lbl">Numerical</span>A = 10 (2), B = 01 (1). x1 = (1 ⊕ 0)' = 0, so x1 terms are 0. A &gt; B = A1B1' = 1·1 = <strong>1</strong>. A &lt; B = 0 and A = B = 0. Correct, since 2 &gt; 1.</p></div>
 <h3>4-bit comparator</h3>
 <div class="formula">A = B :  x3·x2·x1·x0<br/>A &gt; B :  A3B3' + x3A2B2' + x3x2A1B1' + x3x2x1A0B0'<br/>A &lt; B :  A3'B3 + x3A2'B2 + x3x2A1'B1 + x3x2x1A0'B0</div>
-<p>Here x<sub>i</sub> = (A<sub>i</sub> ⊕ B<sub>i</sub>)'. For larger numbers, comparators are <strong>cascaded</strong>: the result of the lower stage is fed into extra inputs of the next stage. (As far as I know, the standard 4-bit comparator chip is the 7485.)</p>
+<p>Here x<sub>i</sub> = (A<sub>i</sub> ⊕ B<sub>i</sub>)'. For larger numbers, comparators are <strong>cascaded</strong>: the result of the lower stage is fed into extra inputs of the next stage.</p>
 </section>
 <section class="topic" id="t-hier">
 <div class="head"><h2>Structural design and hierarchy: module instantiation</h2><label class="rev" for="r-hier"><input class="rev" data-sec="t-hier" id="r-hier" type="checkbox"/>revised</label></div>
@@ -130,8 +126,8 @@ module full_adder(input A, B, Cin, output S, Cout);
 endmodule</code></pre>
 <ul class="t"><li>Each instance has its own <strong>instance name</strong> (HA1, HA2). Two instances of the same module are two separate copies of that hardware.</li><li><code>wire</code>s connect one block's output to another block's input (s1, c1, c2 above).</li><li><strong>Positional connection</strong>: signals are listed in the same order as the ports of the module. The first example above is positional.</li><li><strong>Hierarchy</strong>: the top module contains lower modules, which may contain others. This matches how real chips are built (blocks within blocks).</li></ul>
 <p>Simulated: the full adder built this way gave S = 1, Cout = 1 for A = B = Cin = 1, and matched A + B + Cin for all 8 inputs. A full subtractor built from two half subtractors and an OR gate also matched all 8 inputs.</p>
-<div class="note fix"><p><span class="lbl">Check</span>The class notes' half adder line is scrambled. It reads <code>assign S = A ∧ B</code>, but the sum must be <strong>A ^ B</strong> (XOR), with <code>C = A &amp; B</code>. The notes' first instance also reads <code>half_adder HA1 (A,B,s1,s2)</code>. The second output of HA1 is its carry, so it must be connected to <strong>c1</strong>, because the OR gate takes c1 and c2.</p></div>
-<div class="note add"><p><span class="lbl">Added</span><strong>Named connection</strong> is the other form: <code>half_adder HA1 (.A(A), .B(B), .S(s1), .C(c1));</code>. The order does not matter and mistakes are easier to spot. Structural, dataflow (<code>assign</code>) and behavioural (<code>always</code>) are the abstraction levels from Module 1, and one design may mix them.</p></div>
+<div class="note"><p><span class="lbl">Common mistake</span>Structural full adder: the half adder sum must be A ^ B (XOR), not A &amp; B, with C = A &amp; B. The second output of HA1 is its carry, so it must be connected to c1, because the OR gate takes c1 and c2.</p></div>
+<div class="note"><p><span class="lbl">Note</span><strong>Named connection</strong> is the other form: <code>half_adder HA1 (.A(A), .B(B), .S(s1), .C(c1));</code>. The order does not matter and mistakes are easier to spot. Structural, dataflow (<code>assign</code>) and behavioural (<code>always</code>) are the abstraction levels from Module 1, and one design may mix them.</p></div>
 <div class="note"><p><span class="lbl">Explain</span><strong>Why structural modelling?</strong> It builds large circuits from small, tested blocks. It matches the real hardware hierarchy and the gate-level or ASIC implementation. It works well with synthesis tools and is essential for modelling MSI and LSI circuits such as adders, multiplexers and decoders.</p></div>
 </section>
 <section class="topic" id="t-prim">
@@ -150,7 +146,7 @@ endmodule</code></pre>
 endmodule</code></pre>
 <p>Simulated: this gate-level MUX was used as the final stage of an 8:1 MUX and gave the correct output for every select value.</p>
 <div class="wrap"><table class="wide"><thead><tr><th>Primitive</th><th>Function</th></tr></thead><tbody><tr><td><code>and</code></td><td>AND of all inputs</td></tr><tr><td><code>nand</code></td><td>NOT of AND</td></tr><tr><td><code>or</code></td><td>OR of all inputs</td></tr><tr><td><code>nor</code></td><td>NOT of OR</td></tr><tr><td><code>xor</code></td><td>1 when an odd number of inputs are 1</td></tr><tr><td><code>xnor</code></td><td>NOT of XOR</td></tr><tr><td><code>not</code></td><td>inverter</td></tr><tr><td><code>buf</code></td><td>buffer (output = input)</td></tr></tbody></table></div>
-<div class="note add"><p><span class="lbl">Added</span>Which style to use: <code>assign</code> and an expression is shorter, gate primitives map one-to-one to a circuit diagram. Both give the same hardware. Primitives also accept delays, see the last section.</p></div>
+<div class="note"><p><span class="lbl">Note</span>Which style to use: <code>assign</code> and an expression is shorter, gate primitives map one-to-one to a circuit diagram. Both give the same hardware. Primitives also accept delays, see the last section.</p></div>
 </section>
 <section class="topic" id="t-udp">
 <div class="head"><h2>User defined primitives (UDP)</h2><label class="rev" for="r-udp"><input class="rev" data-sec="t-udp" id="r-udp" type="checkbox"/>revised</label></div>
@@ -185,7 +181,7 @@ endmodule</code></pre>
        1 ? 1 : 1;
   endtable
 endprimitive</code></pre>
-<div class="note add"><p><span class="lbl">Added</span><strong>Sequential UDP</strong> (the notes only name it). The output is declared <code>reg</code> and the table has an extra middle column for the <strong>current state</strong>: <code>inputs : current state : next state</code>. A <code>-</code> as next state means "no change". A level-sensitive D latch:</p></div>
+<div class="note"><p><span class="lbl">Note</span>The output is declared <code>reg</code> and the table has an extra middle column for the <strong>current state</strong>: <code>inputs : current state : next state</code>. A <code>-</code> as next state means "no change". A level-sensitive D latch:</p></div>
 <pre><code>primitive dlatch(Q, D, G);
   output Q;  reg Q;  input D, G;
   table
@@ -196,21 +192,21 @@ endprimitive</code></pre>
   endtable
 endprimitive</code></pre>
 <p>Simulated: G = 1, D = 1 gives Q = 1. Then G = 0, D = 0 and Q <strong>stays 1</strong> (held). Then G = 1 with D = 0 gives Q = 0.</p>
-<div class="note fix"><p><span class="lbl">Check</span>The scan of the notes' UDP examples is missing some semicolons (the header line, each table row and <code>endtable</code> lines). Write the semicolon after the header and after every table row. The notes use the shorter header <code>primitive xor_udp (output Y, input A, B);</code>. That form is allowed in standard Verilog-2001, but the free simulator used here accepted only the older form shown above (the ports listed, then <code>output</code> and <code>input</code> declared on the next line). Both mean the same, use either in the exam unless your teacher prefers one.</p></div>
+<div class="note"><p><span class="lbl">Note</span>Write a semicolon after the header and after every table row and endtable line. The shorter header form (primitive xor_udp (output Y, input A, B);) is allowed in Verilog-2001, but Icarus Verilog accepts only the older form shown above (ports listed, then output and input declared on the next line).</p></div>
 </section>
 <section class="topic" id="t-pdel">
 <div class="head"><h2>Adding delay to primitives</h2><label class="rev" for="r-pdel"><input class="rev" data-sec="t-pdel" id="r-pdel" type="checkbox"/>revised</label></div>
 <div class="chips"><span class="chip">Define</span><span class="chip">Explain</span><span class="chip">Likely exam</span></div>
 <div class="note def"><p><span class="lbl">Delay on a primitive</span>A delay written after the gate type models the <strong>propagation delay</strong> of that gate in simulation. It is <strong>not</strong> used for synthesis.</p></div>
 <div class="formula">and  #3      g1 (y, A, B);     // 3 time units for both rise and fall<br/>and  #(2,5)   g2 (y, A, B);     // rise 2, fall 5<br/>nand #(4)    g1 (Y, A, B);     // 4 time units</div>
-<ul class="t"><li><code>#</code> comes <strong>before</strong> the instance name. <code>#(rise, fall)</code> gives different delays for a 0 to 1 change and a 1 to 0 change.</li><li><strong>Rise delay</strong>: time for the output to go from 0 to 1. <strong>Fall delay</strong>: time for 1 to 0.</li><li>As far as I know, a third value <code>#(rise, fall, turn-off)</code> is used for tri-state gates.</li><li>The unit is set by <code>`timescale</code>, for example <code>`timescale 1ns/1ps</code>.</li></ul>
+<ul class="t"><li><code>#</code> comes <strong>before</strong> the instance name. <code>#(rise, fall)</code> gives different delays for a 0 to 1 change and a 1 to 0 change.</li><li><strong>Rise delay</strong>: time for the output to go from 0 to 1. <strong>Fall delay</strong>: time for 1 to 0.</li><li>A third value <code>#(rise, fall, turn-off)</code> is used for tri-state gates.</li><li>The unit is set by <code>`timescale</code>, for example <code>`timescale 1ns/1ps</code>.</li></ul>
 <p>Simulation of <code>and #(2,5) g1 (Y, A, B)</code> with <code>A = 1</code>:</p>
 <div class="wrap"><table class="wide"><thead><tr><th>Time (ns)</th><th>Event</th><th>Y</th></tr></thead><tbody><tr><td>10</td><td>B rises (0 to 1)</td><td>1 at 12 ns (rise delay 2 ns)</td></tr><tr><td>20</td><td>B falls (1 to 0)</td><td>0 at 25 ns (fall delay 5 ns)</td></tr></tbody></table></div>
 <pre><code>module delay_test(input A, B, output Y);
   nand #(4) g1 (Y, A, B);     // 4 ns delay
 endmodule</code></pre>
-<div class="note fix"><p><span class="lbl">Check</span>The scan of the notes writes <code>and 3 g1(y,A,B)</code> without the <code>#</code>. The correct form is <code>and #3 g1 (y, A, B);</code>.</p></div>
-<div class="note add"><p><span class="lbl">Added</span>Delay on a primitive and delay on a continuous assignment (<code>assign #2 Y = A &amp; B;</code>, Module 2) are both simulation-only models of propagation delay.</p></div>
+<div class="note"><p><span class="lbl">Common mistake</span>The delay goes right after the primitive name: and #3 g1 (y, A, B);. Writing and 3 g1(y, A, B) is wrong.</p></div>
+<div class="note"><p><span class="lbl">Note</span>Delay on a primitive and delay on a continuous assignment (<code>assign #2 Y = A &amp; B;</code>, Module 2) are both simulation-only models of propagation delay.</p></div>
 </section>
 <section class="topic" id="t-sheet">
 <div class="head"><h2>One-page cheat sheet</h2></div>
@@ -228,7 +224,7 @@ endmodule</code></pre>
 <section class="topic" id="t-qa">
 <div class="head"><h2>Likely questions with answer outlines</h2></div>
 <div class="chips"><span class="chip">Revise the night before</span></div>
-<p>This list is a guess from the syllabus. Please match it against past papers.</p>
+<p>The likely questions below follow the syllabus and typical KTU question patterns. Answer outlines show the points to cover, with a link back to the full section.</p>
 <details class="q"><summary>What is a decoder? Design a 3 to 8 decoder. What is a one-hot decoder? (7)</summary><div class="ans"><p>Definition, 3 to 8 truth table, D<sub>i</sub> as minterms, gate figure, one-hot meaning and uses. See <a href="#t-dec">Decoders</a>.</p></div></details>
 <details class="q"><summary>Implement a full adder using a 3 to 8 decoder and OR gates. (5)</summary><div class="ans"><p>S = Σm(1,2,4,7), Cout = Σm(3,5,6,7), OR the matching outputs. See <a href="#t-dec">Decoders</a>.</p></div></details>
 <details class="q"><summary>Design a BCD to seven-segment decoder. (7)</summary><div class="ans"><p>Segment figure, truth table 0 to 9, don't cares 10 to 15, K-map equations for S0 to S6. See <a href="#t-seg">Seven-segment decoder</a>.</p></div></details>
@@ -246,13 +242,14 @@ endmodule</code></pre>
 <details class="q"><summary>How are delays added to primitives? What are rise and fall delays? (3)</summary><div class="ans"><p>and #(2,5) g (y,a,b), meaning of rise and fall, simulation only. See <a href="#t-pdel">Delay on primitives</a>.</p></div></details>
 </section>
 <footer class="notes-footer" role="contentinfo">
-  <div class="notes-footer-inner">
-    <div class="notes-footer-nav">
-      <a href="/">← All Subjects</a>
-      <a href="/notes/deld-module-2/">← Previous: DELD Module 2</a>
-    </div>
-    <div class="notes-footer-meta">
-      <span>GAEST305 DELD · Module 3 · KTU 2024 Scheme</span>
-    </div>
-  </div>
+<div class="notes-footer-inner">
+<div class="notes-footer-nav">
+<a href="/">← All Subjects</a>
+<a href="/notes/deld-module-2/">← Previous: DELD Module 2</a>
+</div>
+<div class="notes-footer-meta">
+<span>GAEST305 DELD · Module 3 · KTU 2024 Scheme</span>
+<p class="notes-ref">Based on the KTU syllabus and standard digital design textbooks. Truth tables and equations were checked in code, and Verilog examples (including user defined primitives and gate delays) were run in Icarus Verilog, which accepts only the older UDP header style. Example functions are illustrative.</p></div>
+</div>
 </footer>
+

@@ -1,379 +1,345 @@
 <header class="top">
-  <p class="eyebrow">PCITT302 · Computer Organization and Architecture</p>
-  <h1>Module 4: Parallel Processing &amp; Multicore Architectures</h1>
-  <p class="lede">Syllabus coverage: parallel processing goals and challenges, Flynn's taxonomy (SISD, MIMD, SIMD, SPMD), vector architectures, hardware multithreading (fine-grained, coarse-grained, SMT), multicore and shared memory systems (SMP, UMA vs NUMA), and the Intel Core i7 architectural case study.</p>
+<p class="eyebrow">PCITT302 · Computer Organization and Architecture</p>
+<h1>Module 4: Introduction to Parallel Processors</h1>
+<p class="lede">Exam-oriented notes for KTU PCITT302, Module 4 (introduction to parallel processors). <strong>SISD, MIMD, SIMD and SPMD</strong> come first and carry the "Likely exam" chip. Vector processing, multithreading, multicore and the Core i7 case study follow, shorter.</p>
 </header>
-
-<!-- ============ WHY ============ -->
 <section class="topic" id="t-why">
-  <div class="head"><h2>Why multiprocessors, and why parallel programs are hard</h2><label class="rev" for="r-why"><input class="rev" type="checkbox" id="r-why" data-sec="t-why">revised</label></div>
-  <div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Key Concept</span></div>
-  <div class="note def"><p><span class="lbl">Multiprocessor</span>A computer built by connecting many smaller processors, instead of one large inefficient one. A <strong>cluster</strong> is a set of computers connected over a network that works as one large multiprocessor.</p></div>
-  <h3>Goals and advantages</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Advantage</th><th>Meaning</th></tr></thead>
-    <tbody>
-      <tr><td>Improved performance</td><td>Many independent processes run at the same time (process-level parallelism).</td></tr>
-      <tr><td>Higher throughput</td><td>More processes complete per unit time.</td></tr>
-      <tr><td>Fault tolerance</td><td>If one processor fails, the other n − 1 keep running.</td></tr>
-      <tr><td>Scalability</td><td>Spread the load over more processors as demand grows.</td></tr>
-      <tr><td>Economies of scale</td><td>Shared resources make the system cheaper.</td></tr>
-    </tbody>
-  </table></div>
-  <h3>Terms</h3>
-  <ul class="t">
-    <li><strong>Parallel processing</strong>: running a <em>single job</em> on multiple processors at the same time. Running many independent jobs is task-level (process-level) parallelism.</li>
-    <li><strong>Multicore processor</strong>: a microprocessor with several processors ("cores") on one chip. Multicores are almost always <strong>shared memory processors (SMPs)</strong>, because the cores share one physical address space.</li>
-    <li><strong>Data parallelism</strong>: the same operation on many independent data items (SIMD, vector). <strong>Task parallelism</strong>: different tasks or threads run at the same time (MIMD).</li>
-  </ul>
-  <div class="note def"><p><span class="lbl">Parallelism Forms</span>Data-level parallelism (DLP) distributes data across parallel compute units running identical operations. Task-level parallelism (TLP) distributes distinct concurrent execution threads or processes across processors.</p></div>
-  <h3>Software against hardware</h3>
-  <p>The challenge is that concurrent <em>software</em> can run on serial or on parallel <em>hardware</em>. We must (1) make naturally sequential software fast on parallel hardware, and (2) make concurrent programs fast as the number of processors grows. Example: a MATLAB matrix multiply is sequential software, and it can run on a serial Pentium 4 or on a parallel Core i7.</p>
-  <h3>Why parallel programs are hard</h3>
-  <ul class="t">
-    <li><strong>Scheduling</strong>, <strong>partitioning</strong> the work into parallel pieces, <strong>load balancing</strong>, time to <strong>synchronize</strong>, and <strong>communication overhead</strong>.</li>
-    <li>Analogy: 8 reporters writing one story. The pieces must be equal and they must not spend their time talking to each other.</li>
-    <li>Amdahl's Law: even a small sequential part limits the speed-up.</li>
-  </ul>
-  <div class="formula">Speed-up = 1 / [ (1 − F) + F / N ]    F = fraction that is parallel, N = number of processors</div>
-  <div class="note"><p><span class="lbl">Numerical 1</span>Speed-up of 90 with 100 processors: how much can be sequential?</p></div>
-  <div class="formula">1/90 = (1 − F) + F/100  →  F = (1 − 1/90) / (1 − 1/100) = 0.9989<br>Sequential part = 1 − F ≈ 0.11%  (the textbook rounds to 0.1%)</div>
-  <div class="note"><p><span class="lbl">Numerical 2</span>Add 10 scalar variables (not parallelizable) and add two 10 × 10 matrices (parallelizable). Speed-up with 10 and with 40 processors? Then with 20 × 20 matrices.</p></div>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Problem</th><th class="c">Processors</th><th class="c">Time (units of t)</th><th class="c">Speed-up</th><th class="c">Of ideal</th></tr></thead>
-    <tbody>
-      <tr><td>10 × 10 (110 additions)</td><td class="c">10</td><td class="c">100/10 + 10 = 20</td><td class="c">5.5</td><td class="c">55%</td></tr>
-      <tr><td></td><td class="c">40</td><td class="c">100/40 + 10 = 12.5</td><td class="c">8.8</td><td class="c">22%</td></tr>
-      <tr><td>20 × 20 (410 additions)</td><td class="c">10</td><td class="c">400/10 + 10 = 50</td><td class="c">8.2</td><td class="c">82%</td></tr>
-      <tr><td></td><td class="c">40</td><td class="c">400/40 + 10 = 20</td><td class="c">20.5</td><td class="c">51%</td></tr>
-    </tbody>
-  </table></div>
-  <ul class="t">
-    <li><strong>Strong scaling</strong>: speed-up with the problem size fixed. <strong>Weak scaling</strong>: the problem size grows in proportion to the processors. A bigger problem gives better speed-up.</li>
-    <li><strong>Load balance</strong>: in the 20 × 20 case on 40 processors, if one processor gets 5% of the work instead of 2.5%, time = max(380/39, 20) + 10 = 30 and the speed-up falls from 20.5 to 410/30 ≈ <strong>14</strong>. At 12.5% it falls to 410/60 ≈ <strong>7</strong>.</li>
-  </ul>
-  <div class="note example"><p><span class="lbl">Speedup Modeling (Amdahl's Law)</span>Demonstrates the strict asymptotic limits imposed by serial fractions and load imbalance: even small serial overheads or uneven load distribution dramatically bottleneck maximum attainable multiprocessor speedup.</p></div>
+<div class="head"><h2>Why multiprocessors, and why parallel programs are hard</h2><label class="rev" for="r-why"><input class="rev" data-sec="t-why" id="r-why" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span></div>
+<div class="note def"><p><span class="lbl">Multiprocessor</span>A computer built by connecting many smaller processors, instead of one large inefficient one. A <strong>cluster</strong> is a set of computers connected over a network that works as one large multiprocessor.</p></div>
+<h3>Goals and advantages</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Advantage</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Improved performance</td><td>Many independent processes run at the same time (process-level parallelism).</td></tr>
+<tr><td>Higher throughput</td><td>More processes complete per unit time.</td></tr>
+<tr><td>Fault tolerance</td><td>If one processor fails, the other n − 1 keep running.</td></tr>
+<tr><td>Scalability</td><td>Spread the load over more processors as demand grows.</td></tr>
+<tr><td>Economies of scale</td><td>Shared resources make the system cheaper.</td></tr>
+</tbody>
+</table></div>
+<h3>Terms</h3>
+<ul class="t">
+<li><strong>Parallel processing</strong>: running a <em>single job</em> on multiple processors at the same time. Running many independent jobs is task-level (process-level) parallelism.</li>
+<li><strong>Multicore processor</strong>: a microprocessor with several processors ("cores") on one chip. Multicores are almost always <strong>shared memory processors (SMPs)</strong>, because the cores share one physical address space.</li>
+<li><strong>Data parallelism</strong>: the same operation on many independent data items (SIMD, vector). <strong>Task parallelism</strong>: different tasks or threads run at the same time (MIMD).</li>
+</ul>
+<h3>Software against hardware</h3>
+<p>The challenge is that concurrent <em>software</em> can run on serial or on parallel <em>hardware</em>. We must (1) make naturally sequential software fast on parallel hardware, and (2) make concurrent programs fast as the number of processors grows. Example: a MATLAB matrix multiply is sequential software, and it can run on a serial Pentium 4 or on a parallel Core i7.</p>
+<h3>Why parallel programs are hard</h3>
+<ul class="t">
+<li><strong>Scheduling</strong>, <strong>partitioning</strong> the work into parallel pieces, <strong>load balancing</strong>, time to <strong>synchronize</strong>, and <strong>communication overhead</strong>.</li>
+<li>Analogy: 8 reporters writing one story. The pieces must be equal and they must not spend their time talking to each other.</li>
+<li>Amdahl's Law: even a small sequential part limits the speed-up.</li>
+</ul>
+<div class="formula">Speed-up = 1 / [ (1 − F) + F / N ]    F = fraction that is parallel, N = number of processors</div>
+<div class="note"><p><span class="lbl">Numerical 1</span>Speed-up of 90 with 100 processors: how much can be sequential?</p></div>
+<div class="formula">1/90 = (1 − F) + F/100  →  F = (1 − 1/90) / (1 − 1/100) = 0.9989<br/>Sequential part = 1 − F ≈ 0.11%  (the textbook rounds to 0.1%)</div>
+<div class="note"><p><span class="lbl">Numerical 2</span>Add 10 scalar variables (not parallelizable) and add two 10 × 10 matrices (parallelizable). Speed-up with 10 and with 40 processors? Then with 20 × 20 matrices.</p></div>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Problem</th><th class="c">Processors</th><th class="c">Time (units of t)</th><th class="c">Speed-up</th><th class="c">Of ideal</th></tr></thead>
+<tbody>
+<tr><td>10 × 10 (110 additions)</td><td class="c">10</td><td class="c">100/10 + 10 = 20</td><td class="c">5.5</td><td class="c">55%</td></tr>
+<tr><td></td><td class="c">40</td><td class="c">100/40 + 10 = 12.5</td><td class="c">8.8</td><td class="c">22%</td></tr>
+<tr><td>20 × 20 (410 additions)</td><td class="c">10</td><td class="c">400/10 + 10 = 50</td><td class="c">8.2</td><td class="c">82%</td></tr>
+<tr><td></td><td class="c">40</td><td class="c">400/40 + 10 = 20</td><td class="c">20.5</td><td class="c">51%</td></tr>
+</tbody>
+</table></div>
+<ul class="t">
+<li><strong>Strong scaling</strong>: speed-up with the problem size fixed. <strong>Weak scaling</strong>: the problem size grows in proportion to the processors. A bigger problem gives better speed-up.</li>
+<li><strong>Load balance</strong>: in the 20 × 20 case on 40 processors, if one processor gets 5% of the work instead of 2.5%, time = max(380/39, 20) + 10 = 30 and the speed-up falls from 20.5 to 410/30 ≈ <strong>14</strong>. At 12.5% it falls to 410/60 ≈ <strong>7</strong>.</li>
+</ul>
 </section>
-
-<!-- ============ FLYNN ============ -->
 <section class="topic" id="t-flynn">
-  <div class="head"><h2>SISD, MIMD, SIMD, SPMD (and MISD)</h2><label class="rev" for="r-flynn"><input class="rev" type="checkbox" id="r-flynn" data-sec="t-flynn">revised</label></div>
-  <div class="chips"><span class="chip">Likely exam</span><span class="chip">Define</span><span class="chip">Differentiate</span><span class="chip">Draw</span></div>
-  <p>Classification by the number of <strong>instruction streams</strong> and <strong>data streams</strong> (Flynn, 1960s, still used).</p>
-  <figure class="fig"><svg viewBox="0 0 660 304" role="img" aria-labelledby="fft ffd"><title id="fft">Flynn's classification</title><desc id="ffd">2 by 2 grid of instruction streams against data streams</desc><text class="s-m" x="385" y="20" text-anchor="middle">Data streams</text><text class="s-m" x="70" y="20" text-anchor="middle">Instruction</text><text class="s-m" x="70" y="36" text-anchor="middle">streams</text><text class="s-t" x="247" y="52" text-anchor="middle">Single</text><text class="s-t" x="512" y="52" text-anchor="middle">Multiple</text><text class="s-t" x="60" y="110" text-anchor="middle">Single</text><text class="s-t" x="60" y="226" text-anchor="middle">Multiple</text><rect class="s-box" x="120" y="62" width="255" height="100" rx="3"/><text class="s-t" x="247" y="92" text-anchor="middle">SISD</text><text class="s-s" x="247" y="116" text-anchor="middle">uniprocessor</text><text class="s-s" x="247" y="136" text-anchor="middle">e.g. Intel Pentium 4</text><rect class="s-box2" x="385" y="62" width="255" height="100" rx="3"/><text class="s-t" x="512" y="92" text-anchor="middle">SIMD</text><text class="s-s" x="512" y="116" text-anchor="middle">one instruction, many data</text><text class="s-s" x="512" y="136" text-anchor="middle">e.g. x86 SSE/AVX, vector, GPU</text><rect class="s-box" x="120" y="176" width="255" height="100" rx="3"/><text class="s-t" x="247" y="206" text-anchor="middle">MISD</text><text class="s-s" x="247" y="230" text-anchor="middle">no examples today</text><text class="s-s" x="247" y="250" text-anchor="middle">pipelined stream processor</text><rect class="s-box2" x="385" y="176" width="255" height="100" rx="3"/><text class="s-t" x="512" y="206" text-anchor="middle">MIMD</text><text class="s-s" x="512" y="230" text-anchor="middle">multiprocessor, multicore</text><text class="s-s" x="512" y="250" text-anchor="middle">e.g. Intel Core i7</text><text class="s-m" x="640" y="294" text-anchor="end">SPMD = the normal way to program a MIMD</text></svg><figcaption>Flynn's classification with the textbook examples.</figcaption></figure>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Class</th><th>Meaning</th><th>Example</th></tr></thead>
-    <tbody>
-      <tr><td><strong>SISD</strong></td><td>Single instruction stream, single data stream. A conventional <strong>uniprocessor</strong>.</td><td>Intel Pentium 4</td></tr>
-      <tr><td><strong>SIMD</strong></td><td>Single instruction stream, multiple data streams. The <strong>same instruction</strong> is applied to many data items, as in a vector processor. All units are synchronized and driven by <strong>one PC</strong>.</td><td>x86 SSE and AVX, vector processors, GPUs</td></tr>
-      <tr><td><strong>MIMD</strong></td><td>Multiple instruction streams, multiple data streams. A <strong>multiprocessor</strong>. Each processor runs its own instructions on its own data.</td><td>Intel Core i7 (multicore)</td></tr>
-      <tr><td><strong>SPMD</strong></td><td>Single program, multiple data streams. The normal way to program a MIMD computer: <strong>one program</strong> runs on all processors, and conditional statements make different processors run different sections.</td><td>OpenMP or MPI programs</td></tr>
-      <tr><td><strong>MISD</strong></td><td>Multiple instruction streams, single data stream. A series of computations on one data stream in a pipelined fashion (parse, decrypt, decompress, search). <strong>No longer in use.</strong></td><td>None today</td></tr>
-    </tbody>
-  </table></div>
-  <ul class="t">
-    <li>SPMD is a <strong>programming model</strong>, not a hardware class. The hardware is MIMD.</li>
-    <li>A MIMD can run separate programs on different processors that work together, but programmers normally write one program (SPMD).</li>
-    <li>MIMD runs on multiple processes or threads to keep its processors busy. SIMD gets its parallelism from <strong>data</strong>.</li>
-  </ul>
-  <h3>SIMD against MIMD</h3>
-  <figure class="fig"><svg viewBox="0 0 660 246" role="img" aria-labelledby="fst fsd"><title id="fst">SIMD against MIMD</title><desc id="fsd">SIMD has one control unit driving many ALUs; MIMD has a control unit per core</desc><defs><marker id="fsah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs><text class="s-m" x="165" y="20" text-anchor="middle">SIMD</text><text class="s-m" x="500" y="20" text-anchor="middle">MIMD (each core its own PC)</text><rect class="s-box2" x="60" y="34" width="210" height="44" rx="3"/><text class="s-t" x="165" y="54" text-anchor="middle">Control unit, one PC</text><text class="s-s" x="165" y="70" text-anchor="middle">one instruction stream</text><rect class="s-box" x="14" y="118" width="56" height="40" rx="3"/><text class="s-s" x="42" y="136" text-anchor="middle">ALU</text><text class="s-s" x="42" y="152" text-anchor="middle">0</text><path class="s-line" d="M165 78L42 118" marker-end="url(#fsah)"/><rect class="s-box2" x="14" y="178" width="56" height="30" rx="3"/><text class="s-s" x="42" y="198" text-anchor="middle">data 0</text><path class="s-line" d="M42 158L42 178" marker-end="url(#fsah)"/><rect class="s-box" x="76" y="118" width="56" height="40" rx="3"/><text class="s-s" x="104" y="136" text-anchor="middle">ALU</text><text class="s-s" x="104" y="152" text-anchor="middle">1</text><path class="s-line" d="M165 78L104 118" marker-end="url(#fsah)"/><rect class="s-box2" x="76" y="178" width="56" height="30" rx="3"/><text class="s-s" x="104" y="198" text-anchor="middle">data 1</text><path class="s-line" d="M104 158L104 178" marker-end="url(#fsah)"/><rect class="s-box" x="138" y="118" width="56" height="40" rx="3"/><text class="s-s" x="166" y="136" text-anchor="middle">ALU</text><text class="s-s" x="166" y="152" text-anchor="middle">2</text><path class="s-line" d="M165 78L166 118" marker-end="url(#fsah)"/><rect class="s-box2" x="138" y="178" width="56" height="30" rx="3"/><text class="s-s" x="166" y="198" text-anchor="middle">data 2</text><path class="s-line" d="M166 158L166 178" marker-end="url(#fsah)"/><rect class="s-box" x="200" y="118" width="56" height="40" rx="3"/><text class="s-s" x="228" y="136" text-anchor="middle">ALU</text><text class="s-s" x="228" y="152" text-anchor="middle">3</text><path class="s-line" d="M165 78L228 118" marker-end="url(#fsah)"/><rect class="s-box2" x="200" y="178" width="56" height="30" rx="3"/><text class="s-s" x="228" y="198" text-anchor="middle">data 3</text><path class="s-line" d="M228 158L228 178" marker-end="url(#fsah)"/><text class="s-s" x="165" y="232" text-anchor="middle">all ALUs do the same op each cycle</text><rect class="s-box2" x="330" y="34" width="100" height="40" rx="3"/><text class="s-t" x="380" y="52" text-anchor="middle">PC / control</text><text class="s-s" x="380" y="67" text-anchor="middle">program A</text><rect class="s-box" x="330" y="118" width="100" height="40" rx="3"/><text class="s-t" x="380" y="142" text-anchor="middle">ALU + regs</text><rect class="s-box2" x="330" y="178" width="100" height="30" rx="3"/><text class="s-s" x="380" y="198" text-anchor="middle">data 0</text><path class="s-line" d="M380 74L380 118" marker-end="url(#fsah)"/><path class="s-line" d="M380 158L380 178" marker-end="url(#fsah)"/><rect class="s-box2" x="438" y="34" width="100" height="40" rx="3"/><text class="s-t" x="488" y="52" text-anchor="middle">PC / control</text><text class="s-s" x="488" y="67" text-anchor="middle">program B</text><rect class="s-box" x="438" y="118" width="100" height="40" rx="3"/><text class="s-t" x="488" y="142" text-anchor="middle">ALU + regs</text><rect class="s-box2" x="438" y="178" width="100" height="30" rx="3"/><text class="s-s" x="488" y="198" text-anchor="middle">data 1</text><path class="s-line" d="M488 74L488 118" marker-end="url(#fsah)"/><path class="s-line" d="M488 158L488 178" marker-end="url(#fsah)"/><rect class="s-box2" x="546" y="34" width="100" height="40" rx="3"/><text class="s-t" x="596" y="52" text-anchor="middle">PC / control</text><text class="s-s" x="596" y="67" text-anchor="middle">program C</text><rect class="s-box" x="546" y="118" width="100" height="40" rx="3"/><text class="s-t" x="596" y="142" text-anchor="middle">ALU + regs</text><rect class="s-box2" x="546" y="178" width="100" height="30" rx="3"/><text class="s-s" x="596" y="198" text-anchor="middle">data 2</text><path class="s-line" d="M596 74L596 118" marker-end="url(#fsah)"/><path class="s-line" d="M596 158L596 178" marker-end="url(#fsah)"/><text class="s-s" x="480" y="232" text-anchor="middle">each core runs its own instructions on its own data</text></svg><figcaption>SIMD has one control unit and one instruction stream. MIMD has one per core.</figcaption></figure>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th></th><th>SIMD</th><th>MIMD</th></tr></thead>
-    <tbody>
-      <tr><td>Control</td><td>One PC, all units synchronized</td><td>A PC per processor, units independent</td></tr>
-      <tr><td>Parallelism</td><td>Data-level</td><td>Task or thread-level</td></tr>
-      <tr><td>Instruction storage</td><td>One copy of the code</td><td>Shared-memory MIMD needs several instruction caches and a copy of the code in each</td></tr>
-      <tr><td>Best for</td><td>Arrays in <span class="m">for</span> loops, identical operations</td><td>Different tasks, irregular work</td></tr>
-      <tr><td>Weak point</td><td>case / switch statements</td><td>Synchronization and communication cost</td></tr>
-    </tbody>
-  </table></div>
-  <div class="note add"><p><span class="lbl">Added</span>The original motivation for SIMD was to spread the cost of one control unit over dozens of execution units. Each unit still has its own address registers, so different units can use different data addresses. Both points are from the textbook.</p></div>
+<div class="head"><h2>SISD, MIMD, SIMD, SPMD (and MISD)</h2><label class="rev" for="r-flynn"><input class="rev" data-sec="t-flynn" id="r-flynn" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Likely exam</span><span class="chip">Define</span><span class="chip">Differentiate</span><span class="chip">Draw</span></div>
+<p>Classification by the number of <strong>instruction streams</strong> and <strong>data streams</strong> (Flynn, 1960s, still used).</p>
+<figure class="fig"><svg aria-labelledby="fft ffd" role="img" viewbox="0 0 660 304"><title id="fft">Flynn's classification</title><desc id="ffd">2 by 2 grid of instruction streams against data streams</desc><text class="s-m" text-anchor="middle" x="385" y="20">Data streams</text><text class="s-m" text-anchor="middle" x="70" y="20">Instruction</text><text class="s-m" text-anchor="middle" x="70" y="36">streams</text><text class="s-t" text-anchor="middle" x="247" y="52">Single</text><text class="s-t" text-anchor="middle" x="512" y="52">Multiple</text><text class="s-t" text-anchor="middle" x="60" y="110">Single</text><text class="s-t" text-anchor="middle" x="60" y="226">Multiple</text><rect class="s-box" height="100" rx="3" width="255" x="120" y="62"></rect><text class="s-t" text-anchor="middle" x="247" y="92">SISD</text><text class="s-s" text-anchor="middle" x="247" y="116">uniprocessor</text><text class="s-s" text-anchor="middle" x="247" y="136">e.g. Intel Pentium 4</text><rect class="s-box2" height="100" rx="3" width="255" x="385" y="62"></rect><text class="s-t" text-anchor="middle" x="512" y="92">SIMD</text><text class="s-s" text-anchor="middle" x="512" y="116">one instruction, many data</text><text class="s-s" text-anchor="middle" x="512" y="136">e.g. x86 SSE/AVX, vector, GPU</text><rect class="s-box" height="100" rx="3" width="255" x="120" y="176"></rect><text class="s-t" text-anchor="middle" x="247" y="206">MISD</text><text class="s-s" text-anchor="middle" x="247" y="230">no examples today</text><text class="s-s" text-anchor="middle" x="247" y="250">pipelined stream processor</text><rect class="s-box2" height="100" rx="3" width="255" x="385" y="176"></rect><text class="s-t" text-anchor="middle" x="512" y="206">MIMD</text><text class="s-s" text-anchor="middle" x="512" y="230">multiprocessor, multicore</text><text class="s-s" text-anchor="middle" x="512" y="250">e.g. Intel Core i7</text><text class="s-m" text-anchor="end" x="640" y="294">SPMD = the normal way to program a MIMD</text></svg><figcaption>Flynn's classification with the textbook examples.</figcaption></figure>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Class</th><th>Meaning</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><strong>SISD</strong></td><td>Single instruction stream, single data stream. A conventional <strong>uniprocessor</strong>.</td><td>Intel Pentium 4</td></tr>
+<tr><td><strong>SIMD</strong></td><td>Single instruction stream, multiple data streams. The <strong>same instruction</strong> is applied to many data items, as in a vector processor. All units are synchronized and driven by <strong>one PC</strong>.</td><td>x86 SSE and AVX, vector processors, GPUs</td></tr>
+<tr><td><strong>MIMD</strong></td><td>Multiple instruction streams, multiple data streams. A <strong>multiprocessor</strong>. Each processor runs its own instructions on its own data.</td><td>Intel Core i7 (multicore)</td></tr>
+<tr><td><strong>SPMD</strong></td><td>Single program, multiple data streams. The normal way to program a MIMD computer: <strong>one program</strong> runs on all processors, and conditional statements make different processors run different sections.</td><td>OpenMP or MPI programs</td></tr>
+<tr><td><strong>MISD</strong></td><td>Multiple instruction streams, single data stream. A series of computations on one data stream in a pipelined fashion (parse, decrypt, decompress, search). <strong>No longer in use.</strong></td><td>None today</td></tr>
+</tbody>
+</table></div>
+<ul class="t">
+<li>SPMD is a <strong>programming model</strong>, not a hardware class. The hardware is MIMD.</li>
+<li>A MIMD can run separate programs on different processors that work together, but programmers normally write one program (SPMD).</li>
+<li>MIMD runs on multiple processes or threads to keep its processors busy. SIMD gets its parallelism from <strong>data</strong>.</li>
+</ul>
+<h3>SIMD against MIMD</h3>
+<figure class="fig"><svg aria-labelledby="fst fsd" role="img" viewbox="0 0 660 246"><title id="fst">SIMD against MIMD</title><desc id="fsd">SIMD has one control unit driving many ALUs; MIMD has a control unit per core</desc><defs><marker id="fsah" markerheight="6" markerwidth="6" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="s-head" d="M0 0L10 5L0 10z"></path></marker></defs><text class="s-m" text-anchor="middle" x="165" y="20">SIMD</text><text class="s-m" text-anchor="middle" x="500" y="20">MIMD (each core its own PC)</text><rect class="s-box2" height="44" rx="3" width="210" x="60" y="34"></rect><text class="s-t" text-anchor="middle" x="165" y="54">Control unit, one PC</text><text class="s-s" text-anchor="middle" x="165" y="70">one instruction stream</text><rect class="s-box" height="40" rx="3" width="56" x="14" y="118"></rect><text class="s-s" text-anchor="middle" x="42" y="136">ALU</text><text class="s-s" text-anchor="middle" x="42" y="152">0</text><path class="s-line" d="M165 78L42 118" marker-end="url(#fsah)"></path><rect class="s-box2" height="30" rx="3" width="56" x="14" y="178"></rect><text class="s-s" text-anchor="middle" x="42" y="198">data 0</text><path class="s-line" d="M42 158L42 178" marker-end="url(#fsah)"></path><rect class="s-box" height="40" rx="3" width="56" x="76" y="118"></rect><text class="s-s" text-anchor="middle" x="104" y="136">ALU</text><text class="s-s" text-anchor="middle" x="104" y="152">1</text><path class="s-line" d="M165 78L104 118" marker-end="url(#fsah)"></path><rect class="s-box2" height="30" rx="3" width="56" x="76" y="178"></rect><text class="s-s" text-anchor="middle" x="104" y="198">data 1</text><path class="s-line" d="M104 158L104 178" marker-end="url(#fsah)"></path><rect class="s-box" height="40" rx="3" width="56" x="138" y="118"></rect><text class="s-s" text-anchor="middle" x="166" y="136">ALU</text><text class="s-s" text-anchor="middle" x="166" y="152">2</text><path class="s-line" d="M165 78L166 118" marker-end="url(#fsah)"></path><rect class="s-box2" height="30" rx="3" width="56" x="138" y="178"></rect><text class="s-s" text-anchor="middle" x="166" y="198">data 2</text><path class="s-line" d="M166 158L166 178" marker-end="url(#fsah)"></path><rect class="s-box" height="40" rx="3" width="56" x="200" y="118"></rect><text class="s-s" text-anchor="middle" x="228" y="136">ALU</text><text class="s-s" text-anchor="middle" x="228" y="152">3</text><path class="s-line" d="M165 78L228 118" marker-end="url(#fsah)"></path><rect class="s-box2" height="30" rx="3" width="56" x="200" y="178"></rect><text class="s-s" text-anchor="middle" x="228" y="198">data 3</text><path class="s-line" d="M228 158L228 178" marker-end="url(#fsah)"></path><text class="s-s" text-anchor="middle" x="165" y="232">all ALUs do the same op each cycle</text><rect class="s-box2" height="40" rx="3" width="100" x="330" y="34"></rect><text class="s-t" text-anchor="middle" x="380" y="52">PC / control</text><text class="s-s" text-anchor="middle" x="380" y="67">program A</text><rect class="s-box" height="40" rx="3" width="100" x="330" y="118"></rect><text class="s-t" text-anchor="middle" x="380" y="142">ALU + regs</text><rect class="s-box2" height="30" rx="3" width="100" x="330" y="178"></rect><text class="s-s" text-anchor="middle" x="380" y="198">data 0</text><path class="s-line" d="M380 74L380 118" marker-end="url(#fsah)"></path><path class="s-line" d="M380 158L380 178" marker-end="url(#fsah)"></path><rect class="s-box2" height="40" rx="3" width="100" x="438" y="34"></rect><text class="s-t" text-anchor="middle" x="488" y="52">PC / control</text><text class="s-s" text-anchor="middle" x="488" y="67">program B</text><rect class="s-box" height="40" rx="3" width="100" x="438" y="118"></rect><text class="s-t" text-anchor="middle" x="488" y="142">ALU + regs</text><rect class="s-box2" height="30" rx="3" width="100" x="438" y="178"></rect><text class="s-s" text-anchor="middle" x="488" y="198">data 1</text><path class="s-line" d="M488 74L488 118" marker-end="url(#fsah)"></path><path class="s-line" d="M488 158L488 178" marker-end="url(#fsah)"></path><rect class="s-box2" height="40" rx="3" width="100" x="546" y="34"></rect><text class="s-t" text-anchor="middle" x="596" y="52">PC / control</text><text class="s-s" text-anchor="middle" x="596" y="67">program C</text><rect class="s-box" height="40" rx="3" width="100" x="546" y="118"></rect><text class="s-t" text-anchor="middle" x="596" y="142">ALU + regs</text><rect class="s-box2" height="30" rx="3" width="100" x="546" y="178"></rect><text class="s-s" text-anchor="middle" x="596" y="198">data 2</text><path class="s-line" d="M596 74L596 118" marker-end="url(#fsah)"></path><path class="s-line" d="M596 158L596 178" marker-end="url(#fsah)"></path><text class="s-s" text-anchor="middle" x="480" y="232">each core runs its own instructions on its own data</text></svg><figcaption>SIMD has one control unit and one instruction stream. MIMD has one per core.</figcaption></figure>
+<div class="wrap"><table class="wide">
+<thead><tr><th></th><th>SIMD</th><th>MIMD</th></tr></thead>
+<tbody>
+<tr><td>Control</td><td>One PC, all units synchronized</td><td>A PC per processor, units independent</td></tr>
+<tr><td>Parallelism</td><td>Data-level</td><td>Task or thread-level</td></tr>
+<tr><td>Instruction storage</td><td>One copy of the code</td><td>Shared-memory MIMD needs several instruction caches and a copy of the code in each</td></tr>
+<tr><td>Best for</td><td>Arrays in <span class="m">for</span> loops, identical operations</td><td>Different tasks, irregular work</td></tr>
+<tr><td>Weak point</td><td>case / switch statements</td><td>Synchronization and communication cost</td></tr>
+</tbody>
+</table></div>
+<div class="note"><p><span class="lbl">Note</span>The original motivation for SIMD was to spread the cost of one control unit over dozens of execution units. Each unit still has its own address registers, so different units can use different data addresses. Both points are from the textbook.</p></div>
 </section>
-
-<!-- ============ SIMD ============ -->
 <section class="topic" id="t-simd">
-  <div class="head"><h2>SIMD in detail</h2><label class="rev" for="r-simd"><input class="rev" type="checkbox" id="r-simd" data-sec="t-simd">revised</label></div>
-  <div class="chips"><span class="chip">Likely exam</span><span class="chip">Explain</span><span class="chip">Numerical</span></div>
-  <ul class="t">
-    <li>SIMD operates on <strong>vectors</strong> of data. One SIMD instruction can add 64 numbers by sending 64 data streams to 64 ALUs and producing 64 sums in a single clock cycle.</li>
-    <li>All execution units are synchronized and respond to a single instruction from a single PC. To the programmer it looks close to SISD.</li>
-    <li>A sequential program can be compiled for SISD hardware or for SIMD hardware.</li>
-    <li><strong>Advantage:</strong> reduced instruction bandwidth. Only one copy of the code runs everywhere.</li>
-    <li><strong>Works best</strong> on arrays in for loops. It needs a lot of identically structured data, called <strong>data-level parallelism</strong>.</li>
-    <li><strong>Weakest</strong> in case or switch statements, where each unit must do a different operation depending on its data. Units with the wrong data are <strong>disabled</strong> while the others continue. With n cases, SIMD runs at about <strong>1/n of peak</strong>.</li>
-  </ul>
-  <div class="note"><p><span class="lbl">Numerical</span>A 64-wide SIMD unit executes a switch with 4 cases, and each lane takes one case. Effective rate = 1/4 of peak. In the 64-add example, 64 lanes finish in 1 cycle against 64 cycles on a scalar unit, so a speed-up of 64 when all lanes are used. On the 4-case switch, 64 / 4 = 16 times.</p></div>
-  <h3>SIMD in x86: multimedia extensions</h3>
-  <div class="note add"><p><span class="lbl">Added</span>Subword parallelism for narrow integers inspired MMX (1996). Later came <strong>SSE</strong> (Streaming SIMD Extensions) and then <strong>AVX</strong> (Advanced Vector Extensions), which does four 64-bit floating-point operations at once. The register width is coded in the opcode, so each wider generation needs a new set of opcodes. Hundreds of SSE and AVX instructions exist now.</p></div>
-  <p>Two interpretations of SIMD are alive today: the <strong>multimedia extensions</strong> above, and the <strong>vector architecture</strong> in the next section. The old "array processors" with one ALU per element have faded away.</p>
+<div class="head"><h2>SIMD in detail</h2><label class="rev" for="r-simd"><input class="rev" data-sec="t-simd" id="r-simd" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Likely exam</span><span class="chip">Explain</span><span class="chip">Numerical</span></div>
+<ul class="t">
+<li>SIMD operates on <strong>vectors</strong> of data. One SIMD instruction can add 64 numbers by sending 64 data streams to 64 ALUs and producing 64 sums in a single clock cycle.</li>
+<li>All execution units are synchronized and respond to a single instruction from a single PC. To the programmer it looks close to SISD.</li>
+<li>A sequential program can be compiled for SISD hardware or for SIMD hardware.</li>
+<li><strong>Advantage:</strong> reduced instruction bandwidth. Only one copy of the code runs everywhere.</li>
+<li><strong>Works best</strong> on arrays in for loops. It needs a lot of identically structured data, called <strong>data-level parallelism</strong>.</li>
+<li><strong>Weakest</strong> in case or switch statements, where each unit must do a different operation depending on its data. Units with the wrong data are <strong>disabled</strong> while the others continue. With n cases, SIMD runs at about <strong>1/n of peak</strong>.</li>
+</ul>
+<div class="note"><p><span class="lbl">Numerical</span>A 64-wide SIMD unit executes a switch with 4 cases, and each lane takes one case. Effective rate = 1/4 of peak. In the 64-add example, 64 lanes finish in 1 cycle against 64 cycles on a scalar unit, so a speed-up of 64 when all lanes are used. On the 4-case switch, 64 / 4 = 16 times.</p></div>
+<h3>SIMD in x86: multimedia extensions</h3>
+<div class="note"><p><span class="lbl">Note</span>Subword parallelism for narrow integers inspired MMX (1996). Later came <strong>SSE</strong> (Streaming SIMD Extensions) and then <strong>AVX</strong> (Advanced Vector Extensions), which does four 64-bit floating-point operations at once. The register width is coded in the opcode, so each wider generation needs a new set of opcodes. Hundreds of SSE and AVX instructions exist now.</p></div>
+<p>Two interpretations of SIMD are alive today: the <strong>multimedia extensions</strong> above, and the <strong>vector architecture</strong> in the next section. The old "array processors" with one ALU per element have faded away.</p>
 </section>
-
-<!-- ============ VECTOR ============ -->
 <section class="topic" id="t-vec">
-  <div class="head"><h2>Vector architecture</h2><label class="rev" for="r-vec"><input class="rev" type="checkbox" id="r-vec" data-sec="t-vec">revised</label></div>
-  <div class="chips"><span class="chip">Explain</span><span class="chip">Differentiate</span><span class="chip">Numerical</span><span class="chip">Important</span></div>
-  <div class="note def"><p><span class="lbl">Vector architecture</span>Instead of 64 ALUs adding 64 numbers at once, the ALU is <strong>pipelined</strong>. Collect data from memory into a large set of <strong>vector registers</strong>, operate on the elements in order using pipelined units, then write the results back to memory.</p></div>
-  <ul class="t">
-    <li>A vector machine might have <strong>32 vector registers, each holding 64 elements of 64 bits</strong>. The elements are independent, so they can also be processed in parallel.</li>
-    <li>The number of elements L in a vector register is the <strong>vector length</strong>. It decides how many operations run in parallel.</li>
-    <li>Vector instructions need the operations to be independent, which is data parallelism. The data sits in vector registers.</li>
-  </ul>
-  <div class="note fix"><p><span class="lbl">Check</span>Your multithreading and vector note starts in the middle of an interrupts chapter and ends with an I/O chapter conclusion. Only the processors section in between belongs to this module, and I used just that. It also says an Intel IA-32 vector register is 128 bits, giving L = 2 to 16 elements (64-bit down to 8-bit). That is correct: 128/64 = 2 and 128/8 = 16.</p></div>
-  <h3>Vector against scalar</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Property</th><th>Why it helps</th></tr></thead>
-    <tbody>
-      <tr><td>One instruction = a whole loop</td><td>Fetch and decode bandwidth drops a lot.</td></tr>
-      <tr><td>Results are independent</td><td>No data hazards inside one vector instruction.</td></tr>
-      <tr><td>Hazard check per vector operand</td><td>Checked once per vector, not once per element. Saves time and energy.</td></tr>
-      <tr><td>Known memory access pattern</td><td>Adjacent elements: the memory latency is paid once for the whole vector, not per word.</td></tr>
-      <tr><td>The loop branch is gone</td><td>No control hazards from the loop.</td></tr>
-      <tr><td>Overall</td><td>Better power and energy, and easier than MIMD to write efficient code when data-level parallelism exists.</td></tr>
-    </tbody>
-  </table></div>
-  <h3>Worked example: DAXPY (Y = a × X + Y, 64 elements)</h3>
-  <div class="note example"><p><span class="lbl">Vector ISA Conventions</span>In vector instruction sets (such as VMIPS), vector instructions take a <code>.v</code> or <code>v</code> suffix (e.g. <code>lv</code>, <code>sv</code>, <code>mulvs.d</code>) and operate over full vector registers with a single instruction issuance.</p></div>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Vector MIPS (6 instructions)</th><th>Meaning</th></tr></thead>
-    <tbody>
-      <tr><td class="m">l.d $f0, a($sp)</td><td>load scalar a</td></tr>
-      <tr><td class="m">lv $v1, 0($s0)</td><td>load vector X</td></tr>
-      <tr><td class="m">mulvs.d $v2, $v1, $f0</td><td>vector × scalar</td></tr>
-      <tr><td class="m">lv $v3, 0($s1)</td><td>load vector Y</td></tr>
-      <tr><td class="m">addv.d $v4, $v2, $v3</td><td>add Y to the product</td></tr>
-      <tr><td class="m">sv $v4, 0($s1)</td><td>store the result</td></tr>
-    </tbody>
-  </table></div>
-  <p>Conventional MIPS: 2 set-up instructions plus a loop of 9 instructions (l.d, mul.d, l.d, add.d, s.d, two addiu, subu, bne) run 64 times = 2 + 9 × 64 = <strong>578</strong>, which the book calls "almost 600". Vector: <strong>6</strong>. In the scalar loop nearly half the instructions are loop overhead, and every add.d waits for a mul.d. In the vector code each instruction stalls only for the first element, so stalls happen once per vector operation, about <strong>64 times less often</strong>.</p>
-  <h3>Vector lanes</h3>
-  <figure class="fig"><svg viewBox="0 0 660 156" role="img" aria-labelledby="fvt fvd"><title id="fvt">Vector lanes</title><desc id="fvd">Vector add with one lane against four lanes; elements are interleaved across lanes</desc><defs><marker id="fvah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-head" d="M0 0L10 5L0 10z"/></marker></defs><text class="s-m" x="165" y="18" text-anchor="middle">(a) one lane: 1 add per cycle</text><rect class="s-box2" x="10" y="30" width="300" height="34" rx="3"/><text class="s-s" x="160" y="52" text-anchor="middle">Vector registers: elements 0 1 2 3 ... 63</text><rect class="s-box" x="110" y="86" width="100" height="34" rx="3"/><text class="s-s" x="160" y="108" text-anchor="middle">FP add pipe</text><path class="s-line" d="M160 64L160 86" marker-end="url(#fvah)"/><text class="s-s" x="160" y="142" text-anchor="middle">64 elements = 64 cycles</text><text class="s-m" x="495" y="18" text-anchor="middle">(b) four lanes: 4 adds per cycle</text><rect class="s-box2" x="340" y="30" width="73" height="34" rx="3"/><text class="s-s" x="376" y="44" text-anchor="middle">elements</text><text class="s-s" x="376" y="58" text-anchor="middle">0,4,8..</text><rect class="s-box" x="340" y="86" width="73" height="34" rx="3"/><text class="s-s" x="376" y="108" text-anchor="middle">add pipe 0</text><path class="s-line" d="M376 64L376 86" marker-end="url(#fvah)"/><rect class="s-box2" x="419" y="30" width="73" height="34" rx="3"/><text class="s-s" x="455" y="44" text-anchor="middle">elements</text><text class="s-s" x="455" y="58" text-anchor="middle">1,5,9..</text><rect class="s-box" x="419" y="86" width="73" height="34" rx="3"/><text class="s-s" x="455" y="108" text-anchor="middle">add pipe 1</text><path class="s-line" d="M455 64L455 86" marker-end="url(#fvah)"/><rect class="s-box2" x="498" y="30" width="73" height="34" rx="3"/><text class="s-s" x="534" y="44" text-anchor="middle">elements</text><text class="s-s" x="534" y="58" text-anchor="middle">2,6,10..</text><rect class="s-box" x="498" y="86" width="73" height="34" rx="3"/><text class="s-s" x="534" y="108" text-anchor="middle">add pipe 2</text><path class="s-line" d="M534 64L534 86" marker-end="url(#fvah)"/><rect class="s-box2" x="577" y="30" width="73" height="34" rx="3"/><text class="s-s" x="613" y="44" text-anchor="middle">elements</text><text class="s-s" x="613" y="58" text-anchor="middle">3,7,11..</text><rect class="s-box" x="577" y="86" width="73" height="34" rx="3"/><text class="s-s" x="613" y="108" text-anchor="middle">add pipe 3</text><path class="s-line" d="M613 64L613 86" marker-end="url(#fvah)"/><text class="s-s" x="495" y="142" text-anchor="middle">64 elements = 16 cycles (start-up ignored)</text></svg><figcaption>One lane against four lanes. Elements are interleaved across the lanes.</figcaption></figure>
-  <ul class="t">
-    <li>A <strong>lane</strong> is a parallel pipeline for the vector functional units, with its share of the vector registers (lane 0 holds elements 0, 4, 8 ...).</li>
-    <li>Going from one lane to four cuts the clocks per vector instruction by about 4: 64 elements take 64 cycles on one lane and 16 on four, ignoring start-up. 16 lanes would take 4.</li>
-    <li>More lanes only help if the application and architecture support <strong>long vectors</strong>.</li>
-  </ul>
-  <h3>Vector against multimedia extensions (SSE, AVX)</h3>
-  <div class="note def"><p><span class="lbl">Architectural Comparison</span>Key differences between dedicated vector processors and standard multimedia SIMD extensions (SSE/AVX):</p></div>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th></th><th>Vector architecture</th><th>Multimedia extensions</th></tr></thead>
-    <tbody>
-      <tr><td>Operations per instruction</td><td>Dozens</td><td>A few</td></tr>
-      <tr><td>Number of elements</td><td>In a <strong>vector length register</strong>, so new versions keep binary compatibility</td><td>Coded in the opcode, so a new opcode set for each width (MMX, SSE, AVX ...)</td></tr>
-      <tr><td>Memory access</td><td>Contiguous, <strong>strided</strong> (every n-th element) and <strong>indexed</strong> (gather-scatter)</td><td>Mostly contiguous</td></tr>
-    </tbody>
-  </table></div>
-  <ul class="t">
-    <li><strong>Strip mining</strong>: when a loop is longer than the vector length, wrap it in a loop of full-length vector operations and handle the leftover elements.</li>
-    <li>Why are vector machines rare outside high-performance computing? Large vector state slows context switches, vector page faults are hard to handle, and SIMD extensions gave some of the benefit.</li>
-  </ul>
+<div class="head"><h2>Vector architecture</h2><label class="rev" for="r-vec"><input class="rev" data-sec="t-vec" id="r-vec" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Explain</span><span class="chip">Differentiate</span><span class="chip">Numerical</span></div>
+<div class="note def"><p><span class="lbl">Vector architecture</span>Instead of 64 ALUs adding 64 numbers at once, the ALU is <strong>pipelined</strong>. Collect data from memory into a large set of <strong>vector registers</strong>, operate on the elements in order using pipelined units, then write the results back to memory.</p></div>
+<ul class="t">
+<li>A vector machine might have <strong>32 vector registers, each holding 64 elements of 64 bits</strong>. The elements are independent, so they can also be processed in parallel.</li>
+<li>The number of elements L in a vector register is the <strong>vector length</strong>. It decides how many operations run in parallel.</li>
+<li>Vector instructions need the operations to be independent, which is data parallelism. The data sits in vector registers.</li>
+</ul>
+<h3>Vector against scalar</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Property</th><th>Why it helps</th></tr></thead>
+<tbody>
+<tr><td>One instruction = a whole loop</td><td>Fetch and decode bandwidth drops a lot.</td></tr>
+<tr><td>Results are independent</td><td>No data hazards inside one vector instruction.</td></tr>
+<tr><td>Hazard check per vector operand</td><td>Checked once per vector, not once per element. Saves time and energy.</td></tr>
+<tr><td>Known memory access pattern</td><td>Adjacent elements: the memory latency is paid once for the whole vector, not per word.</td></tr>
+<tr><td>The loop branch is gone</td><td>No control hazards from the loop.</td></tr>
+<tr><td>Overall</td><td>Better power and energy, and easier than MIMD to write efficient code when data-level parallelism exists.</td></tr>
+</tbody>
+</table></div>
+<h3>Worked example: DAXPY (Y = a × X + Y, 64 elements)</h3>
+<div class="note"><p><span class="lbl">Note</span>This is the textbook example. Vector MIPS uses a "v" suffix. <span class="m">lv</span> and <span class="m">sv</span> load and store a whole vector.</p></div>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Vector MIPS (6 instructions)</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td class="m">l.d $f0, a($sp)</td><td>load scalar a</td></tr>
+<tr><td class="m">lv $v1, 0($s0)</td><td>load vector X</td></tr>
+<tr><td class="m">mulvs.d $v2, $v1, $f0</td><td>vector × scalar</td></tr>
+<tr><td class="m">lv $v3, 0($s1)</td><td>load vector Y</td></tr>
+<tr><td class="m">addv.d $v4, $v2, $v3</td><td>add Y to the product</td></tr>
+<tr><td class="m">sv $v4, 0($s1)</td><td>store the result</td></tr>
+</tbody>
+</table></div>
+<p>Conventional MIPS: 2 set-up instructions plus a loop of 9 instructions (l.d, mul.d, l.d, add.d, s.d, two addiu, subu, bne) run 64 times = 2 + 9 × 64 = <strong>578</strong>, which the book calls "almost 600". Vector: <strong>6</strong>. In the scalar loop nearly half the instructions are loop overhead, and every add.d waits for a mul.d. In the vector code each instruction stalls only for the first element, so stalls happen once per vector operation, about <strong>64 times less often</strong>.</p>
+<h3>Vector lanes</h3>
+<figure class="fig"><svg aria-labelledby="fvt fvd" role="img" viewbox="0 0 660 156"><title id="fvt">Vector lanes</title><desc id="fvd">Vector add with one lane against four lanes; elements are interleaved across lanes</desc><defs><marker id="fvah" markerheight="6" markerwidth="6" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="s-head" d="M0 0L10 5L0 10z"></path></marker></defs><text class="s-m" text-anchor="middle" x="165" y="18">(a) one lane: 1 add per cycle</text><rect class="s-box2" height="34" rx="3" width="300" x="10" y="30"></rect><text class="s-s" text-anchor="middle" x="160" y="52">Vector registers: elements 0 1 2 3 ... 63</text><rect class="s-box" height="34" rx="3" width="100" x="110" y="86"></rect><text class="s-s" text-anchor="middle" x="160" y="108">FP add pipe</text><path class="s-line" d="M160 64L160 86" marker-end="url(#fvah)"></path><text class="s-s" text-anchor="middle" x="160" y="142">64 elements = 64 cycles</text><text class="s-m" text-anchor="middle" x="495" y="18">(b) four lanes: 4 adds per cycle</text><rect class="s-box2" height="34" rx="3" width="73" x="340" y="30"></rect><text class="s-s" text-anchor="middle" x="376" y="44">elements</text><text class="s-s" text-anchor="middle" x="376" y="58">0,4,8..</text><rect class="s-box" height="34" rx="3" width="73" x="340" y="86"></rect><text class="s-s" text-anchor="middle" x="376" y="108">add pipe 0</text><path class="s-line" d="M376 64L376 86" marker-end="url(#fvah)"></path><rect class="s-box2" height="34" rx="3" width="73" x="419" y="30"></rect><text class="s-s" text-anchor="middle" x="455" y="44">elements</text><text class="s-s" text-anchor="middle" x="455" y="58">1,5,9..</text><rect class="s-box" height="34" rx="3" width="73" x="419" y="86"></rect><text class="s-s" text-anchor="middle" x="455" y="108">add pipe 1</text><path class="s-line" d="M455 64L455 86" marker-end="url(#fvah)"></path><rect class="s-box2" height="34" rx="3" width="73" x="498" y="30"></rect><text class="s-s" text-anchor="middle" x="534" y="44">elements</text><text class="s-s" text-anchor="middle" x="534" y="58">2,6,10..</text><rect class="s-box" height="34" rx="3" width="73" x="498" y="86"></rect><text class="s-s" text-anchor="middle" x="534" y="108">add pipe 2</text><path class="s-line" d="M534 64L534 86" marker-end="url(#fvah)"></path><rect class="s-box2" height="34" rx="3" width="73" x="577" y="30"></rect><text class="s-s" text-anchor="middle" x="613" y="44">elements</text><text class="s-s" text-anchor="middle" x="613" y="58">3,7,11..</text><rect class="s-box" height="34" rx="3" width="73" x="577" y="86"></rect><text class="s-s" text-anchor="middle" x="613" y="108">add pipe 3</text><path class="s-line" d="M613 64L613 86" marker-end="url(#fvah)"></path><text class="s-s" text-anchor="middle" x="495" y="142">64 elements = 16 cycles (start-up ignored)</text></svg><figcaption>One lane against four lanes. Elements are interleaved across the lanes.</figcaption></figure>
+<ul class="t">
+<li>A <strong>lane</strong> is a parallel pipeline for the vector functional units, with its share of the vector registers (lane 0 holds elements 0, 4, 8 ...).</li>
+<li>Going from one lane to four cuts the clocks per vector instruction by about 4: 64 elements take 64 cycles on one lane and 16 on four, ignoring start-up. 16 lanes would take 4.</li>
+<li>More lanes only help if the application and architecture support <strong>long vectors</strong>.</li>
+</ul>
+<h3>Vector against multimedia extensions (SSE, AVX)</h3>
+<div class="note"><p><span class="lbl">Note</span>Textbook comparison:</p></div>
+<div class="wrap"><table class="wide">
+<thead><tr><th></th><th>Vector architecture</th><th>Multimedia extensions</th></tr></thead>
+<tbody>
+<tr><td>Operations per instruction</td><td>Dozens</td><td>A few</td></tr>
+<tr><td>Number of elements</td><td>In a <strong>vector length register</strong>, so new versions keep binary compatibility</td><td>Coded in the opcode, so a new opcode set for each width (MMX, SSE, AVX ...)</td></tr>
+<tr><td>Memory access</td><td>Contiguous, <strong>strided</strong> (every n-th element) and <strong>indexed</strong> (gather-scatter)</td><td>Mostly contiguous</td></tr>
+</tbody>
+</table></div>
+<ul class="t">
+<li><strong>Strip mining</strong>: when a loop is longer than the vector length, wrap it in a loop of full-length vector operations and handle the leftover elements.</li>
+<li>Why are vector machines rare outside high-performance computing? Large vector state slows context switches, vector page faults are hard to handle, and SIMD extensions gave some of the benefit.</li>
+</ul>
 </section>
-
-<!-- ============ MULTITHREADING ============ -->
 <section class="topic" id="t-mt">
-  <div class="head"><h2>Hardware multithreading</h2><label class="rev" for="r-mt"><input class="rev" type="checkbox" id="r-mt" data-sec="t-mt">revised</label></div>
-  <div class="chips"><span class="chip">Differentiate</span><span class="chip">Draw</span><span class="chip">Important</span></div>
-  <div class="note def"><p><span class="lbl">Hardware multithreading</span>Several threads share the functional units of a <strong>single</strong> processor in an overlapping way, so the hardware stays busy. When one thread stalls, the processor switches to another.</p></div>
-  <ul class="t">
-    <li>MIMD relies on many processes or threads to keep <em>many processors</em> busy. Multithreading keeps <em>one processor</em> busy.</li>
-    <li>Each thread needs its own <strong>copy of the register file and the program counter</strong>. Memory is shared through virtual memory.</li>
-    <li>The hardware must switch threads quickly, much faster than an OS process switch (hundreds to thousands of cycles). Switching can be done by changing a pointer to another register set, in one clock cycle.</li>
-  </ul>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Thread</th><th>Process</th></tr></thead>
-    <tbody>
-      <tr><td>Program counter, register state and stack. A lightweight process. Threads usually <strong>share</strong> one address space.</td><td>One or more threads plus the address space and OS state. A process switch normally <strong>calls the OS</strong>.</td></tr>
-    </tbody>
-  </table></div>
-  <figure class="fig"><svg viewBox="0 0 660 336" role="img" aria-labelledby="fmt fmd"><title id="fmt">Issue slots under multithreading</title><desc id="fmd">Four panels showing a 4-wide superscalar with no multithreading, coarse, fine and simultaneous multithreading</desc><text class="s-s" x="10" y="18" text-anchor="start">No multithreading (one thread, stalls leave slots empty)</text><text class="s-s" x="14" y="39" text-anchor="start">1</text><rect class="stc mt-a" x="36" y="26" width="27" height="16" rx="2"/><text class="s-c" x="49" y="39" text-anchor="middle">A</text><rect class="stc mt-a" x="65" y="26" width="27" height="16" rx="2"/><text class="s-c" x="78" y="39" text-anchor="middle">A</text><rect class="stc s-box" x="93" y="26" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="26" width="27" height="16" rx="2"/><text class="s-s" x="14" y="57" text-anchor="start">2</text><rect class="stc mt-a" x="36" y="44" width="27" height="16" rx="2"/><text class="s-c" x="49" y="57" text-anchor="middle">A</text><rect class="stc s-box" x="65" y="44" width="27" height="16" rx="2"/><rect class="stc s-box" x="93" y="44" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="44" width="27" height="16" rx="2"/><text class="s-s" x="14" y="75" text-anchor="start">3</text><rect class="stc s-box" x="36" y="62" width="27" height="16" rx="2"/><rect class="stc s-box" x="65" y="62" width="27" height="16" rx="2"/><rect class="stc s-box" x="93" y="62" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="62" width="27" height="16" rx="2"/><text class="s-s" x="14" y="93" text-anchor="start">4</text><rect class="stc s-box" x="36" y="80" width="27" height="16" rx="2"/><rect class="stc s-box" x="65" y="80" width="27" height="16" rx="2"/><rect class="stc s-box" x="93" y="80" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="80" width="27" height="16" rx="2"/><text class="s-s" x="14" y="111" text-anchor="start">5</text><rect class="stc mt-a" x="36" y="98" width="27" height="16" rx="2"/><text class="s-c" x="49" y="111" text-anchor="middle">A</text><rect class="stc mt-a" x="65" y="98" width="27" height="16" rx="2"/><text class="s-c" x="78" y="111" text-anchor="middle">A</text><rect class="stc mt-a" x="93" y="98" width="27" height="16" rx="2"/><text class="s-c" x="106" y="111" text-anchor="middle">A</text><rect class="stc s-box" x="122" y="98" width="27" height="16" rx="2"/><text class="s-s" x="14" y="129" text-anchor="start">6</text><rect class="stc mt-a" x="36" y="116" width="27" height="16" rx="2"/><text class="s-c" x="49" y="129" text-anchor="middle">A</text><rect class="stc mt-a" x="65" y="116" width="27" height="16" rx="2"/><text class="s-c" x="78" y="129" text-anchor="middle">A</text><rect class="stc s-box" x="93" y="116" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="116" width="27" height="16" rx="2"/><text class="s-s" x="160.4" y="40" text-anchor="start">rows = clock cycles</text><text class="s-s" x="160.4" y="56" text-anchor="start">4 boxes = 4 issue slots</text><text class="s-s" x="160.4" y="72" text-anchor="start">blank = unused slot</text><text class="s-s" x="340" y="18" text-anchor="start">Coarse-grained: switch on a long stall</text><text class="s-s" x="344" y="39" text-anchor="start">1</text><rect class="stc mt-a" x="366" y="26" width="27" height="16" rx="2"/><text class="s-c" x="379" y="39" text-anchor="middle">A</text><rect class="stc mt-a" x="395" y="26" width="27" height="16" rx="2"/><text class="s-c" x="408" y="39" text-anchor="middle">A</text><rect class="stc s-box" x="423" y="26" width="27" height="16" rx="2"/><rect class="stc s-box" x="452" y="26" width="27" height="16" rx="2"/><text class="s-s" x="344" y="57" text-anchor="start">2</text><rect class="stc mt-a" x="366" y="44" width="27" height="16" rx="2"/><text class="s-c" x="379" y="57" text-anchor="middle">A</text><rect class="stc s-box" x="395" y="44" width="27" height="16" rx="2"/><rect class="stc s-box" x="423" y="44" width="27" height="16" rx="2"/><rect class="stc s-box" x="452" y="44" width="27" height="16" rx="2"/><text class="s-s" x="344" y="75" text-anchor="start">3</text><rect class="stc s-box" x="366" y="62" width="27" height="16" rx="2"/><rect class="stc s-box" x="395" y="62" width="27" height="16" rx="2"/><rect class="stc s-box" x="423" y="62" width="27" height="16" rx="2"/><rect class="stc s-box" x="452" y="62" width="27" height="16" rx="2"/><text class="s-s" x="344" y="93" text-anchor="start">4</text><rect class="stc mt-b" x="366" y="80" width="27" height="16" rx="2"/><text class="s-c" x="379" y="93" text-anchor="middle">B</text><rect class="stc mt-b" x="395" y="80" width="27" height="16" rx="2"/><text class="s-c" x="408" y="93" text-anchor="middle">B</text><rect class="stc mt-b" x="423" y="80" width="27" height="16" rx="2"/><text class="s-c" x="436" y="93" text-anchor="middle">B</text><rect class="stc s-box" x="452" y="80" width="27" height="16" rx="2"/><text class="s-s" x="344" y="111" text-anchor="start">5</text><rect class="stc mt-b" x="366" y="98" width="27" height="16" rx="2"/><text class="s-c" x="379" y="111" text-anchor="middle">B</text><rect class="stc mt-b" x="395" y="98" width="27" height="16" rx="2"/><text class="s-c" x="408" y="111" text-anchor="middle">B</text><rect class="stc s-box" x="423" y="98" width="27" height="16" rx="2"/><rect class="stc s-box" x="452" y="98" width="27" height="16" rx="2"/><text class="s-s" x="344" y="129" text-anchor="start">6</text><rect class="stc mt-b" x="366" y="116" width="27" height="16" rx="2"/><text class="s-c" x="379" y="129" text-anchor="middle">B</text><rect class="stc s-box" x="395" y="116" width="27" height="16" rx="2"/><rect class="stc s-box" x="423" y="116" width="27" height="16" rx="2"/><rect class="stc s-box" x="452" y="116" width="27" height="16" rx="2"/><text class="s-s" x="490.4" y="40" text-anchor="start">rows = clock cycles</text><text class="s-s" x="490.4" y="56" text-anchor="start">4 boxes = 4 issue slots</text><text class="s-s" x="490.4" y="72" text-anchor="start">blank = unused slot</text><text class="s-s" x="10" y="168" text-anchor="start">Fine-grained: switch every cycle</text><text class="s-s" x="14" y="189" text-anchor="start">1</text><rect class="stc mt-a" x="36" y="176" width="27" height="16" rx="2"/><text class="s-c" x="49" y="189" text-anchor="middle">A</text><rect class="stc mt-a" x="65" y="176" width="27" height="16" rx="2"/><text class="s-c" x="78" y="189" text-anchor="middle">A</text><rect class="stc s-box" x="93" y="176" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="176" width="27" height="16" rx="2"/><text class="s-s" x="14" y="207" text-anchor="start">2</text><rect class="stc mt-b" x="36" y="194" width="27" height="16" rx="2"/><text class="s-c" x="49" y="207" text-anchor="middle">B</text><rect class="stc s-box" x="65" y="194" width="27" height="16" rx="2"/><rect class="stc s-box" x="93" y="194" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="194" width="27" height="16" rx="2"/><text class="s-s" x="14" y="225" text-anchor="start">3</text><rect class="stc mt-c" x="36" y="212" width="27" height="16" rx="2"/><text class="s-c" x="49" y="225" text-anchor="middle">C</text><rect class="stc mt-c" x="65" y="212" width="27" height="16" rx="2"/><text class="s-c" x="78" y="225" text-anchor="middle">C</text><rect class="stc mt-c" x="93" y="212" width="27" height="16" rx="2"/><text class="s-c" x="106" y="225" text-anchor="middle">C</text><rect class="stc s-box" x="122" y="212" width="27" height="16" rx="2"/><text class="s-s" x="14" y="243" text-anchor="start">4</text><rect class="stc mt-d" x="36" y="230" width="27" height="16" rx="2"/><text class="s-c" x="49" y="243" text-anchor="middle">D</text><rect class="stc mt-d" x="65" y="230" width="27" height="16" rx="2"/><text class="s-c" x="78" y="243" text-anchor="middle">D</text><rect class="stc s-box" x="93" y="230" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="230" width="27" height="16" rx="2"/><text class="s-s" x="14" y="261" text-anchor="start">5</text><rect class="stc mt-a" x="36" y="248" width="27" height="16" rx="2"/><text class="s-c" x="49" y="261" text-anchor="middle">A</text><rect class="stc s-box" x="65" y="248" width="27" height="16" rx="2"/><rect class="stc s-box" x="93" y="248" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="248" width="27" height="16" rx="2"/><text class="s-s" x="14" y="279" text-anchor="start">6</text><rect class="stc mt-b" x="36" y="266" width="27" height="16" rx="2"/><text class="s-c" x="49" y="279" text-anchor="middle">B</text><rect class="stc mt-b" x="65" y="266" width="27" height="16" rx="2"/><text class="s-c" x="78" y="279" text-anchor="middle">B</text><rect class="stc s-box" x="93" y="266" width="27" height="16" rx="2"/><rect class="stc s-box" x="122" y="266" width="27" height="16" rx="2"/><text class="s-s" x="160.4" y="190" text-anchor="start">rows = clock cycles</text><text class="s-s" x="160.4" y="206" text-anchor="start">4 boxes = 4 issue slots</text><text class="s-s" x="160.4" y="222" text-anchor="start">blank = unused slot</text><text class="s-s" x="340" y="168" text-anchor="start">SMT: several threads in the same cycle</text><text class="s-s" x="344" y="189" text-anchor="start">1</text><rect class="stc mt-a" x="366" y="176" width="27" height="16" rx="2"/><text class="s-c" x="379" y="189" text-anchor="middle">A</text><rect class="stc mt-a" x="395" y="176" width="27" height="16" rx="2"/><text class="s-c" x="408" y="189" text-anchor="middle">A</text><rect class="stc mt-b" x="423" y="176" width="27" height="16" rx="2"/><text class="s-c" x="436" y="189" text-anchor="middle">B</text><rect class="stc mt-b" x="452" y="176" width="27" height="16" rx="2"/><text class="s-c" x="465" y="189" text-anchor="middle">B</text><text class="s-s" x="344" y="207" text-anchor="start">2</text><rect class="stc mt-c" x="366" y="194" width="27" height="16" rx="2"/><text class="s-c" x="379" y="207" text-anchor="middle">C</text><rect class="stc mt-c" x="395" y="194" width="27" height="16" rx="2"/><text class="s-c" x="408" y="207" text-anchor="middle">C</text><rect class="stc mt-a" x="423" y="194" width="27" height="16" rx="2"/><text class="s-c" x="436" y="207" text-anchor="middle">A</text><rect class="stc mt-d" x="452" y="194" width="27" height="16" rx="2"/><text class="s-c" x="465" y="207" text-anchor="middle">D</text><text class="s-s" x="344" y="225" text-anchor="start">3</text><rect class="stc mt-b" x="366" y="212" width="27" height="16" rx="2"/><text class="s-c" x="379" y="225" text-anchor="middle">B</text><rect class="stc mt-b" x="395" y="212" width="27" height="16" rx="2"/><text class="s-c" x="408" y="225" text-anchor="middle">B</text><rect class="stc mt-b" x="423" y="212" width="27" height="16" rx="2"/><text class="s-c" x="436" y="225" text-anchor="middle">B</text><rect class="stc mt-c" x="452" y="212" width="27" height="16" rx="2"/><text class="s-c" x="465" y="225" text-anchor="middle">C</text><text class="s-s" x="344" y="243" text-anchor="start">4</text><rect class="stc mt-d" x="366" y="230" width="27" height="16" rx="2"/><text class="s-c" x="379" y="243" text-anchor="middle">D</text><rect class="stc mt-d" x="395" y="230" width="27" height="16" rx="2"/><text class="s-c" x="408" y="243" text-anchor="middle">D</text><rect class="stc mt-a" x="423" y="230" width="27" height="16" rx="2"/><text class="s-c" x="436" y="243" text-anchor="middle">A</text><rect class="stc mt-a" x="452" y="230" width="27" height="16" rx="2"/><text class="s-c" x="465" y="243" text-anchor="middle">A</text><text class="s-s" x="344" y="261" text-anchor="start">5</text><rect class="stc mt-c" x="366" y="248" width="27" height="16" rx="2"/><text class="s-c" x="379" y="261" text-anchor="middle">C</text><rect class="stc mt-c" x="395" y="248" width="27" height="16" rx="2"/><text class="s-c" x="408" y="261" text-anchor="middle">C</text><rect class="stc mt-b" x="423" y="248" width="27" height="16" rx="2"/><text class="s-c" x="436" y="261" text-anchor="middle">B</text><rect class="stc s-box" x="452" y="248" width="27" height="16" rx="2"/><text class="s-s" x="344" y="279" text-anchor="start">6</text><rect class="stc mt-a" x="366" y="266" width="27" height="16" rx="2"/><text class="s-c" x="379" y="279" text-anchor="middle">A</text><rect class="stc mt-a" x="395" y="266" width="27" height="16" rx="2"/><text class="s-c" x="408" y="279" text-anchor="middle">A</text><rect class="stc mt-d" x="423" y="266" width="27" height="16" rx="2"/><text class="s-c" x="436" y="279" text-anchor="middle">D</text><rect class="stc mt-d" x="452" y="266" width="27" height="16" rx="2"/><text class="s-c" x="465" y="279" text-anchor="middle">D</text><text class="s-s" x="490.4" y="190" text-anchor="start">rows = clock cycles</text><text class="s-s" x="490.4" y="206" text-anchor="start">4 boxes = 4 issue slots</text><text class="s-s" x="490.4" y="222" text-anchor="start">blank = unused slot</text><text class="s-s" x="10" y="326" text-anchor="start">Schematic only: the instruction counts are made up to show the idea, not measured.</text></svg><figcaption>How threads A to D use the issue slots of a 4-wide superscalar processor.</figcaption></figure>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th></th><th>Fine-grained</th><th>Coarse-grained</th><th>Simultaneous (SMT)</th></tr></thead>
-    <tbody>
-      <tr><td>When it switches</td><td>After <strong>every instruction</strong> (every clock), round-robin, skipping stalled threads</td><td>Only on a <strong>long stall</strong>, such as a last-level cache miss</td><td>Does not switch: always issues from <strong>several threads in the same cycle</strong></td></tr>
-      <tr><td>Strength</td><td>Hides both short and long stalls</td><td>Thread switch need not be very fast, rarely slows a single thread</td><td>Uses ILP and thread-level parallelism together, fills the most slots</td></tr>
-      <tr><td>Weakness</td><td>Slows each individual thread, because a ready thread waits its turn</td><td>Pipeline must be emptied or refilled on a switch, so it does not help with short stalls</td><td>Needs a multiple-issue, dynamically scheduled (out-of-order) core</td></tr>
-    </tbody>
-  </table></div>
-  <ul class="t">
-    <li><strong>SMT</strong> builds on a multiple-issue, dynamically scheduled pipeline. Register renaming and dynamic scheduling let instructions from independent threads issue together. The hardware tags each slot and renamed register with its thread.</li>
-    <li>Fine-grained raises total <em>throughput</em>, but each thread takes longer to finish.</li>
-  </ul>
-  <div class="note def"><p><span class="lbl">Multithreading Trade-offs</span><strong>Fine-grained:</strong> switches threads on every clock cycle in a round-robin schedule, hiding throughput stalls effectively but increasing individual thread latency. <strong>Coarse-grained:</strong> switches only on major stalls (e.g. L2/L3 cache misses), keeping single-thread execution fast while suffering from pipeline drain/refill overhead during switches.</p></div>
-  <div class="note add"><p><span class="lbl">Added</span>Numbers from the textbook: on one Core i7 960 core, which supports two threads, SMT gave an average speed-up of <strong>1.31</strong> on the PARSEC benchmarks and an energy-efficiency improvement of <strong>1.07</strong>. A modest cost for a decent gain.</p></div>
+<div class="head"><h2>Hardware multithreading</h2><label class="rev" for="r-mt"><input class="rev" data-sec="t-mt" id="r-mt" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Differentiate</span><span class="chip">Draw</span></div>
+<div class="note def"><p><span class="lbl">Hardware multithreading</span>Several threads share the functional units of a <strong>single</strong> processor in an overlapping way, so the hardware stays busy. When one thread stalls, the processor switches to another.</p></div>
+<ul class="t">
+<li>MIMD relies on many processes or threads to keep <em>many processors</em> busy. Multithreading keeps <em>one processor</em> busy.</li>
+<li>Each thread needs its own <strong>copy of the register file and the program counter</strong>. Memory is shared through virtual memory.</li>
+<li>The hardware must switch threads quickly, much faster than an OS process switch (hundreds to thousands of cycles). Switching can be done by changing a pointer to another register set, in one clock cycle.</li>
+</ul>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Thread</th><th>Process</th></tr></thead>
+<tbody>
+<tr><td>Program counter, register state and stack. A lightweight process. Threads usually <strong>share</strong> one address space.</td><td>One or more threads plus the address space and OS state. A process switch normally <strong>calls the OS</strong>.</td></tr>
+</tbody>
+</table></div>
+<figure class="fig"><svg aria-labelledby="fmt fmd" role="img" viewbox="0 0 660 336"><title id="fmt">Issue slots under multithreading</title><desc id="fmd">Four panels showing a 4-wide superscalar with no multithreading, coarse, fine and simultaneous multithreading</desc><text class="s-s" text-anchor="start" x="10" y="18">No multithreading (one thread, stalls leave slots empty)</text><text class="s-s" text-anchor="start" x="14" y="39">1</text><rect class="stc mt-a" height="16" rx="2" width="27" x="36" y="26"></rect><text class="s-c" text-anchor="middle" x="49" y="39">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="65" y="26"></rect><text class="s-c" text-anchor="middle" x="78" y="39">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="26"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="26"></rect><text class="s-s" text-anchor="start" x="14" y="57">2</text><rect class="stc mt-a" height="16" rx="2" width="27" x="36" y="44"></rect><text class="s-c" text-anchor="middle" x="49" y="57">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="65" y="44"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="44"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="44"></rect><text class="s-s" text-anchor="start" x="14" y="75">3</text><rect class="stc s-box" height="16" rx="2" width="27" x="36" y="62"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="65" y="62"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="62"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="62"></rect><text class="s-s" text-anchor="start" x="14" y="93">4</text><rect class="stc s-box" height="16" rx="2" width="27" x="36" y="80"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="65" y="80"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="80"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="80"></rect><text class="s-s" text-anchor="start" x="14" y="111">5</text><rect class="stc mt-a" height="16" rx="2" width="27" x="36" y="98"></rect><text class="s-c" text-anchor="middle" x="49" y="111">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="65" y="98"></rect><text class="s-c" text-anchor="middle" x="78" y="111">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="93" y="98"></rect><text class="s-c" text-anchor="middle" x="106" y="111">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="98"></rect><text class="s-s" text-anchor="start" x="14" y="129">6</text><rect class="stc mt-a" height="16" rx="2" width="27" x="36" y="116"></rect><text class="s-c" text-anchor="middle" x="49" y="129">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="65" y="116"></rect><text class="s-c" text-anchor="middle" x="78" y="129">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="116"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="116"></rect><text class="s-s" text-anchor="start" x="160.4" y="40">rows = clock cycles</text><text class="s-s" text-anchor="start" x="160.4" y="56">4 boxes = 4 issue slots</text><text class="s-s" text-anchor="start" x="160.4" y="72">blank = unused slot</text><text class="s-s" text-anchor="start" x="340" y="18">Coarse-grained: switch on a long stall</text><text class="s-s" text-anchor="start" x="344" y="39">1</text><rect class="stc mt-a" height="16" rx="2" width="27" x="366" y="26"></rect><text class="s-c" text-anchor="middle" x="379" y="39">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="395" y="26"></rect><text class="s-c" text-anchor="middle" x="408" y="39">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="423" y="26"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="452" y="26"></rect><text class="s-s" text-anchor="start" x="344" y="57">2</text><rect class="stc mt-a" height="16" rx="2" width="27" x="366" y="44"></rect><text class="s-c" text-anchor="middle" x="379" y="57">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="395" y="44"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="423" y="44"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="452" y="44"></rect><text class="s-s" text-anchor="start" x="344" y="75">3</text><rect class="stc s-box" height="16" rx="2" width="27" x="366" y="62"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="395" y="62"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="423" y="62"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="452" y="62"></rect><text class="s-s" text-anchor="start" x="344" y="93">4</text><rect class="stc mt-b" height="16" rx="2" width="27" x="366" y="80"></rect><text class="s-c" text-anchor="middle" x="379" y="93">B</text><rect class="stc mt-b" height="16" rx="2" width="27" x="395" y="80"></rect><text class="s-c" text-anchor="middle" x="408" y="93">B</text><rect class="stc mt-b" height="16" rx="2" width="27" x="423" y="80"></rect><text class="s-c" text-anchor="middle" x="436" y="93">B</text><rect class="stc s-box" height="16" rx="2" width="27" x="452" y="80"></rect><text class="s-s" text-anchor="start" x="344" y="111">5</text><rect class="stc mt-b" height="16" rx="2" width="27" x="366" y="98"></rect><text class="s-c" text-anchor="middle" x="379" y="111">B</text><rect class="stc mt-b" height="16" rx="2" width="27" x="395" y="98"></rect><text class="s-c" text-anchor="middle" x="408" y="111">B</text><rect class="stc s-box" height="16" rx="2" width="27" x="423" y="98"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="452" y="98"></rect><text class="s-s" text-anchor="start" x="344" y="129">6</text><rect class="stc mt-b" height="16" rx="2" width="27" x="366" y="116"></rect><text class="s-c" text-anchor="middle" x="379" y="129">B</text><rect class="stc s-box" height="16" rx="2" width="27" x="395" y="116"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="423" y="116"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="452" y="116"></rect><text class="s-s" text-anchor="start" x="490.4" y="40">rows = clock cycles</text><text class="s-s" text-anchor="start" x="490.4" y="56">4 boxes = 4 issue slots</text><text class="s-s" text-anchor="start" x="490.4" y="72">blank = unused slot</text><text class="s-s" text-anchor="start" x="10" y="168">Fine-grained: switch every cycle</text><text class="s-s" text-anchor="start" x="14" y="189">1</text><rect class="stc mt-a" height="16" rx="2" width="27" x="36" y="176"></rect><text class="s-c" text-anchor="middle" x="49" y="189">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="65" y="176"></rect><text class="s-c" text-anchor="middle" x="78" y="189">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="176"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="176"></rect><text class="s-s" text-anchor="start" x="14" y="207">2</text><rect class="stc mt-b" height="16" rx="2" width="27" x="36" y="194"></rect><text class="s-c" text-anchor="middle" x="49" y="207">B</text><rect class="stc s-box" height="16" rx="2" width="27" x="65" y="194"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="194"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="194"></rect><text class="s-s" text-anchor="start" x="14" y="225">3</text><rect class="stc mt-c" height="16" rx="2" width="27" x="36" y="212"></rect><text class="s-c" text-anchor="middle" x="49" y="225">C</text><rect class="stc mt-c" height="16" rx="2" width="27" x="65" y="212"></rect><text class="s-c" text-anchor="middle" x="78" y="225">C</text><rect class="stc mt-c" height="16" rx="2" width="27" x="93" y="212"></rect><text class="s-c" text-anchor="middle" x="106" y="225">C</text><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="212"></rect><text class="s-s" text-anchor="start" x="14" y="243">4</text><rect class="stc mt-d" height="16" rx="2" width="27" x="36" y="230"></rect><text class="s-c" text-anchor="middle" x="49" y="243">D</text><rect class="stc mt-d" height="16" rx="2" width="27" x="65" y="230"></rect><text class="s-c" text-anchor="middle" x="78" y="243">D</text><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="230"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="230"></rect><text class="s-s" text-anchor="start" x="14" y="261">5</text><rect class="stc mt-a" height="16" rx="2" width="27" x="36" y="248"></rect><text class="s-c" text-anchor="middle" x="49" y="261">A</text><rect class="stc s-box" height="16" rx="2" width="27" x="65" y="248"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="248"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="248"></rect><text class="s-s" text-anchor="start" x="14" y="279">6</text><rect class="stc mt-b" height="16" rx="2" width="27" x="36" y="266"></rect><text class="s-c" text-anchor="middle" x="49" y="279">B</text><rect class="stc mt-b" height="16" rx="2" width="27" x="65" y="266"></rect><text class="s-c" text-anchor="middle" x="78" y="279">B</text><rect class="stc s-box" height="16" rx="2" width="27" x="93" y="266"></rect><rect class="stc s-box" height="16" rx="2" width="27" x="122" y="266"></rect><text class="s-s" text-anchor="start" x="160.4" y="190">rows = clock cycles</text><text class="s-s" text-anchor="start" x="160.4" y="206">4 boxes = 4 issue slots</text><text class="s-s" text-anchor="start" x="160.4" y="222">blank = unused slot</text><text class="s-s" text-anchor="start" x="340" y="168">SMT: several threads in the same cycle</text><text class="s-s" text-anchor="start" x="344" y="189">1</text><rect class="stc mt-a" height="16" rx="2" width="27" x="366" y="176"></rect><text class="s-c" text-anchor="middle" x="379" y="189">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="395" y="176"></rect><text class="s-c" text-anchor="middle" x="408" y="189">A</text><rect class="stc mt-b" height="16" rx="2" width="27" x="423" y="176"></rect><text class="s-c" text-anchor="middle" x="436" y="189">B</text><rect class="stc mt-b" height="16" rx="2" width="27" x="452" y="176"></rect><text class="s-c" text-anchor="middle" x="465" y="189">B</text><text class="s-s" text-anchor="start" x="344" y="207">2</text><rect class="stc mt-c" height="16" rx="2" width="27" x="366" y="194"></rect><text class="s-c" text-anchor="middle" x="379" y="207">C</text><rect class="stc mt-c" height="16" rx="2" width="27" x="395" y="194"></rect><text class="s-c" text-anchor="middle" x="408" y="207">C</text><rect class="stc mt-a" height="16" rx="2" width="27" x="423" y="194"></rect><text class="s-c" text-anchor="middle" x="436" y="207">A</text><rect class="stc mt-d" height="16" rx="2" width="27" x="452" y="194"></rect><text class="s-c" text-anchor="middle" x="465" y="207">D</text><text class="s-s" text-anchor="start" x="344" y="225">3</text><rect class="stc mt-b" height="16" rx="2" width="27" x="366" y="212"></rect><text class="s-c" text-anchor="middle" x="379" y="225">B</text><rect class="stc mt-b" height="16" rx="2" width="27" x="395" y="212"></rect><text class="s-c" text-anchor="middle" x="408" y="225">B</text><rect class="stc mt-b" height="16" rx="2" width="27" x="423" y="212"></rect><text class="s-c" text-anchor="middle" x="436" y="225">B</text><rect class="stc mt-c" height="16" rx="2" width="27" x="452" y="212"></rect><text class="s-c" text-anchor="middle" x="465" y="225">C</text><text class="s-s" text-anchor="start" x="344" y="243">4</text><rect class="stc mt-d" height="16" rx="2" width="27" x="366" y="230"></rect><text class="s-c" text-anchor="middle" x="379" y="243">D</text><rect class="stc mt-d" height="16" rx="2" width="27" x="395" y="230"></rect><text class="s-c" text-anchor="middle" x="408" y="243">D</text><rect class="stc mt-a" height="16" rx="2" width="27" x="423" y="230"></rect><text class="s-c" text-anchor="middle" x="436" y="243">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="452" y="230"></rect><text class="s-c" text-anchor="middle" x="465" y="243">A</text><text class="s-s" text-anchor="start" x="344" y="261">5</text><rect class="stc mt-c" height="16" rx="2" width="27" x="366" y="248"></rect><text class="s-c" text-anchor="middle" x="379" y="261">C</text><rect class="stc mt-c" height="16" rx="2" width="27" x="395" y="248"></rect><text class="s-c" text-anchor="middle" x="408" y="261">C</text><rect class="stc mt-b" height="16" rx="2" width="27" x="423" y="248"></rect><text class="s-c" text-anchor="middle" x="436" y="261">B</text><rect class="stc s-box" height="16" rx="2" width="27" x="452" y="248"></rect><text class="s-s" text-anchor="start" x="344" y="279">6</text><rect class="stc mt-a" height="16" rx="2" width="27" x="366" y="266"></rect><text class="s-c" text-anchor="middle" x="379" y="279">A</text><rect class="stc mt-a" height="16" rx="2" width="27" x="395" y="266"></rect><text class="s-c" text-anchor="middle" x="408" y="279">A</text><rect class="stc mt-d" height="16" rx="2" width="27" x="423" y="266"></rect><text class="s-c" text-anchor="middle" x="436" y="279">D</text><rect class="stc mt-d" height="16" rx="2" width="27" x="452" y="266"></rect><text class="s-c" text-anchor="middle" x="465" y="279">D</text><text class="s-s" text-anchor="start" x="490.4" y="190">rows = clock cycles</text><text class="s-s" text-anchor="start" x="490.4" y="206">4 boxes = 4 issue slots</text><text class="s-s" text-anchor="start" x="490.4" y="222">blank = unused slot</text><text class="s-s" text-anchor="start" x="10" y="326">Schematic only: the instruction counts are made up to show the idea, not measured.</text></svg><figcaption>How threads A to D use the issue slots of a 4-wide superscalar processor.</figcaption></figure>
+<div class="wrap"><table class="wide">
+<thead><tr><th></th><th>Fine-grained</th><th>Coarse-grained</th><th>Simultaneous (SMT)</th></tr></thead>
+<tbody>
+<tr><td>When it switches</td><td>After <strong>every instruction</strong> (every clock), round-robin, skipping stalled threads</td><td>Only on a <strong>long stall</strong>, such as a last-level cache miss</td><td>Does not switch: always issues from <strong>several threads in the same cycle</strong></td></tr>
+<tr><td>Strength</td><td>Hides both short and long stalls</td><td>Thread switch need not be very fast, rarely slows a single thread</td><td>Uses ILP and thread-level parallelism together, fills the most slots</td></tr>
+<tr><td>Weakness</td><td>Slows each individual thread, because a ready thread waits its turn</td><td>Pipeline must be emptied or refilled on a switch, so it does not help with short stalls</td><td>Needs a multiple-issue, dynamically scheduled (out-of-order) core</td></tr>
+</tbody>
+</table></div>
+<ul class="t">
+<li><strong>SMT</strong> builds on a multiple-issue, dynamically scheduled pipeline. Register renaming and dynamic scheduling let instructions from independent threads issue together. The hardware tags each slot and renamed register with its thread.</li>
+<li>Fine-grained raises total <em>throughput</em>, but each thread takes longer to finish.</li>
+</ul>
+<div class="note"><p><span class="lbl">Note</span>In the textbook, fine-grained multithreading hides more stalls but slows each thread, while coarse-grained is simpler but pays a pipeline start-up cost on each switch. Note that general "fine-grained vs coarse-grained" advantages (flexibility, complexity, throughput) describe the granularity of work, not hardware multithreading. Write the table above in the exam.</p></div>
+<div class="note"><p><span class="lbl">Note</span>Numbers from the textbook: on one Core i7 960 core, which supports two threads, SMT gave an average speed-up of <strong>1.31</strong> on the PARSEC benchmarks and an energy-efficiency improvement of <strong>1.07</strong>. A modest cost for a decent gain.</p></div>
 </section>
-
-<!-- ============ SMP ============ -->
 <section class="topic" id="t-smp">
-  <div class="head"><h2>Multicore and other shared memory multiprocessors</h2><label class="rev" for="r-smp"><input class="rev" type="checkbox" id="r-smp" data-sec="t-smp">revised</label></div>
-  <div class="chips"><span class="chip">Define</span><span class="chip">Differentiate</span><span class="chip">Numerical</span></div>
-  <div class="note def"><p><span class="lbl">Shared memory multiprocessor (SMP)</span>A multiprocessor with a <strong>single physical address space</strong> shared by all processors. Processors communicate through shared variables, using ordinary loads and stores to any location.</p></div>
-  <ul class="t">
-    <li>Programs need not care where their data is, only that they can run in parallel. Any variable is available to any processor.</li>
-    <li>When the address space is common, the hardware usually provides <strong>cache coherence</strong> to give every processor a consistent view of memory.</li>
-    <li>Nearly all multicore chips are SMPs. The alternative, a separate address space for each processor, is the cluster or message-passing style.</li>
-  </ul>
-  <figure class="fig"><svg viewBox="0 0 660 196" role="img" aria-labelledby="fut fud"><title id="fut">UMA and NUMA shared memory multiprocessors</title><desc id="fud">Processors with caches on a network to shared memory, and nodes with local memory</desc><text class="s-m" x="160" y="18" text-anchor="middle">UMA: same latency to all memory</text><text class="s-m" x="500" y="18" text-anchor="middle">NUMA: near memory is faster</text><rect class="s-box" x="20" y="30" width="80" height="34" rx="3"/><text class="s-s" x="60" y="46" text-anchor="middle">Processor</text><rect class="s-box2" x="20" y="70" width="80" height="24" rx="3"/><text class="s-s" x="60" y="87" text-anchor="middle">Cache</text><path class="s-line" d="M60 64L60 70"/><path class="s-line" d="M60 94L60 110"/><rect class="s-box" x="112" y="30" width="80" height="34" rx="3"/><text class="s-s" x="152" y="46" text-anchor="middle">Processor</text><rect class="s-box2" x="112" y="70" width="80" height="24" rx="3"/><text class="s-s" x="152" y="87" text-anchor="middle">Cache</text><path class="s-line" d="M152 64L152 70"/><path class="s-line" d="M152 94L152 110"/><rect class="s-box" x="204" y="30" width="80" height="34" rx="3"/><text class="s-s" x="244" y="46" text-anchor="middle">Processor</text><rect class="s-box2" x="204" y="70" width="80" height="24" rx="3"/><text class="s-s" x="244" y="87" text-anchor="middle">Cache</text><path class="s-line" d="M244 64L244 70"/><path class="s-line" d="M244 94L244 110"/><rect class="s-box2" x="20" y="110" width="264" height="24" rx="3"/><text class="s-t" x="152" y="127" text-anchor="middle">Interconnection network</text><path class="s-line" d="M152 134L152 152" marker-end="url(#fuah)"/><rect class="s-box" x="60" y="152" width="184" height="34" rx="3"/><text class="s-s" x="152" y="174" text-anchor="middle">Shared memory (modules), I/O</text><rect class="s-box2" x="350" y="30" width="90" height="60" rx="3"/><text class="s-t" x="395" y="48" text-anchor="middle">Node 0</text><text class="s-s" x="395" y="64" text-anchor="middle">CPU + cache</text><text class="s-s" x="395" y="80" text-anchor="middle">local memory</text><path class="s-line" d="M395 90L395 110"/><rect class="s-box2" x="450" y="30" width="90" height="60" rx="3"/><text class="s-t" x="495" y="48" text-anchor="middle">Node 1</text><text class="s-s" x="495" y="64" text-anchor="middle">CPU + cache</text><text class="s-s" x="495" y="80" text-anchor="middle">local memory</text><path class="s-line" d="M495 90L495 110"/><rect class="s-box2" x="550" y="30" width="90" height="60" rx="3"/><text class="s-t" x="595" y="48" text-anchor="middle">Node 2</text><text class="s-s" x="595" y="64" text-anchor="middle">CPU + cache</text><text class="s-s" x="595" y="80" text-anchor="middle">local memory</text><path class="s-line" d="M595 90L595 110"/><rect class="s-box2" x="350" y="110" width="290" height="24" rx="3"/><text class="s-t" x="495" y="127" text-anchor="middle">Interconnection network</text><text class="s-s" x="495" y="160" text-anchor="middle">all nodes share ONE address space;</text><text class="s-s" x="495" y="178" text-anchor="middle">remote memory takes longer than local</text></svg><figcaption>UMA and NUMA.</figcaption></figure>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th></th><th>UMA</th><th>NUMA</th></tr></thead>
-    <tbody>
-      <tr><td>Memory latency</td><td>Same for every processor and word</td><td>Some accesses are much faster, depending on who asks for which word</td></tr>
-      <tr><td>Why</td><td>One shared memory behind one network</td><td>Memory is split and attached to different processors or memory controllers</td></tr>
-      <tr><td>Programming</td><td>Easier</td><td>Harder</td></tr>
-      <tr><td>Scaling</td><td>Limited</td><td>Scales to larger sizes, lower latency to nearby memory</td></tr>
-    </tbody>
-  </table></div>
-  <div class="note add"><p><span class="lbl">Added</span>Three more points. (1) <strong>Synchronization</strong>: processors sharing data must coordinate, or one will read data before another has finished writing it. A <strong>lock</strong> lets only one processor at a time use a shared variable. (2) A single large memory is a bottleneck, so memory is spread over several modules behind an interconnection network. (3) In a <strong>message-passing multicomputer</strong> each node is a full computer with its own private memory, and data is shared by <em>sending messages</em>. A cluster is of this kind.</p></div>
-  <h3>Worked example: sum 64,000 numbers on 64 processors (UMA)</h3>
-  <div class="note example"><p><span class="lbl">SPMD Code Implementation</span>Illustrates the Single Program, Multiple Data (SPMD) paradigm where identical compiled source code runs across all nodes, executing distinct conditional branches based on processor thread rank.</p></div>
-  <ol class="t">
-    <li><strong>Divide evenly</strong>: each processor Pn (0 to 63) sums 1000 numbers, from A[1000·Pn] to A[1000·(Pn+1) − 1], into sum[Pn]. All processors run the same code (SPMD), only Pn differs.</li>
-    <li><strong>Reduction</strong>: add the 64 partial sums by halving. With half = 32, processors 0 to 31 add sum[Pn + 32] into sum[Pn]. Then half = 16, 8, 4, 2, 1. That is <strong>6 steps</strong>, log<sub>2</sub> 64. The result is in sum[0].</li>
-    <li><strong>Synchronize</strong> between steps (a barrier), so a processor does not read a partial sum before it is written.</li>
-  </ol>
-  <p>Time ≈ 1000 additions + 6 reduction steps, against 64,000 additions on one processor. In OpenMP the same program is a <span class="m">#pragma omp parallel for</span> loop plus a <span class="m">reduction(+ : FinalSum)</span> clause.</p>
+<div class="head"><h2>Multicore and other shared memory multiprocessors</h2><label class="rev" for="r-smp"><input class="rev" data-sec="t-smp" id="r-smp" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Differentiate</span><span class="chip">Numerical</span></div>
+<div class="note def"><p><span class="lbl">Shared memory multiprocessor (SMP)</span>A multiprocessor with a <strong>single physical address space</strong> shared by all processors. Processors communicate through shared variables, using ordinary loads and stores to any location.</p></div>
+<ul class="t">
+<li>Programs need not care where their data is, only that they can run in parallel. Any variable is available to any processor.</li>
+<li>When the address space is common, the hardware usually provides <strong>cache coherence</strong> to give every processor a consistent view of memory.</li>
+<li>Nearly all multicore chips are SMPs. The alternative, a separate address space for each processor, is the cluster or message-passing style.</li>
+</ul>
+<figure class="fig"><svg aria-labelledby="fut fud" role="img" viewbox="0 0 660 196"><title id="fut">UMA and NUMA shared memory multiprocessors</title><desc id="fud">Processors with caches on a network to shared memory, and nodes with local memory</desc><text class="s-m" text-anchor="middle" x="160" y="18">UMA: same latency to all memory</text><text class="s-m" text-anchor="middle" x="500" y="18">NUMA: near memory is faster</text><rect class="s-box" height="34" rx="3" width="80" x="20" y="30"></rect><text class="s-s" text-anchor="middle" x="60" y="46">Processor</text><rect class="s-box2" height="24" rx="3" width="80" x="20" y="70"></rect><text class="s-s" text-anchor="middle" x="60" y="87">Cache</text><path class="s-line" d="M60 64L60 70"></path><path class="s-line" d="M60 94L60 110"></path><rect class="s-box" height="34" rx="3" width="80" x="112" y="30"></rect><text class="s-s" text-anchor="middle" x="152" y="46">Processor</text><rect class="s-box2" height="24" rx="3" width="80" x="112" y="70"></rect><text class="s-s" text-anchor="middle" x="152" y="87">Cache</text><path class="s-line" d="M152 64L152 70"></path><path class="s-line" d="M152 94L152 110"></path><rect class="s-box" height="34" rx="3" width="80" x="204" y="30"></rect><text class="s-s" text-anchor="middle" x="244" y="46">Processor</text><rect class="s-box2" height="24" rx="3" width="80" x="204" y="70"></rect><text class="s-s" text-anchor="middle" x="244" y="87">Cache</text><path class="s-line" d="M244 64L244 70"></path><path class="s-line" d="M244 94L244 110"></path><rect class="s-box2" height="24" rx="3" width="264" x="20" y="110"></rect><text class="s-t" text-anchor="middle" x="152" y="127">Interconnection network</text><path class="s-line" d="M152 134L152 152" marker-end="url(#fuah)"></path><rect class="s-box" height="34" rx="3" width="184" x="60" y="152"></rect><text class="s-s" text-anchor="middle" x="152" y="174">Shared memory (modules), I/O</text><rect class="s-box2" height="60" rx="3" width="90" x="350" y="30"></rect><text class="s-t" text-anchor="middle" x="395" y="48">Node 0</text><text class="s-s" text-anchor="middle" x="395" y="64">CPU + cache</text><text class="s-s" text-anchor="middle" x="395" y="80">local memory</text><path class="s-line" d="M395 90L395 110"></path><rect class="s-box2" height="60" rx="3" width="90" x="450" y="30"></rect><text class="s-t" text-anchor="middle" x="495" y="48">Node 1</text><text class="s-s" text-anchor="middle" x="495" y="64">CPU + cache</text><text class="s-s" text-anchor="middle" x="495" y="80">local memory</text><path class="s-line" d="M495 90L495 110"></path><rect class="s-box2" height="60" rx="3" width="90" x="550" y="30"></rect><text class="s-t" text-anchor="middle" x="595" y="48">Node 2</text><text class="s-s" text-anchor="middle" x="595" y="64">CPU + cache</text><text class="s-s" text-anchor="middle" x="595" y="80">local memory</text><path class="s-line" d="M595 90L595 110"></path><rect class="s-box2" height="24" rx="3" width="290" x="350" y="110"></rect><text class="s-t" text-anchor="middle" x="495" y="127">Interconnection network</text><text class="s-s" text-anchor="middle" x="495" y="160">all nodes share ONE address space;</text><text class="s-s" text-anchor="middle" x="495" y="178">remote memory takes longer than local</text></svg><figcaption>UMA and NUMA.</figcaption></figure>
+<div class="wrap"><table class="wide">
+<thead><tr><th></th><th>UMA</th><th>NUMA</th></tr></thead>
+<tbody>
+<tr><td>Memory latency</td><td>Same for every processor and word</td><td>Some accesses are much faster, depending on who asks for which word</td></tr>
+<tr><td>Why</td><td>One shared memory behind one network</td><td>Memory is split and attached to different processors or memory controllers</td></tr>
+<tr><td>Programming</td><td>Easier</td><td>Harder</td></tr>
+<tr><td>Scaling</td><td>Limited</td><td>Scales to larger sizes, lower latency to nearby memory</td></tr>
+</tbody>
+</table></div>
+<div class="note"><p><span class="lbl">Note</span>Three more points. (1) <strong>Synchronization</strong>: processors sharing data must coordinate, or one will read data before another has finished writing it. A <strong>lock</strong> lets only one processor at a time use a shared variable. (2) A single large memory is a bottleneck, so memory is spread over several modules behind an interconnection network. (3) In a <strong>message-passing multicomputer</strong> each node is a full computer with its own private memory, and data is shared by <em>sending messages</em>. A cluster is of this kind.</p></div>
+<h3>Worked example: sum 64,000 numbers on 64 processors (UMA)</h3>
+<div class="note"><p><span class="lbl">Note</span>Textbook example, and a typical SPMD program.</p></div>
+<ol class="t">
+<li><strong>Divide evenly</strong>: each processor Pn (0 to 63) sums 1000 numbers, from A[1000·Pn] to A[1000·(Pn+1) − 1], into sum[Pn]. All processors run the same code (SPMD), only Pn differs.</li>
+<li><strong>Reduction</strong>: add the 64 partial sums by halving. With half = 32, processors 0 to 31 add sum[Pn + 32] into sum[Pn]. Then half = 16, 8, 4, 2, 1. That is <strong>6 steps</strong>, log<sub>2</sub> 64. The result is in sum[0].</li>
+<li><strong>Synchronize</strong> between steps (a barrier), so a processor does not read a partial sum before it is written.</li>
+</ol>
+<p>Time ≈ 1000 additions + 6 reduction steps, against 64,000 additions on one processor. In OpenMP the same program is a <span class="m">#pragma omp parallel for</span> loop plus a <span class="m">reduction(+ : FinalSum)</span> clause.</p>
 </section>
-
-<!-- ============ CORE i7 ============ -->
 <section class="topic" id="t-i7">
-  <div class="head"><h2>Case study: Intel Core i7</h2><label class="rev" for="r-i7"><input class="rev" type="checkbox" id="r-i7" data-sec="t-i7">revised</label></div>
-  <div class="chips"><span class="chip">Key Concept</span><span class="chip">Explain</span><span class="chip">Numerical</span></div>
-  <div class="note example"><p><span class="lbl">Case Study Reference</span>The Intel Core i7 (Bloomfield/Nehalem architecture, Core i7-960) serves as the canonical textbook case study illustrating the convergence of MIMD multicore, SIMD multimedia units (SSE4.2), and 2-way SMT Hyper-Threading.</p></div>
-  <p>The Core i7 shows <strong>every idea in this module in one chip</strong>:</p>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Concept</th><th>Where it appears in the Core i7</th></tr></thead>
-    <tbody>
-      <tr><td><strong>MIMD</strong> / multicore</td><td>4 cores, each with its own instruction stream. The textbook's Flynn table lists the i7 as its MIMD example (the Pentium 4 is SISD).</td></tr>
-      <tr><td><strong>SIMD</strong></td><td>SSE multimedia extensions on each core: 4 single-precision or 2 double-precision operations per instruction.</td></tr>
-      <tr><td><strong>Hardware multithreading (SMT)</strong></td><td>Hyper-Threading: 2 threads per core, so 8 hardware threads.</td></tr>
-      <tr><td><strong>Shared memory</strong></td><td>One physical address space. The cores share the last-level cache and memory, with cache coherence.</td></tr>
-      <tr><td><strong>SPMD</strong></td><td>One program (for example an OpenMP loop) runs on all cores.</td></tr>
-    </tbody>
-  </table></div>
-  <h3>Core i7 960 specifications</h3>
-  <div class="wrap"><table class="wide">
-    <thead><tr><th>Item</th><th>Value</th><th>Source</th></tr></thead>
-    <tbody>
-      <tr><td>Cores, threads</td><td>4 cores, 8 threads (2 per core)</td><td>Textbook, spec lookup</td></tr>
-      <tr><td>Clock</td><td>3.2 GHz (up to 3.47 GHz with Turbo)</td><td>Textbook, spec lookup</td></tr>
-      <tr><td>Technology, die, power</td><td>45 nm, 263 mm², 130 W</td><td>Textbook</td></tr>
-      <tr><td>Transistors</td><td>About 700 million</td><td>Textbook (the lookup says 731 M)</td></tr>
-      <tr><td>Cache</td><td>L1 32 KB instruction + 32 KB data per core, L2 256 KB per core, L3 8 MB shared</td><td>Spec lookup (L1 listed as 64 KB per core)</td></tr>
-      <tr><td>Memory</td><td>DDR3, triple channel, 32 GB/s (DRAM pin bandwidth)</td><td>Textbook, spec lookup</td></tr>
-      <tr><td>SIMD width</td><td>4 single-precision, 2 double-precision</td><td>Textbook</td></tr>
-      <tr><td>Peak floating point</td><td>102 GFLOP/s single, 51 GFLOP/s double</td><td>Textbook</td></tr>
-    </tbody>
-  </table></div>
-  <div class="note"><p><span class="lbl">Numerical</span>Roofline for the i7 960 (textbook figures): peak double-precision 51.2 GFLOP/s, measured memory bandwidth 16.4 GB/s. Attainable performance = min(peak, bandwidth × arithmetic intensity).</p></div>
-  <div class="formula">Ridge point = 51.2 / 16.4 ≈ 3.1 FLOP/byte  (the GTX 280 GPU: 78 / 127 ≈ 0.6)<br>At 0.5 FLOP/byte: min(51.2, 16.4 × 0.5) = 8.2 GFLOP/s, memory bound (the book says about 8)<br>At 4 FLOP/byte: min(51.2, 16.4 × 4) = 51.2 GFLOP/s, compute bound</div>
-  <h3>Core i7 against a GPU</h3>
-  <ul class="t">
-    <li>Intel researchers compared the i7 960 with the NVIDIA GTX 280 GPU on 14 kernels. The GPU ran from 2.0 times <em>slower</em> to 15.2 times <em>faster</em>.</li>
-    <li>The GPU has 4.4 times the memory bandwidth (141 against 32 GB/s), so memory-bound kernels favour it. Caches and cache blocking help the i7, because they can turn a kernel from memory bound to compute bound.</li>
-    <li>Gather-scatter addressing helps the GPU a lot, and the i7's SSE lacks it. Synchronization (atomic updates) can be a big cost on the i7.</li>
-    <li>The book's point is not who wins, but which architecture feature matters for which workload.</li>
-  </ul>
-  <div class="note example"><p><span class="lbl">Specification Notes</span>The Core i7 architecture features 32 KB instruction + 32 KB data L1 caches per core (64 KB total per core), a dedicated 256 KB unified L2 per core, and a shared inclusive 8 MB L3 cache across all 4 cores.</p></div>
+<div class="head"><h2>Case study: Intel Core i7</h2><label class="rev" for="r-i7"><input class="rev" data-sec="t-i7" id="r-i7" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Explain</span><span class="chip">Numerical</span></div>
+<div class="note"><p><span class="lbl">Note</span>This section uses the textbook case study (the quad-core i7 960, 2009) and a spec lookup. Newer Core i7 chips have more cores and larger caches, so quote this one as "the Core i7 960 in the textbook" if the question gives no model.</p></div>
+<p>The Core i7 shows <strong>every idea in this module in one chip</strong>:</p>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Concept</th><th>Where it appears in the Core i7</th></tr></thead>
+<tbody>
+<tr><td><strong>MIMD</strong> / multicore</td><td>4 cores, each with its own instruction stream. The textbook's Flynn table lists the i7 as its MIMD example (the Pentium 4 is SISD).</td></tr>
+<tr><td><strong>SIMD</strong></td><td>SSE multimedia extensions on each core: 4 single-precision or 2 double-precision operations per instruction.</td></tr>
+<tr><td><strong>Hardware multithreading (SMT)</strong></td><td>Hyper-Threading: 2 threads per core, so 8 hardware threads.</td></tr>
+<tr><td><strong>Shared memory</strong></td><td>One physical address space. The cores share the last-level cache and memory, with cache coherence.</td></tr>
+<tr><td><strong>SPMD</strong></td><td>One program (for example an OpenMP loop) runs on all cores.</td></tr>
+</tbody>
+</table></div>
+<h3>Core i7 960 specifications</h3>
+<div class="wrap"><table class="wide">
+<thead><tr><th>Item</th><th>Value</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Cores, threads</td><td>4 cores, 8 threads (2 per core)</td><td>Textbook, spec lookup</td></tr>
+<tr><td>Clock</td><td>3.2 GHz (up to 3.47 GHz with Turbo)</td><td>Textbook, spec lookup</td></tr>
+<tr><td>Technology, die, power</td><td>45 nm, 263 mm², 130 W</td><td>Textbook</td></tr>
+<tr><td>Transistors</td><td>About 700 million</td><td>Textbook (the lookup says 731 M)</td></tr>
+<tr><td>Cache</td><td>L1 32 KB instruction + 32 KB data per core, L2 256 KB per core, L3 8 MB shared</td><td>Spec lookup (L1 listed as 64 KB per core)</td></tr>
+<tr><td>Memory</td><td>DDR3, triple channel, 32 GB/s (DRAM pin bandwidth)</td><td>Textbook, spec lookup</td></tr>
+<tr><td>SIMD width</td><td>4 single-precision, 2 double-precision</td><td>Textbook</td></tr>
+<tr><td>Peak floating point</td><td>102 GFLOP/s single, 51 GFLOP/s double</td><td>Textbook</td></tr>
+</tbody>
+</table></div>
+<div class="note"><p><span class="lbl">Numerical</span>Roofline for the i7 960 (textbook figures): peak double-precision 51.2 GFLOP/s, measured memory bandwidth 16.4 GB/s. Attainable performance = min(peak, bandwidth × arithmetic intensity).</p></div>
+<div class="formula">Ridge point = 51.2 / 16.4 ≈ 3.1 FLOP/byte  (the GTX 280 GPU: 78 / 127 ≈ 0.6)<br/>At 0.5 FLOP/byte: min(51.2, 16.4 × 0.5) = 8.2 GFLOP/s, memory bound (the book says about 8)<br/>At 4 FLOP/byte: min(51.2, 16.4 × 4) = 51.2 GFLOP/s, compute bound</div>
+<h3>Core i7 against a GPU</h3>
+<ul class="t">
+<li>Intel researchers compared the i7 960 with the NVIDIA GTX 280 GPU on 14 kernels. The GPU ran from 2.0 times <em>slower</em> to 15.2 times <em>faster</em>.</li>
+<li>The GPU has 4.4 times the memory bandwidth (141 against 32 GB/s), so memory-bound kernels favour it. Caches and cache blocking help the i7, because they can turn a kernel from memory bound to compute bound.</li>
+<li>Gather-scatter addressing helps the GPU a lot, and the i7's SSE lacks it. Synchronization (atomic updates) can be a big cost on the i7.</li>
+<li>The book's point is not who wins, but which architecture feature matters for which workload.</li>
+</ul>
+<div class="note"><p><span class="lbl">Note</span>Sources differ a little on the i7 960 numbers: transistors (700 M against 731 M) and L1 size (64 KB per core as one total, against 32 + 32 KB). Both are given where they occur.</p></div>
 </section>
-
-<!-- ============ CHEAT SHEET ============ -->
 <section class="topic" id="t-sheet">
-  <div class="head"><h2>One-page cheat sheet</h2></div>
-  <div class="chips"><span class="chip">Revise the night before</span></div>
-  <div class="cards">
-    <div class="rc"><h4>Flynn</h4><ul>
-      <li>SISD: 1 instruction, 1 data. Uniprocessor</li>
-      <li>SIMD: 1 instruction, many data. Vector, SSE, GPU</li>
-      <li>MIMD: many instructions, many data. Multicore</li>
-      <li>MISD: none today</li>
-      <li>SPMD: one program on all MIMD cores</li></ul></div>
-    <div class="rc"><h4>SIMD</h4><ul>
-      <li>One PC, units synchronized</li>
-      <li>One copy of the code</li>
-      <li>Best on array loops (data-level parallelism)</li>
-      <li>case/switch with n cases: 1/n of peak</li></ul></div>
-    <div class="rc"><h4>MIMD</h4><ul>
-      <li>PC per core, own instructions, own data</li>
-      <li>Needs threads or processes</li>
-      <li>Sync and communication cost</li></ul></div>
-    <div class="rc"><h4>Vector</h4><ul>
-      <li>Vector registers (32 × 64 elements × 64 bit)</li>
-      <li>Pipelined units, lanes</li>
-      <li>One instruction = a loop. DAXPY: 6 against 578</li>
-      <li>No hazards inside a vector, no loop branch</li>
-      <li>Gather-scatter, strided, strip mining</li></ul></div>
-    <div class="rc"><h4>Multithreading</h4><ul>
-      <li>Per-thread PC and registers</li>
-      <li>Fine: switch every instruction</li>
-      <li>Coarse: switch on long stall</li>
-      <li>SMT: several threads in one cycle (i7 gain 1.31)</li></ul></div>
-    <div class="rc"><h4>Shared memory</h4><ul>
-      <li>One physical address space, cache coherence</li>
-      <li>UMA: uniform latency. NUMA: near is faster, scales more</li>
-      <li>Locks for sync. 64,000 numbers: 1000 each, 6 reduction steps</li></ul></div>
-    <div class="rc"><h4>Amdahl</h4><ul>
-      <li>Speed-up = 1 / [(1 − F) + F/N]</li>
-      <li>90× on 100 CPUs: 0.1% sequential</li>
-      <li>Bigger problem, better speed-up (strong against weak scaling)</li>
-      <li>Load imbalance: 20.5 → 14 → 7</li></ul></div>
-    <div class="rc"><h4>Core i7 960</h4><ul>
-      <li>4 cores, 8 threads, 3.2 GHz, 45 nm, 130 W</li>
-      <li>L2 256 KB per core, L3 8 MB shared</li>
-      <li>SSE: 4 SP or 2 DP per instruction</li>
-      <li>51 DP and 102 SP GFLOP/s, 32 GB/s memory</li></ul></div>
-  </div>
+<div class="head"><h2>One-page cheat sheet</h2></div>
+<div class="chips"><span class="chip">Revise the night before</span></div>
+<div class="cards">
+<div class="rc"><h4>Flynn</h4><ul>
+<li>SISD: 1 instruction, 1 data. Uniprocessor</li>
+<li>SIMD: 1 instruction, many data. Vector, SSE, GPU</li>
+<li>MIMD: many instructions, many data. Multicore</li>
+<li>MISD: none today</li>
+<li>SPMD: one program on all MIMD cores</li></ul></div>
+<div class="rc"><h4>SIMD</h4><ul>
+<li>One PC, units synchronized</li>
+<li>One copy of the code</li>
+<li>Best on array loops (data-level parallelism)</li>
+<li>case/switch with n cases: 1/n of peak</li></ul></div>
+<div class="rc"><h4>MIMD</h4><ul>
+<li>PC per core, own instructions, own data</li>
+<li>Needs threads or processes</li>
+<li>Sync and communication cost</li></ul></div>
+<div class="rc"><h4>Vector</h4><ul>
+<li>Vector registers (32 × 64 elements × 64 bit)</li>
+<li>Pipelined units, lanes</li>
+<li>One instruction = a loop. DAXPY: 6 against 578</li>
+<li>No hazards inside a vector, no loop branch</li>
+<li>Gather-scatter, strided, strip mining</li></ul></div>
+<div class="rc"><h4>Multithreading</h4><ul>
+<li>Per-thread PC and registers</li>
+<li>Fine: switch every instruction</li>
+<li>Coarse: switch on long stall</li>
+<li>SMT: several threads in one cycle (i7 gain 1.31)</li></ul></div>
+<div class="rc"><h4>Shared memory</h4><ul>
+<li>One physical address space, cache coherence</li>
+<li>UMA: uniform latency. NUMA: near is faster, scales more</li>
+<li>Locks for sync. 64,000 numbers: 1000 each, 6 reduction steps</li></ul></div>
+<div class="rc"><h4>Amdahl</h4><ul>
+<li>Speed-up = 1 / [(1 − F) + F/N]</li>
+<li>90× on 100 CPUs: 0.1% sequential</li>
+<li>Bigger problem, better speed-up (strong against weak scaling)</li>
+<li>Load imbalance: 20.5 → 14 → 7</li></ul></div>
+<div class="rc"><h4>Core i7 960</h4><ul>
+<li>4 cores, 8 threads, 3.2 GHz, 45 nm, 130 W</li>
+<li>L2 256 KB per core, L3 8 MB shared</li>
+<li>SSE: 4 SP or 2 DP per instruction</li>
+<li>51 DP and 102 SP GFLOP/s, 32 GB/s memory</li></ul></div>
+</div>
 </section>
-
-<!-- ============ QUESTIONS ============ -->
 <section class="topic" id="t-qa">
-  <div class="head"><h2>Likely questions with answer outlines</h2></div>
-  <div class="chips"><span class="chip">Covers every syllabus line</span></div>
-  <div class="note example"><p><span class="lbl">Exam Review</span>Standard university examination questions covering Flynn's classification, vector processing, multithreading paradigms, and multicore architectures.</p></div>
-
-  <details class="q"><summary>Explain Flynn's classification: SISD, SIMD, MISD and MIMD, with a neat diagram and one example each. (7)</summary><div class="ans">
-    <p>2 by 2 grid of instruction streams against data streams, a line of definition for each, Pentium 4, SSE or vector, no example for MISD, Core i7. See <a href="#t-flynn">Flynn</a>.</p></div></details>
-
-  <details class="q"><summary>Differentiate SIMD and MIMD. (3 or 7)</summary><div class="ans">
-    <p>Use the table: control, parallelism, code copies, best use, weak point. Add the SIMD and MIMD figure. See <a href="#t-flynn">Flynn</a>.</p></div></details>
-
-  <details class="q"><summary>What is SPMD? How is it related to MIMD? (3)</summary><div class="ans">
-    <p>One program runs on all processors of a MIMD machine, and conditionals select different sections. It is a programming model, the normal way to program MIMD. Example: the 64,000-number sum. See <a href="#t-flynn">Flynn</a> and <a href="#t-smp">Shared memory</a>.</p></div></details>
-
-  <details class="q"><summary>Explain SISD and SIMD architectures. Why does SIMD slow down on case statements? (7)</summary><div class="ans">
-    <p>SISD as the uniprocessor. SIMD: one PC, many ALUs, one code copy, data-level parallelism, works on array loops. Units with the wrong data are disabled, so n cases give 1/n of peak. See <a href="#t-simd">SIMD</a>.</p></div></details>
-
-  <details class="q"><summary>What are the goals and advantages of multiprocessors? Why is it hard to write parallel programs? (7)</summary><div class="ans">
-    <p>Five advantages, then scheduling, partitioning, load balancing, synchronization, communication. Add Amdahl's Law and the 90 times on 100 processors example. See <a href="#t-why">Why multiprocessors</a>.</p></div></details>
-
-  <details class="q"><summary>Explain vector architecture. Compare DAXPY on a scalar and on a vector processor. (7)</summary><div class="ans">
-    <p>Vector registers and pipelined units, the six-instruction vector code against 578 scalar instructions, fewer hazards and branches, lanes. See <a href="#t-vec">Vector</a>.</p></div></details>
-
-  <details class="q"><summary>Compare vector processors with scalar processors and with multimedia SIMD extensions. (7)</summary><div class="ans">
-    <p>The two tables: one instruction = a loop, no hazards inside a vector, memory latency paid once; vector length register, strided and gather-scatter access. See <a href="#t-vec">Vector</a>.</p></div></details>
-
-  <details class="q"><summary>What is hardware multithreading? Explain fine-grained, coarse-grained and simultaneous multithreading. (7)</summary><div class="ans">
-    <p>Definition, per-thread PC and registers, the comparison table, and the issue-slot figure. Say that SMT gave 1.31 on a Core i7 core. See <a href="#t-mt">Multithreading</a>.</p></div></details>
-
-  <details class="q"><summary>Define a shared memory multiprocessor. Differentiate UMA and NUMA. (3 or 7)</summary><div class="ans">
-    <p>Single physical address space, communication by loads and stores, cache coherence. UMA table against NUMA. See <a href="#t-smp">Shared memory</a>.</p></div></details>
-
-  <details class="q"><summary>What is a multicore processor? How does it differ from a cluster? (3)</summary><div class="ans">
-    <p>Several cores on one chip sharing a physical address space (SMP). A cluster is separate computers on a network with their own memories, sharing data by messages. See <a href="#t-why">Why multiprocessors</a> and <a href="#t-smp">Shared memory</a>.</p></div></details>
-
-  <details class="q"><summary>A program has 99.9% parallel code. What speed-up can 100 processors give? A fixed problem against a larger one? (7)</summary><div class="ans">
-    <p>Speed-up = 1 / (0.001 + 0.999/100) = 91. Then the 10 and 40 processor tables (5.5, 8.8, 8.2, 20.5) and the load-balance drop to 14 and 7. See <a href="#t-why">Why multiprocessors</a>.</p></div></details>
-
-  <details class="q"><summary>Write a case study of the Intel Core i7: architecture and how it uses parallelism. (7)</summary><div class="ans">
-    <p>Four cores (MIMD), SSE (SIMD), two threads per core (SMT), shared L3 and memory, specifications table, and the roofline or the GPU comparison. See <a href="#t-i7">Core i7</a>.</p></div></details>
+<div class="head"><h2>Likely questions with answer outlines</h2></div>
+<div class="chips"><span class="chip">The first five are the likely ones</span></div>
+<details class="q"><summary>Explain Flynn's classification: SISD, SIMD, MISD and MIMD, with a neat diagram and one example each. (7)</summary><div class="ans">
+<p>2 by 2 grid of instruction streams against data streams, a line of definition for each, Pentium 4, SSE or vector, no example for MISD, Core i7. See <a href="#t-flynn">Flynn</a>.</p></div></details>
+<details class="q"><summary>Differentiate SIMD and MIMD. (3 or 7)</summary><div class="ans">
+<p>Use the table: control, parallelism, code copies, best use, weak point. Add the SIMD and MIMD figure. See <a href="#t-flynn">Flynn</a>.</p></div></details>
+<details class="q"><summary>What is SPMD? How is it related to MIMD? (3)</summary><div class="ans">
+<p>One program runs on all processors of a MIMD machine, and conditionals select different sections. It is a programming model, the normal way to program MIMD. Example: the 64,000-number sum. See <a href="#t-flynn">Flynn</a> and <a href="#t-smp">Shared memory</a>.</p></div></details>
+<details class="q"><summary>Explain SISD and SIMD architectures. Why does SIMD slow down on case statements? (7)</summary><div class="ans">
+<p>SISD as the uniprocessor. SIMD: one PC, many ALUs, one code copy, data-level parallelism, works on array loops. Units with the wrong data are disabled, so n cases give 1/n of peak. See <a href="#t-simd">SIMD</a>.</p></div></details>
+<details class="q"><summary>What are the goals and advantages of multiprocessors? Why is it hard to write parallel programs? (7)</summary><div class="ans">
+<p>Five advantages, then scheduling, partitioning, load balancing, synchronization, communication. Add Amdahl's Law and the 90 times on 100 processors example. See <a href="#t-why">Why multiprocessors</a>.</p></div></details>
+<details class="q"><summary>Explain vector architecture. Compare DAXPY on a scalar and on a vector processor. (7)</summary><div class="ans">
+<p>Vector registers and pipelined units, the six-instruction vector code against 578 scalar instructions, fewer hazards and branches, lanes. See <a href="#t-vec">Vector</a>.</p></div></details>
+<details class="q"><summary>Compare vector processors with scalar processors and with multimedia SIMD extensions. (7)</summary><div class="ans">
+<p>The two tables: one instruction = a loop, no hazards inside a vector, memory latency paid once; vector length register, strided and gather-scatter access. See <a href="#t-vec">Vector</a>.</p></div></details>
+<details class="q"><summary>What is hardware multithreading? Explain fine-grained, coarse-grained and simultaneous multithreading. (7)</summary><div class="ans">
+<p>Definition, per-thread PC and registers, the comparison table, and the issue-slot figure. Say that SMT gave 1.31 on a Core i7 core. See <a href="#t-mt">Multithreading</a>.</p></div></details>
+<details class="q"><summary>Define a shared memory multiprocessor. Differentiate UMA and NUMA. (3 or 7)</summary><div class="ans">
+<p>Single physical address space, communication by loads and stores, cache coherence. UMA table against NUMA. See <a href="#t-smp">Shared memory</a>.</p></div></details>
+<details class="q"><summary>What is a multicore processor? How does it differ from a cluster? (3)</summary><div class="ans">
+<p>Several cores on one chip sharing a physical address space (SMP). A cluster is separate computers on a network with their own memories, sharing data by messages. See <a href="#t-why">Why multiprocessors</a> and <a href="#t-smp">Shared memory</a>.</p></div></details>
+<details class="q"><summary>A program has 99.9% parallel code. What speed-up can 100 processors give? A fixed problem against a larger one? (7)</summary><div class="ans">
+<p>Speed-up = 1 / (0.001 + 0.999/100) = 91. Then the 10 and 40 processor tables (5.5, 8.8, 8.2, 20.5) and the load-balance drop to 14 and 7. See <a href="#t-why">Why multiprocessors</a>.</p></div></details>
+<details class="q"><summary>Write a case study of the Intel Core i7: architecture and how it uses parallelism. (7)</summary><div class="ans">
+<p>Four cores (MIMD), SSE (SIMD), two threads per core (SMT), shared L3 and memory, specifications table, and the roofline or the GPU comparison. See <a href="#t-i7">Core i7</a>.</p></div></details>
 </section>
-
 <footer class="notes-footer" role="contentinfo">
-  <div class="notes-footer-inner">
-    <div class="notes-footer-nav">
-      <a href="/">← All Subjects</a>
-      <a href="/notes/coa-module-3/">← Previous: COA Module 3 (Memory Organization)</a>
-    </div>
-    <div class="notes-footer-meta">
-      <span>PCITT302 COA · Module 4 · KTU 2024 Scheme</span>
-    </div>
-  </div>
+<div class="notes-footer-inner">
+<div class="notes-footer-nav">
+<a href="/">← All Subjects</a>
+<a href="/notes/coa-module-3/">← Previous: COA Module 3 (Memory Organization)</a>
+</div>
+<div class="notes-footer-meta">
+<span>PCITT302 COA · Module 4 · KTU 2024 Scheme</span>
+<p class="notes-ref">References: Patterson and Hennessy, <em>Computer Organization and Design</em>, chapter 6 (Parallel Processors from Client to Cloud); Core i7 960 specifications from a public spec database (TechPowerUp). Worked numbers were recomputed in code.</p></div>
+</div>
 </footer>
+

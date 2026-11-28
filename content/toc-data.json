@@ -812,5 +812,97 @@
       "title": "Likely questions",
       "group": "Revise"
     }
+  ],
+  "ds-m2": [
+    {
+      "id": "t-pyq",
+      "title": "What past papers asked",
+      "group": "Past papers"
+    },
+    {
+      "id": "t-ls",
+      "title": "Linear search",
+      "group": "Searching"
+    },
+    {
+      "id": "t-bs",
+      "title": "Binary search",
+      "group": "Searching"
+    },
+    {
+      "id": "t-bub",
+      "title": "Bubble sort",
+      "group": "Sorting"
+    },
+    {
+      "id": "t-sel",
+      "title": "Selection sort",
+      "group": "Sorting"
+    },
+    {
+      "id": "t-ins",
+      "title": "Insertion sort",
+      "group": "Sorting"
+    },
+    {
+      "id": "t-qs",
+      "title": "Quick sort",
+      "group": "Sorting"
+    },
+    {
+      "id": "t-ms",
+      "title": "Merge sort",
+      "group": "Sorting"
+    },
+    {
+      "id": "t-hs",
+      "title": "Heap sort",
+      "group": "Sorting"
+    },
+    {
+      "id": "t-cmp",
+      "title": "Comparing the sorts",
+      "group": "Sorting"
+    },
+    {
+      "id": "t-hash",
+      "title": "Hashing and hash tables",
+      "group": "Hash tables"
+    },
+    {
+      "id": "t-hf",
+      "title": "Hash functions",
+      "group": "Hash tables"
+    },
+    {
+      "id": "t-lp",
+      "title": "Closed hashing: linear probing",
+      "group": "Hash tables"
+    },
+    {
+      "id": "t-chain",
+      "title": "Open hashing: separate chaining",
+      "group": "Hash tables"
+    },
+    {
+      "id": "t-rem",
+      "title": "Remedies: random, quadratic, double",
+      "group": "Hash tables"
+    },
+    {
+      "id": "t-lf",
+      "title": "Load factor and rehashing",
+      "group": "Hash tables"
+    },
+    {
+      "id": "t-sheet",
+      "title": "One-page cheat sheet",
+      "group": "Revise"
+    },
+    {
+      "id": "t-qa",
+      "title": "Likely questions",
+      "group": "Revise"
+    }
   ]
 }

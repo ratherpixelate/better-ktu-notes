@@ -67,12 +67,12 @@
         {
           "num": 2,
           "slug": "module-2",
-          "title": "Linked Lists, Queues & Double-Ended Queues",
-          "desc": "Singly, doubly and circular linked lists, polynomial addition using lists, linear and circular queue implementations, and deques.",
-          "status": "drafting",
+          "title": "Searching, Sorting and Hash Tables",
+          "desc": "Linear & binary search, bubble/selection/insertion/quick/merge/heap sort, hashing, hash functions, linear probing, chaining, clustering remedies, and load factor.",
+          "status": "active",
           "storageKey": "ds-m2-revised",
-          "totalTopics": 7,
-          "href": null
+          "totalTopics": 16,
+          "href": "/notes/ds-module-2/"
         },
         {
           "num": 3,

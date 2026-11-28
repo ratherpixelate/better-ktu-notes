@@ -1869,5 +1869,228 @@
       "Revise the night before"
     ],
     "keywords": "Likely questions with answer outlines Revise the night before This list is a guess from the syllabus. Please match it against past papers. What is a decoder? Design a 3 to 8 decoder. What is a one-hot decoder? (7) Definition, 3 to 8 truth table, D i as minterms, gate figure, one-hot meaning and uses"
+  },
+  {
+    "id": "t-pyq",
+    "title": "What the past papers asked",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-pyq",
+    "chips": [
+      "Past paper",
+      "Read first"
+    ],
+    "keywords": "What the past papers asked revised Past paper Read first Module 2 has two Part B questions (Q11 and Q12) and you answer one. Part A also has two 3-mark questions from this module (Q3 and Q4). Slot S3 November 2025 S3 May 2026 Part A, Q3 (3) Selection sort on 45, 23, 50, 32, 17 Linear search for 40"
+  },
+  {
+    "id": "t-ls",
+    "title": "Linear search",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-ls",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Numerical",
+      "Past paper"
+    ],
+    "keywords": "Linear search revised Define Algorithm Numerical Past paper Linear (sequential) search Check the elements one by one from the start until the key is found or the end of the list is reached. It works on unsorted data. Algorithm: LinearSearch (a, n, key) Start. Set i = 0. While i is less than n, repeat steps 4 and 5. If"
+  },
+  {
+    "id": "t-bs",
+    "title": "Binary search",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-bs",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Numerical",
+      "Past paper"
+    ],
+    "keywords": "Binary search revised Define Algorithm Numerical Past paper Binary search Searches a sorted array by comparing the key with the middle element and throwing away half of the array each time. The array must be sorted. If key = a[mid], found. If key < a[mid], search the left half. If key > a[mid], search the right half. Algorithm: BinarySearch (a,"
+  },
+  {
+    "id": "t-bub",
+    "title": "Bubble sort",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-bub",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Numerical",
+      "Past paper"
+    ],
+    "keywords": "Bubble sort revised Define Algorithm Numerical Past paper Sorting terms Pass : one sweep over the data. In place : uses only O(1) extra memory. Stable : equal keys keep their original order. Internal sorting : all data fits in main memory (all the sorts on this page). Bubble sort Repeatedly compares adjacent elements and swaps them if they are"
+  },
+  {
+    "id": "t-sel",
+    "title": "Selection sort",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-sel",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Numerical",
+      "Past paper"
+    ],
+    "keywords": "Selection sort revised Define Algorithm Numerical Past paper Selection sort In each pass, select the smallest element of the unsorted part and swap it into the next position of the sorted part. Algorithm: SelectionSort (a, n) Start. Repeat steps 3 to 6 for i = 0 to n \u2212 2. Set min = i. Repeat step 5 for j ="
+  },
+  {
+    "id": "t-ins",
+    "title": "Insertion sort",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-ins",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Numerical",
+      "Past paper"
+    ],
+    "keywords": "Insertion sort revised Define Algorithm Numerical Past paper Insertion sort Builds the sorted array one element at a time, like sorting playing cards in your hand. Take the next element (the key ) and insert it into its correct place in the sorted part on its left, shifting larger elements one place right. Algorithm: InsertionSort (a, n) Start. Repeat steps"
+  },
+  {
+    "id": "t-qs",
+    "title": "Quick sort (recursive)",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-qs",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Quick sort (recursive) revised Define Algorithm Numerical Likely exam Quick sort A divide and conquer sort. Pick a pivot , partition the array so that smaller elements are on its left and larger on its right (the pivot is now in its final place), then sort the two sides recursively . Algorithm: QuickSort (a, low, high) Start. If low is"
+  },
+  {
+    "id": "t-ms",
+    "title": "Merge sort (recursive)",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-ms",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Draw",
+      "Past paper"
+    ],
+    "keywords": "Merge sort (recursive) revised Define Algorithm Draw Past paper Merge sort A divide and conquer sort. Divide the array into two halves, sort each half recursively , then merge the two sorted halves into one sorted array. Algorithm: MergeSort (a, low, high) Start. If low is greater than or equal to high, return (one element is sorted). Set mid ="
+  },
+  {
+    "id": "t-hs",
+    "title": "Heap sort",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-hs",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Heap sort revised Define Algorithm Draw Likely exam Heap A complete binary tree in which every parent is larger than or equal to its children ( max-heap ). The largest element is therefore at the root. A heap is stored in an array: for index i, the children are 2i + 1 and 2i + 2, and the parent is"
+  },
+  {
+    "id": "t-cmp",
+    "title": "Comparing the sorting algorithms",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-cmp",
+    "chips": [
+      "Differentiate",
+      "Likely exam"
+    ],
+    "keywords": "Comparing the sorting algorithms revised Differentiate Likely exam Sort Best Average Worst Extra space Stable Idea Bubble O(n)* O(n\u00b2) O(n\u00b2) O(1) Yes swap adjacent pairs Selection O(n\u00b2) O(n\u00b2) O(n\u00b2) O(1) No pick the minimum Insertion O(n) O(n\u00b2) O(n\u00b2) O(1) Yes insert into sorted part Merge O(n log n) O(n log n) O(n log n) O(n) Yes divide, merge Quick O(n"
+  },
+  {
+    "id": "t-hash",
+    "title": "Hashing and hash tables",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-hash",
+    "chips": [
+      "Define",
+      "Short note",
+      "Past paper"
+    ],
+    "keywords": "Hashing and hash tables revised Define Short note Past paper Hashing A technique that converts a key into an array index directly using a hash function , so that a record can be stored and found without searching. The array is the hash table . index = h(key), 0 \u2264 h(key) \u2264 m \u2212 1 (m = size of the"
+  },
+  {
+    "id": "t-hf",
+    "title": "Hash functions",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-hf",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam",
+      "Past paper"
+    ],
+    "keywords": "Hash functions revised Define Numerical Likely exam Past paper Method Formula Note Division h(k) = k mod m m should be a prime, not close to a power of 2 Multiplication h(k) = \u230am \u00d7 frac(k \u00d7 A)\u230b 0 < A < 1, about 0.6180339887 Mid-square square k, take the middle r digits table size 10 r Folding split k"
+  },
+  {
+    "id": "t-lp",
+    "title": "Closed hashing and linear probing",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-lp",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Numerical",
+      "Drawbacks",
+      "Past paper"
+    ],
+    "keywords": "Closed hashing and linear probing revised Define Algorithm Numerical Drawbacks Past paper Closed hashing (open addressing) All keys are stored inside the table itself . If the home slot is taken, probe other slots in a fixed order until a free one is found. Linear probing On a collision try the next slot , then the next, wrapping around at"
+  },
+  {
+    "id": "t-chain",
+    "title": "Open hashing: separate chaining",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-chain",
+    "chips": [
+      "Define",
+      "Algorithm",
+      "Draw",
+      "Likely exam"
+    ],
+    "keywords": "Open hashing: separate chaining revised Define Algorithm Draw Likely exam Separate chaining Each slot of the table holds a linked list of all the keys that hash to it. A collision simply adds another node to the list. Separate chaining hash table with ten slots, slot 8 holds the list 18 then 58, slot 9 holds the list 89, 49,"
+  },
+  {
+    "id": "t-rem",
+    "title": "Remedies for clustering: random, quadratic and double hashing",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-rem",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam",
+      "Past paper"
+    ],
+    "keywords": "Remedies for clustering: random, quadratic and double hashing revised Define Numerical Likely exam Past paper Random probing Random probing The probe sequence is produced by a pseudo-random number generator . The generator is started with the same seed for every key, so a search repeats exactly the sequence used to insert. h(k, i) = ( h(k) + r i )"
+  },
+  {
+    "id": "t-lf",
+    "title": "Load factor and rehashing",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-lf",
+    "chips": [
+      "Define",
+      "Numerical",
+      "Likely exam"
+    ],
+    "keywords": "Load factor and rehashing revised Define Numerical Likely exam Load factor \u03b1 = n / m, where n is the number of keys stored and m is the table size. It measures how full the table is. Open addressing : \u03b1 can never exceed 1. Keep it below about 0.5 to 0.7. Chaining : \u03b1 is the average list length"
+  },
+  {
+    "id": "t-sheet",
+    "title": "One-page cheat sheet",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-sheet",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "One-page cheat sheet revised Revise the night before Searching Linear: O(n), any order Binary: O(log n), sorted only mid = (low + high) / 2 key < a[mid]: high = mid \u2212 1, else low = mid + 1 Simple sorts (O(n\u00b2)) Bubble: swap adjacent, flag gives best O(n), stable Selection: pick min, always n(n\u22121)/2 comparisons, not stable Insertion: insert"
+  },
+  {
+    "id": "t-qa",
+    "title": "Likely questions with answer outlines",
+    "badge": "DS M2",
+    "url": "/notes/ds-module-2/#t-qa",
+    "chips": [
+      "Revise the night before"
+    ],
+    "keywords": "Likely questions with answer outlines revised Revise the night before Questions with a month tag appeared in KTU papers. The rest follow the syllabus and typical question patterns. Perform selection sort on 45, 23, 50, 32, 17. (3) Nov 2025 Pass 1: 17 23 50 32 45. Pass 2: 17 23 50 32 45. Pass 3: 17 23 32 50"
   }
 ]

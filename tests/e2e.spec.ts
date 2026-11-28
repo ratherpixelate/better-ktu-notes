@@ -39,9 +39,9 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     await expect(page.locator('#pbitt304')).toBeVisible();
     await expect(page.locator('#gaest305')).toBeVisible();
 
-    // Check 12 Active Modules (COA M1..M4, DS M1, DBMS M1..M4, DELD M1..M3)
+    // Check 13 Active Modules (COA M1..M4, DS M1..M2, DBMS M1..M4, DELD M1..M3)
     const activeCards = page.locator('.module-card:not(.locked)');
-    await expect(activeCards).toHaveCount(12);
+    await expect(activeCards).toHaveCount(13);
 
     // Verify Active Module Card shows "0/17 completed" and NO green status dot
     const coaM1Card = activeCards.first();
@@ -490,6 +490,31 @@ test.describe('BetterKTUNotes E2E Suite', () => {
     const lastTopic = page.locator('section.topic#t-qa');
     const contentVis = await lastTopic.evaluate((el) => window.getComputedStyle(el).contentVisibility);
     expect(contentVis).toBe('auto');
+  });
+
+  test('11. DS Module 2 Notes & Search/Sorting Diagrams Integrity', async ({ page }) => {
+    await page.goto('/notes/ds-module-2/');
+
+    // Check title and TOC
+    await expect(page).toHaveTitle(/DS Module 2: Searching, Sorting and Hash Tables/);
+    await expect(page.locator('.toc')).toBeVisible();
+    await expect(page.locator('.toc a')).toHaveCount(18);
+
+    // Check SVG diagrams (merge sort, heap sort, separate chaining)
+    const svgs = page.locator('.fig svg');
+    await expect(svgs.first()).toBeVisible();
+    await expect(svgs).toHaveCount(3);
+
+    // Check checkboxes count (16 topics + 0 in sheet/qa)
+    await expect(page.locator('input.rev')).toHaveCount(16);
+    await expect(page.locator('#t-sheet .rev')).not.toBeAttached();
+    await expect(page.locator('#t-qa .rev')).not.toBeAttached();
+
+    // Test backward footer navigation to DS Module 1
+    const prevLink = page.locator('.notes-footer-nav a:has-text("Previous: DS Module 1")');
+    await expect(prevLink).toBeVisible();
+    await prevLink.click();
+    await expect(page).toHaveURL(/notes\/ds-module-1\/?$/);
   });
 
 });

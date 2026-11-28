@@ -1,0 +1,435 @@
+<header class="top">
+<p class="eyebrow">PCITT303 · Data Structures</p>
+<h1>Module 2: Searching, Sorting and Hash Tables</h1>
+<p class="lede">Exam-oriented notes for KTU PCITT303, Module 2 (11 hours). They are built from the syllabus line, two real KTU question papers (S3 November 2025 and S3 May 2026) and standard references. Algorithms are written as plain-English numbered steps, the way a lab record or exam answer is written, and each one has a C function that was compiled and tested. Every trace, table and number on this page was produced by running the algorithm.</p>
+</header>
+<section class="topic" id="t-pyq">
+<div class="head"><h2>What the past papers asked</h2><label class="rev" for="r-pyq"><input class="rev" data-sec="t-pyq" id="r-pyq" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Past paper</span><span class="chip">Read first</span></div>
+<p>Module 2 has two Part B questions (Q11 and Q12) and you answer one. Part A also has two 3-mark questions from this module (Q3 and Q4).</p>
+<div class="wrap"><table class="wide"><thead><tr><th>Slot</th><th>S3 November 2025</th><th>S3 May 2026</th></tr></thead><tbody><tr><td>Part A, Q3 (3)</td><td>Selection sort on 45, 23, 50, 32, 17</td><td>Linear search for 40 in 12, 25, 18, 40, 55, 30</td></tr><tr><td>Part A, Q4 (3)</td><td>Describe linear probing</td><td>What happens on a collision in linear probing? Example</td></tr><tr><td>Q11 a (5)</td><td>Merge sort algorithm, average and worst case complexity</td><td>Bubble sort on 45, 12, 78, 23, 56 and its time complexity</td></tr><tr><td>Q11 b (4)</td><td>Mid-square method and folding method with examples</td><td>Insertion sort with an example</td></tr><tr><td>Q12 a (5 or 3)</td><td>Quadratic probing, table size 7, insert 22, 30, 50 (5)</td><td>What is hashing? Need for hash tables (3)</td></tr><tr><td>Q12 b (4 or 6)</td><td>Binary search algorithm (4)</td><td>Division, multiplication and folding methods with examples (6)</td></tr></tbody></table></div>
+<h3>What this suggests</h3>
+<ul class="t"><li><strong>Linear probing was in Part A both times.</strong> Know it with an example and its drawbacks.</li><li><strong>Hash functions were in Part B both times</strong> (mid-square, folding, division, multiplication). Learn all four with one worked example each.</li><li>Between the two papers, <strong>selection, bubble, insertion and merge sort</strong> and <strong>both searches</strong> have appeared.</li><li><strong>Not yet asked in these two papers:</strong> quick sort, heap sort, separate chaining, double hashing, random probing, load factor and rehashing. They are in the syllabus, so they can come.</li></ul>
+<div class="note"><p><span class="lbl">Note</span>Two papers are a small sample, so use this as a guide for what to practise first, not as a guarantee. Every question above is answered in the sections below and in the likely questions at the end, with the same data as the papers.</p></div>
+</section>
+<section class="topic" id="t-ls">
+<div class="head"><h2>Linear search</h2><label class="rev" for="r-ls"><input class="rev" data-sec="t-ls" id="r-ls" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Linear (sequential) search</span>Check the elements <strong>one by one from the start</strong> until the key is found or the end of the list is reached. It works on <strong>unsorted</strong> data.</p></div>
+<p><strong>Algorithm: LinearSearch (a, n, key)</strong></p>
+<ol class="t"><li>Start.</li><li>Set i = 0.</li><li>While i is less than n, repeat steps 4 and 5.</li><li>If a[i] is equal to key, print "Found at position i + 1" and stop.</li><li>Increase i by 1.</li><li>Print "Key not found".</li><li>Stop.</li></ol>
+<h3>Example (May 2026): search 40 in 12, 25, 18, 40, 55, 30</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Step</th><th class="c">Index i</th><th class="c">a[i]</th><th class="c">Compare with 40</th><th class="c">Result</th></tr></thead><tbody><tr><td class="c m">1</td><td class="c m">0</td><td class="c m">12</td><td class="c m">12 = 40 ?</td><td class="c m">No</td></tr><tr><td class="c m">2</td><td class="c m">1</td><td class="c m">25</td><td class="c m">25 = 40 ?</td><td class="c m">No</td></tr><tr><td class="c m">3</td><td class="c m">2</td><td class="c m">18</td><td class="c m">18 = 40 ?</td><td class="c m">No</td></tr><tr><td class="c m">4</td><td class="c m">3</td><td class="c m">40</td><td class="c m">40 = 40 ?</td><td class="c m"><strong>Yes</strong></td></tr></tbody></table></div>
+<p><strong>40 is found at index 3 (position 4) after 4 comparisons.</strong> If the key were 99, all 6 elements would be compared and the search would fail.</p>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>Comparisons</th><th>Complexity</th></tr></thead><tbody><tr><td>Best case</td><td>1 (key is the first element)</td><td>O(1)</td></tr><tr><td>Average case</td><td>about n/2</td><td>O(n)</td></tr><tr><td>Worst case</td><td>n (key is last or missing)</td><td>O(n)</td></tr></tbody></table></div>
+<p>Extra space: O(1). It needs no sorting and works on arrays and linked lists.</p>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>int linear_search(int a[], int n, int key) {
+    for (int i = 0; i &lt; n; i++)
+        if (a[i] == key) return i;
+    return -1;
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-bs">
+<div class="head"><h2>Binary search</h2><label class="rev" for="r-bs"><input class="rev" data-sec="t-bs" id="r-bs" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Binary search</span>Searches a <strong>sorted</strong> array by comparing the key with the <strong>middle</strong> element and throwing away half of the array each time.</p></div>
+<ul class="t"><li><strong>The array must be sorted.</strong></li><li>If key = a[mid], found. If key &lt; a[mid], search the left half. If key &gt; a[mid], search the right half.</li></ul>
+<p><strong>Algorithm: BinarySearch (a, n, key)</strong></p>
+<ol class="t"><li>Start.</li><li>Set low = 0 and high = n − 1.</li><li>While low is less than or equal to high, repeat steps 4 to 6.</li><li>Set mid = (low + high) / 2 (integer division).</li><li>If a[mid] is equal to key, print "Found at position mid + 1" and stop.</li><li>If key is less than a[mid], set high = mid − 1. Otherwise set low = mid + 1.</li><li>Print "Key not found".</li><li>Stop.</li></ol>
+<p><strong>Recursive form: BinarySearch (a, low, high, key)</strong></p>
+<ol class="t"><li>If low is greater than high, return −1 (not found).</li><li>Set mid = (low + high) / 2.</li><li>If a[mid] is equal to key, return mid.</li><li>If key is less than a[mid], return BinarySearch (a, low, mid − 1, key).</li><li>Otherwise return BinarySearch (a, mid + 1, high, key).</li></ol>
+<h3>Example: sorted array 11, 22, 33, 44, 55, 66, 77, 88 (index 0 to 7)</h3>
+<p><strong>Search 66 (found):</strong></p>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">low</th><th class="c">high</th><th class="c">mid</th><th class="c">a[mid]</th><th class="c">Decision</th></tr></thead><tbody><tr><td class="c m">0</td><td class="c m">7</td><td class="c m">3</td><td class="c m">44</td><td class="c m">66 &gt; 44, so low = 4</td></tr><tr><td class="c m">4</td><td class="c m">7</td><td class="c m">5</td><td class="c m">66</td><td class="c m"><strong>Found at index 5</strong></td></tr></tbody></table></div>
+<p><strong>Search 25 (not found):</strong></p>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">low</th><th class="c">high</th><th class="c">mid</th><th class="c">a[mid]</th><th class="c">Decision</th></tr></thead><tbody><tr><td class="c m">0</td><td class="c m">7</td><td class="c m">3</td><td class="c m">44</td><td class="c m">25 &lt; 44, so high = 2</td></tr><tr><td class="c m">0</td><td class="c m">2</td><td class="c m">1</td><td class="c m">22</td><td class="c m">25 &gt; 22, so low = 2</td></tr><tr><td class="c m">2</td><td class="c m">2</td><td class="c m">2</td><td class="c m">33</td><td class="c m">25 &lt; 33, so high = 1</td></tr><tr><td class="c m">2</td><td class="c m">1</td><td class="c m"></td><td class="c m"></td><td class="c m">low &gt; high, <strong>not found</strong></td></tr></tbody></table></div>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>Comparisons</th><th>Complexity</th></tr></thead><tbody><tr><td>Best case</td><td>1 (key is the middle element)</td><td>O(1)</td></tr><tr><td>Average and worst case</td><td>the array halves each time, so at most ⌊log<sub>2</sub> n⌋ + 1</td><td><strong>O(log n)</strong></td></tr></tbody></table></div>
+<p>For n = 1024 at most 11 comparisons are needed, against up to 1024 for linear search. Extra space: O(1) for the loop form, O(log n) for the recursive form (call stack).</p>
+<div class="note"><p><span class="lbl">Note</span>With very large arrays, <code>(low + high)</code> can overflow an <code>int</code>. The safe form is <code>mid = low + (high − low) / 2</code>. Binary search also needs random access, so it is not suitable for a linked list.</p></div>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>int binary_search(int a[], int n, int key) {
+    int low = 0, high = n - 1;
+    while (low &lt;= high) {
+        int mid = (low + high) / 2;
+        if (a[mid] == key) return mid;
+        else if (key &lt; a[mid]) high = mid - 1;
+        else low = mid + 1;
+    }
+    return -1;
+}
+
+int binary_search_rec(int a[], int low, int high, int key) {
+    if (low &gt; high) return -1;
+    int mid = (low + high) / 2;
+    if (a[mid] == key) return mid;
+    if (key &lt; a[mid]) return binary_search_rec(a, low, mid - 1, key);
+    return binary_search_rec(a, mid + 1, high, key);
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-bub">
+<div class="head"><h2>Bubble sort</h2><label class="rev" for="r-bub"><input class="rev" data-sec="t-bub" id="r-bub" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Sorting terms</span><strong>Pass</strong>: one sweep over the data. <strong>In place</strong>: uses only O(1) extra memory. <strong>Stable</strong>: equal keys keep their original order. <strong>Internal sorting</strong>: all data fits in main memory (all the sorts on this page).</p></div>
+<div class="note def"><p><span class="lbl">Bubble sort</span>Repeatedly compares <strong>adjacent</strong> elements and swaps them if they are out of order. After pass 1 the largest element has "bubbled" to the end, after pass 2 the second largest is in place, and so on.</p></div>
+<p><strong>Algorithm: BubbleSort (a, n)</strong></p>
+<ol class="t"><li>Start.</li><li>Repeat steps 3 to 6 for pass = 1 to n − 1.</li><li>Set swapped = 0.</li><li>Repeat step 5 for j = 0 to n − pass − 1.</li><li>If a[j] is greater than a[j + 1], swap them and set swapped = 1.</li><li>If swapped is still 0, the array is sorted. Go to step 7.</li><li>Stop.</li></ol>
+<h3>Example (May 2026): 45, 12, 78, 23, 56</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Pass</th><th class="c">Comparisons and swaps</th><th class="c">Array after the pass</th></tr></thead><tbody><tr><td class="c m">1</td><td class="c m">45 &gt; 12 swap, 45 &lt; 78 no, 78 &gt; 23 swap, 78 &gt; 56 swap</td><td class="c m">12 45 23 56 <strong>78</strong></td></tr><tr><td class="c m">2</td><td class="c m">12 &lt; 45 no, 45 &gt; 23 swap, 45 &lt; 56 no</td><td class="c m">12 23 45 <strong>56 78</strong></td></tr><tr><td class="c m">3</td><td class="c m">12 &lt; 23, 23 &lt; 45 : <strong>no swap, stop</strong></td><td class="c m">12 23 45 56 78</td></tr></tbody></table></div>
+<p><strong>Sorted: 12, 23, 45, 56, 78.</strong> This took 3 passes, 4 + 3 + 2 = 9 comparisons and 4 swaps (without the swapped flag it would run all 4 passes, 10 comparisons).</p>
+<h3>Time complexity (answer for the 5-mark question)</h3>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>Why</th><th>Complexity</th></tr></thead><tbody><tr><td>Worst (reverse order)</td><td>n − 1 passes, pass k does n − k comparisons: (n − 1) + (n − 2) + ... + 1 = n(n − 1)/2</td><td><strong>O(n²)</strong></td></tr><tr><td>Average</td><td>about n²/4 swaps and still about n²/2 comparisons</td><td><strong>O(n²)</strong></td></tr><tr><td>Best (already sorted)</td><td>one pass of n − 1 comparisons, no swap, stop (with the flag)</td><td><strong>O(n)</strong></td></tr></tbody></table></div>
+<p>Space O(1). Bubble sort is stable and in place. Measured on 64 sorted numbers: 63 comparisons. On 64 reversed numbers: 2016 = 64·63/2 comparisons.</p>
+<div class="note"><p><span class="lbl">Common mistake</span>Some books (and some answer keys) leave out the <code>swapped</code> flag. Then the best case is also O(n²). Say in your answer which version you are writing. With the flag the best case is O(n).</p></div>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>void bubble_sort(int a[], int n) {
+    for (int pass = 0; pass &lt; n - 1; pass++) {
+        int swapped = 0;
+        for (int j = 0; j &lt; n - 1 - pass; j++)
+            if (a[j] &gt; a[j + 1]) {
+                int t = a[j]; a[j] = a[j + 1]; a[j + 1] = t; swapped = 1;
+            }
+        if (!swapped) break;
+    }
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-sel">
+<div class="head"><h2>Selection sort</h2><label class="rev" for="r-sel"><input class="rev" data-sec="t-sel" id="r-sel" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Selection sort</span>In each pass, <strong>select the smallest element</strong> of the unsorted part and swap it into the next position of the sorted part.</p></div>
+<p><strong>Algorithm: SelectionSort (a, n)</strong></p>
+<ol class="t"><li>Start.</li><li>Repeat steps 3 to 6 for i = 0 to n − 2.</li><li>Set min = i.</li><li>Repeat step 5 for j = i + 1 to n − 1.</li><li>If a[j] is less than a[min], set min = j.</li><li>Swap a[i] and a[min].</li><li>Stop.</li></ol>
+<h3>Example (November 2025): 45, 23, 50, 32, 17</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Pass</th><th class="c">Unsorted part searched</th><th class="c">Smallest</th><th class="c">Swap</th><th class="c">Array after the pass</th></tr></thead><tbody><tr><td class="c m">1</td><td class="c m">45 23 50 32 17</td><td class="c m">17</td><td class="c m">45 and 17</td><td class="c m"><strong>17</strong> 23 50 32 45</td></tr><tr><td class="c m">2</td><td class="c m">23 50 32 45</td><td class="c m">23</td><td class="c m">(already in place)</td><td class="c m">17 <strong>23</strong> 50 32 45</td></tr><tr><td class="c m">3</td><td class="c m">50 32 45</td><td class="c m">32</td><td class="c m">50 and 32</td><td class="c m">17 23 <strong>32</strong> 50 45</td></tr><tr><td class="c m">4</td><td class="c m">50 45</td><td class="c m">45</td><td class="c m">50 and 45</td><td class="c m">17 23 32 <strong>45 50</strong></td></tr></tbody></table></div>
+<p><strong>Sorted: 17, 23, 32, 45, 50.</strong> 10 comparisons.</p>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>Complexity</th></tr></thead><tbody><tr><td>Best, average, worst</td><td><strong>O(n²)</strong>: always n(n − 1)/2 comparisons, whatever the input</td></tr><tr><td>Swaps</td><td>at most n − 1, the fewest of the simple sorts</td></tr><tr><td>Space and stability</td><td>O(1), in place, <strong>not stable</strong> (the long-distance swap can reorder equal keys)</td></tr></tbody></table></div>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>void selection_sort(int a[], int n) {
+    for (int i = 0; i &lt; n - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j &lt; n; j++)
+            if (a[j] &lt; a[min]) min = j;
+        int t = a[i]; a[i] = a[min]; a[min] = t;
+    }
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-ins">
+<div class="head"><h2>Insertion sort</h2><label class="rev" for="r-ins"><input class="rev" data-sec="t-ins" id="r-ins" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Insertion sort</span>Builds the sorted array one element at a time, like sorting playing cards in your hand. Take the next element (the <strong>key</strong>) and <strong>insert it into its correct place</strong> in the sorted part on its left, shifting larger elements one place right.</p></div>
+<p><strong>Algorithm: InsertionSort (a, n)</strong></p>
+<ol class="t"><li>Start.</li><li>Repeat steps 3 to 5 for i = 1 to n − 1.</li><li>Set key = a[i] and j = i − 1.</li><li>While j is at least 0 and a[j] is greater than key, set a[j + 1] = a[j] and decrease j by 1.</li><li>Set a[j + 1] = key.</li><li>Stop.</li></ol>
+<h3>Example: 31, 25, 12, 22, 11</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Pass</th><th class="c">Key</th><th class="c">What happens</th><th class="c">Array after the pass</th></tr></thead><tbody><tr><td class="c m">1</td><td class="c m">25</td><td class="c m">31 shifts right, 25 goes before it</td><td class="c m">25 31 | 12 22 11</td></tr><tr><td class="c m">2</td><td class="c m">12</td><td class="c m">31 and 25 shift right, 12 goes first</td><td class="c m">12 25 31 | 22 11</td></tr><tr><td class="c m">3</td><td class="c m">22</td><td class="c m">31 and 25 shift right, 22 goes after 12</td><td class="c m">12 22 25 31 | 11</td></tr><tr><td class="c m">4</td><td class="c m">11</td><td class="c m">all four shift right, 11 goes first</td><td class="c m">11 12 22 25 31</td></tr></tbody></table></div>
+<p><strong>Sorted: 11, 12, 22, 25, 31.</strong> 10 comparisons and 9 shifts.</p>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>Complexity</th></tr></thead><tbody><tr><td>Best (already sorted)</td><td><strong>O(n)</strong>: one comparison per element (63 for 64 sorted numbers)</td></tr><tr><td>Average and worst (reverse order)</td><td><strong>O(n²)</strong> (2016 comparisons for 64 reversed numbers)</td></tr><tr><td>Space and stability</td><td>O(1), in place, <strong>stable</strong></td></tr></tbody></table></div>
+<p>Insertion sort is fast on small or nearly sorted data, which is why faster sorts use it for small sub-arrays.</p>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>void insertion_sort(int a[], int n) {
+    for (int i = 1; i &lt; n; i++) {
+        int key = a[i], j = i - 1;
+        while (j &gt;= 0 &amp;&amp; a[j] &gt; key) { a[j + 1] = a[j]; j--; }
+        a[j + 1] = key;
+    }
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-qs">
+<div class="head"><h2>Quick sort (recursive)</h2><label class="rev" for="r-qs"><input class="rev" data-sec="t-qs" id="r-qs" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Likely exam</span></div>
+<div class="note def"><p><span class="lbl">Quick sort</span>A <strong>divide and conquer</strong> sort. Pick a <strong>pivot</strong>, partition the array so that smaller elements are on its left and larger on its right (the pivot is now in its final place), then sort the two sides <strong>recursively</strong>.</p></div>
+<p><strong>Algorithm: QuickSort (a, low, high)</strong></p>
+<ol class="t"><li>Start.</li><li>If low is greater than or equal to high, return (zero or one element is already sorted).</li><li>Call Partition (a, low, high) and store the pivot position in p.</li><li>Call QuickSort (a, low, p − 1).</li><li>Call QuickSort (a, p + 1, high).</li><li>Stop.</li></ol>
+<p><strong>Partition (a, low, high), with the first element as pivot</strong></p>
+<ol class="t"><li>Set pivot = a[low], left = low + 1 and right = high.</li><li>Move left to the right while left ≤ right and a[left] ≤ pivot.</li><li>Move right to the left while a[right] &gt; pivot.</li><li>If left &lt; right, swap a[left] and a[right], then go to step 2.</li><li>Otherwise swap a[low] and a[right] and return right. This is the final position of the pivot.</li></ol>
+<h3>Example: 27, 10, 36, 18, 25, 45</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Step</th><th class="c">Action</th><th class="c">Array</th></tr></thead><tbody><tr><td class="c m">Pivot</td><td class="c m">pivot = 27</td><td class="c m">27 10 36 18 25 45</td></tr><tr><td class="c m">Scan</td><td class="c m">left stops at 36 (index 2), right stops at 25 (index 4)</td><td class="c m">27 10 36 18 25 45</td></tr><tr><td class="c m">Swap</td><td class="c m">swap 36 and 25</td><td class="c m">27 10 25 18 36 45</td></tr><tr><td class="c m">Scan</td><td class="c m">left stops at 36 (index 4), right stops at 18 (index 3): they have crossed</td><td class="c m">27 10 25 18 36 45</td></tr><tr><td class="c m">Place pivot</td><td class="c m">swap 27 with a[right] = 18</td><td class="c m">18 10 25 <strong>27</strong> 36 45</td></tr></tbody></table></div>
+<p>Now 27 is in its final place. Sort the left part 18, 10, 25 and the right part 36, 45 the same way:</p>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Sub-array</th><th class="c">Pivot</th><th class="c">Result</th></tr></thead><tbody><tr><td class="c">18 10 25</td><td class="c">18</td><td class="c">10 <strong>18</strong> 25</td></tr><tr><td class="c">36 45</td><td class="c">36</td><td class="c"><strong>36</strong> 45</td></tr><tr><td class="c">Whole array</td><td class="c"></td><td class="c">10 18 25 27 36 45</td></tr></tbody></table></div>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>When</th><th>Complexity</th></tr></thead><tbody><tr><td>Best and average</td><td>pivot splits the array into two nearly equal halves, log n levels of n work</td><td><strong>O(n log n)</strong></td></tr><tr><td>Worst</td><td>pivot is the smallest or largest each time (for example <strong>already sorted</strong> data with the first element as pivot). The sizes go n − 1, n − 2, ...</td><td><strong>O(n²)</strong></td></tr><tr><td>Space</td><td>recursion stack: O(log n) on average, O(n) in the worst case</td><td>in place, <strong>not stable</strong></td></tr></tbody></table></div>
+<p>Measured on 64 numbers: 2016 comparisons for sorted and for reversed input (the worst case), against 370 for a random order.</p>
+<div class="note"><p><span class="lbl">Common mistake</span>Books use different partition schemes (first element, last element or middle element as pivot, and the Hoare or Lomuto way of scanning). The <strong>final sorted answer is the same</strong> but the intermediate arrays differ. Name your pivot choice and follow it. This page uses the first element as pivot.</p></div>
+<div class="note"><p><span class="lbl">Note</span>A random pivot or the median of three (first, middle, last) makes the worst case very unlikely on sorted data.</p></div>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>int partition(int a[], int low, int high) {
+    int pivot = a[low], left = low + 1, right = high;
+    while (1) {
+        while (left &lt;= right &amp;&amp; a[left] &lt;= pivot) left++;
+        while (a[right] &gt; pivot) right--;
+        if (left &lt; right) { int t = a[left]; a[left] = a[right]; a[right] = t; }
+        else break;
+    }
+    a[low] = a[right]; a[right] = pivot;
+    return right;
+}
+
+void quick_sort(int a[], int low, int high) {
+    if (low &lt; high) {
+        int p = partition(a, low, high);
+        quick_sort(a, low, p - 1);
+        quick_sort(a, p + 1, high);
+    }
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-ms">
+<div class="head"><h2>Merge sort (recursive)</h2><label class="rev" for="r-ms"><input class="rev" data-sec="t-ms" id="r-ms" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Draw</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Merge sort</span>A <strong>divide and conquer</strong> sort. <strong>Divide</strong> the array into two halves, <strong>sort each half recursively</strong>, then <strong>merge</strong> the two sorted halves into one sorted array.</p></div>
+<p><strong>Algorithm: MergeSort (a, low, high)</strong></p>
+<ol class="t"><li>Start.</li><li>If low is greater than or equal to high, return (one element is sorted).</li><li>Set mid = (low + high) / 2.</li><li>Call MergeSort (a, low, mid).</li><li>Call MergeSort (a, mid + 1, high).</li><li>Call Merge (a, low, mid, high).</li><li>Stop.</li></ol>
+<p><strong>Merge (a, low, mid, high)</strong></p>
+<ol class="t"><li>Copy a[low] to a[mid] into array L and a[mid + 1] to a[high] into array R.</li><li>Set i = 0, j = 0 and k = low.</li><li>While both L and R have elements left: if L[i] ≤ R[j], set a[k] = L[i] and increase i. Otherwise set a[k] = R[j] and increase j. Increase k by 1.</li><li>Copy any elements left in L to a.</li><li>Copy any elements left in R to a.</li><li>Stop.</li></ol>
+<p>Using L[i] ≤ R[j] (not &lt;) takes the left element first when keys are equal, which keeps the sort <strong>stable</strong>.</p>
+<h3>Example: 38, 27, 43, 3, 9, 82, 10</h3>
+<figure class="fig"><svg aria-labelledby="fmst fmsd" role="img" viewbox="0 0 650 452"><title id="fmst">Merge sort on 38 27 43 3 9 82 10</title><desc id="fmsd">divide steps top to bottom, then merge steps top to bottom</desc><defs><marker id="fmsah" markerheight="6" markerwidth="6" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="s-head" d="M0 0L10 5L0 10z"></path></marker></defs><text class="s-s" text-anchor="start" x="14" y="18">Divide: split in the middle until each part has one element</text><rect class="s-box" height="32" rx="3" width="254" x="198.0" y="30"></rect><text class="s-m" text-anchor="middle" x="325.0" y="51">38  27  43  3  9  82  10</text><path class="s-line" d="M325.0 62L197.5 88"></path><path class="s-line" d="M325.0 62L495.0 88"></path><rect class="s-box" height="32" rx="3" width="152" x="121.5" y="88"></rect><text class="s-m" text-anchor="middle" x="197.5" y="109">38  27  43  3</text><path class="s-line" d="M197.5 120L112.5 146"></path><path class="s-line" d="M197.5 120L282.5 146"></path><rect class="s-box" height="32" rx="3" width="118" x="436.0" y="88"></rect><text class="s-m" text-anchor="middle" x="495.0" y="109">9  82  10</text><path class="s-line" d="M495.0 120L452.5 146"></path><path class="s-line" d="M495.0 120L580.0 146"></path><rect class="s-box" height="32" rx="3" width="84" x="70.5" y="146"></rect><text class="s-m" text-anchor="middle" x="112.5" y="167">38  27</text><path class="s-line" d="M112.5 178L70.0 204"></path><path class="s-line" d="M112.5 178L155.0 204"></path><rect class="s-box" height="32" rx="3" width="84" x="240.5" y="146"></rect><text class="s-m" text-anchor="middle" x="282.5" y="167">43  3</text><path class="s-line" d="M282.5 178L240.0 204"></path><path class="s-line" d="M282.5 178L325.0 204"></path><rect class="s-box" height="32" rx="3" width="84" x="410.5" y="146"></rect><text class="s-m" text-anchor="middle" x="452.5" y="167">9  82</text><path class="s-line" d="M452.5 178L410.0 204"></path><path class="s-line" d="M452.5 178L495.0 204"></path><rect class="s-box" height="32" rx="3" width="50" x="555.0" y="146"></rect><text class="s-m" text-anchor="middle" x="580.0" y="167">10</text><path class="s-line" d="M580.0 178L580.0 204"></path><rect class="s-box" height="32" rx="3" width="50" x="45.0" y="204"></rect><text class="s-m" text-anchor="middle" x="70.0" y="225">38</text><rect class="s-box" height="32" rx="3" width="50" x="130.0" y="204"></rect><text class="s-m" text-anchor="middle" x="155.0" y="225">27</text><rect class="s-box" height="32" rx="3" width="50" x="215.0" y="204"></rect><text class="s-m" text-anchor="middle" x="240.0" y="225">43</text><rect class="s-box" height="32" rx="3" width="50" x="300.0" y="204"></rect><text class="s-m" text-anchor="middle" x="325.0" y="225">3</text><rect class="s-box" height="32" rx="3" width="50" x="385.0" y="204"></rect><text class="s-m" text-anchor="middle" x="410.0" y="225">9</text><rect class="s-box" height="32" rx="3" width="50" x="470.0" y="204"></rect><text class="s-m" text-anchor="middle" x="495.0" y="225">82</text><rect class="s-box" height="32" rx="3" width="50" x="555.0" y="204"></rect><text class="s-m" text-anchor="middle" x="580.0" y="225">10</text><text class="s-s" text-anchor="start" x="14" y="278">Merge: combine sorted parts, always taking the smaller front element</text><rect class="s-box2" height="32" rx="3" width="84" x="70.5" y="292"></rect><text class="s-m" text-anchor="middle" x="112.5" y="313">27  38</text><rect class="s-box2" height="32" rx="3" width="84" x="240.5" y="292"></rect><text class="s-m" text-anchor="middle" x="282.5" y="313">3  43</text><rect class="s-box2" height="32" rx="3" width="84" x="410.5" y="292"></rect><text class="s-m" text-anchor="middle" x="452.5" y="313">9  82</text><rect class="s-box2" height="32" rx="3" width="50" x="555.0" y="292"></rect><text class="s-m" text-anchor="middle" x="580.0" y="313">10</text><rect class="s-box2" height="32" rx="3" width="152" x="121.5" y="350"></rect><text class="s-m" text-anchor="middle" x="197.5" y="371">3  27  38  43</text><path class="s-line" d="M112.5 324L197.5 350" marker-end="url(#fmsah)"></path><path class="s-line" d="M282.5 324L197.5 350" marker-end="url(#fmsah)"></path><rect class="s-box2" height="32" rx="3" width="118" x="436.0" y="350"></rect><text class="s-m" text-anchor="middle" x="495.0" y="371">9  10  82</text><path class="s-line" d="M452.5 324L495.0 350" marker-end="url(#fmsah)"></path><path class="s-line" d="M580.0 324L495.0 350" marker-end="url(#fmsah)"></path><rect class="s-box2" height="32" rx="3" width="254" x="198.0" y="408"></rect><text class="s-m" text-anchor="middle" x="325.0" y="429">3  9  10  27  38  43  82</text><path class="s-line" d="M197.5 382L325.0 408" marker-end="url(#fmsah)"></path><path class="s-line" d="M495.0 382L325.0 408" marker-end="url(#fmsah)"></path></svg><figcaption>The array is halved until single elements remain, then the sorted parts are merged back. Final result 3 9 10 27 38 43 82.</figcaption></figure>
+<h3>Complexity (answer for the 5-mark question)</h3>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>Complexity</th></tr></thead><tbody><tr><td>Best case</td><td>O(n log n)</td></tr><tr><td><strong>Average case</strong></td><td><strong>O(n log n)</strong></td></tr><tr><td><strong>Worst case</strong></td><td><strong>O(n log n)</strong></td></tr><tr><td>Extra space</td><td>O(n) for the temporary arrays (not in place)</td></tr><tr><td>Stability</td><td>Stable</td></tr></tbody></table></div>
+<div class="formula">Why: halving gives log n levels (n = 8: 3 levels). Merging all the parts on one level costs n.<br/>T(n) = 2T(n/2) + n  gives  T(n) = n log n.  Same for every input order.</div>
+<div class="note"><p><span class="lbl">Note</span>The syllabus says detailed analysis is not required, so the level-by-level argument above is enough. Merge sort is good for linked lists and large data, but its O(n) extra memory is its main cost compared with quick sort and heap sort.</p></div>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>void merge(int a[], int low, int mid, int high) {
+    int n1 = mid - low + 1, n2 = high - mid;
+    int *L = malloc(n1 * sizeof(int)), *R = malloc(n2 * sizeof(int));
+    for (int i = 0; i &lt; n1; i++) L[i] = a[low + i];
+    for (int j = 0; j &lt; n2; j++) R[j] = a[mid + 1 + j];
+    int i = 0, j = 0, k = low;
+    while (i &lt; n1 &amp;&amp; j &lt; n2) a[k++] = (L[i] &lt;= R[j]) ? L[i++] : R[j++];
+    while (i &lt; n1) a[k++] = L[i++];
+    while (j &lt; n2) a[k++] = R[j++];
+    free(L); free(R);
+}
+
+void merge_sort(int a[], int low, int high) {
+    if (low &lt; high) {
+        int mid = (low + high) / 2;
+        merge_sort(a, low, mid);
+        merge_sort(a, mid + 1, high);
+        merge(a, low, mid, high);
+    }
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-hs">
+<div class="head"><h2>Heap sort</h2><label class="rev" for="r-hs"><input class="rev" data-sec="t-hs" id="r-hs" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Draw</span><span class="chip">Likely exam</span></div>
+<div class="note def"><p><span class="lbl">Heap</span>A <strong>complete binary tree</strong> in which every parent is larger than or equal to its children (<strong>max-heap</strong>). The largest element is therefore at the root. A heap is stored in an array: for index i, the children are 2i + 1 and 2i + 2, and the parent is ⌊(i − 1) / 2⌋.</p></div>
+<div class="note def"><p><span class="lbl">Heap sort</span>First <strong>build a max-heap</strong> from the array. Then repeatedly <strong>swap the root (largest) with the last element of the heap</strong>, shrink the heap by one and <strong>restore the heap property</strong>. The sorted part grows from the right.</p></div>
+<figure class="fig"><svg aria-labelledby="fheapt fheapd" role="img" viewbox="0 0 700 290"><title id="fheapt">Max-heap as a tree and as an array</title><desc id="fheapd">heap of 13, 11, 12, 5, 6, 7 drawn as a binary tree and as an array</desc><defs><marker id="fheapah" markerheight="6" markerwidth="6" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="s-head" d="M0 0L10 5L0 10z"></path></marker></defs><path class="s-line" d="M325 53L205 87"></path><path class="s-line" d="M325 53L445 87"></path><path class="s-line" d="M205 121L135 155"></path><path class="s-line" d="M205 121L275 155"></path><path class="s-line" d="M445 121L445 155"></path><circle class="s-box2" cx="325" cy="36" r="17"></circle><text class="s-t" text-anchor="middle" x="325" y="41">13</text><text class="s-s" text-anchor="start" x="352" y="40">[0]</text><circle class="s-box2" cx="205" cy="104" r="17"></circle><text class="s-t" text-anchor="middle" x="205" y="109">11</text><text class="s-s" text-anchor="end" x="178" y="108">[1]</text><circle class="s-box2" cx="445" cy="104" r="17"></circle><text class="s-t" text-anchor="middle" x="445" y="109">12</text><text class="s-s" text-anchor="start" x="472" y="108">[2]</text><circle class="s-box2" cx="135" cy="172" r="17"></circle><text class="s-t" text-anchor="middle" x="135" y="177">5</text><text class="s-s" text-anchor="end" x="108" y="176">[3]</text><circle class="s-box2" cx="275" cy="172" r="17"></circle><text class="s-t" text-anchor="middle" x="275" y="177">6</text><text class="s-s" text-anchor="start" x="302" y="176">[4]</text><circle class="s-box2" cx="445" cy="172" r="17"></circle><text class="s-t" text-anchor="middle" x="445" y="177">7</text><text class="s-s" text-anchor="end" x="418" y="176">[5]</text><text class="s-s" text-anchor="start" x="520" y="48">Max-heap: every parent</text><text class="s-s" text-anchor="start" x="520" y="66">is larger than its children</text><text class="s-s" text-anchor="start" x="520" y="92">Children of index i:</text><text class="s-m" text-anchor="start" x="520" y="110">2i + 1 and 2i + 2</text><text class="s-s" text-anchor="start" x="520" y="136">Parent of index i:</text><text class="s-m" text-anchor="start" x="520" y="154">⌊(i − 1) / 2⌋</text><rect class="s-box2" height="30" rx="3" width="54" x="40" y="226"></rect><text class="s-t" text-anchor="middle" x="67" y="246">13</text><text class="s-s" text-anchor="middle" x="67" y="272">[0]</text><rect class="s-box2" height="30" rx="3" width="54" x="94" y="226"></rect><text class="s-t" text-anchor="middle" x="121" y="246">11</text><text class="s-s" text-anchor="middle" x="121" y="272">[1]</text><rect class="s-box2" height="30" rx="3" width="54" x="148" y="226"></rect><text class="s-t" text-anchor="middle" x="175" y="246">12</text><text class="s-s" text-anchor="middle" x="175" y="272">[2]</text><rect class="s-box2" height="30" rx="3" width="54" x="202" y="226"></rect><text class="s-t" text-anchor="middle" x="229" y="246">5</text><text class="s-s" text-anchor="middle" x="229" y="272">[3]</text><rect class="s-box2" height="30" rx="3" width="54" x="256" y="226"></rect><text class="s-t" text-anchor="middle" x="283" y="246">6</text><text class="s-s" text-anchor="middle" x="283" y="272">[4]</text><rect class="s-box2" height="30" rx="3" width="54" x="310" y="226"></rect><text class="s-t" text-anchor="middle" x="337" y="246">7</text><text class="s-s" text-anchor="middle" x="337" y="272">[5]</text><text class="s-s" text-anchor="start" x="380" y="246">the same heap stored as an array</text></svg><figcaption>The max-heap that 12, 11, 13, 5, 6, 7 turns into, drawn as a tree and stored as an array.</figcaption></figure>
+<p><strong>Algorithm: HeapSort (a, n)</strong></p>
+<ol class="t"><li>Start.</li><li>Build a max-heap: for i = n / 2 − 1 down to 0, call Heapify (a, n, i).</li><li>Repeat steps 4 and 5 for end = n − 1 down to 1.</li><li>Swap a[0] (the largest) and a[end].</li><li>Call Heapify (a, end, 0) to restore the heap in the first end elements.</li><li>Stop.</li></ol>
+<p><strong>Heapify (a, n, i): move a[i] down until the heap property holds</strong></p>
+<ol class="t"><li>Set largest = i, left = 2i + 1 and right = 2i + 2.</li><li>If left &lt; n and a[left] &gt; a[largest], set largest = left.</li><li>If right &lt; n and a[right] &gt; a[largest], set largest = right.</li><li>If largest is not i, swap a[i] and a[largest] and call Heapify (a, n, largest).</li><li>Stop.</li></ol>
+<h3>Example: 12, 11, 13, 5, 6, 7</h3>
+<p><strong>Build the max-heap.</strong> Heapify index 2 (13 with child 7): no change. Index 1 (11 with children 5, 6): no change. Index 0 (12 with children 11, 13): swap 12 and 13, giving <strong>13 11 12 5 6 7</strong>.</p>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Step</th><th class="c">Array</th><th class="c">Sorted part</th></tr></thead><tbody><tr><td class="c m">Swap root with a[5]</td><td class="c m">12 11 7 5 6 | <strong>13</strong></td><td class="c m">13</td></tr><tr><td class="c m">Swap root with a[4]</td><td class="c m">11 6 7 5 | <strong>12 13</strong></td><td class="c m">12 13</td></tr><tr><td class="c m">Swap root with a[3]</td><td class="c m">7 6 5 | <strong>11 12 13</strong></td><td class="c m">11 12 13</td></tr><tr><td class="c m">Swap root with a[2]</td><td class="c m">6 5 | <strong>7 11 12 13</strong></td><td class="c m">7 11 12 13</td></tr><tr><td class="c m">Swap root with a[1]</td><td class="c m">5 | <strong>6 7 11 12 13</strong></td><td class="c m">6 7 11 12 13</td></tr></tbody></table></div>
+<p><strong>Sorted: 5, 6, 7, 11, 12, 13.</strong> (Each array above is after the swap and after restoring the heap in the part before the bar.)</p>
+<div class="wrap"><table class="wide"><thead><tr><th>Case</th><th>Complexity</th></tr></thead><tbody><tr><td>Best, average, worst</td><td><strong>O(n log n)</strong>: building the heap costs O(n), and the n − 1 root removals each cost O(log n)</td></tr><tr><td>Space and stability</td><td>O(1) extra (in place), <strong>not stable</strong></td></tr></tbody></table></div>
+<details class="q"><summary>C function (compiled and tested)</summary><div class="ans"><pre><code>void heapify(int a[], int n, int i) {
+    while (1) {
+        int largest = i, l = 2 * i + 1, r = 2 * i + 2;
+        if (l &lt; n &amp;&amp; a[l] &gt; a[largest]) largest = l;
+        if (r &lt; n &amp;&amp; a[r] &gt; a[largest]) largest = r;
+        if (largest == i) return;
+        int t = a[i]; a[i] = a[largest]; a[largest] = t;
+        i = largest;
+    }
+}
+
+void heap_sort(int a[], int n) {
+    for (int i = n / 2 - 1; i &gt;= 0; i--) heapify(a, n, i);
+    for (int end = n - 1; end &gt; 0; end--) {
+        int t = a[0]; a[0] = a[end]; a[end] = t;
+        heapify(a, end, 0);
+    }
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-cmp">
+<div class="head"><h2>Comparing the sorting algorithms</h2><label class="rev" for="r-cmp"><input class="rev" data-sec="t-cmp" id="r-cmp" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Differentiate</span><span class="chip">Likely exam</span></div>
+<div class="wrap"><table class="wide"><thead><tr><th>Sort</th><th>Best</th><th>Average</th><th>Worst</th><th>Extra space</th><th>Stable</th><th>Idea</th></tr></thead><tbody><tr><td>Bubble</td><td class="m">O(n)*</td><td class="m">O(n²)</td><td class="m">O(n²)</td><td class="m">O(1)</td><td>Yes</td><td>swap adjacent pairs</td></tr><tr><td>Selection</td><td class="m">O(n²)</td><td class="m">O(n²)</td><td class="m">O(n²)</td><td class="m">O(1)</td><td>No</td><td>pick the minimum</td></tr><tr><td>Insertion</td><td class="m">O(n)</td><td class="m">O(n²)</td><td class="m">O(n²)</td><td class="m">O(1)</td><td>Yes</td><td>insert into sorted part</td></tr><tr><td>Merge</td><td class="m">O(n log n)</td><td class="m">O(n log n)</td><td class="m">O(n log n)</td><td class="m">O(n)</td><td>Yes</td><td>divide, merge</td></tr><tr><td>Quick</td><td class="m">O(n log n)</td><td class="m">O(n log n)</td><td class="m">O(n²)</td><td class="m">O(log n)</td><td>No</td><td>partition around pivot</td></tr><tr><td>Heap</td><td class="m">O(n log n)</td><td class="m">O(n log n)</td><td class="m">O(n log n)</td><td class="m">O(1)</td><td>No</td><td>max-heap, remove root</td></tr></tbody></table></div>
+<p>* with the swapped flag.</p>
+<ul class="t"><li><strong>Small or nearly sorted data</strong>: insertion sort.</li><li><strong>Guaranteed O(n log n)</strong>: merge sort (needs extra memory) or heap sort (in place).</li><li><strong>Fastest on average in practice</strong>: quick sort.</li><li><strong>Fewest swaps</strong>: selection sort.</li></ul>
+<h3>Measured comparisons on 64 numbers</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Sort</th><th class="c">Sorted input</th><th class="c">Reversed input</th><th class="c">Random input</th></tr></thead><tbody><tr><td class="c">Bubble (flag)</td><td class="c">63</td><td class="c">2016</td><td class="c">1980</td></tr><tr><td class="c">Insertion</td><td class="c">63</td><td class="c">2016</td><td class="c">995</td></tr><tr><td class="c">Selection</td><td class="c">2016</td><td class="c">2016</td><td class="c">2016</td></tr><tr><td class="c">Quick (first pivot)</td><td class="c">2016</td><td class="c">2016</td><td class="c">370</td></tr></tbody></table></div>
+<p>Here n(n − 1)/2 = 2016. The random column is one run of a shuffled list, so only the pattern matters. Quick sort on sorted data degrades to 2016, which is the O(n²) worst case.</p>
+<div class="note"><p><span class="lbl">Note</span>The syllabus says detailed analysis of the sorts is not required, so you only need the table above and the reasons given in each section.</p></div>
+</section>
+<section class="topic" id="t-hash">
+<div class="head"><h2>Hashing and hash tables</h2><label class="rev" for="r-hash"><input class="rev" data-sec="t-hash" id="r-hash" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Short note</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Hashing</span>A technique that <strong>converts a key into an array index directly</strong> using a <strong>hash function</strong>, so that a record can be stored and found without searching. The array is the <strong>hash table</strong>.</p></div>
+<div class="formula">index = h(key),   0 ≤ h(key) ≤ m − 1   (m = size of the table)</div>
+<div class="note def"><p><span class="lbl">Collision</span>Two different keys give the same index: h(k1) = h(k2). Hash tables must have a <strong>collision resolution technique</strong>.</p></div>
+<h3>Need for hash tables (May 2026)</h3>
+<div class="wrap"><table class="wide"><thead><tr><th>Structure</th><th>Search</th><th>Insert</th><th>Delete</th></tr></thead><tbody><tr><td>Unsorted array</td><td>O(n)</td><td>O(1) at the end</td><td>O(n)</td></tr><tr><td>Sorted array</td><td>O(log n)</td><td>O(n)</td><td>O(n)</td></tr><tr><td>Linked list</td><td>O(n)</td><td>O(1) at the front</td><td>O(n)</td></tr><tr><td><strong>Hash table</strong></td><td><strong>O(1) on average</strong></td><td>O(1) on average</td><td>O(1) on average</td></tr></tbody></table></div>
+<ul class="t"><li>Searching, inserting and deleting take <strong>constant time on average</strong>, no matter how many records there are.</li><li>Worst case is O(n) if every key collides, so the hash function and the collision method matter.</li><li>Used for symbol tables in compilers, database indexes, caches, dictionaries and sets.</li></ul>
+<h3>A good hash function</h3>
+<ul class="t"><li>Fast to compute.</li><li>Gives the <strong>same index</strong> for the same key every time.</li><li>Spreads keys <strong>uniformly</strong> over 0 to m − 1, so few collisions.</li><li>Uses <strong>all parts</strong> of the key.</li></ul>
+</section>
+<section class="topic" id="t-hf">
+<div class="head"><h2>Hash functions</h2><label class="rev" for="r-hf"><input class="rev" data-sec="t-hf" id="r-hf" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Likely exam</span><span class="chip">Past paper</span></div>
+<div class="wrap"><table class="wide"><thead><tr><th>Method</th><th>Formula</th><th>Note</th></tr></thead><tbody><tr><td>Division</td><td class="m">h(k) = k mod m</td><td>m should be a prime, not close to a power of 2</td></tr><tr><td>Multiplication</td><td class="m">h(k) = ⌊m × frac(k × A)⌋</td><td>0 &lt; A &lt; 1, about 0.6180339887</td></tr><tr><td>Mid-square</td><td class="m">square k, take the middle r digits</td><td>table size 10<sup>r</sup></td></tr><tr><td>Folding</td><td class="m">split k into parts, add the parts</td><td>shift or boundary folding</td></tr></tbody></table></div>
+<h3>1. Division method</h3>
+<p>Divide the key by the table size m and use the <strong>remainder</strong>. Fast and simple. Choose m as a <strong>prime</strong>. A bad m (a power of 2 or 10) makes the index depend only on the last few digits or bits of the key.</p>
+<div class="formula">h(k) = k mod m<br/>Example: m = 11. h(1234) = 1234 mod 11 = 2   (1234 = 112 × 11 + 2)</div>
+<h3>2. Multiplication method</h3>
+<p><strong>Steps</strong></p>
+<ol class="t"><li>Multiply the key k by a constant A (0 &lt; A &lt; 1).</li><li>Take the <strong>fractional part</strong> of k × A.</li><li>Multiply it by m and take the floor.</li></ol>
+<div class="formula">h(k) = ⌊ m × ( k·A mod 1 ) ⌋     A ≈ (√5 − 1)/2 = 0.6180339887 (suggested by Knuth)<br/>Example: k = 100, m = 20.  k·A = 61.8034,  fractional part 0.8034,  × 20 = 16.07,  h(100) = 16<br/>Example: k = 123456, m = 10000.  k·A = 76300.0041,  fractional part 0.0041,  × 10000 = 41.15,  h(123456) = 41</div>
+<p>Here the value of m is not critical, so m can be a power of 2.</p>
+<h3>3. Mid-square method</h3>
+<p><strong>Steps</strong></p>
+<ol class="t"><li>Square the key.</li><li>Take the <strong>middle r digits</strong> of the square as the index. The table size is 10<sup>r</sup>.</li></ol>
+<div class="formula">Example: k = 4567, r = 2 (table size 100)<br/>4567² = 20857489 (8 digits). The middle two digits are the 4th and 5th: 20 8 <b>57</b> 489.  h(4567) = 57<br/>Example: k = 123, r = 3 (table size 1000)<br/>123² = 15129. The middle three digits are 5, 1, 2.  h(123) = 512</div>
+<p>Why it works: the middle digits depend on <strong>all</strong> digits of the key. The ends of a square depend only on the end digits of the key.</p>
+<h3>4. Folding method</h3>
+<p>Split the key into parts of equal length (the last part may be shorter), <strong>add the parts</strong>, and drop the final carry if the sum is longer than the index.</p>
+<div class="wrap"><table class="wide"><thead><tr><th>Type</th><th>How</th><th>Example: k = 123456789, parts of 3 digits, table size 1000</th></tr></thead><tbody><tr><td><strong>Shift folding</strong></td><td>add the parts as they are</td><td>123 + 456 + 789 = 1368. Drop the carry: <strong>368</strong></td></tr><tr><td><strong>Boundary folding</strong></td><td>reverse every second part, then add</td><td>123 + <b>654</b> + 789 = 1566. Drop the carry: <strong>566</strong></td></tr></tbody></table></div>
+<div class="formula">Example: k = 5678, parts of 2 digits, table size 100<br/>56 + 78 = 134, drop the carry: h(5678) = 34<br/>Example with an uneven last part: k = 76123451001214, parts of 3 digits<br/>Shift: 761 + 234 + 510 + 012 + 14 = 1531.   Boundary: 761 + 432 + 510 + 210 + 14 = 1927</div>
+<div class="note"><p><span class="lbl">Common mistake</span>Books differ on small details. <strong>Mid-square</strong>: when the square has an odd number of digits and you need an even number of them (for example 1234² = 1522756, 7 digits, r = 2), some books take the 4th and 5th digits (27) and others the 3rd and 4th (22). <strong>Folding</strong>: some books take the sum mod the table size and others just drop the carry. State the digits you take and the rule you follow.</p></div>
+<div class="note"><p><span class="lbl">Note</span>The multiplication and folding examples with the long keys come from a published data-structures course page. Other methods you may see: digit analysis (keep the digits that spread the known keys best) and the radix or polynomial method for strings.</p></div>
+</section>
+<section class="topic" id="t-lp">
+<div class="head"><h2>Closed hashing and linear probing</h2><label class="rev" for="r-lp"><input class="rev" data-sec="t-lp" id="r-lp" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Numerical</span><span class="chip">Drawbacks</span><span class="chip">Past paper</span></div>
+<div class="note def"><p><span class="lbl">Closed hashing (open addressing)</span>All keys are stored <strong>inside the table itself</strong>. If the home slot is taken, probe other slots in a fixed order until a free one is found.</p></div>
+<div class="note def"><p><span class="lbl">Linear probing</span>On a collision try the <strong>next slot</strong>, then the next, wrapping around at the end of the table.</p></div>
+<div class="formula">h(k, i) = ( h(k) + i ) mod m     i = 0, 1, 2, ...</div>
+<p><strong>Insert (T, m, key)</strong></p>
+<ol class="t"><li>Set home = key mod m and i = home.</li><li>If T[i] is empty or marked deleted, store key in T[i] and stop.</li><li>Set i = (i + 1) mod m.</li><li>If i is equal to home, print "Table full" and stop. Otherwise go to step 2.</li></ol>
+<p><strong>Search (T, m, key)</strong></p>
+<ol class="t"><li>Set home = key mod m and i = home.</li><li>If T[i] is empty, print "Not found" and stop.</li><li>If T[i] is equal to key, print "Found at slot i" and stop.</li><li>Set i = (i + 1) mod m.</li><li>If i is equal to home, print "Not found" and stop. Otherwise go to step 2.</li></ol>
+<h3>Example: m = 10, h(k) = k mod 10, insert 89, 18, 49, 58, 69</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Key</th><th class="c">Home slot</th><th class="c">Slots tried</th><th class="c">Stored in</th><th class="c">Probes</th></tr></thead><tbody><tr><td class="c">89</td><td class="c">9</td><td class="c">9</td><td class="c">9</td><td class="c">1</td></tr><tr><td class="c">18</td><td class="c">8</td><td class="c">8</td><td class="c">8</td><td class="c">1</td></tr><tr><td class="c">49</td><td class="c">9</td><td class="c">9 (taken), 0</td><td class="c">0</td><td class="c">2</td></tr><tr><td class="c">58</td><td class="c">8</td><td class="c">8, 9, 0 (taken), 1</td><td class="c">1</td><td class="c">4</td></tr><tr><td class="c">69</td><td class="c">9</td><td class="c">9, 0, 1 (taken), 2</td><td class="c">2</td><td class="c">4</td></tr></tbody></table></div>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Slot</th><th class="c">0</th><th class="c">1</th><th class="c">2</th><th class="c">3</th><th class="c">4</th><th class="c">5</th><th class="c">6</th><th class="c">7</th><th class="c">8</th><th class="c">9</th></tr></thead><tbody><tr><td class="c">Key</td><td class="c">49</td><td class="c">58</td><td class="c">69</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">18</td><td class="c">89</td></tr></tbody></table></div>
+<p>The keys 49, 58 and 69 are all stored far from their home slots. Searching 69 takes 4 probes. Searching a missing key such as 99 (home slot 9) probes slots 9, 0, 1, 2 and stops at the empty slot 3: 5 probes.</p>
+<h3>Drawbacks of linear probing</h3>
+<ul class="t"><li><strong>Primary clustering</strong>: occupied slots form long runs. A key that hashes anywhere into a run is added to its end, so the run keeps growing. In the example above, 49, 58 and 69 all pile up behind 89.</li><li><strong>Long probe sequences</strong> as the table fills: searches (especially for missing keys) slow down sharply (see the load factor section).</li><li><strong>Deletion is awkward.</strong> You cannot just empty a slot, because a search stops at an empty slot and would lose keys stored beyond it. A deleted slot must be <strong>marked as deleted</strong>, which still adds to the length of searches.</li><li><strong>The table can become full.</strong> There are only m slots, so at most m keys.</li></ul>
+<p>Check of the deletion problem: after deleting 49 and marking slot 0 as deleted, searching 69 still finds it. If slot 0 were simply made empty, the search for 69 stops there and wrongly says "not found". Both cases were run.</p>
+<div class="note"><p><span class="lbl">Common mistake</span>Naming differs between books. This page follows the KTU syllabus: <strong>closed hashing = open addressing</strong> (keys stay in the table, as in linear probing) and <strong>open hashing = separate chaining</strong> (keys go in lists outside the table). A few books use the words the other way round, so write the description along with the name.</p></div>
+<details class="q"><summary>C functions for linear probing, with lazy deletion (compiled and tested)</summary><div class="ans"><pre><code>#define M 10
+#define EMPTY -1
+#define DELETED -2
+int hash(int key) { return key % M; }
+
+int lp_insert(int t[], int key) {
+    int h = hash(key);
+    for (int i = 0; i &lt; M; i++) {
+        int s = (h + i) % M;
+        if (t[s] == EMPTY || t[s] == DELETED) { t[s] = key; return s; }
+    }
+    return -1;                       /* table full */
+}
+
+int lp_search(int t[], int key) {
+    int h = hash(key);
+    for (int i = 0; i &lt; M; i++) {
+        int s = (h + i) % M;
+        if (t[s] == EMPTY) return -1;
+        if (t[s] == key) return s;
+    }
+    return -1;
+}
+
+int lp_delete(int t[], int key) {
+    int s = lp_search(t, key);
+    if (s &gt;= 0) t[s] = DELETED;
+    return s;
+}</code></pre></div></details>
+</section>
+<section class="topic" id="t-chain">
+<div class="head"><h2>Open hashing: separate chaining</h2><label class="rev" for="r-chain"><input class="rev" data-sec="t-chain" id="r-chain" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Algorithm</span><span class="chip">Draw</span><span class="chip">Likely exam</span></div>
+<div class="note def"><p><span class="lbl">Separate chaining</span>Each slot of the table holds a <strong>linked list</strong> of all the keys that hash to it. A collision simply adds another node to the list.</p></div>
+<figure class="fig"><svg aria-labelledby="fcht fchd" role="img" viewbox="0 0 650 322"><title id="fcht">Separate chaining</title><desc id="fchd">hash table with ten slots, slot 8 holds the list 18 then 58, slot 9 holds the list 89, 49, 69</desc><defs><marker id="fchah" markerheight="6" markerwidth="6" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="s-head" d="M0 0L10 5L0 10z"></path></marker></defs><text class="s-m" text-anchor="start" x="14" y="20">Hash table (m = 10)</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="34"></rect><text class="s-s" text-anchor="end" x="28" y="51">0</text><text class="s-s" text-anchor="start" x="112" y="51">NULL</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="62"></rect><text class="s-s" text-anchor="end" x="28" y="79">1</text><text class="s-s" text-anchor="start" x="112" y="79">NULL</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="90"></rect><text class="s-s" text-anchor="end" x="28" y="107">2</text><text class="s-s" text-anchor="start" x="112" y="107">NULL</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="118"></rect><text class="s-s" text-anchor="end" x="28" y="135">3</text><text class="s-s" text-anchor="start" x="112" y="135">NULL</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="146"></rect><text class="s-s" text-anchor="end" x="28" y="163">4</text><text class="s-s" text-anchor="start" x="112" y="163">NULL</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="174"></rect><text class="s-s" text-anchor="end" x="28" y="191">5</text><text class="s-s" text-anchor="start" x="112" y="191">NULL</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="202"></rect><text class="s-s" text-anchor="end" x="28" y="219">6</text><text class="s-s" text-anchor="start" x="112" y="219">NULL</text><rect class="s-box" height="24" rx="3" width="56" x="40" y="230"></rect><text class="s-s" text-anchor="end" x="28" y="247">7</text><text class="s-s" text-anchor="start" x="112" y="247">NULL</text><rect class="s-box2" height="24" rx="3" width="56" x="40" y="258"></rect><text class="s-s" text-anchor="end" x="28" y="275">8</text><path class="s-line" d="M96 270L130 270" marker-end="url(#fchah)"></path><rect class="s-box" height="22" rx="3" width="44" x="130" y="259"></rect><text class="s-t" text-anchor="middle" x="152" y="275">18</text><path class="s-line" d="M174 270L210 270" marker-end="url(#fchah)"></path><rect class="s-box" height="22" rx="3" width="44" x="210" y="259"></rect><text class="s-t" text-anchor="middle" x="232" y="275">58</text><text class="s-s" text-anchor="start" x="262" y="275">NULL</text><rect class="s-box2" height="24" rx="3" width="56" x="40" y="286"></rect><text class="s-s" text-anchor="end" x="28" y="303">9</text><path class="s-line" d="M96 298L130 298" marker-end="url(#fchah)"></path><rect class="s-box" height="22" rx="3" width="44" x="130" y="287"></rect><text class="s-t" text-anchor="middle" x="152" y="303">89</text><path class="s-line" d="M174 298L210 298" marker-end="url(#fchah)"></path><rect class="s-box" height="22" rx="3" width="44" x="210" y="287"></rect><text class="s-t" text-anchor="middle" x="232" y="303">49</text><path class="s-line" d="M254 298L290 298" marker-end="url(#fchah)"></path><rect class="s-box" height="22" rx="3" width="44" x="290" y="287"></rect><text class="s-t" text-anchor="middle" x="312" y="303">69</text><text class="s-s" text-anchor="start" x="342" y="303">NULL</text><text class="s-m" text-anchor="start" x="330" y="80">h(k) = k mod 10</text><text class="s-s" text-anchor="start" x="330" y="100">89 and 49 and 69 all hash to 9</text><text class="s-s" text-anchor="start" x="330" y="118">18 and 58 both hash to 8</text><text class="s-s" text-anchor="start" x="330" y="136">Each new key is added at the end of its list</text></svg><figcaption>Keys 89, 18, 49, 58, 69 with h(k) = k mod 10. Slot 8 holds 18 and 58, slot 9 holds 89, 49 and 69.</figcaption></figure>
+<p><strong>Insert (T, key)</strong></p>
+<ol class="t"><li>Set i = key mod m.</li><li>Search the list T[i] for key. If it is already there, stop.</li><li>Create a new node holding key.</li><li>Add the node at the end of the list T[i] (adding at the front is also common and is O(1)).</li></ol>
+<p><strong>Search (T, key)</strong></p>
+<ol class="t"><li>Set i = key mod m.</li><li>Walk down the list T[i], comparing each node with key.</li><li>If a node holds key, print "Found" and stop.</li><li>If the end of the list is reached, print "Not found".</li></ol>
+<ul class="t"><li><strong>Delete</strong>: find the node in the list and unlink it. Nothing special is needed.</li><li><strong>Cost</strong>: the average list length is the load factor α = n / m, so search takes <strong>O(1 + α)</strong> on average.</li><li><strong>The table never gets full</strong>, and α can be greater than 1.</li></ul>
+<div class="wrap"><table class="wide"><thead><tr><th></th><th>Closed hashing (probing)</th><th>Open hashing (chaining)</th></tr></thead><tbody><tr><td>Where keys live</td><td>inside the table</td><td>in lists hanging off the table</td></tr><tr><td>Table can be full</td><td>yes, n ≤ m</td><td>no</td></tr><tr><td>Deletion</td><td>needs a "deleted" marker</td><td>simple unlink</td></tr><tr><td>Clustering</td><td>yes</td><td>none</td></tr><tr><td>Extra memory</td><td>none</td><td>pointer in every node</td></tr><tr><td>Best when</td><td>memory is tight, keys are few</td><td>number of keys is unknown or large</td></tr></tbody></table></div>
+<div class="note"><p><span class="lbl">Note</span>Chaining degrades gracefully: doubling the keys only doubles the list length. Open addressing degrades sharply as the table fills.</p></div>
+</section>
+<section class="topic" id="t-rem">
+<div class="head"><h2>Remedies for clustering: random, quadratic and double hashing</h2><label class="rev" for="r-rem"><input class="rev" data-sec="t-rem" id="r-rem" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Likely exam</span><span class="chip">Past paper</span></div>
+<h3>Random probing</h3>
+<div class="note def"><p><span class="lbl">Random probing</span>The probe sequence is produced by a <strong>pseudo-random number generator</strong>. The generator is started with the same seed for every key, so a search repeats exactly the sequence used to insert.</p></div>
+<div class="formula">h(k, i) = ( h(k) + r<sub>i</sub> ) mod m      r<sub>1</sub>, r<sub>2</sub>, ... = fixed pseudo-random numbers</div>
+<p>It removes primary clustering because consecutive probes are scattered. Example with m = 10 and the fixed sequence 5, 2, 8, 1, ... (illustrative): 49 (home 9, taken) tries 9 + 5 = 14, so slot 4. 58 (home 8, taken) tries 8 + 5 = 13, so slot 3. 69 (home 9, taken) tries slot 4 (taken), then 9 + 2 = 11, so slot 1.</p>
+<h3>Quadratic probing (November 2025)</h3>
+<div class="note def"><p><span class="lbl">Quadratic probing</span>On a collision try the slots at distances <strong>1², 2², 3², ...</strong> from the home slot instead of 1, 2, 3.</p></div>
+<div class="formula">h(k, i) = ( h(k) + i² ) mod m     i = 0, 1, 2, ...   (f(i) = i²)</div>
+<div class="note"><p><span class="lbl">Numerical</span>Table size 7 (index 0 to 6), Hash(x) = x % 7, f(i) = i². Insert 22, 30 and 50.</p></div>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Key</th><th class="c">Home slot x % 7</th><th class="c">Probes</th><th class="c">Stored in</th></tr></thead><tbody><tr><td class="c">22</td><td class="c">1</td><td class="c">(1 + 0) = 1, free</td><td class="c"><strong>1</strong></td></tr><tr><td class="c">30</td><td class="c">2</td><td class="c">(2 + 0) = 2, free</td><td class="c"><strong>2</strong></td></tr><tr><td class="c">50</td><td class="c">1</td><td class="c">1 taken by 22. i = 1: (1 + 1) = 2, taken by 30. i = 2: (1 + 4) = 5, free</td><td class="c"><strong>5</strong></td></tr></tbody></table></div>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Index</th><th class="c">0</th><th class="c">1</th><th class="c">2</th><th class="c">3</th><th class="c">4</th><th class="c">5</th><th class="c">6</th></tr></thead><tbody><tr><td class="c">Key</td><td class="c"></td><td class="c">22</td><td class="c">30</td><td class="c"></td><td class="c"></td><td class="c">50</td><td class="c"></td></tr></tbody></table></div>
+<ul class="t"><li><strong>Advantage</strong>: removes primary clustering because the jumps grow.</li><li><strong>Drawback 1: secondary clustering.</strong> Keys with the same home slot follow the same probe sequence.</li><li><strong>Drawback 2:</strong> it may <strong>miss free slots</strong>.</li></ul>
+<h3>Double hashing</h3>
+<div class="note def"><p><span class="lbl">Double hashing</span>A <strong>second hash function h₂</strong> decides the step size, so different keys with the same home slot follow <strong>different</strong> probe sequences.</p></div>
+<div class="formula">h(k, i) = ( h<sub>1</sub>(k) + i × h<sub>2</sub>(k) ) mod m<br/>h<sub>1</sub>(k) = k mod m,    h<sub>2</sub>(k) = R − ( k mod R )    R is a prime smaller than m,  h<sub>2</sub>(k) is never 0</div>
+<div class="note"><p><span class="lbl">Numerical</span>m = 11, R = 7. Insert 22, 33, 44 and 55 (all have home slot 0 since each is a multiple of 11).</p></div>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Key</th><th class="c">h₁</th><th class="c">h₂ = 7 − (k mod 7)</th><th class="c">Probes</th><th class="c">Stored in</th></tr></thead><tbody><tr><td class="c">22</td><td class="c">0</td><td class="c">6</td><td class="c">slot 0 free</td><td class="c"><strong>0</strong></td></tr><tr><td class="c">33</td><td class="c">0</td><td class="c">2</td><td class="c">slot 0 taken, then (0 + 2) = 2 free</td><td class="c"><strong>2</strong></td></tr><tr><td class="c">44</td><td class="c">0</td><td class="c">5</td><td class="c">slot 0 taken, then (0 + 5) = 5 free</td><td class="c"><strong>5</strong></td></tr><tr><td class="c">55</td><td class="c">0</td><td class="c">1</td><td class="c">slot 0 taken, then (0 + 1) = 1 free</td><td class="c"><strong>1</strong></td></tr></tbody></table></div>
+<p>Four keys with the same home slot go to four different places, so there is <strong>no primary and no secondary clustering</strong>. The table size should be prime so that the steps reach every slot.</p>
+<h3>The four methods side by side (m = 10, keys 89, 18, 49, 58, 69)</h3>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">Method</th><th class="c">Probe sequence</th><th class="c">49 goes to</th><th class="c">58 goes to</th><th class="c">69 goes to</th><th class="c">Probes for 49, 58, 69</th></tr></thead><tbody><tr><td class="c">Linear</td><td class="c">h + i</td><td class="c">0</td><td class="c">1</td><td class="c">2</td><td class="c">2, 4, 4</td></tr><tr><td class="c">Quadratic</td><td class="c">h + i²</td><td class="c">0</td><td class="c">2</td><td class="c">3</td><td class="c">2, 3, 3</td></tr><tr><td class="c">Double (R = 7)</td><td class="c">h₁ + i·h₂</td><td class="c">6</td><td class="c">3</td><td class="c">0</td><td class="c">2, 2, 2</td></tr><tr><td class="c">Random (5, 2, 8, ...)</td><td class="c">h + r<sub>i</sub></td><td class="c">4</td><td class="c">3</td><td class="c">1</td><td class="c">2, 2, 3</td></tr></tbody></table></div>
+<p>(89 goes to slot 9 and 18 to slot 8 in every method. Table size 10 is used only to match the earlier example. In practice use a prime.)</p>
+<div class="wrap"><table class="wide"><thead><tr><th>Method</th><th>Primary clustering</th><th>Secondary clustering</th></tr></thead><tbody><tr><td>Linear probing</td><td>Yes</td><td>Yes</td></tr><tr><td>Random probing</td><td>No</td><td>Yes (same sequence for every key)</td></tr><tr><td>Quadratic probing</td><td>No</td><td>Yes</td></tr><tr><td>Double hashing</td><td>No</td><td>No</td></tr></tbody></table></div>
+</section>
+<section class="topic" id="t-lf">
+<div class="head"><h2>Load factor and rehashing</h2><label class="rev" for="r-lf"><input class="rev" data-sec="t-lf" id="r-lf" type="checkbox"/>revised</label></div>
+<div class="chips"><span class="chip">Define</span><span class="chip">Numerical</span><span class="chip">Likely exam</span></div>
+<div class="note def"><p><span class="lbl">Load factor</span>α = n / m, where n is the number of keys stored and m is the table size. It measures how full the table is.</p></div>
+<ul class="t"><li><strong>Open addressing</strong>: α can never exceed 1. Keep it below about 0.5 to 0.7.</li><li><strong>Chaining</strong>: α is the average list length and can exceed 1. Keep it around 1 or below.</li></ul>
+<h3>Why performance falls as α grows (linear probing)</h3>
+<div class="formula">Expected probes, successful search   ≈ ½ ( 1 + 1 / (1 − α) )<br/>Expected probes, unsuccessful search ≈ ½ ( 1 + 1 / (1 − α)² )</div>
+<div class="wrap"><table class="wide"><thead><tr><th class="c">α</th><th class="c">Successful</th><th class="c">Unsuccessful</th></tr></thead><tbody><tr><td class="c">0.5</td><td class="c">1.5</td><td class="c">2.5</td></tr><tr><td class="c">0.7</td><td class="c">2.17</td><td class="c">6.06</td></tr><tr><td class="c">0.9</td><td class="c">5.5</td><td class="c">50.5</td></tr></tbody></table></div>
+<p>A simulation with random keys in a 2003-slot table gave 1.49 and 2.46 at α = 0.5, and 2.14 and 5.90 at α = 0.7, which agrees with the formulas. They are for understanding, not for memorising.</p>
+<div class="note def"><p><span class="lbl">Rehashing</span>When the load factor passes a limit, <strong>build a larger table</strong> (about twice the size, rounded up to a prime) and <strong>insert every existing key again</strong> using the hash function with the new table size.</p></div>
+<p><strong>Rehash</strong></p>
+<ol class="t"><li>Create a new table of about twice the size (next prime).</li><li>For every key in the old table, compute h(key) with the new m and insert it into the new table.</li><li>Discard the old table.</li></ol>
+<div class="note"><p><span class="lbl">Numerical</span>Table of size 7 using linear probing holds 15, 22, 36 and 29. Load factor = 4/7 = 0.57, above the limit 0.5, so rehash into size 17.</p></div>
+<div class="wrap"><table class="wide"><thead><tr><th class="c"></th><th class="c">Table size</th><th class="c">Slots</th></tr></thead><tbody><tr><td class="c">Before</td><td class="c">7</td><td class="c">slot 1: 15, slot 2: 22, slot 3: 36, slot 4: 29 (all four have home slot 1 and pile up)</td></tr><tr><td class="c">After</td><td class="c">17</td><td class="c">15 mod 17 = 15, 22 mod 17 = 5, 36 mod 17 = 2, 29 mod 17 = 12. Each key is alone in its slot</td></tr></tbody></table></div>
+<ul class="t"><li>The keys must be <strong>re-hashed, not just copied</strong>, because h(k) = k mod m changes when m changes.</li><li>One rehash costs O(n), but it happens rarely, so the <strong>average cost per insertion stays O(1)</strong> (amortised).</li></ul>
+<div class="note"><p><span class="lbl">Note</span>The limits quoted (0.5 for quadratic probing, about 0.7 for linear probing, and the 0.75 used in some library hash maps for chaining) are rules of thumb. Your answer only needs to say that rehashing starts when α crosses a chosen threshold.</p></div>
+</section>
+<section class="topic" id="t-sheet">
+<div class="head"><h2>One-page cheat sheet</h2></div>
+<div class="chips"><span class="chip">Revise the night before</span></div>
+<div class="cards">
+<div class="rc"><h4>Searching</h4><ul><li>Linear: O(n), any order</li><li>Binary: O(log n), sorted only</li><li>mid = (low + high) / 2</li><li>key &lt; a[mid]: high = mid − 1, else low = mid + 1</li></ul></div>
+<div class="rc"><h4>Simple sorts (O(n²))</h4><ul><li>Bubble: swap adjacent, flag gives best O(n), stable</li><li>Selection: pick min, always n(n−1)/2 comparisons, not stable</li><li>Insertion: insert key into sorted part, best O(n), stable</li></ul></div>
+<div class="rc"><h4>Fast sorts</h4><ul><li>Merge: O(n log n) always, O(n) space, stable</li><li>Quick: avg O(n log n), worst O(n²) (sorted, first pivot), not stable</li><li>Heap: O(n log n) always, in place, not stable</li><li>Heap: children 2i+1, 2i+2</li></ul></div>
+<div class="rc"><h4>Hash functions</h4><ul><li>Division: k mod m (m prime)</li><li>Multiplication: ⌊m·frac(kA)⌋, A = 0.618...</li><li>Mid-square: middle digits of k²</li><li>Folding: add parts (shift) or reverse alternate parts (boundary)</li></ul></div>
+<div class="rc"><h4>Collisions</h4><ul><li>Linear: (h + i) mod m, primary clustering</li><li>Quadratic: (h + i²) mod m, secondary clustering</li><li>Double: (h₁ + i·h₂) mod m, no clustering</li><li>Chaining: list per slot, O(1 + α)</li></ul></div>
+<div class="rc"><h4>Load factor</h4><ul><li>α = n / m</li><li>Open addressing: α ≤ 1</li><li>Rehash: new table about 2m (prime), re-insert all keys with the new m</li></ul></div>
+<div class="rc"><h4>Worked answers</h4><ul><li>Selection 45 23 50 32 17 gives 17 23 32 45 50</li><li>Bubble 45 12 78 23 56 gives 12 23 45 56 78 in 3 passes</li><li>Quadratic, m = 7: 22 at 1, 30 at 2, 50 at 5</li><li>Search 40 in 12 25 18 40 55 30: position 4</li></ul></div>
+</div>
+</section>
+<section class="topic" id="t-qa">
+<div class="head"><h2>Likely questions with answer outlines</h2></div>
+<div class="chips"><span class="chip">Revise the night before</span></div>
+<p>Questions with a month tag appeared in KTU papers. The rest follow the syllabus and typical question patterns.</p>
+<details class="q"><summary>Perform selection sort on 45, 23, 50, 32, 17. (3) <span class="chip">Nov 2025</span></summary><div class="ans"><p>Pass 1: 17 23 50 32 45. Pass 2: 17 23 50 32 45. Pass 3: 17 23 32 50 45. Pass 4: 17 23 32 45 50. Always n(n − 1)/2 comparisons, O(n²). See <a href="#t-sel">Selection sort</a>.</p></div></details>
+<details class="q"><summary>Illustrate linear search on 12, 25, 18, 40, 55, 30 with key 40. (3) <span class="chip">May 2026</span></summary><div class="ans"><p>Compare 12, 25, 18, 40 in order. Found at index 3, position 4, after 4 comparisons. Best O(1), worst O(n). See <a href="#t-ls">Linear search</a>.</p></div></details>
+<details class="q"><summary>Describe linear probing. What happens when a collision occurs? Give an example. (3) <span class="chip">Nov 2025</span> <span class="chip">May 2026</span></summary><div class="ans"><p>h(k, i) = (h(k) + i) mod m. On a collision try the next slot, wrapping around. Example m = 10: 89, 18, 49 (to slot 0), 58 (to slot 1), 69 (to slot 2). Mention primary clustering. See <a href="#t-lp">Linear probing</a>.</p></div></details>
+<details class="q"><summary>Write the merge sort algorithm. State its average and worst case complexity. (5) <span class="chip">Nov 2025</span></summary><div class="ans"><p>MergeSort and Merge steps. Average O(n log n), worst O(n log n), space O(n), stable. Because log n levels each cost n. See <a href="#t-ms">Merge sort</a>.</p></div></details>
+<details class="q"><summary>Illustrate the mid-square method and the folding method with examples. (4) <span class="chip">Nov 2025</span></summary><div class="ans"><p>Mid-square: 4567² = 20857489, middle two digits 57. Folding: 123456789 in parts of 3, shift 123 + 456 + 789 = 1368 gives 368, boundary 123 + 654 + 789 = 1566 gives 566. See <a href="#t-hf">Hash functions</a>.</p></div></details>
+<details class="q"><summary>Quadratic probing, table size 7, Hash(x) = x % 7, f(i) = i². Insert 22, 30, 50. (5) <span class="chip">Nov 2025</span></summary><div class="ans"><p>22 to slot 1, 30 to slot 2. 50 home slot 1 taken, i = 1 gives slot 2 taken, i = 2 gives (1 + 4) = 5 free. Table: index 1 = 22, 2 = 30, 5 = 50. See <a href="#t-rem">Remedies</a>.</p></div></details>
+<details class="q"><summary>Write an algorithm for binary search. (4) <span class="chip">Nov 2025</span></summary><div class="ans"><p>Sorted array, low and high, mid = (low + high) / 2, compare, halve. O(log n). Add the worked example for 66. See <a href="#t-bs">Binary search</a>.</p></div></details>
+<details class="q"><summary>Sort 45, 12, 78, 23, 56 using bubble sort and analyse its time complexity. (5) <span class="chip">May 2026</span></summary><div class="ans"><p>Pass 1: 12 45 23 56 78. Pass 2: 12 23 45 56 78. Pass 3: no swap. Best O(n) with a flag, average and worst O(n²), space O(1). See <a href="#t-bub">Bubble sort</a>.</p></div></details>
+<details class="q"><summary>Explain insertion sort with an example. (4) <span class="chip">May 2026</span></summary><div class="ans"><p>Key inserted into the sorted left part with shifting. Example 31 25 12 22 11 in four passes. Best O(n), worst O(n²), stable. See <a href="#t-ins">Insertion sort</a>.</p></div></details>
+<details class="q"><summary>What is hashing? Explain the need for hash tables. (3) <span class="chip">May 2026</span></summary><div class="ans"><p>Key to index by hash function. O(1) average search, insert and delete against O(n) or O(log n). See <a href="#t-hash">Hashing</a>.</p></div></details>
+<details class="q"><summary>Explain the division, multiplication and folding methods with examples. (6) <span class="chip">May 2026</span></summary><div class="ans"><p>1234 mod 11 = 2. k = 100, m = 20 gives 16 by the multiplication method. Folding as above. See <a href="#t-hf">Hash functions</a>.</p></div></details>
+<details class="q"><summary>Write the quick sort algorithm. Trace it on 27, 10, 36, 18, 25, 45 and give the best and worst case. (7)</summary><div class="ans"><p>Partition with the first element as pivot, recursive calls. First partition gives 18 10 25 27 36 45. Best and average O(n log n), worst O(n²). See <a href="#t-qs">Quick sort</a>.</p></div></details>
+<details class="q"><summary>Explain heap sort with an example. (7)</summary><div class="ans"><p>Max-heap, build, repeated swap of the root with the last element and heapify. 12 11 13 5 6 7 gives 5 6 7 11 12 13. O(n log n), in place. See <a href="#t-hs">Heap sort</a>.</p></div></details>
+<details class="q"><summary>Explain separate chaining with an example. Compare it with linear probing. (5)</summary><div class="ans"><p>List per slot; 89, 49, 69 chain in slot 9. Table never full, simple delete, no clustering, extra pointer memory. See <a href="#t-chain">Chaining</a>.</p></div></details>
+<details class="q"><summary>What are the drawbacks of linear probing? How do quadratic probing and double hashing help? (5)</summary><div class="ans"><p>Primary clustering, long searches, deletion markers, full table. Quadratic removes primary clustering but keeps secondary. Double hashing removes both. See <a href="#t-lp">Linear probing</a> and <a href="#t-rem">Remedies</a>.</p></div></details>
+<details class="q"><summary>Explain double hashing with an example. (4)</summary><div class="ans"><p>h(k, i) = (h₁(k) + i·h₂(k)) mod m. m = 11, R = 7: 22, 33, 44, 55 go to slots 0, 2, 5, 1. See <a href="#t-rem">Remedies</a>.</p></div></details>
+<details class="q"><summary>What is load factor? What is rehashing and when is it done? (4)</summary><div class="ans"><p>α = n / m. When α crosses a limit, build a table about twice as large and re-insert every key using the new table size. See <a href="#t-lf">Load factor and rehashing</a>.</p></div></details>
+<details class="q"><summary>Compare the sorting algorithms by time, space and stability. (5)</summary><div class="ans"><p>Use the table in <a href="#t-cmp">Comparing the sorts</a>.</p></div></details>
+</section>
+<footer class="notes-footer" role="contentinfo">
+<div class="notes-footer-inner">
+<div class="notes-footer-nav">
+<a href="/">← All Subjects</a>
+<a href="/notes/ds-module-1/">← Previous: DS Module 1 (Arrays &amp; Stacks)</a>
+</div>
+<div class="notes-footer-meta">
+<span>PCITT303 DS · Module 2 · KTU 2024 Scheme</span>
+<p class="notes-ref">Built from the KTU syllabus, two KTU question papers (S3 November 2025 and S3 May 2026) and these references: <a href="https://www.cise.ufl.edu/~sahni/dsaaj/enrich/c11/function.htm">hash functions (multiplication and folding examples)</a>, <a href="https://w3.cs.jmu.edu/spragunr/CS240/lectures/hashing/collision_resolution.html">closed hashing and clustering</a>, <a href="https://en.wikipedia.org/wiki/Heapsort">heap sort</a>. All traces, comparison counts, hash and probe tables were produced by running code; the C functions were compiled with gcc and tested against the C library sort on 2000 random arrays. Keys and arrays that are not from a past paper are illustrative.</p>
+</div>
+</div>
+</footer>
+
